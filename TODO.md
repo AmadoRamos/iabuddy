@@ -52,12 +52,12 @@
 
 ## 2. Preparación del entorno 🔴
 
-- [ ] Actualizar drivers AMD Adrenalin y verificar Vulkan (`vulkaninfo --summary`).
-- [ ] Instalar Ollama para Windows y confirmar que usa la RX 9070 por Vulkan (`ollama ps` → 100 % GPU).
-- [ ] Descargar o compilar whisper.cpp con Vulkan para Windows y probar `whisper-cli` con un audio.
+- [x] Actualizar drivers AMD Adrenalin y verificar Vulkan (`vulkaninfo --summary`). → Driver 26.10.1 (17/10/2026), Vulkan 1.4.359, RX 9070 detectada.
+- [x] Instalar Ollama para Windows y confirmar que usa la RX 9070 (`ollama ps` → 100 % GPU). → Ollama 0.40.12 usa **ROCm** (no Vulkan) en la RX 9070. En S2, comparar con `OLLAMA_VULKAN=1`.
+- [x] Descargar o compilar whisper.cpp con Vulkan para Windows y probar `whisper-cli` con un audio. → No hay binario oficial con Vulkan para Windows: se compiló v1.9.5 en `C:\Tools\whisper.cpp` (VS 2022 + CMake + Vulkan SDK 1.4.363). Ejecutables en `build\bin\Release\` (`whisper-cli`, `whisper-server`). Modelo `large-v3-turbo` en `C:\Models\whisper`. `jfk.wav` se transcribe bien, con encode de 823 ms.
 - [x] Instalar Python 3.12, `uv`, `git`. (Python 3.12 gestionado por `uv`, fijado en `.python-version`.)
-- [ ] Instalar **espeak-ng** para Windows (lo necesitan `phonemizer` y Kokoro para fonemas).
-- [ ] Instalar `ffmpeg` (conversión de audios de prueba).
+- [x] Instalar **espeak-ng** para Windows (lo necesitan `phonemizer` y Kokoro para fonemas). → 1.52.0 en `C:\Program Files\eSpeak NG`.
+- [x] Instalar `ffmpeg` (conversión de audios de prueba). → 9.0.2.
 - [x] Crear estructura base del repo (`backend/`, `frontend/`, `spikes/`, `tests/`) + `pyproject.toml` + `.gitignore` (excluye `models/`, `data/`, audios y pesos). Los modelos viven en `C:\Models`, no en el repo.
 
 ---
@@ -121,7 +121,7 @@
 
 1. ~~Decidir 1.1 (entorno) y 1.2 (audio)~~ ✅
 2. ~~Diseño de la UI~~ ✅ — 7 pantallas con gamificación, guardadas en [docs/ui/](docs/ui/README.md).
-3. **Preparación del entorno** (sección 2).
+3. ~~Preparación del entorno (sección 2)~~ ✅
 4. **Grabar el dataset** (3.1) — es lo único que no se puede automatizar.
 5. Ejecutar los **spikes** y cerrar **1.4** con datos.
 6. Arrancar la **Fase 1**. Las decisiones 1.3, 1.5 y 1.6 se pueden tomar durante la Fase 1.
