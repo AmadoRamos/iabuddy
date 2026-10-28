@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Modelos, datos y audio (nunca al repo)
+models/
+data/
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.onnx
+*.gguf
+*.bin
+*.pt
+*.safetensors
+
+# Entorno local
+.env
+.claude/settings.local.json
+.vscode/
+.idea/
+Thumbs.db

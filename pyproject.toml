@@ -1,0 +1,17 @@
+[project]
+name = "iabuddy"
+version = "0.1.0"
+description = "Compañero local de conversación en inglés con feedback de gramática y pronunciación."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12,<3.13"
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest", "ruff"]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
