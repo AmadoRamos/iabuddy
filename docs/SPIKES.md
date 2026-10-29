@@ -168,4 +168,4 @@ El stack de la app (whisper 1,8 GB y gemma 8,6 GB) ocupa **10,4 GB, dentro del p
 - **TTS: Kokoro fp32 en CPU**, cortando el *primer* trozo de la respuesta en la primera coma o el primer punto (unos 370 ms). El resto, frase a frase.
 - **El presupuesto que importa es el total de S6** (< 1,5 s desde el fin de tu frase): STT unos 170 ms + LLM hasta el primer trozo unos 250–400 ms + TTS unos 370 ms ≈ 0,8–0,95 s. Cabe, aunque el silencio de fin de turno se suma encima (se fija en S4).
 - **Si S6 no llega:** Kokoro en GPU con PyTorch + ROCm (la opción secundaria del [diseño](DISENO.md)). Queda VRAM libre (unos 2 GB) para ello.
-- **Voz y velocidad: las elige Amado de oído.** Las muestras están en `data/s3/voices/<voz>_<velocidad>.wav`: 8 voces US a 1.0 y 0.9.
+- **Voz: `af_heart` a velocidad 0,9.** Amado la eligió de oído entre 8 voces US a 1.0 y 0.9 (muestras en `data/s3/voices/`).

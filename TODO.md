@@ -23,7 +23,7 @@
   - Pulsar la tecla mientras habla el compañero = **interrupción** (barge-in explícito, sin falsos positivos).
   - Pendiente: valor por defecto del silencio (se fija en el spike S4) y qué tecla (propuesta: **Espacio**).
 - [x] **Acento del compañero** → **US**. Voces Kokoro en inglés americano y fonemas de referencia `en-us` para pronunciación.
-- [ ] **Velocidad de habla por defecto** del compañero (normal o 0,9× para B1–B2).
+- [x] **Velocidad de habla por defecto** del compañero (normal o 0,9× para B1–B2). → **0,9×** (elegida de oído en S3).
 
 ### 1.3 Comportamiento pedagógico 🟡 (Fase 2)
 - [ ] **Modo de corrección por defecto:** silencioso (solo resumen al final) / panel lateral en vivo / el compañero corrige en voz.
@@ -37,7 +37,7 @@
 - [x] **Cómo integrar whisper.cpp:** como proceso `whisper-server` (HTTP) o con bindings de Python compilados con Vulkan. → **Proceso aparte con `whisper-server` (HTTP)**: probado en S1, unos 160 ms por frase.
 - [x] **LLM:** elegir entre 2–3 candidatos de 8–14B en Q4. → **`gemma4:12b-it-qat`** en Ollama con `OLLAMA_NUM_PARALLEL=2` ([S2](docs/SPIKES.md#s2--llm-2026-10-28)).
 - [x] **Un modelo o dos:** el mismo LLM para compañero y tutor, o un modelo más pequeño solo para el tutor. Depende de la contención de GPU que salga en el spike. → **Un solo modelo.** Con el tutor activo, el compañero sigue cumpliendo: 248 ms de primer token y 50 tok/s.
-- [ ] **Voz TTS concreta** dentro de Kokoro (escuchar 3–4 voces y escoger).
+- [x] **Voz TTS concreta** dentro de Kokoro (escuchar 3–4 voces y escoger). → **`af_heart`** a velocidad 0,9.
 
 ### 1.5 Datos y privacidad 🟢
 - [ ] **¿Guardar grabaciones de audio?** Sí / no / solo los turnos con errores de pronunciación.
