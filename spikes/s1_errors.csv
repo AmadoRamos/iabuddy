@@ -1,0 +1,29 @@
+id,error,correct
+e01,i go,i went
+e02,she don't,she doesn't
+e03,i have thirty years|i have 30 years,i am thirty|i'm thirty|i am 30|i'm 30
+e04,i am agree,i agree
+e05,the people is|people is,people are
+e06,i am working here since|i'm working here since,have been working|i've been working
+e07,explained me,explained to me|explained the problem to me
+e08,didn't went,didn't go
+e09,depends of,depends on
+e10,interested on,interested in
+e11,arrived to,arrived at|arrived in
+e12,like very much the coffee,like the coffee very much|really like the coffee
+e13,is very important,it is very important|it's very important
+e14,the life in the city,life in the city
+e15,explain me,explain to me
+e16,more taller,taller
+e17,do a decision,make a decision
+e18,did you went,did you go
+e19,there is many,there are many
+e20,when i will arrive,when i arrive|when i get
+e21,said me,told me
+e22,used to work,used to working
+e23,discussed about,discussed
+e24,have been in london last year,was in london last year
+e25,a engineer,an engineer
+e26,informations,information
+e27,want that you,want you to
+e28,yesterday i have finished,yesterday i finished

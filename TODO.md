@@ -33,8 +33,8 @@
 - [ ] **Temas de conversación libre:** totalmente libre, lista de temas sugeridos, o temas ligados a tus intereses (tecnología, entrevistas, etc.).
 
 ### 1.4 Modelos 🟡 (se cierran con los spikes de la Fase 0)
-- [ ] **STT:** whisper.cpp `large-v3-turbo` (Vulkan) vs. Parakeet TDT 0.6B (ONNX, CPU). Criterio principal: **transcripción literal de tus errores**, luego latencia.
-- [ ] **Cómo integrar whisper.cpp:** como proceso `whisper-server` (HTTP) o con bindings de Python compilados con Vulkan. Propuesta: proceso aparte (más simple de compilar en Windows).
+- [x] **STT:** whisper.cpp `large-v3-turbo` (Vulkan) vs. Parakeet TDT 0.6B (ONNX, CPU). Criterio principal: **transcripción literal de tus errores**, luego latencia. → **whisper.cpp `large-v3` (sin turbo), GPU por Vulkan, greedy y sin prompt** ([S1](docs/SPIKES.md#s1--stt-literal-2026-10-28)). Si no cabe en VRAM junto al LLM (S2), se usa turbo.
+- [x] **Cómo integrar whisper.cpp:** como proceso `whisper-server` (HTTP) o con bindings de Python compilados con Vulkan. → **Proceso aparte con `whisper-server` (HTTP)**: probado en S1, unos 160 ms por frase.
 - [ ] **LLM:** elegir entre 2–3 candidatos de 8–14B en Q4.
 - [ ] **Un modelo o dos:** el mismo LLM para compañero y tutor, o un modelo más pequeño solo para el tutor. Depende de la contención de GPU que salga en el spike.
 - [ ] **Voz TTS concreta** dentro de Kokoro (escuchar 3–4 voces y escoger).
@@ -73,8 +73,9 @@
 - Pasada previa con whisper `large-v3-turbo`: conserva la mayoría de los errores, pero corrige algunas preposiciones y artículos (*interested on*, *arrived to*, *explain me*, *a engineer*, *informations*). Con palabras sueltas falla mucho, así que para S5 hace falta el modelo de fonemas.
 
 ### 3.2 Spikes
-- [ ] **S1 — STT literal.** Transcribir el dataset con whisper.cpp y Parakeet; medir WER contra tu texto literal, y en particular **cuántos de tus errores se conservan** vs. cuántos "corrige" el modelo. Medir latencia por frase.
+- [x] **S1 — STT literal.** Transcribir el dataset con whisper.cpp y Parakeet; medir WER contra tu texto literal, y en particular **cuántos de tus errores se conservan** vs. cuántos "corrige" el modelo. Medir latencia por frase.
   - ✅ Criterio: conserva ≥ 80 % de los errores y < 500 ms por frase corta.
+  - → [Resultados](docs/SPIKES.md#s1--stt-literal-2026-10-28): gana **whisper `large-v3` (sin turbo)**. Conserva el 68 % de los errores, que es el **86 % si no se cuentan los fallos de pronunciación** ✅, y tarda unos 160 ms por frase en GPU ✅. Turbo conserva el 54 % (71 %), Parakeet el 46 % (72 %), y *beam search* no ayuda.
 - [ ] **S2 — LLM.** Con 2–3 modelos: tiempo a primer token, tokens/s, VRAM; repetir con una petición del tutor en paralelo (`OLLAMA_NUM_PARALLEL`).
   - ✅ Criterio: primer token < 500 ms y ≥ 30 tok/s con el tutor activo.
 - [ ] **S3 — TTS.** Kokoro ONNX en CPU: latencia de la primera frase y factor de tiempo real.
