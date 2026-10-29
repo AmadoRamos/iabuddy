@@ -21,7 +21,7 @@
 - [x] **Estrategia de turno** → **tecla para empezar a hablar + fin de turno por silencio configurable**.
   - Pulsar la tecla abre tu turno; el turno se cierra tras N ms de silencio (configurable en la UI) o al volver a pulsar la tecla.
   - Pulsar la tecla mientras habla el compañero = **interrupción** (barge-in explícito, sin falsos positivos).
-  - Pendiente: valor por defecto del silencio (se fija en el spike S4) y qué tecla (propuesta: **Espacio**).
+  - Valor por defecto del silencio: **1.500 ms** (S4). Como tecla se propone **Espacio**.
 - [x] **Acento del compañero** → **US**. Voces Kokoro en inglés americano y fonemas de referencia `en-us` para pronunciación.
 - [x] **Velocidad de habla por defecto** del compañero (normal o 0,9× para B1–B2). → **0,9×** (elegida de oído en S3).
 
@@ -82,7 +82,8 @@
 - [x] **S3 — TTS.** Kokoro ONNX en CPU: latencia de la primera frase y factor de tiempo real.
   - ✅ Criterio: < 200 ms para una frase de ~10 palabras.
   - → [Resultados](docs/SPIKES.md#s3--tts-2026-10-28): ❌ tarda 644 ms por frase y 372 ms cortando el primer trozo, con un coste fijo de unos 300 ms por llamada en CPU. RTF 0,23. DirectML falla. Se usa fp32 en CPU con el primer trozo corto, y se evalúa en S6 contra el presupuesto total de 1,5 s. Si no llega, Kokoro en GPU con PyTorch + ROCm.
-- [ ] **S4 — Fin de turno.** Pasar las grabaciones largas por Silero VAD con distintos umbrales de silencio y ver dónde te corta; fijar el valor por defecto.
+- [x] **S4 — Fin de turno.** Pasar las grabaciones largas por Silero VAD con distintos umbrales de silencio y ver dónde te corta; fijar el valor por defecto.
+  - → [Resultados](docs/SPIKES.md#s4--fin-de-turno-2026-10-29): en habla libre haces pausas de hasta 2,5 s. Con 900 ms te cortaría 10 veces en 63 s y con 1.500 ms, 2 veces. **El fin de turno principal es la tecla.** El silencio queda como red de seguridad con **1.500 ms** por defecto. En la Fase 1 se añade la *fusión de turno* (si sigues hablando tras un corte, se cancela la respuesta y se une al turno).
 - [ ] **S5 — Pronunciación.** wav2vec2 de fonemas sobre los pares mínimos: ¿distingue *ship* de *sheep* en tu voz?
 - [ ] **S6 — Ida y vuelta por terminal.** Micrófono → VAD → STT → LLM → TTS → altavoz; medir la latencia total por etapa.
   - ✅ Criterio: < 1,5 s del fin de tu frase al primer audio.

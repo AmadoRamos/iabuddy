@@ -169,3 +169,46 @@ El stack de la app (whisper 1,8 GB y gemma 8,6 GB) ocupa **10,4 GB, dentro del p
 - **El presupuesto que importa es el total de S6** (< 1,5 s desde el fin de tu frase): STT unos 170 ms + LLM hasta el primer trozo unos 250–400 ms + TTS unos 370 ms ≈ 0,8–0,95 s. Cabe, aunque el silencio de fin de turno se suma encima (se fija en S4).
 - **Si S6 no llega:** Kokoro en GPU con PyTorch + ROCm (la opción secundaria del [diseño](DISENO.md)). Queda VRAM libre (unos 2 GB) para ello.
 - **Voz: `af_heart` a velocidad 0,9.** Amado la eligió de oído entre 8 voces US a 1.0 y 0.9 (muestras en `data/s3/voices/`).
+
+---
+
+## S4 — Fin de turno (2026-10-29)
+
+**Pregunta:** ¿cuánto silencio hay que esperar para cerrar tu turno sin cortarte a mitad de frase? Ese tiempo se suma entero a la latencia de respuesta.
+
+### Montaje
+- Silero VAD v6 en ONNX (`C:\Models\silero\silero_vad.onnx`), ejecutado directamente con `onnxruntime` en CPU, sin torch.
+- Ventanas de 32 ms, histéresis 0,5 / 0,35 y tramos de voz de al menos 250 ms.
+- Se miden las **pausas internas** de cada grabación, es decir, el silencio entre dos tramos de voz.
+- Script: [spikes/s4_vad.py](../spikes/s4_vad.py).
+
+### Resultados
+Hay 98 pausas internas: mediana de 144 ms, p90 de 960 ms y **máximo de 2.464 ms**.
+
+| Silencio de fin de turno | Cortes en frases leídas (40 pausas) | Cortes en habla libre (58 pausas, 63 s de voz) |
+|---|---|---|
+| 300 ms | 5 | 25 |
+| 500 ms | 3 | 18 |
+| 700 ms | 1 | 14 |
+| 900 ms | 1 | 10 |
+| 1.200 ms | 0 | 7 |
+| 1.500 ms | 0 | 2 |
+
+Pausas más largas en habla libre:
+- f01: 2.464, 2.016, 1.280 y 1.248 ms;
+- f02: 1.408 y 1.344 ms;
+- f04: 1.280 ms;
+- f03: 960 ms.
+
+### Lectura
+1. **En habla libre a nivel B1–B2 haces pausas largas para pensar,** de hasta 2,5 s. Con 900 ms de silencio te cortaría 10 veces en un minuto. Ni siquiera con 1,5 s se libra del todo (2 cortes, ambos en f01).
+2. **No existe un umbral de silencio que sea a la vez rápido y seguro:**
+   - para no cortarte nunca haría falta esperar unos 2,5 s;
+   - sumando el pipeline (~0,9 s), la respuesta tardaría unos 3,4 s, muy por encima de los 1,5 s de S6.
+3. **Con las frases leídas sí funciona** (0 cortes a partir de 1.200 ms). Pero no es el caso de uso real.
+
+### Decisión propuesta
+- **El fin de turno principal es la tecla:** vuelves a pulsar Espacio al terminar. Así no hay espera de silencio y la respuesta llega en unos 0,9 s. El diseño ya lo contemplaba ([§1.2 del TODO](../TODO.md)).
+- **El silencio queda como red de seguridad:** **1.500 ms** por defecto, configurable en la UI. Corta poco (2 veces en 63 s de habla libre) y sirve por si olvidas pulsar.
+- **Mejora para la Fase 1 que hace el corte inofensivo** (*fusión de turno*): si sigues hablando después de un corte y antes de que suene la respuesta, se cancela la generación y tu nuevo fragmento se une al turno anterior. Con esto se podría bajar el silencio a unos 900 ms sin cortes visibles.
+- **A futuro:** usar un detector semántico de fin de turno, que decida si la frase está terminada según el texto, en lugar de solo el silencio.
