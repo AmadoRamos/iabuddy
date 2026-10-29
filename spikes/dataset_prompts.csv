@@ -1,0 +1,57 @@
+id,kind,prompt
+e01,error,Yesterday I go to the office very early.
+e02,error,She don't like to work on weekends.
+e03,error,I have thirty years old.
+e04,error,I am agree with you.
+e05,error,The people is very friendly here.
+e06,error,I am working here since 2019.
+e07,error,He explained me the problem.
+e08,error,I didn't went to the meeting.
+e09,error,It depends of the client.
+e10,error,I am interested on machine learning.
+e11,error,We arrived to the airport at night.
+e12,error,I like very much the coffee.
+e13,error,Is very important to test the code.
+e14,error,The life in the city is expensive.
+e15,error,Can you explain me how it works?
+e16,error,She is more taller than her brother.
+e17,error,I need to do a decision today.
+e18,error,Did you went to the party?
+e19,error,There is many bugs in this code.
+e20,error,I will call you when I will arrive.
+e21,error,My boss said me to finish it.
+e22,error,I'm used to work late.
+e23,error,We discussed about the new feature.
+e24,error,I have been in London last year.
+e25,error,He is a engineer in a big company.
+e26,error,The informations are on the website.
+e27,error,I want that you review my code.
+e28,error,Yesterday I have finished the report.
+p01a,pair,ship
+p01b,pair,sheep
+p02a,pair,very
+p02b,pair,berry
+p03a,pair,watch
+p03b,pair,wash
+p04a,pair,think
+p04b,pair,sink
+p05a,pair,live
+p05b,pair,leave
+p06a,pair,three
+p06b,pair,tree
+p07a,pair,cat
+p07b,pair,cut
+p08a,pair,chair
+p08b,pair,share
+p09a,pair,yet
+p09b,pair,jet
+p10a,pair,walked
+p10b,pair,worked
+p10c,pair,wanted
+p11a,pair,school
+p11b,pair,speak
+p11c,pair,study
+f01,free,"Describe your job and a typical day at work (30-60 s, in English)."
+f02,free,"Tell what you did last weekend (30-60 s, in English)."
+f03,free,"Explain a technical project you are proud of (30-60 s, in English)."
+f04,free,"What would you do with a free year? (30-60 s, in English)."
