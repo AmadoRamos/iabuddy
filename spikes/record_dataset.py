@@ -1,6 +1,6 @@
 """Graba el dataset de la Fase 0 (TODO 3.1).
 
-    uv run --group spikes python spikes/record_dataset.py [--only error|pair|free] [--out DIR]
+    uv run --group spikes python spikes/record_dataset.py [--only error|pair|free] [--redo ID ...] [--out DIR]
 
 Recorre spikes/dataset_prompts.csv, graba cada frase del micrófono por defecto
 (WAV 16 kHz mono, int16) y mantiene DIR/manifest.csv con el texto *literal* dicho.
@@ -62,6 +62,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
     ap.add_argument("--out", type=Path, default=ROOT / "data" / "dataset")
     ap.add_argument("--only", choices=["error", "pair", "free"])
+    ap.add_argument("--redo", nargs="+", default=[], metavar="ID", help="vuelve a grabar estos ids")
     args = ap.parse_args()
 
     args.out.mkdir(parents=True, exist_ok=True)
@@ -70,7 +71,8 @@ def main() -> None:
     done = {}
     if manifest.exists():
         done = {r["id"]: r for r in csv.DictReader(manifest.open(encoding="utf-8"))}
-    todo = [p for p in prompts if p["id"] not in done and args.only in (None, p["kind"])]
+    todo = [p for p in prompts
+            if (p["id"] not in done or p["id"] in args.redo) and args.only in (None, p["kind"])]
 
     print(f"Micrófono: {sd.query_devices(kind='input')['name']}")
     print(f"{len(done)} grabadas, {len(todo)} pendientes. Salida: {args.out}")
