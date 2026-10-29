@@ -66,10 +66,11 @@
 
 ### 3.1 Dataset de prueba (lo graba Amado) 🔴
 > Grabador listo: doble clic en `grabar_dataset.bat` o `uv run --group spikes python spikes/record_dataset.py` (opcional `--only error|pair|free`). Las frases están en [spikes/dataset_prompts.csv](spikes/dataset_prompts.csv) y se pueden editar o sustituir por errores tuyos. La salida va a `data/dataset/` (fuera del repo), con WAV y `manifest.csv`. El script se puede cortar y retomar.
-- [ ] **20–30 frases con errores reales** típicos (tiempos verbales, preposiciones, artículos, orden de palabras). Guardar también el texto *exacto* que dijiste, con los errores.
-- [ ] **10–15 pares mínimos** de pronunciación: *ship/sheep*, *very/berry*, *watch/wash*, *think/sink*, *walked* (-ed), *school* (s inicial), etc.
-- [ ] 3–4 grabaciones largas (30–60 s) hablando libremente, con pausas naturales.
-- [ ] Formato: WAV 16 kHz mono, nombre + transcripción en un `manifest.csv`.
+- [x] **20–30 frases con errores reales** típicos (tiempos verbales, preposiciones, artículos, orden de palabras). Guardar también el texto *exacto* que dijiste, con los errores. → 28 (`e01`–`e28`).
+- [x] **10–15 pares mínimos** de pronunciación: *ship/sheep*, *very/berry*, *watch/wash*, *think/sink*, *walked* (-ed), *school* (s inicial), etc. → 9 pares + 6 palabras sueltas (`p01a`–`p11c`).
+- [x] 3–4 grabaciones largas (30–60 s) hablando libremente, con pausas naturales. → 4 (`f01`–`f04`): 44, 21, 14 y 20 s.
+- [x] Formato: WAV 16 kHz mono, nombre + transcripción en un `manifest.csv`. → `data/dataset/` (56 archivos, fuera del repo).
+- Pasada previa con whisper `large-v3-turbo`: conserva la mayoría de los errores, pero corrige algunas preposiciones y artículos (*interested on*, *arrived to*, *explain me*, *a engineer*, *informations*). Con palabras sueltas falla mucho, así que para S5 hace falta el modelo de fonemas.
 
 ### 3.2 Spikes
 - [ ] **S1 — STT literal.** Transcribir el dataset con whisper.cpp y Parakeet; medir WER contra tu texto literal, y en particular **cuántos de tus errores se conservan** vs. cuántos "corrige" el modelo. Medir latencia por frase.
@@ -123,6 +124,6 @@
 1. ~~Decidir 1.1 (entorno) y 1.2 (audio)~~ ✅
 2. ~~Diseño de la UI~~ ✅ — 7 pantallas con gamificación, guardadas en [docs/ui/](docs/ui/README.md).
 3. ~~Preparación del entorno (sección 2)~~ ✅
-4. **Grabar el dataset** (3.1) — es lo único que no se puede automatizar.
+4. ~~Grabar el dataset (3.1)~~ ✅
 5. Ejecutar los **spikes** y cerrar **1.4** con datos.
 6. Arrancar la **Fase 1**. Las decisiones 1.3, 1.5 y 1.6 se pueden tomar durante la Fase 1.
