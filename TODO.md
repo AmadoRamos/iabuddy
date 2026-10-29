@@ -65,7 +65,7 @@
 ## 3. Fase 0 — Spikes de validación
 
 ### 3.1 Dataset de prueba (lo graba Amado) 🔴
-> Grabador listo: `uv run --group spikes python spikes/record_dataset.py` (opcional `--only error|pair|free`). Las frases están en [spikes/dataset_prompts.csv](spikes/dataset_prompts.csv) y se pueden editar o sustituir por errores tuyos. La salida va a `data/dataset/` (fuera del repo), con WAV y `manifest.csv`. El script se puede cortar y retomar.
+> Grabador listo: doble clic en `grabar_dataset.bat` o `uv run --group spikes python spikes/record_dataset.py` (opcional `--only error|pair|free`). Las frases están en [spikes/dataset_prompts.csv](spikes/dataset_prompts.csv) y se pueden editar o sustituir por errores tuyos. La salida va a `data/dataset/` (fuera del repo), con WAV y `manifest.csv`. El script se puede cortar y retomar.
 - [ ] **20–30 frases con errores reales** típicos (tiempos verbales, preposiciones, artículos, orden de palabras). Guardar también el texto *exacto* que dijiste, con los errores.
 - [ ] **10–15 pares mínimos** de pronunciación: *ship/sheep*, *very/berry*, *watch/wash*, *think/sink*, *walked* (-ed), *school* (s inicial), etc.
 - [ ] 3–4 grabaciones largas (30–60 s) hablando libremente, con pausas naturales.
