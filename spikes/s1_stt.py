@@ -30,6 +30,7 @@ WHISPER = {
     "whisper-v3": (8179, None),
     "whisper-turbo+beam5": (8180, None),
     "whisper-v3+beam5": (8181, None),
+    "whisper-v3-q5_0": (8182, None),
 }
 
 
