@@ -79,8 +79,9 @@
 - [x] **S2 — LLM.** Con 2–3 modelos: tiempo a primer token, tokens/s, VRAM; repetir con una petición del tutor en paralelo (`OLLAMA_NUM_PARALLEL`).
   - ✅ Criterio: primer token < 500 ms y ≥ 30 tok/s con el tutor activo.
   - → [Resultados](docs/SPIKES.md#s2--llm-2026-10-28): **gemma4:12b-it-qat** cumple con el tutor activo (266 ms y 46 tok/s) y es el mejor en *recasting* y como tutor. Pero la VRAM total llega a 15,7 GB con whisper v3. qwen3.5 no procesa en paralelo y llama3.1 es rápido pero pobre. Con whisper `large-v3-q5_0` (los mismos errores conservados que v3), el stack ocupa **10,4 GB** ✅, con 248 ms de primer token y 50 tok/s con el tutor activo ✅.
-- [ ] **S3 — TTS.** Kokoro ONNX en CPU: latencia de la primera frase y factor de tiempo real.
+- [x] **S3 — TTS.** Kokoro ONNX en CPU: latencia de la primera frase y factor de tiempo real.
   - ✅ Criterio: < 200 ms para una frase de ~10 palabras.
+  - → [Resultados](docs/SPIKES.md#s3--tts-2026-10-28): ❌ tarda 644 ms por frase y 372 ms cortando el primer trozo, con un coste fijo de unos 300 ms por llamada en CPU. RTF 0,23. DirectML falla. Se usa fp32 en CPU con el primer trozo corto, y se evalúa en S6 contra el presupuesto total de 1,5 s. Si no llega, Kokoro en GPU con PyTorch + ROCm.
 - [ ] **S4 — Fin de turno.** Pasar las grabaciones largas por Silero VAD con distintos umbrales de silencio y ver dónde te corta; fijar el valor por defecto.
 - [ ] **S5 — Pronunciación.** wav2vec2 de fonemas sobre los pares mínimos: ¿distingue *ship* de *sheep* en tu voz?
 - [ ] **S6 — Ida y vuelta por terminal.** Micrófono → VAD → STT → LLM → TTS → altavoz; medir la latencia total por etapa.

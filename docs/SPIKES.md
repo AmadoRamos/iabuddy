@@ -135,3 +135,37 @@ El stack de la app (whisper 1,8 GB y gemma 8,6 GB) ocupa **10,4 GB, dentro del p
 - **La VRAM queda resuelta usando whisper `large-v3-q5_0`** (2.ª ronda). Si en el futuro hiciera falta más margen, hay otras palancas:
   - *KV cache* en `q8_0` (`OLLAMA_KV_CACHE_TYPE`);
   - bajar `num_ctx`.
+
+---
+
+## S3 — TTS (2026-10-28)
+
+**Pregunta:** ¿Kokoro en CPU genera el primer audio del compañero lo bastante rápido?
+
+**Criterio:** < 200 ms para una frase de unas 10 palabras.
+
+### Montaje
+- `kokoro-onnx` 0.6.1, modelos v1.0 (fp32 de 310 MB e int8 de 88 MB) en `C:\Models\kokoro`, voz `af_heart` y `en-us`.
+- CPU: Ryzen 7 5800XT (8 núcleos).
+- 5 frases cortas típicas de la primera frase del compañero, repetidas 3 veces.
+- Script: [spikes/s3_tts.py](../spikes/s3_tts.py).
+
+### Resultados
+| Variante | Frase de ~10 palabras (mediana / máx) | Trozo de 1–6 palabras (mediana / máx) | RTF |
+|---|---|---|---|
+| fp32, CPU | 644 / 685 ms | **372 / 446 ms** | 0,23 |
+| int8, CPU | 574 / 599 ms | — | 0,21 |
+| fp32, GPU con DirectML (`onnxruntime-directml` 1.24) | ❌ falla al ejecutar | | |
+
+### Lectura
+1. **No cumple el criterio de 200 ms.** Una frase de ~10 palabras (unos 2,7 s de audio) tarda unos 650 ms.
+2. **Kokoro tiene un coste fijo de unos 250–300 ms por llamada en CPU.** Por eso, aunque se corte el texto en trozos de 1–6 palabras (hasta la primera coma o el primer punto), no baja de unos 370 ms.
+3. **int8 apenas gana:** un 10 % más rápido. No compensa el riesgo de perder calidad de voz.
+4. **DirectML no sirve:** ONNX Runtime falla dentro del modelo, probablemente por una operación que no soporta.
+5. **La generación no es un cuello de botella:** con un RTF de 0,23, mientras suena una frase da tiempo de sobra a sintetizar la siguiente. El único problema es la latencia del primer audio.
+
+### Decisión propuesta
+- **TTS: Kokoro fp32 en CPU**, cortando el *primer* trozo de la respuesta en la primera coma o el primer punto (unos 370 ms). El resto, frase a frase.
+- **El presupuesto que importa es el total de S6** (< 1,5 s desde el fin de tu frase): STT unos 170 ms + LLM hasta el primer trozo unos 250–400 ms + TTS unos 370 ms ≈ 0,8–0,95 s. Cabe, aunque el silencio de fin de turno se suma encima (se fija en S4).
+- **Si S6 no llega:** Kokoro en GPU con PyTorch + ROCm (la opción secundaria del [diseño](DISENO.md)). Queda VRAM libre (unos 2 GB) para ello.
+- **Voz y velocidad: las elige Amado de oído.** Las muestras están en `data/s3/voices/<voz>_<velocidad>.wav`: 8 voces US a 1.0 y 0.9.
