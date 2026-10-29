@@ -84,7 +84,8 @@
   - → [Resultados](docs/SPIKES.md#s3--tts-2026-10-28): ❌ tarda 644 ms por frase y 372 ms cortando el primer trozo, con un coste fijo de unos 300 ms por llamada en CPU. RTF 0,23. DirectML falla. Se usa fp32 en CPU con el primer trozo corto, y se evalúa en S6 contra el presupuesto total de 1,5 s. Si no llega, Kokoro en GPU con PyTorch + ROCm.
 - [x] **S4 — Fin de turno.** Pasar las grabaciones largas por Silero VAD con distintos umbrales de silencio y ver dónde te corta; fijar el valor por defecto.
   - → [Resultados](docs/SPIKES.md#s4--fin-de-turno-2026-10-29): en habla libre haces pausas de hasta 2,5 s. Con 900 ms te cortaría 10 veces en 63 s y con 1.500 ms, 2 veces. **El fin de turno principal es la tecla.** El silencio queda como red de seguridad con **1.500 ms** por defecto. En la Fase 1 se añade la *fusión de turno* (si sigues hablando tras un corte, se cancela la respuesta y se une al turno).
-- [ ] **S5 — Pronunciación.** wav2vec2 de fonemas sobre los pares mínimos: ¿distingue *ship* de *sheep* en tu voz?
+- [x] **S5 — Pronunciación.** wav2vec2 de fonemas sobre los pares mínimos: ¿distingue *ship* de *sheep* en tu voz?
+  - → [Resultados](docs/SPIKES.md#s5--pronunciaci%C3%B3n-2026-10-29): **sí.** Gana la palabra que querías decir en 15/24. Los "fallos" con margen claro coinciden con rasgos típicos de hispanohablante (*ship → ʃi*, *three → tɹi*, *yet → dʒe*, *chair → ʃe*), así que probablemente es tu pronunciación real (**confírmalo escuchando**). Tarda unos 0,1 s por segundo de audio en CPU. Para producción hay que exportarlo a ONNX.
 - [ ] **S6 — Ida y vuelta por terminal.** Micrófono → VAD → STT → LLM → TTS → altavoz; medir la latencia total por etapa.
   - ✅ Criterio: < 1,5 s del fin de tu frase al primer audio.
 - [ ] Documentar resultados en `docs/SPIKES.md` y cerrar las decisiones del punto 1.4.

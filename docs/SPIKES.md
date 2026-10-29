@@ -212,3 +212,49 @@ Pausas más largas en habla libre:
 - **El silencio queda como red de seguridad:** **1.500 ms** por defecto, configurable en la UI. Corta poco (2 veces en 63 s de habla libre) y sirve por si olvidas pulsar.
 - **Mejora para la Fase 1 que hace el corte inofensivo** (*fusión de turno*): si sigues hablando después de un corte y antes de que suene la respuesta, se cancela la generación y tu nuevo fragmento se une al turno anterior. Con esto se podría bajar el silencio a unos 900 ms sin cortes visibles.
 - **A futuro:** usar un detector semántico de fin de turno, que decida si la frase está terminada según el texto, en lugar de solo el silencio.
+
+---
+
+## S5 — Pronunciación (2026-10-29)
+
+**Pregunta:** ¿un wav2vec2 de fonemas distingue *ship* de *sheep* en tu voz? En S1 quedó claro que un STT de palabras no lo hace.
+
+### Montaje
+- Modelo `facebook/wav2vec2-lv-60-espeak-cv-ft` (316 M parámetros, CTC sobre fonemas IPA de eSpeak), con PyTorch en CPU. La caché está en `C:\Models\hf`.
+- Para cada una de las 24 grabaciones `p*`:
+  1. **Fonemas que oye el modelo** (CTC greedy).
+  2. **Candidato ganador:** se compara la pérdida CTC del audio bajo dos secuencias de fonemas, la palabra que querías decir y su error típico. Gana la de menor pérdida, y el margen (en nats) indica lo clara que es la preferencia.
+     - En los pares, el error típico es la otra palabra del par.
+     - En `-ed`, es pronunciarlo como /ɪd/ (*walk-ed*).
+     - En s+consonante, es añadir una *e-* delante (*eschool*).
+- Script: [spikes/s5_phonemes.py](../spikes/s5_phonemes.py).
+
+### Resultados
+Gana la palabra que querías decir en **15/24** grabaciones. Los 9 casos restantes:
+
+| id | Querías | El modelo oye | Gana | Margen | Rasgo típico de hispanohablante |
+|---|---|---|---|---|---|
+| p01a | ship | /ʃ i/ | sheep | 3,5 | /ɪ/ → /i/ (no hay /ɪ/ en español) |
+| p06a | three | /t ɹ i/ | tree | 7,9 | /θ/ → /t/ |
+| p09a | yet | /dʒ e/ | jet | 6,2 | *y* inicial → /dʒ/ (rehilamiento) |
+| p08a | chair | /ʃ eː n/ | share | 5,7 | /tʃ/ → /ʃ/ |
+| p11a | school | /ɛ ʃ uː n/ | eschool | 1,1 | *e-* epentética |
+| p11b | speak | /e s b r iː/ | espeak | 0,1 | *e-* epentética |
+| p04a | think | /f i ŋ/ | sink | 0,4 | /θ/ → /f/ o /s/ |
+| p02a | very | /b ɛ r i/ | berry | 0,4 | /v/ → /b/ (en español son el mismo sonido) |
+| p07a | cat | /k a d/ | cut | 0,3 | /æ/ → /a/ |
+
+Velocidad en CPU: unos **0,1 s por segundo de audio** (195 ms para una palabra, 0,8 s para una frase de 8 s).
+
+### Lectura
+1. **Sí distingue los sonidos en tu voz.** Cuando dices las dos palabras del par de forma distinta, el modelo las separa con margen claro: *watch/wash*, *live/leave*, *sink*, *sheep*, *tree*, *jet*, *share*.
+2. **Los 9 "fallos" casi seguro no son del modelo, sino tuyos.** Los cuatro con margen claro (*ship → ʃi*, *three → tɹi*, *yet → dʒe*, *chair → ʃe*) son justo los rasgos clásicos de un hispanohablante. Lo que oye el modelo encaja con lo que se espera, así que está detectando pronunciación real. Solo puedes confirmarlo tú escuchando esos audios.
+3. **Los de margen pequeño (< 1,5 nats) son ambiguos:** *very/berry*, *think/sink*, *cat/cut*, *speak/espeak*, *walked*, *worked*. Ahí el feedback debe ser prudente, del tipo "revisa" y no "lo dijiste mal".
+4. **Con terminaciones -ed, no es concluyente:** oye /w a r k e d/ en *walked*, pero el margen es muy pequeño.
+5. **El coste es asumible:** el análisis es asíncrono (modo pasivo) y no entra en la latencia del compañero. 1,2 GB en disco y CPU.
+
+### Decisión propuesta
+- **Pronunciación (Fase 4): `wav2vec2-lv-60-espeak-cv-ft` + puntuación de candidatos por pérdida CTC.**
+  - Solo se marcan errores cuando el margen es claro (umbral inicial de ~2 nats, a calibrar).
+  - Cada error se acompaña de una explicación del rasgo típico (tabla anterior).
+- **Para producción:** exportar a ONNX para no depender de PyTorch en la app (la ruta prevista en el [diseño](DISENO.md)). PyTorch queda solo para los spikes.
