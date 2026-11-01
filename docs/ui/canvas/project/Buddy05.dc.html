@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Buddy 05 · Micro</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&display=swap">
+<style>
+body{margin:0}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-10px) rotate(2deg)}}
+@keyframes blink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+@keyframes talk{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+@keyframes pulse{0%{opacity:0}40%{opacity:1}100%{opacity:0}}
+@keyframes twinkle{0%,100%{transform:scale(.6) rotate(0)}50%{transform:scale(1.15) rotate(25deg)}}
+@keyframes dot{0%,100%{opacity:.3}50%{opacity:1}}
+.a-bob{animation:bob 3.6s ease-in-out infinite}
+.blink{animation:blink 4.2s infinite;transform-box:fill-box;transform-origin:center}
+.talk{animation:talk .38s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.pulse{animation:pulse 1.4s ease-out infinite}
+.twinkle{animation:twinkle 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.dot{animation:dot 1.2s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div style="width: 1100px; height: 820px; box-sizing: border-box; padding: 44px 48px; background: #FFFDF7; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 30px">
+
+<div style="display: flex; gap: 44px; align-items: stretch">
+<div style="position: relative; flex: none; width: 440px; height: 400px; border-radius: 40px; background: #FFE0EF; border: 3px solid #1B1340; overflow: hidden; display: flex; align-items: center; justify-content: center">
+<div aria-hidden="true" style="position: absolute; width: 300px; height: 300px; border-radius: 50%; background: #FFC8E2"></div>
+<svg class="a-bob" role="img" aria-label="Micro, un micrófono retro rosado con cara y bracitos" width="320" height="320" viewBox="0 0 200 200" style="position: relative">
+<path d="M58 144 Q40 148 38 166" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/>
+<path d="M142 144 Q160 148 162 166" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/>
+<path d="M78 152 H122 L114 190 H86 Z" fill="#1B1340"/>
+<rect x="58" y="134" width="84" height="18" rx="9" fill="#FFC800" stroke="#1B1340" stroke-width="5"/>
+<circle cx="100" cy="80" r="58" fill="#FF5FAE" stroke="#1B1340" stroke-width="5"/>
+<path d="M43 70 A58 58 0 0 1 157 70 Z" fill="#FF8FC6" stroke="#1B1340" stroke-width="4" stroke-linejoin="round"/>
+<path d="M64 40 H136 M52 56 H148 M80 30 V70 M100 26 V70 M120 30 V70" stroke="#1B1340" stroke-width="3" stroke-opacity=".4"/>
+<path d="M58 92 Q60 108 70 118" stroke="#FFFFFF" stroke-opacity=".55" stroke-width="5" stroke-linecap="round" fill="none"/>
+<g class="blink"><ellipse cx="82" cy="92" rx="11" ry="14" fill="#FFFFFF" stroke="#1B1340" stroke-width="3.5"/><circle cx="83" cy="95" r="6" fill="#1B1340"/><ellipse cx="118" cy="92" rx="11" ry="14" fill="#FFFFFF" stroke="#1B1340" stroke-width="3.5"/><circle cx="119" cy="95" r="6" fill="#1B1340"/></g>
+<path d="M89 112 Q100 123 111 112" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/>
+</svg>
+</div>
+
+<div style="flex: 1; display: flex; flex-direction: column; gap: 16px; padding-top: 6px">
+<span style="font-weight: 800; font-size: 14px; letter-spacing: .14em; color: #BE185D">CONCEPTO 05</span>
+<h1 class="disp" style="margin: 0; font-size: 64px; line-height: .95; font-weight: 800; letter-spacing: -0.035em">Micro</h1>
+<p style="margin: 0; font-size: 21px; line-height: 1.4; font-weight: 600">Un micrófono retro con carácter de showman.</p>
+<ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 16px; line-height: 1.45; font-weight: 500">
+<li>Es el objeto del speaking: se entiende al instante qué hace la app.</li>
+<li>La rejilla vibra al escuchar; sirve de ícono para el gran botón de hablar.</li>
+<li>Riesgo: el cuerpo rígido deja menos expresión corporal que un personaje blando.</li>
+</ul>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<span style="padding: 6px 12px; border-radius: 999px; background: #FFFFFF; border: 2px solid #1B1340; font-weight: 700; font-size: 14px">Showman</span>
+<span style="padding: 6px 12px; border-radius: 999px; background: #FFFFFF; border: 2px solid #1B1340; font-weight: 700; font-size: 14px">Seguro</span>
+<span style="padding: 6px 12px; border-radius: 999px; background: #FFFFFF; border: 2px solid #1B1340; font-weight: 700; font-size: 14px">Divertido</span>
+</div>
+<div style="display: flex; gap: 10px; margin-top: auto">
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #FF5FAE; border: 2px solid #1B1340"></span>#FF5FAE</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #FF8FC6; border: 2px solid #1B1340"></span>#FF8FC6</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #FFC800; border: 2px solid #1B1340"></span>#FFC800</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #1B1340; border: 2px solid #1B1340"></span>#1B1340</div>
+</div>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px">
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340">
+<svg role="img" aria-label="Escucha" width="130" height="130" viewBox="0 0 200 200">
+<path d="M58 144 Q40 148 38 166" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/>
+<path d="M142 144 Q160 148 162 166" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/>
+<path d="M78 152 H122 L114 190 H86 Z" fill="#1B1340"/>
+<rect x="58" y="134" width="84" height="18" rx="9" fill="#FFC800" stroke="#1B1340" stroke-width="5"/>
+<circle cx="100" cy="80" r="58" fill="#FF5FAE" stroke="#1B1340" stroke-width="5"/>
+<path d="M43 70 A58 58 0 0 1 157 70 Z" fill="#FFC800" stroke="#1B1340" stroke-width="4" stroke-linejoin="round"/>
+<path d="M64 40 H136 M52 56 H148 M80 30 V70 M100 26 V70 M120 30 V70" stroke="#1B1340" stroke-width="3" stroke-opacity=".4"/>
+<path class="pulse" d="M62 12 Q100 -4 138 12" stroke="#FF5FAE" stroke-width="5" stroke-linecap="round" fill="none"/>
+<ellipse cx="82" cy="92" rx="12" ry="16" fill="#FFFFFF" stroke="#1B1340" stroke-width="3.5"/><circle cx="82" cy="90" r="7" fill="#1B1340"/><ellipse cx="118" cy="92" rx="12" ry="16" fill="#FFFFFF" stroke="#1B1340" stroke-width="3.5"/><circle cx="118" cy="90" r="7" fill="#1B1340"/>
+<circle cx="100" cy="116" r="5" fill="#1B1340"/>
+</svg>
+<span style="font-weight: 800; font-size: 17px">Escucha</span>
+<span style="font-weight: 600; font-size: 13px; color: #5B5478; text-align: center">La rejilla se enciende</span>
+</div>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340">
+<svg role="img" aria-label="Piensa" width="130" height="130" viewBox="0 0 200 200">
+<path d="M58 144 Q40 148 38 166" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/>
+<path d="M78 152 H122 L114 190 H86 Z" fill="#1B1340"/>
+<rect x="58" y="134" width="84" height="18" rx="9" fill="#FFC800" stroke="#1B1340" stroke-width="5"/>
+<circle cx="100" cy="80" r="58" fill="#FF5FAE" stroke="#1B1340" stroke-width="5"/>
+<path d="M43 70 A58 58 0 0 1 157 70 Z" fill="#FF8FC6" stroke="#1B1340" stroke-width="4" stroke-linejoin="round"/>
+<path d="M64 40 H136 M52 56 H148 M80 30 V70 M100 26 V70 M120 30 V70" stroke="#1B1340" stroke-width="3" stroke-opacity=".4"/>
+<path d="M142 144 Q156 126 128 118" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/>
+<ellipse cx="82" cy="92" rx="11" ry="14" fill="#FFFFFF" stroke="#1B1340" stroke-width="3.5"/><circle cx="86" cy="86" r="6" fill="#1B1340"/><ellipse cx="118" cy="92" rx="11" ry="14" fill="#FFFFFF" stroke="#1B1340" stroke-width="3.5"/><circle cx="122" cy="86" r="6" fill="#1B1340"/>
+<path d="M90 114 L108 110" stroke="#1B1340" stroke-width="5" stroke-linecap="round"/>
+<circle class="dot" cx="164" cy="20" r="7" fill="#FF5FAE"/><circle class="dot" cx="180" cy="10" r="5" fill="#FF5FAE" style="animation-delay: .2s"/><circle class="dot" cx="192" cy="4" r="3.5" fill="#FF5FAE" style="animation-delay: .4s"/>
+</svg>
+<span style="font-weight: 800; font-size: 17px">Piensa</span>
+<span style="font-weight: 600; font-size: 13px; color: #5B5478; text-align: center">Mano en la barbilla</span>
+</div>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340">
+<svg role="img" aria-label="Habla" width="130" height="130" viewBox="0 0 200 200">
+<path d="M58 144 Q40 148 38 166" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/>
+<path d="M142 144 Q160 148 162 166" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/>
+<path d="M78 152 H122 L114 190 H86 Z" fill="#1B1340"/>
+<rect x="58" y="134" width="84" height="18" rx="9" fill="#FFC800" stroke="#1B1340" stroke-width="5"/>
+<circle cx="100" cy="80" r="58" fill="#FF5FAE" stroke="#1B1340" stroke-width="5"/>
+<path d="M43 70 A58 58 0 0 1 157 70 Z" fill="#FF8FC6" stroke="#1B1340" stroke-width="4" stroke-linejoin="round"/>
+<path d="M64 40 H136 M52 56 H148 M80 30 V70 M100 26 V70 M120 30 V70" stroke="#1B1340" stroke-width="3" stroke-opacity=".4"/>
+<g class="blink"><ellipse cx="82" cy="90" rx="11" ry="13" fill="#FFFFFF" stroke="#1B1340" stroke-width="3.5"/><circle cx="83" cy="93" r="6" fill="#1B1340"/><ellipse cx="118" cy="90" rx="11" ry="13" fill="#FFFFFF" stroke="#1B1340" stroke-width="3.5"/><circle cx="119" cy="93" r="6" fill="#1B1340"/></g>
+<g class="talk"><ellipse cx="100" cy="116" rx="13" ry="11" fill="#1B1340"/><ellipse cx="100" cy="121" rx="6" ry="3.5" fill="#FFC800"/></g>
+<path class="pulse" d="M170 64 Q180 80 170 96 M182 54 Q198 80 182 106" stroke="#1B1340" stroke-width="4" stroke-linecap="round" fill="none"/>
+</svg>
+<span style="font-weight: 800; font-size: 17px">Habla</span>
+<span style="font-weight: 600; font-size: 13px; color: #5B5478; text-align: center">Ondas que salen</span>
+</div>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340">
+<svg role="img" aria-label="Celebra" width="130" height="130" viewBox="0 0 200 200">
+<path d="M58 144 Q38 122 42 98" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/>
+<path d="M142 144 Q162 122 158 98" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/>
+<path d="M78 152 H122 L114 190 H86 Z" fill="#1B1340"/>
+<rect x="58" y="134" width="84" height="18" rx="9" fill="#FFC800" stroke="#1B1340" stroke-width="5"/>
+<circle cx="100" cy="80" r="58" fill="#FF5FAE" stroke="#1B1340" stroke-width="5"/>
+<path d="M43 70 A58 58 0 0 1 157 70 Z" fill="#FF8FC6" stroke="#1B1340" stroke-width="4" stroke-linejoin="round"/>
+<path d="M64 40 H136 M52 56 H148 M80 30 V70 M100 26 V70 M120 30 V70" stroke="#1B1340" stroke-width="3" stroke-opacity=".4"/>
+<path d="M70 94 Q82 80 94 94" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M106 94 Q118 80 130 94" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/>
+<path d="M82 106 Q100 132 118 106 Z" fill="#1B1340" stroke="#1B1340" stroke-width="4" stroke-linejoin="round"/>
+<path class="twinkle" transform="translate(24 30)" d="M0 -10 L3 -3 L10 -3 L4 1.6 L6.2 10 L0 5 L-6.2 10 L-4 1.6 L-10 -3 L-3 -3 Z" fill="#FFC800" stroke="#1B1340" stroke-width="2"/>
+<path class="twinkle" transform="translate(178 26)" d="M0 -10 L3 -3 L10 -3 L4 1.6 L6.2 10 L0 5 L-6.2 10 L-4 1.6 L-10 -3 L-3 -3 Z" fill="#5EEAD4" stroke="#1B1340" stroke-width="2" style="animation-delay: .5s"/>
+</svg>
+<span style="font-weight: 800; font-size: 17px">Celebra</span>
+<span style="font-weight: 600; font-size: 13px; color: #5B5478; text-align: center">Brazos arriba</span>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1100,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sistema de diseño · Acordeón, búsqueda y atajos</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@500;700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font-family:inherit;cursor:pointer}
+input{font-family:inherit}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.mono{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+button:focus-visible,input:focus-visible{outline:none;box-shadow:0 0 0 3px #FFFFFF,0 0 0 6px #3D5AFE !important}
+.acc-h:hover{background:#F1F3FF}
+.chev{transition:transform 250ms cubic-bezier(.2,.8,.2,1)}
+.row:hover{background:#F1F3FF}
+.kbd{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:32px;padding:0 9px;border-radius:9px;background:#FFFFFF;box-shadow:inset 0 0 0 2px #1B1340,0 3px 0 #1B1340;font-family:'Figtree',sans-serif;font-weight:800;font-size:13px;color:#1B1340}
+@media (prefers-reduced-motion: reduce){.chev{transition:none}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1400px; padding: 56px; background: #F6F7FF; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 22px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .14em; color: #2338C9">IABUDDY · SISTEMA DE DISEÑO · 18</span>
+<h1 class="disp" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.045em; line-height: 1">Acordeón, búsqueda y atajos</h1>
+<p style="margin: 0; font-size: 17px; font-weight: 600; color: #4A4366">Todo funciona: abre correcciones, busca escenarios y abre el panel de atajos.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px; flex: 1; min-height: 0">
+
+<section style="padding: 24px 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Acordeón · correcciones del tutor</h2><span style="font-size: 13px; font-weight: 600; color: #4A4366">Historial de la sesión del 30 oct · 4 correcciones</span></div>
+<button type="button" onClick="{{toggleAll}}" style="min-height: 40px; padding: 0 14px; border: none; border-radius: 999px; background: #E3E8FF; color: #2338C9; font-weight: 800; font-size: 13px; white-space: nowrap">{{allLabel}}</button>
+</div>
+<div style="display: flex; flex-direction: column; border-radius: 22px; box-shadow: inset 0 0 0 2px #E6E8F2; overflow: hidden">
+<sc-for list="{{items}}" as="it" hint-placeholder-count="4">
+<div style="border-top: {{it.sep}}">
+<h3 style="margin: 0"><button type="button" class="acc-h" onClick="{{it.toggle}}" aria-expanded="{{it.open}}" aria-controls="{{it.pid}}" style="width: 100%; min-height: 64px; padding: 12px 18px; border: none; background: {{it.headBg}}; display: flex; align-items: center; gap: 14px; text-align: left; color: #1B1340">
+<span style="width: 36px; height: 36px; flex: none; border-radius: 12px; background: {{it.tagBg}}; color: {{it.tagFg}}; display: grid; place-items: center; font-weight: 800; font-size: 12px">{{it.tag}}</span>
+<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 800">{{it.title}}</span><span style="font-size: 13px; font-weight: 600; color: #5B5478">{{it.meta}}</span></span>
+<svg class="chev" aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="transform: {{it.rot}}"><path d="m6 9 6 6 6-6"/></svg>
+</button></h3>
+<sc-if value="{{it.open}}" hint-placeholder-val="{{ false }}">
+<div id="{{it.pid}}" role="region" style="padding: 4px 18px 18px 68px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border-radius: 14px; background: #FFE8DF"><span style="font-size: 11px; font-weight: 800; letter-spacing: .1em; color: #9A3412">DIJISTE</span><span style="font-size: 15px; font-weight: 700; color: #1B1340">{{it.said}}</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border-radius: 14px; background: #EEFAD9"><span style="font-size: 11px; font-weight: 800; letter-spacing: .1em; color: #2F5208">MEJOR ASÍ</span><span style="font-size: 15px; font-weight: 700; color: #1B1340">{{it.better}}</span></div>
+<span style="font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.45">{{it.why}}</span>
+<div style="display: flex; gap: 8px"><button type="button" style="min-height: 40px; padding: 0 14px; border: none; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 13px">Practicar esta frase</button><button type="button" style="min-height: 40px; padding: 0 14px; border: none; border-radius: 999px; background: #F1F3FF; color: #1B1340; font-weight: 800; font-size: 13px">Escuchar</button></div>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px; font-weight: 600; color: #4A4366; line-height: 1.45">
+<div style="padding: 12px 14px; border-radius: 16px; background: #F6F7FF"><strong style="color: #1B1340">Cabecera:</strong> botón dentro de un h3, ≥ 64 px de alto, aria-expanded y aria-controls. Chevron gira 180° en 250 ms.</div>
+<div style="padding: 12px 14px; border-radius: 16px; background: #F6F7FF"><strong style="color: #1B1340">Varios abiertos:</strong> cada panel es independiente. «Abrir todo» solo si hay más de 3.</div>
+<div style="padding: 12px 14px; border-radius: 16px; background: #F6F7FF"><strong style="color: #1B1340">Teclado:</strong> Tab entre cabeceras, Enter o Espacio abre y cierra.</div>
+<div style="padding: 12px 14px; border-radius: 16px; background: #F6F7FF"><strong style="color: #1B1340">Etiqueta:</strong> tipo de corrección en la ficha (GR gramática, VO vocabulario, NA naturalidad).</div>
+</div>
+</section>
+
+<div style="display: flex; flex-direction: column; gap: 22px; min-height: 0">
+<section style="padding: 24px 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 2px"><h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Búsqueda</h2><span style="font-size: 13px; font-weight: 600; color: #4A4366">Escenarios e historial. Filtra mientras escribes; prueba «café» o «trabajo».</span></div>
+<div role="search" style="position: relative">
+<label for="q" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Buscar escenarios</label>
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A4366" stroke-width="2.6" stroke-linecap="round" style="position: absolute; left: 18px; top: 17px"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+<input id="q" type="search" value="{{q}}" onChange="{{setQ}}" placeholder="Buscar escenarios…" autocomplete="off" style="width: 100%; min-height: 54px; padding: 0 108px 0 50px; border: none; border-radius: 999px; background: #F1F3FF; box-shadow: inset 0 0 0 2px #8A86A3; font-size: 16px; font-weight: 600; color: #1B1340">
+<sc-if value="{{hasQ}}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{clearQ}}" aria-label="Borrar búsqueda" style="position: absolute; right: 56px; top: 9px; width: 36px; height: 36px; border: none; border-radius: 50%; background: #E6E8F2; display: grid; place-items: center"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></sc-if>
+<span class="kbd" aria-hidden="true" style="position: absolute; right: 14px; top: 11px">/</span>
+</div>
+<span role="status" style="font-size: 13px; font-weight: 700; color: #4A4366">{{countLabel}}</span>
+<sc-if value="{{hasResults}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<sc-for list="{{results}}" as="r" hint-placeholder-count="4">
+<div class="row" style="display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 8px 12px; border-radius: 16px">
+<span style="width: 36px; height: 36px; flex: none; border-radius: 12px; background: {{r.bg}}"></span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 800">{{r.pre}}<mark style="background: #FFF4C7; color: #1B1340; border-radius: 4px; padding: 0 2px; box-shadow: inset 0 -2px 0 #A16207">{{r.hit}}</mark>{{r.post}}</span><span style="font-size: 12px; font-weight: 600; color: #5B5478">{{r.meta}}</span></span>
+<span style="font-size: 12px; font-weight: 800; color: #2338C9">{{r.kind}}</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{noResults}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 20px; background: #F6F7FF">
+<svg aria-hidden="true" width="54" height="54" viewBox="0 0 200 200"><rect x="14" y="96" width="20" height="36" rx="10" fill="#FFC800"/><rect x="42" y="80" width="26" height="70" rx="13" fill="#FF6B3D"/><rect x="74" y="44" width="52" height="136" rx="26" fill="#3D5AFE"/><rect x="132" y="80" width="26" height="70" rx="13" fill="#FF5FAE"/><rect x="166" y="96" width="20" height="36" rx="10" fill="#9BE22D"/><circle cx="89" cy="86" r="8.5" fill="#FFFFFF"/><circle cx="111" cy="86" r="8.5" fill="#FFFFFF"/><circle cx="87" cy="84" r="4.5" fill="#1B1340"/><circle cx="109" cy="84" r="4.5" fill="#1B1340"/></svg>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 800">No encontré «{{q}}»</span><span style="font-size: 13px; font-weight: 600; color: #4A4366">Prueba con otra palabra o crea un escenario nuevo.</span></span>
+</div>
+</sc-if>
+</section>
+
+<section style="padding: 24px 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px; position: relative; flex: 1; min-height: 0; overflow: hidden">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Panel de atajos</h2><span style="font-size: 13px; font-weight: 600; color: #4A4366">Se abre con <span class="kbd" style="height: 24px; min-width: 24px; font-size: 12px">?</span> desde cualquier pantalla.</span></div>
+<button type="button" onClick="{{toggleKeys}}" aria-haspopup="dialog" style="min-height: 48px; padding: 0 18px; border: none; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 15px">Ver atajos</button>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px; font-weight: 600; color: #4A4366; line-height: 1.45">
+<div style="padding: 12px 14px; border-radius: 16px; background: #F6F7FF"><strong style="color: #1B1340">Tecla:</strong> 32 px de alto, borde 2 px en tinta y sombra inferior de 3 px. Combinaciones con «+».</div>
+<div style="padding: 12px 14px; border-radius: 16px; background: #F6F7FF"><strong style="color: #1B1340">Sin conflictos:</strong> los atajos de una letra no actúan dentro de campos de texto.</div>
+</div>
+<sc-if value="{{keysOpen}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; background: rgba(27,19,64,.42); display: grid; place-items: center; padding: 18px">
+<div role="dialog" aria-modal="true" aria-labelledby="keys-t" style="width: 100%; max-height: 100%; padding: 20px 22px; border-radius: 26px; background: #FFFFFF; box-shadow: 0 30px 60px -20px rgba(27,19,64,.5); display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: center"><h3 id="keys-t" class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Atajos de teclado</h3><button type="button" onClick="{{toggleKeys}}" aria-label="Cerrar" style="width: 40px; height: 40px; border: none; border-radius: 50%; background: #F1F3FF; display: grid; place-items: center"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 22px; row-gap: 8px">
+<sc-for list="{{keys}}" as="k" hint-placeholder-count="8">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 36px; font-size: 14px; font-weight: 700"><span>{{k.what}}</span><span style="display: flex; gap: 4px"><sc-for list="{{k.ks}}" as="kk" hint-placeholder-count="1"><span class="kbd">{{kk.t}}</span></sc-for></span></div>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+</section>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { open: [0], q: '', keys: false }; }
+  renderVals() {
+    const st = this.state;
+    const data = [
+      { tag: 'GR', tagBg: '#FFE8DF', tagFg: '#9A3412', title: 'Pasado simple', meta: 'Turno 3 · «Yesterday I go…»', said: 'Yesterday I go to the office early.', better: 'Yesterday I went to the office early.', why: 'Con «yesterday» el verbo va en pasado: go → went.' },
+      { tag: 'VO', tagBg: '#E3E8FF', tagFg: '#2338C9', title: 'Make vs. do', meta: 'Turno 6 · «do a mistake»', said: 'I always do a mistake with that.', better: 'I always make a mistake with that.', why: 'En inglés se dice «make a mistake». «Do» va con tareas: do homework.' },
+      { tag: 'NA', tagBg: '#EEFAD9', tagFg: '#2F5208', title: 'Sonar más natural', meta: 'Turno 9 · «I am agree»', said: 'I am agree with you.', better: 'I agree with you.', why: '«Agree» ya es verbo; no lleva «am». Error muy común viniendo del español.' },
+      { tag: 'GR', tagBg: '#FFE8DF', tagFg: '#9A3412', title: 'Preposiciones de tiempo', meta: 'Turno 12 · «in Monday»', said: 'We have a meeting in Monday.', better: 'We have a meeting on Monday.', why: 'Días de la semana con «on»; meses y años con «in».' }
+    ];
+    const items = data.map((d, i) => {
+      const open = st.open.indexOf(i) !== -1;
+      return Object.assign({}, d, {
+        open, pid: 'acc-p-' + i, sep: i === 0 ? 'none' : '2px solid #E6E8F2',
+        headBg: open ? '#F6F7FF' : '#FFFFFF', rot: open ? 'rotate(180deg)' : 'none',
+        toggle: () => this.setState({ open: open ? st.open.filter(x => x !== i) : st.open.concat([i]) })
+      });
+    });
+    const allOpen = st.open.length === data.length;
+    const all = [
+      { t: 'Pedir un café', meta: 'Escenario · 3 objetivos · A2', kind: 'Escenario', bg: '#FF6B3D' },
+      { t: 'Entrevista de trabajo', meta: 'Escenario · 4 objetivos · B2', kind: 'Escenario', bg: '#3D5AFE' },
+      { t: 'Check-in en el hotel', meta: 'Escenario · 3 objetivos · B1', kind: 'Escenario', bg: '#FF5FAE' },
+      { t: 'Charla sobre trabajo remoto', meta: 'Historial · 28 oct · 14 min', kind: 'Historial', bg: '#9BE22D' },
+      { t: 'Reclamo en el aeropuerto', meta: 'Escenario · 4 objetivos · B1', kind: 'Escenario', bg: '#FFC800' },
+      { t: 'Café con un colega', meta: 'Historial · 25 oct · 9 min', kind: 'Historial', bg: '#FF6B3D' }
+    ];
+    const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const q = st.q.trim();
+    const nq = norm(q);
+    let results = all;
+    if (q) results = all.filter(r => norm(r.t).indexOf(nq) !== -1);
+    results = results.slice(0, 4).map(r => {
+      if (!q) return Object.assign({}, r, { pre: r.t, hit: '', post: '' });
+      const at = norm(r.t).indexOf(nq);
+      return Object.assign({}, r, { pre: r.t.slice(0, at), hit: r.t.slice(at, at + q.length), post: r.t.slice(at + q.length) });
+    });
+    const n = q ? all.filter(r => norm(r.t).indexOf(nq) !== -1).length : all.length;
+    const keys = [
+      { what: 'Hablar (abrir turno)', ks: [{ t: 'Espacio' }] },
+      { what: 'Cancelar turno o cerrar', ks: [{ t: 'Esc' }] },
+      { what: 'Repetir lo que dijo Onda', ks: [{ t: 'R' }] },
+      { what: 'Mostrar u ocultar texto', ks: [{ t: 'T' }] },
+      { what: 'Siguiente sonido', ks: [{ t: '→' }] },
+      { what: 'Sonido anterior', ks: [{ t: '←' }] },
+      { what: 'Buscar', ks: [{ t: '/' }] },
+      { what: 'Ajustes', ks: [{ t: 'Ctrl' }, { t: ',' }] },
+      { what: 'Terminar sesión', ks: [{ t: 'Ctrl' }, { t: 'Enter' }] },
+      { what: 'Este panel', ks: [{ t: '?' }] }
+    ];
+    return {
+      items, allLabel: allOpen ? 'Cerrar todo' : 'Abrir todo',
+      toggleAll: () => this.setState({ open: allOpen ? [] : data.map((_, i) => i) }),
+      q: st.q, hasQ: st.q.length > 0,
+      setQ: (e) => this.setState({ q: e.target.value }),
+      clearQ: () => this.setState({ q: '' }),
+      results, hasResults: n > 0, noResults: n === 0,
+      countLabel: q ? (n === 1 ? '1 resultado' : n + ' resultados') : 'Recientes',
+      keysOpen: st.keys, toggleKeys: () => this.setState({ keys: !st.keys }), keys
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>IABuddy — Inicio C2 · Estudio de voz (Speak)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+Mono:wght@600;700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#1F4BFF}a:hover{color:#0E1430}
+button{font-family:inherit;cursor:pointer}
+.ipa{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+a:focus-visible,button:focus-visible{outline:3px solid #1F4BFF;outline-offset:3px}
+.lift{transition:transform .2s ease, box-shadow .2s ease}
+.lift:hover{transform:translateY(-2px)}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes blink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+@keyframes wave{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
+@keyframes glow{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
+@keyframes lit{0%,6%{color:#B4BAD3;background:transparent}14%,80%{color:#1F4BFF;background:transparent}88%,100%{color:#B4BAD3}}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(-3deg)}50%{transform:scale(1.1) rotate(3deg)}}
+@keyframes fill{from{width:0}}
+@keyframes popin{0%{transform:scale(.7) rotate(var(--r,0deg));opacity:0}100%{transform:scale(1) rotate(var(--r,0deg));opacity:1}}
+@keyframes shimmer{0%{transform:translateX(-120%)}100%{transform:translateX(320%)}}
+.a-bob{animation:bob 4s ease-in-out infinite}
+.a-blink{animation:blink 4.5s infinite;transform-origin:center}
+.a-wave{animation:wave 1s ease-in-out infinite;transform-origin:center}
+.a-glow{animation:glow 3s ease-in-out infinite}
+.a-lit{animation:lit 7s ease-in-out infinite}
+.a-flicker{animation:flicker 1.6s ease-in-out infinite}
+.a-fill{animation:fill 1.4s cubic-bezier(.2,.8,.2,1) both}
+.a-pop{animation:popin .6s cubic-bezier(.3,1.5,.5,1) both}
+.a-shimmer{animation:shimmer 2.8s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="min-height: 1500px; background: #F4F6FF; color: #0E1430; font-family: 'Plus Jakarta Sans', system-ui, sans-serif">
+
+<header style="max-width: 1320px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 48px) 8px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="InicioC2.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #0E1430; min-height: 44px">
+<span aria-hidden="true" style="position: relative; width: 38px; height: 38px; border-radius: 50%; background: #1F4BFF; display: flex; align-items: center; justify-content: center; gap: 5px">
+<span style="width: 8px; height: 11px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 1px"><span style="width: 4px; height: 5px; border-radius: 50%; background: #0E1430"></span></span>
+<span style="width: 8px; height: 11px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 1px"><span style="width: 4px; height: 5px; border-radius: 50%; background: #0E1430"></span></span>
+<span style="position: absolute; right: -3px; top: 14px; width: 8px; height: 12px; border-radius: 4px; background: #FF8A1F"></span>
+</span>
+<span style="font-weight: 800; font-size: 22px; letter-spacing: -0.02em">iabuddy</span>
+</a>
+<nav aria-label="Principal" style="display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; border-radius: 999px; background: #FFFFFF">
+<a href="InicioC2.dc.html" aria-current="page" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; background: #1F4BFF; color: #FFFFFF; font-weight: 700; font-size: 15px; text-decoration: none">Hoy</a>
+<a href="Conversacion.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #2B3150; font-weight: 600; font-size: 15px; text-decoration: none">Conversar</a>
+<a href="InicioC2.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #2B3150; font-weight: 600; font-size: 15px; text-decoration: none">Escenarios</a>
+<a href="InicioC2.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #2B3150; font-weight: 600; font-size: 15px; text-decoration: none">Sonidos</a>
+<a href="InicioC2.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #2B3150; font-weight: 600; font-size: 15px; text-decoration: none">Progreso</a>
+</nav>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+<span style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: #FFFFFF; font-weight: 800; font-size: 15px">
+<svg class="a-flicker" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="#FF8A1F"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>12</span>
+<span style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px 0 8px; border-radius: 999px; background: #FFFFFF; font-weight: 800; font-size: 15px">
+<span style="width: 28px; height: 30px; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: #1F4BFF; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 13px">7</span>Conversador</span>
+<a href="InicioC2.dc.html" aria-label="Ajustes" style="width: 44px; height: 44px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; color: #2B3150">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></a>
+</div>
+</header>
+
+<main style="max-width: 1320px; margin: 0 auto; padding: 16px clamp(16px, 4vw, 48px) 56px; display: flex; flex-direction: column; gap: 24px">
+
+<section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 24px">
+
+<div style="position: relative; overflow: hidden; border-radius: 28px; background: #FFFFFF; box-shadow: 0 16px 40px -24px rgba(31,75,255,.35); padding: 32px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px">
+<div aria-hidden="true" class="a-glow" style="position: absolute; top: -80px; width: 360px; height: 260px; border-radius: 50%; background: radial-gradient(closest-side, rgba(143,166,255,.45), rgba(143,166,255,0))"></div>
+<div aria-hidden="true" class="a-bob" style="position: relative; width: 130px; height: 130px">
+<span style="position: absolute; left: 8px; top: 2px; width: 114px; height: 62px; border: 8px solid #0E1430; border-bottom: none; border-radius: 62px 62px 0 0"></span>
+<span style="position: absolute; left: 14px; top: 16px; width: 102px; height: 102px; border-radius: 50%; background: #1F4BFF; box-shadow: inset -10px -12px 0 #1638D6, inset 8px 8px 0 #4A6DFF; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px">
+<span style="display: flex; gap: 12px"><span class="a-blink" style="width: 20px; height: 27px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px"><span style="width: 10px; height: 11px; border-radius: 50%; background: #0E1430"></span></span><span class="a-blink" style="width: 20px; height: 27px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px"><span style="width: 10px; height: 11px; border-radius: 50%; background: #0E1430"></span></span></span>
+<span style="width: 26px; height: 11px; border-radius: 0 0 14px 14px; background: #0E1430"></span>
+</span>
+<span style="position: absolute; left: 0; top: 50px; width: 22px; height: 38px; border-radius: 10px; background: #FF8A1F"></span>
+<span style="position: absolute; right: 0; top: 50px; width: 22px; height: 38px; border-radius: 10px; background: #FF8A1F"></span>
+<span style="position: absolute; left: 50%; bottom: -6px; width: 60px; height: 8px; margin-left: -30px; border-radius: 50%; background: rgba(31,75,255,.18)"></span>
+</div>
+<h1 style="position: relative; margin: 6px 0 0; font-size: clamp(30px, 3.2vw, 40px); line-height: 1.1; font-weight: 800; letter-spacing: -0.03em">¡Qué bueno verte, Amado!</h1>
+<p style="position: relative; margin: 0; font-size: 17px; line-height: 1.5; font-weight: 500; color: #5A6080; max-width: 34ch">Te faltan 6 minutos para la meta de hoy. ¿Calentamos con un repaso de 1 minuto?</p>
+<div style="position: relative; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; width: 100%; margin-top: 6px">
+<a class="lift" href="Conversacion.dc.html" style="flex: 1 1 200px; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; border-radius: 16px; background: #1F4BFF; color: #FFFFFF; font-weight: 800; font-size: 17px; text-decoration: none; box-shadow: 0 10px 24px -10px rgba(31,75,255,.8)">¡Vamos! <span style="padding: 3px 9px; border-radius: 8px; background: rgba(255,255,255,.2); font-size: 13px">Espacio</span></a>
+<a class="lift" href="Conversacion.dc.html" style="flex: 1 1 160px; display: flex; align-items: center; justify-content: center; min-height: 56px; border-radius: 16px; background: #E6EBFF; color: #1F4BFF; font-weight: 800; font-size: 16px; text-decoration: none">Ir directo a hablar</a>
+</div>
+</div>
+
+<div style="position: relative; overflow: hidden; border-radius: 28px; background: #FFFFFF; box-shadow: 0 16px 40px -24px rgba(31,75,255,.35); display: flex; flex-direction: column">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 18px 22px 0">
+<span style="font-weight: 700; font-size: 14px; color: #5A6080">Calentamiento · 1 de 3</span>
+<button type="button" aria-label="Guardar frase" style="width: 44px; height: 44px; border: none; border-radius: 12px; background: transparent; display: flex; align-items: center; justify-content: center; color: #5A6080">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+</div>
+<div style="padding: 0 22px"><div style="height: 6px; border-radius: 999px; background: #E6EBFF; overflow: hidden"><div class="a-fill" style="width: 33%; height: 100%; border-radius: 999px; background: #1F4BFF"></div></div></div>
+<div lang="en" style="flex: 1; display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 4px 12px; padding: 34px 26px 18px; font-size: clamp(28px, 2.8vw, 36px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.25">
+<span style="display: flex; flex-direction: column; align-items: center"><span class="a-lit">I</span><span style="font-size: 12px; font-weight: 700; color: #0A7A59">96</span></span>
+<span style="display: flex; flex-direction: column; align-items: center"><span class="a-lit" style="animation-delay: .35s">led</span><span style="font-size: 12px; font-weight: 700; color: #0A7A59">91</span></span>
+<span style="display: flex; flex-direction: column; align-items: center"><span class="a-lit" style="animation-delay: .7s">the</span><span style="font-size: 12px; font-weight: 700; color: #C2560A">72</span></span>
+<span style="display: flex; flex-direction: column; align-items: center"><span class="a-lit" style="animation-delay: 1.05s; padding: 0 6px; border-radius: 10px; background: #E6EBFF">migration</span><span style="font-size: 12px; font-weight: 700; color: #0A7A59">88</span></span>
+<span style="display: flex; flex-direction: column; align-items: center"><span class="a-lit" style="animation-delay: 1.4s">to</span><span style="font-size: 12px; font-weight: 700; color: #0A7A59">94</span></span>
+<span style="display: flex; flex-direction: column; align-items: center"><span class="a-lit" style="animation-delay: 1.75s">a</span><span style="font-size: 12px; font-weight: 700; color: #0A7A59">90</span></span>
+<span style="display: flex; flex-direction: column; align-items: center"><span class="a-lit" style="animation-delay: 2.1s">new</span><span style="font-size: 12px; font-weight: 700; color: #0A7A59">93</span></span>
+<span style="display: flex; flex-direction: column; align-items: center"><span class="a-lit" style="animation-delay: 2.45s; text-decoration: underline dotted #C2560A; text-decoration-thickness: 3px; text-underline-offset: 6px">database</span><span style="font-size: 12px; font-weight: 700; color: #C2560A">61 · /eɪ/</span></span>
+</div>
+<p style="margin: 0; text-align: center; font-size: 15px; font-weight: 600; color: #5A6080">Lideré la migración a una nueva base de datos.</p>
+<div style="position: relative; margin: 20px 14px 14px; padding: 18px 20px 20px; border-radius: 22px; background: #FFFFFF; box-shadow: 0 -10px 30px -18px rgba(31,75,255,.6), inset 0 0 0 1.5px #E6EBFF; display: flex; flex-direction: column; align-items: center; gap: 14px">
+<span style="font-weight: 600; font-size: 14px; color: #5A6080">Escuchando…</span>
+<div aria-hidden="true" style="display: flex; align-items: center; gap: 5px; height: 30px">
+<span style="width: 5px; height: 5px; border-radius: 50%; background: #CBD3F5"></span><span style="width: 5px; height: 5px; border-radius: 50%; background: #CBD3F5"></span><span style="width: 5px; height: 5px; border-radius: 50%; background: #AFBCF2"></span>
+<span class="a-wave" style="width: 5px; height: 16px; border-radius: 9px; background: #8FA6FF"></span>
+<span class="a-wave" style="width: 5px; height: 28px; border-radius: 9px; background: #1F4BFF; animation-delay: -.2s"></span>
+<span class="a-wave" style="width: 5px; height: 20px; border-radius: 9px; background: #1F4BFF; animation-delay: -.4s"></span>
+<span class="a-wave" style="width: 5px; height: 30px; border-radius: 9px; background: #1F4BFF; animation-delay: -.6s"></span>
+<span class="a-wave" style="width: 5px; height: 14px; border-radius: 9px; background: #8FA6FF; animation-delay: -.3s"></span>
+<span style="width: 5px; height: 5px; border-radius: 50%; background: #AFBCF2"></span><span style="width: 5px; height: 5px; border-radius: 50%; background: #CBD3F5"></span><span style="width: 5px; height: 5px; border-radius: 50%; background: #CBD3F5"></span>
+</div>
+<div style="display: flex; align-items: center; gap: 18px">
+<button type="button" aria-label="Escuchar la frase en inglés americano" style="width: 48px; height: 48px; border: none; border-radius: 50%; background: #F4F6FF; display: flex; align-items: center; justify-content: center; color: #2B3150">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>
+<button type="button" aria-label="Detener (Espacio)" style="width: 76px; height: 76px; border: none; border-radius: 50%; background: #E6EBFF; display: flex; align-items: center; justify-content: center; gap: 7px">
+<span style="width: 8px; height: 26px; border-radius: 3px; background: #1F4BFF"></span><span style="width: 8px; height: 26px; border-radius: 3px; background: #1F4BFF"></span></button>
+<button type="button" aria-label="Repetir" style="width: 48px; height: 48px; border: none; border-radius: 50%; background: #F4F6FF; display: flex; align-items: center; justify-content: center; color: #2B3150">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+</div>
+</div>
+</div>
+</section>
+
+<section style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+<div style="flex: 999 1 420px; min-width: 0; border-radius: 28px; background: #FFFFFF; padding: 26px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-weight: 700; font-size: 13px; letter-spacing: .12em; color: #5A6080">UNIDAD 3</span>
+<h2 style="margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.02em">Entrevista técnica</h2>
+</div>
+<a href="InicioC2.dc.html" aria-label="Frases clave de la unidad" style="width: 48px; height: 48px; border-radius: 14px; background: #E6EBFF; display: flex; align-items: center; justify-content: center; color: #1F4BFF">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M6.5 17H20v4H6.5A2.5 2.5 0 0 1 4 18.5"/></svg></a>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<a class="lift" href="InicioC2.dc.html" style="align-self: flex-start; display: flex; align-items: center; gap: 14px; min-height: 64px; padding: 10px 22px 10px 10px; border-radius: 22px; background: #F4F6FF; color: #2B3150; text-decoration: none; margin-left: 4%">
+<span style="flex: none; width: 44px; height: 44px; border-radius: 50%; background: #12B886; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+<span style="font-weight: 700; font-size: 16px">Preséntate en menos de 1 minuto</span></a>
+<a class="lift" href="Conversacion.dc.html" style="position: relative; overflow: hidden; align-self: flex-start; display: flex; align-items: center; gap: 14px; min-height: 76px; padding: 12px 26px 12px 12px; border-radius: 24px; background: #1F4BFF; color: #FFFFFF; text-decoration: none; margin-left: 18%; box-shadow: 0 14px 30px -14px rgba(31,75,255,.9)">
+<span aria-hidden="true" class="a-shimmer" style="position: absolute; top: 0; left: 0; width: 30%; height: 100%; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.22), rgba(255,255,255,0))"></span>
+<span style="flex: none; width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; border: 3px solid #8FA6FF; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #1F4BFF; font-size: 15px">HM</span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 800; font-size: 17px">Describe un proyecto del que estés orgulloso</span><span style="font-weight: 600; font-size: 13px; opacity: .9">Hiring manager · roleplay · 6 min</span></span></a>
+<span style="align-self: flex-start; display: flex; align-items: center; gap: 14px; min-height: 64px; padding: 10px 22px 10px 10px; border-radius: 22px; background: #F4F6FF; color: #5A6080; margin-left: 30%">
+<span style="flex: none; width: 44px; height: 44px; border-radius: 50%; background: #DDE2F2; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px">HM</span>
+<span style="font-weight: 700; font-size: 16px">Explica un trade-off técnico</span></span>
+<span style="align-self: flex-start; display: flex; align-items: center; gap: 14px; min-height: 64px; padding: 10px 22px 10px 10px; border-radius: 22px; background: #F4F6FF; color: #5A6080; margin-left: 12%">
+<span style="flex: none; width: 44px; height: 44px; border-radius: 50%; background: #DDE2F2; display: flex; align-items: center; justify-content: center"><span class="ipa" style="font-weight: 700; font-size: 15px">eɪ</span></span>
+<span style="font-weight: 700; font-size: 16px">Pronunciación: database, data, scale</span></span>
+</div>
+</div>
+
+<div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+
+<div style="border-radius: 28px; background: #FFFFFF; padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center">
+<svg class="a-flicker" aria-hidden="true" width="56" height="56" viewBox="0 0 24 24" fill="#FF8A1F"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/><circle cx="12" cy="16" r="2.4" fill="#FFD3A8"/></svg>
+<div style="display: flex; flex-direction: column"><span style="font-size: 48px; font-weight: 800; letter-spacing: -0.04em; line-height: 1">12</span><span style="font-size: 18px; font-weight: 800">días de racha</span></div>
+<div aria-label="Semana: lunes a miércoles cumplidos, jueves con protector, viernes cumplido, hoy en curso" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; width: 100%">
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; font-weight: 700"><span style="width: 32px; height: 32px; border-radius: 50%; background: #FF8A1F; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>L</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; font-weight: 700"><span style="width: 32px; height: 32px; border-radius: 50%; background: #FF8A1F; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>M</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; font-weight: 700"><span style="width: 32px; height: 32px; border-radius: 50%; background: #FF8A1F; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>X</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; font-weight: 700"><span style="width: 32px; height: 32px; border-radius: 50%; background: #1F4BFF; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></span>J</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; font-weight: 700"><span style="width: 32px; height: 32px; border-radius: 50%; background: #FF8A1F; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>V</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; font-weight: 700"><span style="width: 32px; height: 32px; border-radius: 50%; border: 3px solid #FF8A1F; background: conic-gradient(#FFD3A8 60%, #FFFFFF 0)"></span>S</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: #5A6080"><span style="width: 32px; height: 32px; border-radius: 50%; background: #E9ECF5"></span>D</span>
+</div>
+<span style="font-weight: 600; font-size: 14px; color: #5A6080">El jueves usaste tu protector · hoy 9 de 15 min</span>
+</div>
+
+<div style="border-radius: 28px; background: #FFFFFF; padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center">
+<div style="width: 112px; height: 124px; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: #1F4BFF; color: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span style="font-size: 50px; font-weight: 800; line-height: 1; letter-spacing: -0.04em">7</span>
+<span style="font-size: 11px; font-weight: 800; letter-spacing: .16em">NIVEL</span>
+</div>
+<span style="font-size: 20px; font-weight: 800">Conversador</span>
+<div style="position: relative; width: 100%; height: 22px; border-radius: 999px; background: #E6EBFF; overflow: hidden">
+<div class="a-fill" style="width: 83.5%; height: 100%; border-radius: 999px; background: #1F4BFF; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; color: #FFFFFF; font-weight: 800; font-size: 12px">+35 hoy</div>
+</div>
+<span style="font-weight: 600; font-size: 14px; color: #5A6080">2.340 / 2.800 XP · siguiente: 8 · Narrador</span>
+</div>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap">
+<h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #5A6080">Métricas clave</h2>
+<span style="display: flex; align-items: center; min-height: 40px; padding: 0 14px; border-radius: 12px; background: #FFFFFF; font-weight: 700; font-size: 14px">Últimos 7 días</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 18px">
+<div style="border-radius: 22px; background: #FFFFFF; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="width: 36px; height: 36px; border-radius: 50%; background: #8E6BFF; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span><span style="font-weight: 700; font-size: 13px; color: #0A7A59">↑ 18 %</span></div>
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 10px">
+<div style="display: flex; flex-direction: column"><span style="font-size: 32px; font-weight: 800; letter-spacing: -0.03em">214</span><span style="font-weight: 600; font-size: 14px; color: #5A6080">Turnos hablados</span></div>
+<span aria-hidden="true" style="display: flex; align-items: flex-end; gap: 3px; height: 34px"><span style="width: 5px; height: 40%; border-radius: 3px; background: #D9D0FF"></span><span style="width: 5px; height: 70%; border-radius: 3px; background: #D9D0FF"></span><span style="width: 5px; height: 30%; border-radius: 3px; background: #D9D0FF"></span><span style="width: 5px; height: 55%; border-radius: 3px; background: #B9A8FF"></span><span style="width: 5px; height: 85%; border-radius: 3px; background: #B9A8FF"></span><span style="width: 5px; height: 100%; border-radius: 3px; background: #8E6BFF"></span></span>
+</div>
+</div>
+<div style="border-radius: 22px; background: #FFFFFF; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="width: 36px; height: 36px; border-radius: 50%; background: #12B886; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span style="font-weight: 700; font-size: 13px; color: #0A7A59">↑ 9 %</span></div>
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 10px">
+<div style="display: flex; flex-direction: column"><span style="font-size: 32px; font-weight: 800; letter-spacing: -0.03em">38 min</span><span style="font-weight: 600; font-size: 14px; color: #5A6080">Tiempo hablando</span></div>
+<span aria-hidden="true" style="display: flex; align-items: flex-end; gap: 3px; height: 34px"><span style="width: 5px; height: 50%; border-radius: 3px; background: #BDEBDC"></span><span style="width: 5px; height: 65%; border-radius: 3px; background: #BDEBDC"></span><span style="width: 5px; height: 40%; border-radius: 3px; background: #BDEBDC"></span><span style="width: 5px; height: 8%; border-radius: 3px; background: #BDEBDC"></span><span style="width: 5px; height: 85%; border-radius: 3px; background: #6FD3B5"></span><span style="width: 5px; height: 75%; border-radius: 3px; background: #12B886"></span></span>
+</div>
+</div>
+<div style="border-radius: 22px; background: #FFFFFF; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="width: 36px; height: 36px; border-radius: 50%; background: #1F4BFF; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span style="font-weight: 700; font-size: 13px; color: #0A7A59">↑ 6 pts</span></div>
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 10px">
+<div style="display: flex; flex-direction: column"><span style="font-size: 32px; font-weight: 800; letter-spacing: -0.03em">64 %</span><span style="font-weight: 600; font-size: 14px; color: #5A6080">Turnos sin errores</span></div>
+<span aria-hidden="true" style="display: flex; align-items: flex-end; gap: 3px; height: 34px"><span style="width: 5px; height: 45%; border-radius: 3px; background: #CBD5FF"></span><span style="width: 5px; height: 50%; border-radius: 3px; background: #CBD5FF"></span><span style="width: 5px; height: 48%; border-radius: 3px; background: #CBD5FF"></span><span style="width: 5px; height: 58%; border-radius: 3px; background: #8FA6FF"></span><span style="width: 5px; height: 60%; border-radius: 3px; background: #8FA6FF"></span><span style="width: 5px; height: 64%; border-radius: 3px; background: #1F4BFF"></span></span>
+</div>
+</div>
+<div style="border-radius: 22px; background: #FFFFFF; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: center"><span class="ipa" style="width: 36px; height: 36px; border-radius: 50%; background: #FF8A1F; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 17px">θ</span><span style="font-weight: 700; font-size: 13px; color: #B42318">↓ prioridad</span></div>
+<div style="display: flex; flex-direction: column"><span style="font-size: 32px; font-weight: 800; letter-spacing: -0.03em">48</span><span style="font-weight: 600; font-size: 14px; color: #5A6080">Sonido más débil · think, three</span></div>
+</div>
+</div>
+</section>
+
+<footer style="margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; font-weight: 600; font-size: 14px; color: #5A6080">
+<span style="display: flex; align-items: center; gap: 8px"><span style="width: 9px; height: 9px; border-radius: 50%; background: #12B886"></span>100 % local · VAD, STT, LLM, TTS y fonemas corren en tu equipo</span>
+<span>Referencia de pronunciación: inglés americano</span>
+</footer>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

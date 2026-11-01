@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>IABuddy — Inicio E · Selección de mundos</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Press+Start+2P&family=DM+Sans:opsz,wght@9..40,500;9..40,700;9..40,800&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#1D4ED8}a:hover{color:#111827}
+.disp{font-family:'Dela Gothic One','Arial Black',system-ui,sans-serif;font-weight:400}
+.px{font-family:'Press Start 2P','Courier New',monospace;font-weight:400}
+a:focus-visible,button:focus-visible{outline:4px solid #FFD000;outline-offset:3px}
+.jump{transition:transform .15s steps(3)}
+.jump:hover{transform:translateY(-6px)}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes blinkc{0%,49%{opacity:1}50%,100%{opacity:0}}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(2deg)}}
+@keyframes coin{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.2)}}
+@keyframes blink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+.a-bounce{animation:bounce 1.2s steps(4) infinite}
+.a-blinkc{animation:blinkc 1s steps(1) infinite}
+.a-float{animation:float 5s ease-in-out infinite}
+.a-coin{animation:coin 1.4s ease-in-out infinite}
+.a-blink{animation:blink 4s infinite;transform-origin:center}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="position: relative; overflow: hidden; background-color: #EAF2FF; background-image: linear-gradient(45deg, rgba(29,78,216,.06) 25%, transparent 25%, transparent 75%, rgba(29,78,216,.06) 75%), linear-gradient(45deg, rgba(29,78,216,.06) 25%, transparent 25%, transparent 75%, rgba(29,78,216,.06) 75%); background-size: 48px 48px; background-position: 0 0, 24px 24px; color: #111827; font-family: 'DM Sans', system-ui, sans-serif">
+
+<header style="background: #E5202E; color: #FFFFFF; border-bottom: 6px solid #111827">
+<div style="max-width: 1320px; margin: 0 auto; padding: 16px clamp(16px, 3vw, 32px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="InicioE.dc.html" class="px" style="font-size: 18px; color: #FFFFFF; text-decoration: none; min-height: 44px; display: flex; align-items: center; letter-spacing: .02em">IABUDDY</a>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 22px">
+<div style="display: flex; align-items: center; gap: 10px">
+<span class="px" style="font-size: 13px">LV 07</span>
+<div role="progressbar" aria-label="XP hacia el nivel 8" aria-valuemin="0" aria-valuemax="2800" aria-valuenow="2340" style="display: flex; gap: 3px; padding: 3px; background: #111827; border-radius: 4px">
+<span style="width: 14px; height: 16px; background: #FFD000"></span><span style="width: 14px; height: 16px; background: #FFD000"></span><span style="width: 14px; height: 16px; background: #FFD000"></span><span style="width: 14px; height: 16px; background: #FFD000"></span><span style="width: 14px; height: 16px; background: #FFD000"></span><span style="width: 14px; height: 16px; background: #FFD000"></span><span style="width: 14px; height: 16px; background: #FFD000"></span><span style="width: 14px; height: 16px; background: #FFD000"></span><span style="width: 14px; height: 16px; background: #4B5563"></span><span style="width: 14px; height: 16px; background: #4B5563"></span>
+</div>
+<span class="px" style="font-size: 11px">2340/2800</span>
+</div>
+<span class="px" style="display: flex; align-items: center; gap: 8px; font-size: 13px">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="#FFD000" stroke="#111827" stroke-width="1.6" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>x12</span>
+<span class="px" style="display: flex; align-items: center; gap: 8px; font-size: 13px">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="#38BDF8" stroke="#111827" stroke-width="1.6" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>x1</span>
+<span class="px" style="display: flex; align-items: center; gap: 8px; font-size: 13px">
+<svg class="a-coin" aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="#FFD000" stroke="#111827" stroke-width="1.6" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>x8</span>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #111827; border-radius: 8px">
+<span class="px" style="font-size: 11px; color: #FFD000">HOY</span>
+<span style="display: flex; gap: 3px"><span style="width: 10px; height: 14px; background: #4ADE80"></span><span style="width: 10px; height: 14px; background: #4ADE80"></span><span style="width: 10px; height: 14px; background: #4ADE80"></span><span style="width: 10px; height: 14px; background: #4B5563"></span><span style="width: 10px; height: 14px; background: #4B5563"></span></span>
+<span class="px" style="font-size: 11px">9/15 MIN</span>
+</div>
+</div>
+</header>
+
+<div style="max-width: 1320px; margin: 0 auto; padding: 36px clamp(16px, 3vw, 32px) 64px; display: flex; flex-direction: column; gap: 34px">
+
+<section style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px">
+<div style="display: flex; align-items: center; gap: 22px">
+<div aria-hidden="true" class="a-bounce" style="position: relative; width: 104px; height: 112px; flex: none">
+<span style="position: absolute; left: 6px; top: 0; width: 92px; height: 50px; border: 8px solid #111827; border-bottom: none; border-radius: 46px 46px 0 0"></span>
+<span style="position: absolute; left: 12px; top: 16px; width: 80px; height: 84px; border-radius: 22px; background: #1D4ED8; border: 4px solid #111827; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px">
+<span style="display: flex; gap: 12px"><span class="a-blink" style="width: 14px; height: 20px; background: #FFFFFF; border-radius: 4px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 3px"><span style="width: 8px; height: 8px; background: #111827"></span></span><span class="a-blink" style="width: 14px; height: 20px; background: #FFFFFF; border-radius: 4px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 3px"><span style="width: 8px; height: 8px; background: #111827"></span></span></span>
+<span style="width: 22px; height: 8px; background: #111827; border-radius: 0 0 8px 8px"></span>
+</span>
+<span style="position: absolute; left: 0; top: 46px; width: 20px; height: 34px; border-radius: 6px; background: #E5202E; border: 4px solid #111827"></span>
+<span style="position: absolute; right: 0; top: 46px; width: 20px; height: 34px; border-radius: 6px; background: #E5202E; border: 4px solid #111827"></span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span class="px" style="font-size: 12px; color: #1D4ED8">JUGADOR: AMADO</span>
+<h1 class="disp" style="margin: 0; font-size: clamp(40px, 5vw, 66px); line-height: 1; letter-spacing: -0.01em">Elige un mundo</h1>
+</div>
+</div>
+<a class="jump" href="Conversacion.dc.html" style="display: flex; align-items: center; gap: 14px; min-height: 64px; padding: 0 26px; border-radius: 14px; background: #FFD000; color: #111827; border: 4px solid #111827; box-shadow: 0 7px 0 #111827; text-decoration: none">
+<span class="px" style="padding: 8px 10px; background: #111827; color: #FFD000; border-radius: 6px; font-size: 11px">ESPACIO</span>
+<span class="disp" style="font-size: 22px">Hablar ya</span>
+</a>
+</section>
+
+<section aria-label="Mundos" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 26px; align-items: end">
+
+<a class="jump" href="Conversacion.dc.html" style="display: flex; flex-direction: column; border-radius: 22px; background: #FFFFFF; border: 4px solid #111827; box-shadow: 0 8px 0 #111827; overflow: hidden; color: #111827; text-decoration: none">
+<div aria-hidden="true" style="position: relative; height: 190px; background: #BBF7D0; border-bottom: 4px solid #111827">
+<div class="a-float" style="position: absolute; left: 50%; top: 40px; width: 190px; margin-left: -95px">
+<span style="display: block; width: 190px; height: 70px; border-radius: 50%; background: #22C55E; border: 4px solid #111827"></span>
+<span style="position: absolute; left: 40px; top: -40px; width: 56px; height: 46px; border-radius: 14px 14px 14px 4px; background: #FFFFFF; border: 4px solid #111827"></span>
+<span style="position: absolute; left: 104px; top: -24px; width: 44px; height: 36px; border-radius: 12px 12px 4px 12px; background: #FFD000; border: 4px solid #111827"></span>
+</div>
+</div>
+<div style="padding: 20px; display: flex; flex-direction: column; gap: 10px">
+<span class="px" style="font-size: 11px; color: #15803D">MUNDO 1</span>
+<h2 class="disp" style="margin: 0; font-size: 26px">Plaza Charla</h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.45; font-weight: 500">Conversación libre con Buddy, sin fin de partida.</p>
+<span style="font-weight: 800; font-size: 14px">38 min esta semana</span>
+</div>
+</a>
+
+<a class="jump" href="InicioE.dc.html" style="position: relative; display: flex; flex-direction: column; border-radius: 22px; background: #FFFFFF; border: 6px solid #111827; box-shadow: 0 0 0 6px #FFD000, 0 14px 0 6px #111827; overflow: hidden; color: #111827; text-decoration: none; transform: translateY(-14px)">
+<div aria-hidden="true" style="position: relative; height: 230px; background: #BFDBFE; border-bottom: 4px solid #111827">
+<div class="a-float" style="position: absolute; left: 50%; top: 50px; width: 210px; margin-left: -105px; animation-delay: -1.5s">
+<span style="display: block; width: 210px; height: 76px; border-radius: 50%; background: #1D4ED8; border: 4px solid #111827"></span>
+<span style="position: absolute; left: 50px; top: -66px; width: 50px; height: 92px; background: #FFFFFF; border: 4px solid #111827; border-radius: 6px 6px 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; padding: 8px"><span style="background: #FFD000"></span><span style="background: #FFD000"></span><span style="background: #FFD000"></span><span style="background: #BFDBFE"></span></span>
+<span style="position: absolute; left: 108px; top: -40px; width: 54px; height: 66px; background: #E5202E; border: 4px solid #111827; border-radius: 6px 6px 0 0"></span>
+</div>
+<span class="px a-blinkc" style="position: absolute; top: 14px; left: 14px; padding: 6px 8px; background: #111827; color: #FFD000; border-radius: 4px; font-size: 10px">SELECCIONADO</span>
+</div>
+<div style="padding: 20px; display: flex; flex-direction: column; gap: 10px">
+<span class="px" style="font-size: 11px; color: #1D4ED8">MUNDO 2</span>
+<h2 class="disp" style="margin: 0; font-size: 30px">La Oficina</h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.45; font-weight: 500">Entrevista técnica, daily standup y small talk con un colega.</p>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+<span aria-label="5 de 9 estrellas" style="display: flex; gap: 2px">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="#FFD000" stroke="#111827" stroke-width="2" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="#FFD000" stroke="#111827" stroke-width="2" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="#FFD000" stroke="#111827" stroke-width="2" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="#FFD000" stroke="#111827" stroke-width="2" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="#FFD000" stroke="#111827" stroke-width="2" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="#E5E7EB" stroke="#111827" stroke-width="2" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+</span>
+<span class="px" style="font-size: 11px">5/9</span>
+</div>
+<span style="display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; margin-top: 4px; border-radius: 10px; background: #1D4ED8; color: #FFFFFF; border: 4px solid #111827; font-weight: 800; font-size: 16px">
+<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="#FFFFFF"><polygon points="6 3 20 12 6 21 6 3"/></svg>Entrar · siguiente: Entrevista</span>
+</div>
+</a>
+
+<a class="jump" href="InicioE.dc.html" style="display: flex; flex-direction: column; border-radius: 22px; background: #FFFFFF; border: 4px solid #111827; box-shadow: 0 8px 0 #111827; overflow: hidden; color: #111827; text-decoration: none">
+<div aria-hidden="true" style="position: relative; height: 190px; background: #FED7AA; border-bottom: 4px solid #111827">
+<div class="a-float" style="position: absolute; left: 50%; top: 40px; width: 190px; margin-left: -95px; animation-delay: -3s">
+<span style="display: block; width: 190px; height: 70px; border-radius: 50%; background: #F97316; border: 4px solid #111827"></span>
+<span style="position: absolute; left: 70px; top: -56px; width: 0; height: 0; border-left: 30px solid transparent; border-right: 30px solid transparent; border-bottom: 60px solid #111827"></span>
+<span style="position: absolute; left: 76px; top: -46px; width: 0; height: 0; border-left: 24px solid transparent; border-right: 24px solid transparent; border-bottom: 48px solid #FFFFFF"></span>
+</div>
+</div>
+<div style="padding: 20px; display: flex; flex-direction: column; gap: 10px">
+<span class="px" style="font-size: 11px; color: #C2410C">MUNDO 3</span>
+<h2 class="disp" style="margin: 0; font-size: 26px">De viaje</h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.45; font-weight: 500">Pedir en un restaurante y hacer check-in en el hotel.</p>
+<span style="font-weight: 800; font-size: 14px">1 de 6 estrellas</span>
+</div>
+</a>
+
+<a class="jump" href="InicioE.dc.html" style="display: flex; flex-direction: column; border-radius: 22px; background: #FFFFFF; border: 4px solid #111827; box-shadow: 0 8px 0 #111827; overflow: hidden; color: #111827; text-decoration: none">
+<div aria-hidden="true" style="position: relative; height: 190px; background: #E9D5FF; border-bottom: 4px solid #111827">
+<div class="a-float" style="position: absolute; left: 50%; top: 40px; width: 190px; margin-left: -95px; animation-delay: -2s">
+<span style="display: block; width: 190px; height: 70px; border-radius: 50%; background: #9333EA; border: 4px solid #111827"></span>
+<span style="position: absolute; left: 58px; top: -50px; width: 76px; height: 60px; border-radius: 10px; background: #FFFFFF; border: 4px solid #111827; display: flex; align-items: center; justify-content: center; font-family: 'Noto Sans Mono', monospace; font-size: 30px; font-weight: 700">θ</span>
+</div>
+</div>
+<div style="padding: 20px; display: flex; flex-direction: column; gap: 10px">
+<span class="px" style="font-size: 11px; color: #7E22CE">MUNDO 4</span>
+<h2 class="disp" style="margin: 0; font-size: 26px">Laboratorio de sonidos</h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.45; font-weight: 500">Drills de pronunciación: cada sonido sube del 1 al 5.</p>
+<span style="font-weight: 800; font-size: 14px">8 sonidos · jefe: think / this</span>
+</div>
+</a>
+</section>
+
+<section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr)); gap: 26px; margin-top: 12px">
+
+<div style="border-radius: 18px; background: #FFFFFF; border: 4px solid #111827; box-shadow: 0 8px 0 #111827; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px">
+<h2 class="px" style="margin: 0; font-size: 15px; line-height: 1.4">MISIONES DE LA SEMANA</h2>
+<span style="font-weight: 800; font-size: 14px">quedan 3 días</span>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 12px; border-radius: 10px; background: #F3F4F6">
+<span class="px" style="flex: none; width: 40px; height: 40px; border-radius: 6px; background: #E5202E; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 12px">!</span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 15px">Habla 60 minutos</span>
+<span style="display: flex; gap: 3px"><span style="flex: 1; height: 10px; background: #E5202E"></span><span style="flex: 1; height: 10px; background: #E5202E"></span><span style="flex: 1; height: 10px; background: #E5202E"></span><span style="flex: 1; height: 10px; background: #E5202E"></span><span style="flex: 1; height: 10px; background: #E5202E"></span><span style="flex: 1; height: 10px; background: #E5202E"></span><span style="flex: 1; height: 10px; background: #D1D5DB"></span><span style="flex: 1; height: 10px; background: #D1D5DB"></span><span style="flex: 1; height: 10px; background: #D1D5DB"></span><span style="flex: 1; height: 10px; background: #D1D5DB"></span></span></div>
+<span class="px" style="font-size: 10px">+60XP</span>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 12px; border-radius: 10px; background: #F3F4F6">
+<span class="px" style="flex: none; width: 40px; height: 40px; border-radius: 6px; background: #1D4ED8; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 12px">!</span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 15px">Completa 2 escenarios</span>
+<span style="display: flex; gap: 3px"><span style="flex: 1; height: 10px; background: #1D4ED8"></span><span style="flex: 1; height: 10px; background: #D1D5DB"></span></span></div>
+<span class="px" style="font-size: 10px">+80XP</span>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 12px; border-radius: 10px; background: #F3F4F6">
+<span class="px" style="flex: none; width: 40px; height: 40px; border-radius: 6px; background: #9333EA; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 12px">!</span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 15px">Vence al jefe /θ/ 3 veces</span>
+<span style="display: flex; gap: 3px"><span style="flex: 1; height: 10px; background: #9333EA"></span><span style="flex: 1; height: 10px; background: #D1D5DB"></span><span style="flex: 1; height: 10px; background: #D1D5DB"></span></span></div>
+<span class="px" style="font-size: 10px">+60XP</span>
+</div>
+</div>
+
+<div style="border-radius: 18px; background: #FFFFFF; border: 4px solid #111827; box-shadow: 0 8px 0 #111827; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px">
+<h2 class="px" style="margin: 0; font-size: 15px; line-height: 1.4">INSIGNIAS</h2>
+<span style="font-weight: 800; font-size: 14px">6 de 24</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 14px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center"><span style="width: 68px; height: 68px; border-radius: 50%; background: #E5202E; border: 4px solid #111827; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="#FFD000" stroke="#111827" stroke-width="1.6" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span><span style="font-weight: 800; font-size: 13px">Racha 10</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center"><span style="width: 68px; height: 68px; border-radius: 14px; background: #1D4ED8; border: 4px solid #111827; display: flex; align-items: center; justify-content: center; transform: rotate(45deg)"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linejoin="round" style="transform: rotate(-45deg)"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span><span style="font-weight: 800; font-size: 13px">Entrevistado</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center"><span style="width: 68px; height: 68px; border-radius: 50%; background: #FFD000; border: 4px solid #111827; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="#111827"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span><span style="font-weight: 800; font-size: 13px">50 turnos largos</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center"><span style="width: 68px; height: 68px; border-radius: 50%; background: #E5E7EB; border: 4px dashed #6B7280; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2.4" stroke-linecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><span style="font-weight: 700; font-size: 13px; color: #4B5563">Racha 30</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center"><span style="width: 68px; height: 68px; border-radius: 50%; background: #E5E7EB; border: 4px dashed #6B7280; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2.4" stroke-linecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><span style="font-weight: 700; font-size: 13px; color: #4B5563">Maratón 30 min</span></div>
+</div>
+</div>
+</section>
+
+<nav aria-label="Atajos de teclado" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 22px; padding: 14px 20px; border-radius: 14px; background: #111827; color: #FFFFFF">
+<span style="display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px"><span class="px" style="padding: 6px 8px; background: #FFD000; color: #111827; border-radius: 4px; font-size: 10px">ESPACIO</span>Hablar</span>
+<span style="display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px"><span class="px" style="padding: 6px 8px; background: #FFFFFF; color: #111827; border-radius: 4px; font-size: 10px">← →</span>Cambiar mundo</span>
+<span style="display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px"><span class="px" style="padding: 6px 8px; background: #FFFFFF; color: #111827; border-radius: 4px; font-size: 10px">ENTER</span>Entrar</span>
+<span style="display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px"><span class="px" style="padding: 6px 8px; background: #FFFFFF; color: #111827; border-radius: 4px; font-size: 10px">P</span>Progreso</span>
+</nav>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1640}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

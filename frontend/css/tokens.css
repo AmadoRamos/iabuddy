@@ -1,0 +1,143 @@
+/* IABuddy · tokens de diseño · generado desde el sistema de diseño (oct 2026) */
+/* Solo tema claro. Breakpoints (no se pueden usar en @media como variables): xs <600 · sm 600–899 · md 900–1199 · lg ≥1200 */
+:root {
+
+  /* color · brand */
+  --azul: #3D5AFE; /* Color principal. Texto blanco encima: 5,1:1 */
+  --coral: #FF6B3D; /* Acento cálido */
+  --rosa: #FF5FAE; /* Acento */
+  --amarillo: #FFC800; /* Racha y celebración. Nunca texto sobre blanco */
+  --lima: #9BE22D; /* XP y éxito. Nunca texto sobre blanco */
+
+  /* color · neutral */
+  --text: #1B1340; /* Texto principal (16,2:1) */
+  --text-2: #4A4366; /* Texto secundario */
+  --text-3: #5B5478; /* Texto terciario */
+  --text-disabled: #6B6788; /* Solo controles desactivados */
+  --link: #2338C9; /* Enlaces de texto, siempre subrayados */
+  --bg: #F6F7FF; /* Fondo de la app */
+  --surface: #FFFFFF; /* Tarjetas */
+  --sunken: #F1F3FF; /* Pistas de segmentados, campos */
+  --track: #E6E8F2; /* Barras de progreso vacías */
+  --border-control: #8A86A3; /* Bordes de campos y chips (3,5:1) */
+  --border-subtle: #ECEEF8; /* Separadores y guías de gráficas */
+  --switch-off: #7D7898; /* Interruptor apagado (4,2:1) */
+  --pending: #6E7BC4; /* Borde discontinuo de pendiente/bloqueado */
+
+  /* color · action */
+  --action: #3D5AFE; /* Botón primario, selección */
+  --action-pressed: #2A43D9; /* Primario presionado */
+  --on-action: #FFFFFF; /* Texto sobre acción */
+
+  /* semantic · success */
+  --success-bg: #EEFAD9; /* Fondo */
+  --success-text: #2F5208; /* Texto */
+  --success-fill: #9BE22D; /* Relleno sólido */
+  --success-border: #4D7C0F; /* Borde / icono */
+
+  /* semantic · warning */
+  --warning-bg: #FFF4C7; /* Fondo */
+  --warning-text: #854D0E; /* Texto */
+  --warning-fill: #FFC800; /* Relleno sólido */
+  --warning-border: #A16207; /* Borde / icono */
+
+  /* semantic · error */
+  --error-bg: #FFE8DF; /* Fondo */
+  --error-text: #9A3412; /* Texto */
+  --error-fill: #FF6B3D; /* Relleno sólido */
+  --error-border: #D9480F; /* Borde / icono */
+
+  /* semantic · info */
+  --info-bg: #E3E8FF; /* Fondo */
+  --info-text: #2338C9; /* Texto */
+  --info-fill: #3D5AFE; /* Relleno sólido */
+  --info-border: #3D5AFE; /* Borde / icono */
+
+  /* chart · series */
+  --chart-1: #3D5AFE; /* Serie 1 · Conversación */
+  --chart-2: #D9480F; /* Serie 2 · Escenarios */
+  --chart-3: #C0287A; /* Serie 3 · Sonidos */
+  --chart-4: #4D7C0F; /* Serie 4 · Otros */
+
+  /* chart · sequential */
+  --seq-0: #EEF0F8; /* 0 min */
+  --seq-1: #C6CFFF; /* 1–4 min */
+  --seq-2: #8C9FFF; /* 5–9 min */
+  --seq-3: #3D5AFE; /* 10–14 min */
+  --seq-4: #2338C9; /* 15+ min */
+
+  /* font · family */
+  --font-display: 'Bricolage Grotesque', 'Arial Rounded MT Bold', system-ui, sans-serif; /* Títulos y cifras */
+  --font-body: 'Figtree', system-ui, sans-serif; /* Texto e interfaz */
+  --font-mono: 'Noto Sans Mono', 'DejaVu Sans Mono', monospace; /* IPA y código */
+
+  /* font · size */
+  --fs-display: clamp(2.75rem, 6vw, 4.75rem); /* 76 → 44 px */
+  --fs-h1: clamp(2.25rem, 5vw, 3.75rem); /* 60 → 36 px */
+  --fs-h2: clamp(1.5rem, 2.5vw, 1.875rem); /* 30 → 24 px */
+  --fs-metric: clamp(2.125rem, 3.5vw, 2.75rem); /* 44 → 34 px */
+  --fs-body-l: clamp(1.0625rem, 1.2vw, 1.125rem); /* 18 → 17 px */
+  --fs-body: 1rem; /* 16 px · campos siempre 16 */
+  --fs-small: 0.875rem; /* 14 px */
+  --fs-caption: 0.8125rem; /* 13 px · mínimo absoluto 12 */
+
+  /* font · line-height */
+  --lh-tight: 1.05; /* Títulos */
+  --lh-body: 1.5; /* Texto */
+
+  /* space */
+  --space-xs: 4px;
+  --space-s: 8px;
+  --space-m: 12px;
+  --space-l: 18px;
+  --space-xl: 24px;
+  --space-2xl: 40px;
+  --space-3xl: 56px;
+  --touch-min: 44px; /* Objetivo táctil mínimo */
+
+  /* radius */
+  --radius-chip: 10px;
+  --radius-tile: 18px;
+  --radius-card: 30px;
+  --radius-pill: 999px; /* Botones y chips */
+
+  /* border */
+  --border-sticker: 2.5px; /* Borde tinta de barra superior y teclas */
+
+  /* shadow */
+  --shadow-card: 0 20px 44px -30px rgba(27,19,64,.40);
+  --shadow-raised: 0 20px 36px -20px rgba(27,19,64,.60);
+  --shadow-overlay: 0 24px 50px -20px rgba(27,19,64,.55);
+  --shadow-modal: 0 30px 60px -20px rgba(27,19,64,.50);
+  --focus-ring: 0 0 0 3px #FFFFFF, 0 0 0 6px #3D5AFE; /* Foco visible en todo elemento interactivo */
+
+  /* z */
+  --z-base: 0;
+  --z-sticky: 10;
+  --z-dropdown: 100;
+  --z-drawer: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+  --z-tooltip: 500;
+
+  /* motion */
+  --dur-fast: 150ms; /* Hover, presionado */
+  --dur-base: 250ms; /* Modales, tooltips, avisos */
+  --dur-slow: 500ms; /* Progreso, celebración (hasta 900 ms) */
+  --ease-out: cubic-bezier(.2, .8, .2, 1);
+  --ease-pop: cubic-bezier(.3, 1.5, .5, 1); /* Rebote suave */
+
+  /* layout */
+  --container-max: 1320px;
+  --margin: clamp(16px, 4vw, 40px);
+  --gutter: clamp(16px, 2vw, 24px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0ms; --dur-base: 0ms; --dur-slow: 0ms; }
+}
+
+/* Misma regla, activada desde Ajustes cuando el sistema no lo indica */
+[data-motion="reduced"] { --dur-fast: 0ms; --dur-base: 0ms; --dur-slow: 0ms; }
+
+:focus-visible { outline: none; box-shadow: var(--focus-ring); }

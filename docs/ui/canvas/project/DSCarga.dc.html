@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sistema de diseño · Carga, háptica y sonido</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@500;700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.mono{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+@keyframes shimmer{0%{background-position:-300px 0}100%{background-position:300px 0}}
+@keyframes dot{0%,100%{opacity:.35;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes indet{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
+@keyframes fly{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(60px,-40px) scale(.7);opacity:0}}
+.sk{background:linear-gradient(90deg,#EEF0F8 0,#F8F9FF 50%,#EEF0F8 100%);background-size:600px 100%;animation:shimmer 1.6s linear infinite}
+.dot{animation:dot 1s ease-in-out infinite}
+.spin{animation:spin .9s linear infinite}
+.indet{animation:indet 1.4s ease-in-out infinite}
+.fly{animation:fly 1.6s ease-out infinite}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1560px; padding: 56px; background: #F6F7FF; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 24px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .14em; color: #2338C9">IABUDDY · SISTEMA DE DISEÑO · 09</span>
+<h1 class="disp" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.045em; line-height: 1">Carga, háptica y sonido</h1>
+</div>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Estado «Cargando» en todos los componentes</h2><span style="font-size: 13px; font-weight: 700; color: #4A4366">aria-busy="true" · el tamaño no cambia · no se puede volver a pulsar</span></div>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 20px; background: #F6F7FF"><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">BOTÓN</span><span aria-label="Guardando" style="min-height: 48px; border-radius: 999px; background: #3D5AFE; display: flex; align-items: center; justify-content: center; gap: 6px"><span class="dot" style="width: 8px; height: 8px; border-radius: 50%; background: #FFFFFF"></span><span class="dot" style="width: 8px; height: 8px; border-radius: 50%; background: #FFFFFF; animation-delay: .15s"></span><span class="dot" style="width: 8px; height: 8px; border-radius: 50%; background: #FFFFFF; animation-delay: .3s"></span></span><span style="font-size: 12px; font-weight: 600; color: #4A4366">Puntos en vez de texto, mismo ancho.</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 20px; background: #F6F7FF"><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">SEGMENTO / CHIP</span><span style="align-self: flex-start; display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 14px"><span class="spin" style="width: 14px; height: 14px; border-radius: 50%; border: 2.5px solid rgba(255,255,255,.4); border-top-color: #FFFFFF"></span>Panel</span><span style="font-size: 12px; font-weight: 600; color: #4A4366">Giro pequeño junto a la etiqueta.</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 20px; background: #F6F7FF"><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">INTERRUPTOR</span><span style="width: 56px; height: 32px; padding: 4px; border-radius: 999px; background: #3D5AFE; display: flex; justify-content: flex-end"><span style="width: 24px; height: 24px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><span class="spin" style="width: 14px; height: 14px; border-radius: 50%; border: 2.5px solid #E3E8FF; border-top-color: #3D5AFE"></span></span></span><span style="font-size: 12px; font-weight: 600; color: #4A4366">Cambia al instante y gira mientras guarda.</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 20px; background: #F6F7FF"><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">CAMPO</span><span style="min-height: 48px; padding: 0 14px; border-radius: 14px; background: #FFFFFF; box-shadow: inset 0 0 0 2px #8A86A3; display: flex; align-items: center; justify-content: space-between; font-weight: 600; font-size: 14px">mi_escenario<span style="display: flex; gap: 4px"><span class="dot" style="width: 6px; height: 6px; border-radius: 50%; background: #3D5AFE"></span><span class="dot" style="width: 6px; height: 6px; border-radius: 50%; background: #3D5AFE; animation-delay: .15s"></span><span class="dot" style="width: 6px; height: 6px; border-radius: 50%; background: #3D5AFE; animation-delay: .3s"></span></span></span><span style="font-size: 12px; font-weight: 600; color: #4A4366">«Comprobando…» al validar.</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 20px; background: #F6F7FF"><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">ONDA · IA PENSANDO</span><svg aria-hidden="true" width="64" height="48" viewBox="0 20 200 150"><circle class="dot" cx="24" cy="112" r="11" fill="#FFC800"/><circle class="dot" cx="55" cy="112" r="13" fill="#FF6B3D" style="animation-delay: .15s"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><circle class="dot" cx="145" cy="112" r="13" fill="#FF5FAE" style="animation-delay: .3s"/><circle class="dot" cx="176" cy="112" r="11" fill="#9BE22D" style="animation-delay: .45s"/></svg><span style="font-size: 12px; font-weight: 600; color: #4A4366">Cargador de marca para STT y LLM.</span></div>
+</div>
+<div style="display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 20px; background: #FFFFFF; box-shadow: inset 0 0 0 1.5px #ECEEF8" aria-busy="true" aria-label="Cargando tarjeta">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">ESQUELETO · TARJETA Y MÉTRICA</span>
+<span class="sk" style="width: 40%; height: 14px; border-radius: 9px"></span><span class="sk" style="width: 50%; height: 40px; border-radius: 12px"></span><span class="sk" style="width: 80%; height: 12px; border-radius: 9px"></span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 20px; background: #FFFFFF; box-shadow: inset 0 0 0 1.5px #ECEEF8" aria-busy="true" aria-label="Cargando lista">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">ESQUELETO · LISTA</span>
+<div style="display: flex; gap: 10px; align-items: center"><span class="sk" style="width: 36px; height: 36px; border-radius: 12px"></span><span class="sk" style="flex: 1; height: 12px; border-radius: 9px"></span></div>
+<div style="display: flex; gap: 10px; align-items: center"><span class="sk" style="width: 36px; height: 36px; border-radius: 12px"></span><span class="sk" style="flex: 1; height: 12px; border-radius: 9px"></span></div>
+<div style="display: flex; gap: 10px; align-items: center"><span class="sk" style="width: 36px; height: 36px; border-radius: 12px"></span><span class="sk" style="width: 60%; height: 12px; border-radius: 9px"></span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 20px; background: #FFFFFF; box-shadow: inset 0 0 0 1.5px #ECEEF8">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">PROGRESO</span>
+<span style="font-size: 13px; font-weight: 700">Determinado · cargando LLM 64 %</span>
+<div role="progressbar" aria-valuenow="64" aria-valuemin="0" aria-valuemax="100" style="height: 10px; border-radius: 99px; background: #E3E8FF; overflow: hidden"><div style="width: 64%; height: 100%; border-radius: 99px; background: #3D5AFE"></div></div>
+<span style="font-size: 13px; font-weight: 700">Indeterminado · transcribiendo</span>
+<div role="progressbar" aria-label="Transcribiendo" style="height: 10px; border-radius: 99px; background: #E3E8FF; overflow: hidden"><div class="indet" style="width: 40%; height: 100%; border-radius: 99px; background: #3D5AFE"></div></div>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px">
+<div style="padding: 12px 14px; border-radius: 16px; background: #F6F7FF; font-size: 13px; font-weight: 600; color: #4A4366"><strong style="color: #1B1340">&lt; 300 ms</strong> · nada: evita parpadeos.</div>
+<div style="padding: 12px 14px; border-radius: 16px; background: #F6F7FF; font-size: 13px; font-weight: 600; color: #4A4366"><strong style="color: #1B1340">0,3–1 s</strong> · puntos o giro dentro del control.</div>
+<div style="padding: 12px 14px; border-radius: 16px; background: #F6F7FF; font-size: 13px; font-weight: 600; color: #4A4366"><strong style="color: #1B1340">&gt; 1 s</strong> · esqueleto con la forma final.</div>
+<div style="padding: 12px 14px; border-radius: 16px; background: #FFF4C7; font-size: 13px; font-weight: 600; color: #854D0E"><strong>&gt; 4 s</strong> · aviso «Tarda más de lo normal» con opción de cancelar.</div>
+</div>
+</section>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Microinteracciones</h2>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 20px; background: #F6F7FF"><div style="position: relative; height: 54px; display: flex; align-items: flex-end"><span style="padding: 6px 12px; border-radius: 999px; background: #FFE8DF; font-weight: 700; font-size: 13px">turno largo</span><span class="fly" style="position: absolute; left: 70px; top: 10px; padding: 2px 8px; border-radius: 999px; background: #9BE22D; font-weight: 800; font-size: 12px">+5 XP</span></div><span style="font-weight: 800; font-size: 14px">XP que vuela al contador</span><span style="font-size: 12px; font-weight: 600; color: #4A4366">0,9 s · ease-out · se oculta con «Ocultar XP».</span></div>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 20px; background: #F6F7FF"><div style="height: 54px; display: flex; align-items: center"><span lang="en" style="font-size: 18px; font-weight: 600">Oh, you <mark style="background: #DDF6B5; color: #1B1340; padding: 0 4px; border-radius: 6px; font-weight: 800">went</mark>…</span></div><span style="font-weight: 800; font-size: 14px">Recast resaltado</span><span style="font-size: 12px; font-weight: 600; color: #4A4366">El resaltado aparece cuando Buddy dice la palabra.</span></div>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 20px; background: #F6F7FF"><div style="height: 54px; display: flex; align-items: center; gap: 6px"><span style="font-size: 26px; letter-spacing: 3px">★★</span><span style="font-size: 26px; color: #8A86A3">☆</span></div><span style="font-weight: 800; font-size: 14px">Estrella ganada</span><span style="font-size: 12px; font-weight: 600; color: #4A4366">Rebote 0,5 s + sonido de acierto.</span></div>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 20px; background: #F6F7FF"><div style="height: 54px; display: flex; align-items: center"><div style="width: 100%; height: 14px; border-radius: 99px; background: #E3E8FF; overflow: hidden"><div style="width: 100%; height: 100%; border-radius: 99px; background: #9BE22D"></div></div></div><span style="font-weight: 800; font-size: 14px">Meta completa</span><span style="font-size: 12px; font-weight: 600; color: #4A4366">La barra se llena, Onda celebra y aparece el aviso.</span></div>
+</div>
+</section>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px">
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Sonidos de interfaz</h2><span style="font-size: 13px; font-weight: 700; color: #4A4366">cortos, suaves, desactivables</span></div>
+<div style="display: grid; grid-template-columns: 70px 1fr 70px; gap: 10px 14px; align-items: center; font-size: 14px">
+<span aria-hidden="true" style="display: flex; align-items: flex-end; gap: 3px; height: 28px"><span style="width: 6px; height: 30%; border-radius: 3px; background: #3D5AFE"></span><span style="width: 6px; height: 60%; border-radius: 3px; background: #3D5AFE"></span><span style="width: 6px; height: 100%; border-radius: 3px; background: #3D5AFE"></span></span><span><strong>Turno abierto</strong> · dos notas que suben</span><span class="mono" style="font-size: 12px">120 ms</span>
+<span aria-hidden="true" style="display: flex; align-items: flex-end; gap: 3px; height: 28px"><span style="width: 6px; height: 100%; border-radius: 3px; background: #FF6B3D"></span><span style="width: 6px; height: 60%; border-radius: 3px; background: #FF6B3D"></span><span style="width: 6px; height: 30%; border-radius: 3px; background: #FF6B3D"></span></span><span><strong>Turno cerrado</strong> · dos notas que bajan</span><span class="mono" style="font-size: 12px">120 ms</span>
+<span aria-hidden="true" style="display: flex; align-items: flex-end; gap: 3px; height: 28px"><span style="width: 6px; height: 50%; border-radius: 3px; background: #9BE22D"></span><span style="width: 6px; height: 100%; border-radius: 3px; background: #9BE22D"></span></span><span><strong>Objetivo o estrella</strong> · campanita</span><span class="mono" style="font-size: 12px">250 ms</span>
+<span aria-hidden="true" style="display: flex; align-items: flex-end; gap: 3px; height: 28px"><span style="width: 6px; height: 40%; border-radius: 3px; background: #FFC800"></span><span style="width: 6px; height: 70%; border-radius: 3px; background: #FFC800"></span><span style="width: 6px; height: 100%; border-radius: 3px; background: #FFC800"></span><span style="width: 6px; height: 100%; border-radius: 3px; background: #FFC800"></span></span><span><strong>Meta diaria o nivel</strong> · acorde corto</span><span class="mono" style="font-size: 12px">600 ms</span>
+<span aria-hidden="true" style="display: flex; align-items: flex-end; gap: 3px; height: 28px"><span style="width: 6px; height: 40%; border-radius: 3px; background: #8A86A3"></span><span style="width: 6px; height: 40%; border-radius: 3px; background: #8A86A3"></span></span><span><strong>Problema técnico</strong> · tono grave suave</span><span class="mono" style="font-size: 12px">200 ms</span>
+</div>
+<ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #4A4366; line-height: 1.5">
+<li>Nunca suenan mientras el micrófono escucha: el sonido de apertura termina antes de activar el VAD.</li>
+<li>Nunca suena nada por un error de inglés.</li>
+<li>Volumen −18 dB y separado de la voz de Buddy; bajan 12 dB si Buddy está hablando.</li>
+<li>Cada sonido tiene su equivalente visual. Ajuste: «Sonidos de interfaz».</li>
+</ul>
+</section>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Vibración (táctil)</h2><span style="font-size: 13px; font-weight: 700; color: #4A4366">solo en tableta o móvil</span></div>
+<div style="display: grid; grid-template-columns: 150px 1fr 120px; gap: 10px 14px; align-items: center; font-size: 14px">
+<span aria-hidden="true" style="display: flex; align-items: center; gap: 4px"><span style="width: 10px; height: 20px; border-radius: 4px; background: #1B1340"></span></span><span><strong>Toque</strong> · abrir turno, cambiar opción</span><span class="mono" style="font-size: 12px">[10]</span>
+<span aria-hidden="true" style="display: flex; align-items: center; gap: 4px"><span style="width: 10px; height: 20px; border-radius: 4px; background: #1B1340"></span><span style="width: 14px"></span><span style="width: 10px; height: 20px; border-radius: 4px; background: #1B1340"></span></span><span><strong>Doble</strong> · turno cerrado</span><span class="mono" style="font-size: 12px">[10, 40, 10]</span>
+<span aria-hidden="true" style="display: flex; align-items: center; gap: 4px"><span style="width: 16px; height: 20px; border-radius: 4px; background: #2F5208"></span><span style="width: 20px"></span><span style="width: 30px; height: 20px; border-radius: 4px; background: #2F5208"></span></span><span><strong>Éxito</strong> · objetivo cumplido</span><span class="mono" style="font-size: 12px">[20, 60, 40]</span>
+<span aria-hidden="true" style="display: flex; align-items: center; gap: 4px"><span style="width: 22px; height: 20px; border-radius: 4px; background: #854D0E"></span><span style="width: 18px"></span><span style="width: 22px; height: 20px; border-radius: 4px; background: #854D0E"></span><span style="width: 18px"></span><span style="width: 40px; height: 20px; border-radius: 4px; background: #854D0E"></span></span><span><strong>Celebración</strong> · meta o nivel</span><span class="mono" style="font-size: 12px">[30, 80, 30, 80, 60]</span>
+<span aria-hidden="true" style="display: flex; align-items: center; gap: 4px"><span style="width: 44px; height: 20px; border-radius: 4px; background: #9A3412"></span></span><span><strong>Problema técnico</strong></span><span class="mono" style="font-size: 12px">[60]</span>
+</div>
+<ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #4A4366; line-height: 1.5">
+<li>Patrones en milisegundos para <span class="mono">navigator.vibrate()</span>; en escritorio no se usa.</li>
+<li>Se respeta el modo silencio del sistema y «reducir movimiento».</li>
+<li>Siempre acompaña algo visual, nunca va sola. Ajuste: «Vibración».</li>
+</ul>
+</section>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1560}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

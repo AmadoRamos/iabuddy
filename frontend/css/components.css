@@ -1,0 +1,443 @@
+/* IABuddy · componentes. Requiere theme.css. Ver COMPONENTS.md */
+
+/* ── Botones ─────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-s);
+  min-height: 50px; padding: 0 22px;
+  border: none; border-radius: var(--radius-pill);
+  font-weight: 800; font-size: 1rem; text-decoration: none; white-space: nowrap;
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out), background var(--dur-fast);
+}
+.btn:hover  { transform: translateY(-2px); }
+.btn:active { transform: translateY(1px); }
+.btn-s { min-height: var(--touch-min); padding: 0 16px; font-size: .875rem; }
+.btn-l { min-height: 60px; padding: 0 22px 0 28px; font-size: 1.125rem; gap: 12px; }
+.btn-block { width: 100%; }
+
+.btn-primary { background: var(--action); color: var(--on-action); }
+.btn-primary:hover  { box-shadow: 0 12px 24px -10px rgba(61, 90, 254, .8); }
+.btn-primary:active { background: var(--action-pressed); box-shadow: none; }
+
+.btn-secondary { background: var(--surface); color: var(--text); box-shadow: inset 0 0 0 2px var(--text); }
+.btn-secondary:hover  { box-shadow: inset 0 0 0 2px var(--text), 0 10px 20px -12px rgba(27, 19, 64, .5); }
+.btn-secondary:active { background: var(--sunken); }
+.btn-secondary:focus-visible { box-shadow: inset 0 0 0 2px var(--text), var(--focus-ring); }
+
+.btn-ink { background: var(--text); color: #FFFFFF; }
+.btn-ink:hover  { box-shadow: 0 12px 24px -12px rgba(27, 19, 64, .8); }
+.btn-ink:active { background: #000000; }
+
+/* Tonal: azul por defecto; variantes por color de sección */
+.btn-tonal { background: var(--info-bg); color: var(--info-text); }
+.btn-tonal:hover  { background: var(--info-hover); }
+.btn-tonal:active { background: var(--info-pressed); }
+.btn-tonal-pink    { background: var(--pink-bg);    color: var(--pink-text); }
+.btn-tonal-success { background: var(--success-bg); color: var(--success-text); }
+.btn-tonal-warning { background: var(--warning-bg); color: var(--warning-text); }
+.btn-tonal-error   { background: var(--error-bg);   color: var(--error-text); }
+
+.btn:disabled, .btn[aria-disabled="true"] {
+  background: var(--disabled-bg); color: var(--text-disabled);
+  box-shadow: none; transform: none; cursor: not-allowed;
+}
+.btn-secondary:disabled { background: var(--surface); box-shadow: inset 0 0 0 2px var(--disabled-border); }
+.btn-tonal:disabled     { background: var(--disabled-soft); }
+
+/* Cargando: <button class="btn btn-primary" aria-busy="true"><span class="dots"><i></i><i></i><i></i></span><span class="visually-hidden">Cargando</span></button> */
+.btn[aria-busy="true"] { pointer-events: none; }
+.dots { display: inline-flex; gap: 6px; }
+.dots i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: dot 1s ease-in-out infinite; }
+.dots i:nth-child(2) { animation-delay: .15s; }
+.dots i:nth-child(3) { animation-delay: .3s; }
+.btn-ink .dots i:nth-child(1) { background: var(--amarillo); }
+.btn-ink .dots i:nth-child(2) { background: var(--rosa); }
+.btn-ink .dots i:nth-child(3) { background: var(--lima); }
+
+/* Tecla dentro de un botón: <span class="kbd-inline">Espacio</span> */
+.kbd-inline { padding: 4px 10px; border-radius: 8px; background: #FFFFFF; color: var(--text); font-size: .8125rem; font-weight: 800; }
+
+/* Botón de ícono: siempre con aria-label */
+.icon-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--touch-min); height: var(--touch-min); flex: none;
+  border: none; border-radius: 50%; background: var(--bg); color: var(--text);
+  transition: transform var(--dur-fast) var(--ease-out), background var(--dur-fast);
+}
+.icon-btn:hover  { transform: translateY(-2px); background: var(--info-bg); }
+.icon-btn:active { transform: none; background: var(--info-pressed); }
+.icon-btn[aria-pressed="true"] { background: var(--action); color: var(--on-action); }
+.icon-btn:disabled { background: var(--disabled-soft); color: var(--border-control); transform: none; cursor: not-allowed; }
+.icon-btn svg { width: 18px; height: 18px; }
+.icon-btn-sticker { background: var(--surface); border: var(--border-sticker) solid var(--text); }
+.icon-btn-sticker svg { width: 20px; height: 20px; }
+.icon-btn-info    { background: var(--info-bg);    color: var(--info-text); }
+.icon-btn-pink    { background: var(--pink-bg);    color: var(--pink-text); }
+.icon-btn-success { background: var(--success-bg); color: var(--success-text); }
+
+/* ── Teclas y chips de cabecera ──────────────────────── */
+.kbd {
+  display: inline-block; padding: 8px 18px; border-radius: var(--radius-chip);
+  background: var(--surface); border: 2px solid var(--text); border-bottom-width: 5px;
+  font-weight: 800; font-size: .9375rem; line-height: 1.2; text-transform: uppercase;
+}
+.kbd[data-pressed], .kbd:active { background: var(--info-bg); border-bottom-width: 2px; margin-top: 3px; }
+
+.stat-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: var(--touch-min); padding: 0 14px; border-radius: var(--radius-pill);
+  border: var(--border-sticker) solid var(--text); font-weight: 800; font-size: .9375rem;
+}
+.stat-chip-streak { background: var(--amarillo); }
+.stat-chip-xp     { background: var(--lima); }
+
+/* ── Barra superior ──────────────────────────────────── */
+.topbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-block: 24px 8px; }
+.brand { display: flex; align-items: center; gap: 10px; min-height: var(--touch-min); color: var(--text); text-decoration: none; }
+.brand:hover { color: var(--text); }
+.brand-name { font-family: var(--font-display); font-size: 28px; font-weight: 800; letter-spacing: -0.045em; }
+
+.nav-pill {
+  display: flex; flex-wrap: wrap; gap: 4px; padding: 5px;
+  background: var(--surface); border: var(--border-sticker) solid var(--text); border-radius: var(--radius-pill);
+}
+.nav-pill a {
+  display: flex; align-items: center; min-height: var(--touch-min); padding: 0 18px;
+  border-radius: var(--radius-pill); color: var(--text); font-weight: 700; font-size: .9375rem; text-decoration: none;
+  transition: background var(--dur-fast);
+}
+.nav-pill a:hover  { background: var(--sunken); }
+.nav-pill a:active { background: var(--info-bg); }
+.nav-pill a[aria-current="page"] { background: var(--action); color: var(--on-action); font-weight: 800; }
+
+/* Menú lateral de sección (Ajustes) */
+.side-menu { display: flex; flex-direction: column; gap: 6px; padding: 12px; border-radius: 22px; background: var(--bg); }
+.side-menu a {
+  display: flex; align-items: center; gap: 12px; min-height: var(--touch-min); padding: 0 12px;
+  border-radius: 14px; color: var(--text); font-weight: 700; text-decoration: none;
+}
+.side-menu a::before { content: ""; width: 8px; height: 24px; border-radius: 9px; background: var(--section, var(--azul)); }
+.side-menu a:hover { background: var(--sunken); }
+.side-menu a[aria-current="page"] { background: var(--surface); font-weight: 800; }
+
+/* ── Segmentado, opciones, filtros, pestañas ─────────── */
+/* <div class="segmented" role="group" aria-label="…"><button aria-pressed="true">…</button>…</div> */
+.segmented, .tabs {
+  display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 4px;
+  border-radius: var(--radius-pill); background: var(--sunken);
+}
+.segmented-fill { display: grid; grid-auto-columns: minmax(0, 1fr); grid-auto-flow: column; width: 100%; }
+.segmented button, .tabs button {
+  min-height: var(--touch-min); padding: 0 14px; border: none; border-radius: var(--radius-pill);
+  background: transparent; color: var(--text); font-weight: 800; font-size: .875rem;
+  transition: background var(--dur-fast);
+}
+.segmented button:hover  { background: var(--surface); }
+.segmented button:active { background: var(--info-bg); }
+.segmented button[aria-pressed="true"] { background: var(--action); color: var(--on-action); }
+.segmented button:disabled { color: var(--text-disabled); background: transparent; cursor: not-allowed; }
+
+/* Filtros: activo en tinta para no competir con la acción azul */
+.filters { background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--track); }
+.filters button[aria-pressed="true"] { background: var(--text); color: #FFFFFF; }
+
+.tabs { background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--track); }
+.tabs button { padding: 0 18px; font-weight: 700; color: var(--text-2); }
+.tabs button[aria-selected="true"] { background: var(--text); color: #FFFFFF; }
+
+/* Chip suelto (toggle) */
+.chip {
+  min-height: var(--touch-min); padding: 0 16px; border: none; border-radius: var(--radius-pill);
+  background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--border-control);
+  font-weight: 800; font-size: .875rem; transition: background var(--dur-fast);
+}
+.chip:hover  { background: var(--sunken); }
+.chip:active { background: var(--info-bg); }
+.chip[aria-pressed="true"] { background: var(--text); color: #FFFFFF; box-shadow: none; }
+.chip:disabled { background: var(--disabled-soft); color: var(--text-disabled); box-shadow: none; cursor: not-allowed; }
+.chip:focus-visible { box-shadow: var(--focus-ring); }
+
+/* ── Interruptor ─────────────────────────────────────── */
+/* <button class="switch" role="switch" aria-checked="false" aria-labelledby="…"></button> */
+.switch {
+  flex: none; display: inline-flex; width: 60px; height: 34px; padding: 4px;
+  border: none; border-radius: var(--radius-pill); background: var(--switch-off);
+  transition: background var(--dur-fast);
+}
+.switch::after {
+  content: ""; width: 26px; height: 26px; border-radius: 50%; background: #FFFFFF;
+  box-shadow: 0 2px 6px rgba(27, 19, 64, .3);
+  transition: transform var(--dur-fast) var(--ease-out), width var(--dur-fast);
+}
+.switch:hover { background: var(--text-disabled); }
+.switch:active::after { width: 32px; }
+.switch[aria-checked="true"] { background: var(--action); }
+.switch[aria-checked="true"]::after { transform: translateX(26px); }
+.switch[aria-checked="true"]:active::after { transform: translateX(20px); }
+.switch:disabled { background: var(--disabled-bg); cursor: not-allowed; }
+.switch:disabled::after { background: var(--bg); box-shadow: none; }
+
+.setting-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-m); }
+
+/* ── Deslizador ──────────────────────────────────────── */
+input[type="range"] { width: 100%; height: 28px; accent-color: var(--action); }
+
+/* ── Progreso por pasos ──────────────────────────────── */
+/* <div class="steps" role="img" aria-label="Frase 3 de 8"><i class="done"></i>…</div> */
+.steps { display: flex; gap: 4px; }
+.steps i { flex: 1; height: 8px; border-radius: 9px; background: var(--info-bg); }
+.steps i.done { background: var(--action); }
+
+/* ── Campos ──────────────────────────────────────────── */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field > label, .field-label { font-weight: 800; font-size: .875rem; }
+.input, .select {
+  min-height: 50px; padding: 0 16px; border: none; border-radius: 16px;
+  background: var(--bg); box-shadow: inset 0 0 0 2px var(--border-control);
+  font-size: var(--fs-body); font-weight: 600; color: var(--text);
+  transition: box-shadow var(--dur-fast);
+}
+.input::placeholder { color: var(--text-3); }
+.input:hover, .select:hover { box-shadow: inset 0 0 0 2px var(--text-2); }
+.input:focus, .select:focus, .input:focus-visible, .select:focus-visible {
+  outline: none; background: var(--surface); box-shadow: inset 0 0 0 2px var(--action), 0 0 0 4px var(--info-bg);
+}
+.input[aria-invalid="true"] { background: var(--error-field-bg); box-shadow: inset 0 0 0 2px var(--error-border); }
+.input:disabled, .select:disabled { background: var(--disabled-soft); box-shadow: inset 0 0 0 2px var(--disabled-bg); color: var(--text-disabled); }
+.field-hint  { font-size: var(--fs-caption); color: var(--text-3); }
+.field-error { font-size: var(--fs-caption); font-weight: 700; color: var(--error-text); }
+
+/* Casilla de objetivo (redonda, borde discontinuo) */
+/* <button class="check" role="checkbox" aria-checked="false"><span class="check-box"></span><span lang="en">…</span></button> */
+.check {
+  display: flex; align-items: center; gap: 12px; min-height: var(--touch-min); padding: 0;
+  border: none; background: transparent; text-align: left; font-weight: 700; font-size: .9375rem;
+}
+.check-box {
+  flex: none; width: 30px; height: 30px; border-radius: 50%; border: 3px dashed var(--pending);
+  display: flex; align-items: center; justify-content: center; transition: background var(--dur-fast);
+}
+.check:hover .check-box { border-color: var(--action); background: var(--sunken); }
+.check:active .check-box { transform: scale(.9); background: var(--info-bg); }
+.check[aria-checked="true"] .check-box {
+  border: none; background: var(--lima)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231B1340' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E")
+    center / 16px no-repeat;
+}
+.check:disabled .check-box { border: none; background: var(--disabled-bg); }
+
+/* ── Tarjetas ────────────────────────────────────────── */
+.card { padding: 26px; border-radius: var(--radius-card); background: var(--surface); box-shadow: var(--shadow-card); }
+.card-tight { padding: 18px; }
+
+/* Métrica tintada: <div class="metric-tile tint-error"><span class="overline">TURNOS</span><span class="metric">214</span></div> */
+.metric-tile { display: flex; flex-direction: column; padding: 14px; border-radius: 20px; }
+.metric-tile .overline { font-size: 11px; letter-spacing: .08em; color: currentColor; }
+.metric-tile .metric { font-size: 30px; color: var(--text); }
+
+.tint-info    { background: var(--info-bg);    color: var(--info-text); }
+.tint-error   { background: var(--error-bg);   color: var(--error-text); }
+.tint-warning { background: var(--warning-bg); color: var(--warning-text); }
+.tint-success { background: var(--success-bg); color: var(--success-text); }
+.tint-pink    { background: var(--pink-bg);    color: var(--pink-text); }
+
+/* Tarjeta seleccionable */
+.select-card {
+  display: block; padding: 0; border: none; border-radius: 20px; overflow: hidden; text-align: left;
+  background: var(--surface); box-shadow: 0 14px 30px -20px rgba(27, 19, 64, .5);
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast);
+}
+.select-card:hover  { transform: translateY(-3px); box-shadow: var(--shadow-raised); }
+.select-card:active { transform: scale(.98); }
+.select-card[aria-pressed="true"] { box-shadow: 0 0 0 4px var(--section, var(--coral)), 0 14px 30px -20px rgba(27, 19, 64, .5); }
+.select-card:disabled { background: var(--disabled-soft); transform: none; box-shadow: none; cursor: not-allowed; }
+.select-card-media { display: block; height: 44px; background: var(--info-bg); }
+.select-card-body  { display: block; padding: 10px 12px; font-weight: 800; font-size: .8125rem; }
+
+/* ── Etiquetas ───────────────────────────────────────── */
+.tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: var(--radius-pill); font-weight: 800; font-size: .75rem; }
+.tag-xp       { background: var(--success-bg); color: var(--success-text); font-size: .8125rem; }
+.tag-grammar  { background: var(--azul); color: #FFFFFF; }
+.tag-pron     { background: var(--rosa); color: var(--text); }
+.tag-vocab    { background: var(--amarillo); color: var(--text); }
+.tag-new      { background: var(--text); color: var(--amarillo); }
+.tag-info     { background: var(--info-bg); color: var(--info-text); }
+
+/* Gravedad: <span class="tag severity" data-level="2"><span class="severity-bars"><i></i><i></i><i></i></span>MEDIA</span> */
+.severity[data-level="1"] { background: var(--success-bg); color: var(--success-text); }
+.severity[data-level="2"] { background: var(--warning-bg); color: var(--warning-text); }
+.severity[data-level="3"] { background: var(--error-bg);   color: var(--error-text); }
+.severity-bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+.severity-bars i { width: 4px; border-radius: 3px; background: currentColor; opacity: .25; }
+.severity-bars i:nth-child(1) { height: 40%; }
+.severity-bars i:nth-child(2) { height: 75%; }
+.severity-bars i:nth-child(3) { height: 100%; }
+.severity[data-level="1"] i:nth-child(-n+1),
+.severity[data-level="2"] i:nth-child(-n+2),
+.severity[data-level="3"] i:nth-child(-n+3) { opacity: 1; }
+
+/* Insignia de nivel: barra vertical como Onda */
+.level-badge {
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 56px; height: 96px; border-radius: 28px; background: var(--azul); color: #FFFFFF;
+}
+.level-badge b { font-family: var(--font-display); font-size: 30px; line-height: 1; }
+.level-badge small { font-size: 9px; font-weight: 800; letter-spacing: .14em; }
+
+/* ── Progreso ────────────────────────────────────────── */
+/* <div class="progress" role="progressbar" aria-valuenow="83" aria-valuemin="0" aria-valuemax="100"><i style="width:83%"></i></div> */
+.progress { height: 14px; border-radius: 99px; background: var(--info-bg); overflow: hidden; }
+.progress > i { display: block; height: 100%; border-radius: 99px; background: var(--action); transition: width var(--dur-slow) var(--ease-out); }
+.progress-live { height: 22px; background: var(--track); }
+.progress-live > i {
+  border-radius: 0; background-color: var(--lima);
+  background-image: repeating-linear-gradient(45deg, rgba(27, 19, 64, .14) 0 10px, transparent 10px 20px);
+  background-size: 28px 28px; animation: stripes 1.2s linear infinite;
+}
+
+/* Día del calendario de racha */
+.day { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 14px; font-weight: 800; }
+.day-done   { background: var(--coral); }
+.day-shield { background: var(--surface); border: 3px dashed var(--azul); color: var(--info-text); }
+.day-missed { background: var(--seq-0); color: var(--text-3); }
+.day-today  { background: var(--surface); border: 3px solid var(--text); }
+
+/* Nivel de un sonido 1–5: <span class="sound-level" data-level="3" aria-label="Nivel 3 de 5"><i></i>×5</span> */
+.sound-level { display: inline-flex; align-items: flex-end; gap: 4px; height: 28px; }
+.sound-level i { width: 7px; border-radius: 4px; background: var(--track); }
+.sound-level i:nth-child(1) { height: 40%; --c: var(--amarillo); }
+.sound-level i:nth-child(2) { height: 55%; --c: var(--coral); }
+.sound-level i:nth-child(3) { height: 70%; --c: var(--azul); }
+.sound-level i:nth-child(4) { height: 85%; --c: var(--rosa); }
+.sound-level i:nth-child(5) { height: 100%; --c: var(--lima); }
+.sound-level[data-level="1"] i:nth-child(-n+1),
+.sound-level[data-level="2"] i:nth-child(-n+2),
+.sound-level[data-level="3"] i:nth-child(-n+3),
+.sound-level[data-level="4"] i:nth-child(-n+4),
+.sound-level[data-level="5"] i:nth-child(-n+5) { background: var(--c); }
+
+/* ── Pronunciación ───────────────────────────────────── */
+/* Bandas: ≥85 good · 70–84 close · <70 practice */
+.score-good     { --band: var(--lima);     --band-ink: var(--success-text); }
+.score-close    { --band: var(--amarillo); --band-ink: var(--warning-text); }
+.score-practice { --band: var(--coral);    --band-ink: var(--error-text); }
+
+.drill-word {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 10px;
+  border: none; border-radius: 16px; background: transparent; color: var(--text);
+  transition: background var(--dur-fast);
+}
+.drill-word:hover  { background: var(--bg); }
+.drill-word:active { background: var(--info-hover); }
+.drill-word[aria-pressed="true"] { background: var(--info-bg); }
+.drill-word:disabled { color: var(--text-disabled); cursor: not-allowed; }
+.drill-word-text { font-family: var(--font-display); font-size: clamp(28px, 3.2vw, 40px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+.drill-word-bar  { width: 100%; height: 6px; border-radius: 9px; background: var(--band); }
+.drill-word-score { font-size: .8125rem; font-weight: 800; color: var(--band-ink); }
+
+/* Fonema esperado vs. reconocido */
+.phoneme { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 76px; }
+.phoneme > span:not(.phoneme-score) { width: 100%; padding: 8px 0; border-radius: 12px; text-align: center; font-family: var(--font-mono); font-weight: 700; font-size: 22px; }
+.phoneme-expected { background: var(--bg); }
+.phoneme-match    { background: var(--success-bg); }
+.phoneme-miss     { background: var(--error-bg); }
+.phoneme-score    { font-size: .75rem; font-weight: 800; }
+
+/* ── Conversación ────────────────────────────────────── */
+.bubble { max-width: 86%; padding: 12px 16px; font-size: var(--fs-body); }
+.bubble-buddy { border-radius: 22px 22px 22px 6px; background: var(--bubble-buddy); font-weight: 500; }
+.bubble-you   { align-self: flex-end; border-radius: 22px 22px 6px 22px; background: var(--bubble-you); }
+.bubble-live  { align-self: flex-end; border-radius: 22px 22px 6px 22px; background: var(--error-field-bg); border: 2.5px dashed var(--coral); }
+.bubble-live::after { content: ""; display: inline-block; width: 3px; height: 18px; margin-left: 4px; vertical-align: -3px; background: var(--coral); animation: caret 1s steps(1) infinite; }
+.buddy-row { display: flex; align-items: flex-end; gap: 10px; }
+
+mark.recast { background: var(--mark-recast); color: var(--text); padding: 0 4px; border-radius: 6px; font-weight: 800; }
+.review { text-decoration: underline dotted var(--mark-review); text-decoration-thickness: 3px; text-underline-offset: 6px; }
+s.wrong { text-decoration-color: var(--strike); text-decoration-thickness: 2.5px; }
+
+/* ── Botón Onda (hablar) ─────────────────────────────── */
+/* data-state: idle | listening | thinking | speaking ; disabled para sin micrófono */
+.talk-btn { position: relative; width: 130px; height: 130px; flex: none; }
+.talk-btn::before, .talk-btn::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%; border: 4px solid transparent; opacity: 0;
+}
+.talk-btn[data-state="listening"]::before, .talk-btn[data-state="speaking"]::before,
+.talk-btn[data-state="listening"]::after,  .talk-btn[data-state="speaking"]::after { animation: ring 2.4s ease-out infinite; }
+.talk-btn::after { animation-delay: 1.2s !important; }
+.talk-btn[data-state="listening"]::before { border-color: var(--coral); }
+.talk-btn[data-state="listening"]::after  { border-color: var(--rosa); }
+.talk-btn[data-state="speaking"]::before  { border-color: var(--azul); }
+.talk-btn[data-state="speaking"]::after   { border-color: var(--lima); }
+.talk-btn > button {
+  position: absolute; inset: 8px; border: none; border-radius: 50%; background: var(--surface);
+  box-shadow: 0 16px 34px -18px rgba(61, 90, 254, .7);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.talk-btn > button:hover { transform: translateY(-2px); }
+.talk-btn > button:focus-visible { box-shadow: var(--focus-ring); }
+.talk-btn > button:disabled { background: var(--disabled-soft); box-shadow: none; transform: none; cursor: not-allowed; }
+.talk-btn svg { width: 84px; height: 84px; }
+
+/* Barras de Onda: añade .sway (reposo) o .talk (hablando) a los <rect> laterales */
+.sway, .talk { transform-box: fill-box; transform-origin: center; }
+.sway { animation: sway 1.2s ease-in-out infinite; }
+.talk { animation: talk .45s ease-in-out infinite; }
+.bounce { animation: dot 1.1s ease-in-out infinite; transform-box: fill-box; }
+
+/* ── Modal ───────────────────────────────────────────── */
+/* <dialog class="modal" aria-labelledby="…"> · showModal() da foco atrapado y Esc */
+.modal {
+  width: min(420px, calc(100% - 32px)); padding: 26px; border: none; border-radius: 28px;
+  background: var(--surface); color: var(--text); box-shadow: var(--shadow-modal);
+}
+.modal[open] { display: flex; flex-direction: column; gap: 12px; animation: popin var(--dur-base) var(--ease-out); }
+.modal::backdrop { background: var(--scrim); }
+.modal h2 { font-size: 24px; padding-right: 40px; }
+.modal-close { position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; }
+.modal-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+.modal-celebrate { align-items: center; text-align: center; }
+
+/* ── Tooltip ─────────────────────────────────────────── */
+/* <span class="tt-wrap"><button aria-describedby="t1">…</button><span id="t1" role="tooltip" class="tooltip">…</span></span> */
+.tt-wrap { position: relative; display: inline-flex; }
+.tooltip {
+  position: absolute; left: 50%; bottom: calc(100% + 10px); z-index: var(--z-tooltip);
+  padding: 8px 12px; border-radius: 12px; background: var(--text); color: #FFFFFF;
+  font-weight: 700; font-size: .8125rem; white-space: nowrap; pointer-events: none;
+  opacity: 0; transform: translate(-50%, 4px);
+  transition: opacity var(--dur-fast) ease 300ms, transform var(--dur-fast) ease 300ms;
+}
+.tooltip-wide { width: 220px; white-space: normal; font-weight: 600; line-height: 1.4; }
+.tt-wrap:hover .tooltip, .tt-wrap:focus-within .tooltip { opacity: 1; transform: translate(-50%, 0); }
+.tt-wrap[data-dismissed] .tooltip { opacity: 0; }
+
+/* ── Avisos (toasts) ─────────────────────────────────── */
+.toast-region { position: fixed; right: var(--margin); bottom: var(--margin); z-index: var(--z-toast); width: min(420px, calc(100% - 32px)); }
+.toast {
+  display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 22px;
+  background: var(--surface); box-shadow: 0 14px 30px -14px rgba(27, 19, 64, .45), inset 0 0 0 1.5px var(--border-subtle);
+  animation: popin var(--dur-base) var(--ease-out);
+}
+.toast::before { content: ""; flex: none; width: 10px; align-self: stretch; border-radius: 9px; background: var(--toast-color, var(--azul)); }
+.toast-success { --toast-color: var(--lima); }
+.toast-streak  { --toast-color: var(--amarillo); }
+.toast-body { flex: 1; display: flex; flex-direction: column; }
+.toast-title { font-weight: 800; }
+.toast-text  { font-size: .875rem; color: var(--text-2); }
+
+/* ── Alertas en línea ────────────────────────────────── */
+.alert { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 18px; font-weight: 700; font-size: .9375rem; }
+.alert > svg { flex: none; width: 20px; height: 20px; }
+.alert > span { flex: 1; }
+.alert-info    { background: var(--info-bg);    color: var(--info-text); }
+.alert-warning { background: var(--warning-bg); color: var(--warning-text); }
+.alert-error   { background: var(--error-bg);   color: var(--error-text); }
+.alert .btn { min-height: 40px; padding: 0 14px; font-size: .875rem; background: var(--surface); color: var(--text); }
+
+/* ── Vacío y carga ───────────────────────────────────── */
+.empty { display: flex; align-items: center; gap: 16px; padding: 16px; border-radius: 22px; background: var(--bg); }
+.skeleton {
+  display: block; height: 12px; border-radius: 9px;
+  background: linear-gradient(90deg, var(--seq-0) 0, #F8F9FF 50%, var(--seq-0) 100%);
+  background-size: 600px 100%; animation: shimmer 1.6s linear infinite;
+}

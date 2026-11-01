@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sistema de diseño · Datos, contenido y Onda</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@500;700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.mono{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+@keyframes caret{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes stripes{to{background-position:28px 0}}
+.caret{animation:caret 1s steps(1) infinite}
+.stripes{animation:stripes 1.2s linear infinite}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1760px; padding: 56px; background: #F6F7FF; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 24px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .14em; color: #2338C9">IABUDDY · SISTEMA DE DISEÑO · 05</span>
+<h1 class="disp" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.045em; line-height: 1">Datos, contenido y Onda</h1>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px">
+
+<section style="padding: 24px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Tarjetas</h2>
+<div style="padding: 18px; border-radius: 26px; background: #FFFFFF; box-shadow: 0 20px 44px -26px rgba(27,19,64,.45), inset 0 0 0 1px #F0F1F8; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #5B5478">BASE</span><span style="font-weight: 700; font-size: 15px">Blanca · radio 30 · sombra suave</span></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<div style="padding: 14px; border-radius: 20px; background: #FFE8DF; display: flex; flex-direction: column"><span style="font-size: 11px; font-weight: 800; letter-spacing: .08em; color: #9A3412">TURNOS</span><span class="disp" style="font-size: 30px; font-weight: 800">214</span></div>
+<div style="padding: 14px; border-radius: 20px; background: #FFF4C7; display: flex; flex-direction: column"><span style="font-size: 11px; font-weight: 800; letter-spacing: .08em; color: #854D0E">MINUTOS</span><span class="disp" style="font-size: 30px; font-weight: 800">38</span></div>
+<div style="padding: 14px; border-radius: 20px; background: #EEFAD9; display: flex; flex-direction: column"><span style="font-size: 11px; font-weight: 800; letter-spacing: .08em; color: #2F5208">SIN ERRORES</span><span class="disp" style="font-size: 30px; font-weight: 800">64 %</span></div>
+<div style="padding: 14px; border-radius: 20px; background: #FFE8F3; display: flex; flex-direction: column"><span style="font-size: 11px; font-weight: 800; letter-spacing: .08em; color: #9D174D">SONIDO</span><span class="disp mono" style="font-size: 30px; font-weight: 800">θ 48</span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<div style="border-radius: 22px; background: #FFFFFF; box-shadow: 0 16px 34px -24px rgba(27,19,64,.5); overflow: hidden"><div style="height: 50px; background: #E3E8FF"></div><div style="padding: 10px 12px; font-weight: 800; font-size: 13px">Seleccionable</div></div>
+<div style="border-radius: 22px; background: #FFFFFF; box-shadow: 0 0 0 4px #3D5AFE, 0 16px 34px -24px rgba(27,19,64,.5); overflow: hidden"><div style="height: 50px; background: #E3E8FF"></div><div style="padding: 10px 12px; font-weight: 800; font-size: 13px">Seleccionada</div></div>
+</div>
+</section>
+
+<section style="padding: 24px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Etiquetas</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<span style="padding: 4px 12px; border-radius: 999px; background: #EEFAD9; color: #2F5208; font-weight: 800; font-size: 13px">+25 XP</span>
+<span style="padding: 4px 12px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 12px">Gramática</span>
+<span style="padding: 4px 12px; border-radius: 999px; background: #FF5FAE; color: #1B1340; font-weight: 800; font-size: 12px">Pronunciación</span>
+<span style="padding: 4px 12px; border-radius: 999px; background: #FFC800; color: #1B1340; font-weight: 800; font-size: 12px">Vocabulario</span>
+<span style="padding: 4px 12px; border-radius: 999px; background: #1B1340; color: #FFC800; font-weight: 800; font-size: 12px">NUEVO</span>
+<span style="padding: 4px 12px; border-radius: 999px; background: #EEFAD9; color: #2F5208; font-weight: 800; font-size: 12px; letter-spacing: .04em">ASÍ SE DICE</span>
+<span style="padding: 4px 12px; border-radius: 999px; background: #E3E8FF; color: #2338C9; font-weight: 800; font-size: 12px">Entrevista técnica · B2</span>
+</div>
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #5B5478">GRAVEDAD DEL ERROR</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<span style="display: flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: #EEFAD9; color: #2F5208; font-weight: 800; font-size: 12px"><span style="display: flex; align-items: flex-end; gap: 2px; height: 12px"><span style="width: 4px; height: 40%; border-radius: 3px; background: currentColor"></span><span style="width: 4px; height: 75%; border-radius: 3px; background: rgba(47,82,8,.25)"></span><span style="width: 4px; height: 100%; border-radius: 3px; background: rgba(47,82,8,.25)"></span></span>BAJA</span>
+<span style="display: flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: #FFF4C7; color: #854D0E; font-weight: 800; font-size: 12px"><span style="display: flex; align-items: flex-end; gap: 2px; height: 12px"><span style="width: 4px; height: 40%; border-radius: 3px; background: currentColor"></span><span style="width: 4px; height: 75%; border-radius: 3px; background: currentColor"></span><span style="width: 4px; height: 100%; border-radius: 3px; background: rgba(133,77,14,.25)"></span></span>MEDIA</span>
+<span style="display: flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: #FFE8DF; color: #9A3412; font-weight: 800; font-size: 12px"><span style="display: flex; align-items: flex-end; gap: 2px; height: 12px"><span style="width: 4px; height: 40%; border-radius: 3px; background: currentColor"></span><span style="width: 4px; height: 75%; border-radius: 3px; background: currentColor"></span><span style="width: 4px; height: 100%; border-radius: 3px; background: currentColor"></span></span>ALTA</span>
+</div>
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #5B5478">ESTRELLAS · NIVEL</span>
+<div style="display: flex; align-items: center; gap: 16px">
+<span aria-label="2 de 3 estrellas" style="font-size: 26px; letter-spacing: 3px">★★☆</span>
+<span style="width: 56px; height: 96px; border-radius: 28px; background: #3D5AFE; color: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center"><span class="disp" style="font-size: 30px; font-weight: 800; line-height: 1">7</span><span style="font-size: 9px; font-weight: 800; letter-spacing: .14em">NIVEL</span></span>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">El nivel es una barra vertical (como Onda), no un hexágono.</span>
+</div>
+</section>
+
+<section style="padding: 24px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Progreso</h2>
+<div style="height: 14px; border-radius: 99px; background: #E3E8FF; overflow: hidden"><div style="width: 83%; height: 100%; border-radius: 99px; background: #3D5AFE"></div></div>
+<div style="height: 22px; border-radius: 999px; background: #F1F3FB; overflow: hidden"><div class="stripes" style="width: 63%; height: 100%; background-color: #9BE22D; background-image: repeating-linear-gradient(45deg, rgba(27,19,64,.14) 0 10px, transparent 10px 20px); background-size: 28px 28px"></div></div>
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #5B5478">META DIARIA · 1 BARRA = 1 MINUTO</span>
+<div role="img" aria-label="9 de 15 minutos" style="display: flex; align-items: center; gap: 4px; height: 50px">
+<span style="flex: 1; height: 40%; border-radius: 9px; background: #FFC800"></span><span style="flex: 1; height: 70%; border-radius: 9px; background: #FF6B3D"></span><span style="flex: 1; height: 100%; border-radius: 9px; background: #3D5AFE"></span><span style="flex: 1; height: 70%; border-radius: 9px; background: #FF5FAE"></span><span style="flex: 1; height: 40%; border-radius: 9px; background: #9BE22D"></span><span style="flex: 1; height: 60%; border-radius: 9px; background: #FFC800"></span><span style="flex: 1; height: 85%; border-radius: 9px; background: #FF6B3D"></span><span style="flex: 1; height: 95%; border-radius: 9px; background: #3D5AFE"></span><span style="flex: 1; height: 65%; border-radius: 9px; background: #FF5FAE"></span><span style="flex: 1; height: 45%; border-radius: 9px; background: #E6E8F2"></span><span style="flex: 1; height: 70%; border-radius: 9px; background: #E6E8F2"></span><span style="flex: 1; height: 90%; border-radius: 9px; background: #E6E8F2"></span><span style="flex: 1; height: 60%; border-radius: 9px; background: #E6E8F2"></span><span style="flex: 1; height: 40%; border-radius: 9px; background: #E6E8F2"></span><span style="flex: 1; height: 25%; border-radius: 9px; background: #E6E8F2"></span>
+</div>
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #5B5478">RACHA SEMANAL · DÍAS DEL CALENDARIO</span>
+<div style="display: flex; gap: 8px; align-items: center">
+<span style="width: 40px; height: 40px; border-radius: 14px; background: #FF6B3D; display: flex; align-items: center; justify-content: center; font-weight: 800">12</span>
+<span style="width: 40px; height: 40px; border-radius: 14px; background: #FFFFFF; border: 3px dashed #3D5AFE; color: #2338C9; display: flex; align-items: center; justify-content: center; font-weight: 800">29</span>
+<span style="width: 40px; height: 40px; border-radius: 14px; background: #EEF0F8; color: #5B5478; display: flex; align-items: center; justify-content: center; font-weight: 800">18</span>
+<span style="width: 40px; height: 40px; border-radius: 14px; background: #FFFFFF; border: 3px solid #1B1340; display: flex; align-items: center; justify-content: center; font-weight: 800">31</span>
+<span style="font-size: 12px; font-weight: 600; color: #4A4366">cumplido · protector · sin práctica · hoy</span>
+</div>
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #5B5478">NIVEL DE UN SONIDO (1–5)</span>
+<span aria-label="Nivel 3 de 5" style="display: flex; align-items: flex-end; gap: 4px; height: 28px"><span style="width: 7px; height: 40%; border-radius: 4px; background: #FFC800"></span><span style="width: 7px; height: 55%; border-radius: 4px; background: #FF6B3D"></span><span style="width: 7px; height: 70%; border-radius: 4px; background: #3D5AFE"></span><span style="width: 7px; height: 85%; border-radius: 4px; background: #E6E8F2"></span><span style="width: 7px; height: 100%; border-radius: 4px; background: #E6E8F2"></span></span>
+</section>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px">
+<section style="padding: 24px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 16px">
+<h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Pronunciación</h2>
+<div lang="en" style="display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end">
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 10px; border-radius: 14px"><span class="disp" style="font-size: 30px; font-weight: 800">were</span><span style="width: 100%; height: 6px; border-radius: 9px; background: #9BE22D"></span><span style="font-size: 12px; font-weight: 800; color: #2F5208">88</span></span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 10px; border-radius: 14px"><span class="disp" style="font-size: 30px; font-weight: 800">there</span><span style="width: 100%; height: 6px; border-radius: 9px; background: #FFC800"></span><span style="font-size: 12px; font-weight: 800; color: #854D0E">74</span></span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 10px; border-radius: 14px; background: #E3E8FF"><span class="disp" style="font-size: 30px; font-weight: 800">think</span><span style="width: 100%; height: 6px; border-radius: 9px; background: #FF6B3D"></span><span style="font-size: 12px; font-weight: 800; color: #9A3412">62</span></span>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366; padding-bottom: 12px" lang="es">palabra · seleccionada</span>
+</div>
+<div style="display: flex; gap: 10px; align-items: flex-start">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px; width: 76px"><span class="mono" style="width: 100%; padding: 8px 0; border-radius: 12px; background: #F6F7FF; text-align: center; font-size: 22px; font-weight: 700">θ</span><span class="mono" style="width: 100%; padding: 8px 0; border-radius: 12px; background: #FFE8DF; text-align: center; font-size: 22px; font-weight: 700">t</span><span style="font-size: 12px; font-weight: 800">31</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px; width: 76px"><span class="mono" style="width: 100%; padding: 8px 0; border-radius: 12px; background: #F6F7FF; text-align: center; font-size: 22px; font-weight: 700">ɪ</span><span class="mono" style="width: 100%; padding: 8px 0; border-radius: 12px; background: #EEFAD9; text-align: center; font-size: 22px; font-weight: 700">ɪ</span><span style="font-size: 12px; font-weight: 800">88</span></div>
+<div style="flex: 1; font-size: 13px; font-weight: 600; color: #4A4366; line-height: 1.5; padding-top: 6px">Arriba lo esperado, abajo lo reconocido. Verde lima si coinciden, coral si no, y siempre con la cifra.</div>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 18px; background: #FFE8F3"><span class="mono" style="min-width: 64px; padding: 6px 8px; border-radius: 12px; background: #FFFFFF; font-weight: 700; text-align: center">θ · ð</span><span lang="en" style="flex: 1; font-weight: 700; font-size: 14px">think · this</span><span style="font-size: 13px; font-weight: 700">Nivel 1</span></div>
+</section>
+
+<section style="padding: 24px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 12px">
+<h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Conversación</h2>
+<div style="display: flex; align-items: flex-end; gap: 10px; max-width: 86%">
+<svg aria-hidden="true" width="36" height="36" viewBox="0 0 200 200" style="flex: none"><rect x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/><rect x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE"/><rect x="166" y="88" width="20" height="48" rx="10" fill="#9BE22D"/><circle cx="90" cy="76" r="11" fill="#FFFFFF"/><circle cx="112" cy="76" r="11" fill="#FFFFFF"/></svg>
+<span lang="en" style="padding: 12px 16px; border-radius: 22px 22px 22px 6px; background: #EEF1FF; font-size: 16px; font-weight: 500">Oh, you <mark style="background: #DDF6B5; color: #1B1340; padding: 0 4px; border-radius: 6px; font-weight: 800">went</mark> to the gym?</span>
+</div>
+<span lang="en" style="align-self: flex-end; max-width: 86%; padding: 12px 16px; border-radius: 22px 22px 6px 22px; background: #FFE8DF; font-size: 16px; font-weight: 600">Yes, with my <span style="text-decoration: underline dotted #E0398C; text-decoration-thickness: 3px; text-underline-offset: 6px">brother</span>.</span>
+<span lang="en" style="align-self: flex-end; max-width: 86%; padding: 12px 16px; border-radius: 22px 22px 6px 22px; border: 2.5px dashed #FF6B3D; background: #FFF6F2; font-size: 16px; font-weight: 600">It was a sci-fi movie<span class="caret" style="display: inline-block; width: 3px; height: 18px; margin-left: 4px; background: #FF6B3D; vertical-align: -3px"></span></span>
+<div style="display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; font-weight: 700; color: #4A4366">
+<span>Buddy: <span class="mono">#EEF1FF</span></span><span>Tú: <span class="mono">#FFE8DF</span></span><span>En vivo: borde punteado</span><span>Recast: resaltado lima</span><span>A revisar: subrayado punteado rosa</span>
+</div>
+<div style="padding: 12px 14px; border-radius: 18px; background: #F6F7FF; display: flex; flex-direction: column; gap: 4px">
+<span lang="en" style="font-size: 15px; font-weight: 600">Yesterday I <s style="text-decoration-color: #E2552B; text-decoration-thickness: 2.5px">go</s> → <mark style="background: #DDF6B5; color: #1B1340; padding: 0 3px; border-radius: 5px">went</mark></span>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">Corrección: tachado coral → resaltado lima. Explicación en español.</span>
+</div>
+</section>
+</div>
+
+<div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 22px">
+<section style="padding: 24px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Onda · estados y tamaños</h2>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; text-align: center; font-size: 12px; font-weight: 800">
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 200 200"><rect x="14" y="98" width="20" height="28" rx="10" fill="#FFC800"/><rect x="42" y="88" width="26" height="48" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="88" width="26" height="48" rx="13" fill="#FF5FAE"/><rect x="166" y="98" width="20" height="28" rx="10" fill="#9BE22D"/><circle cx="89" cy="72" r="10" fill="#FFFFFF"/><circle cx="89" cy="71" r="5.5" fill="#1B1340"/><circle cx="111" cy="72" r="10" fill="#FFFFFF"/><circle cx="111" cy="71" r="5.5" fill="#1B1340"/><circle cx="100" cy="98" r="4.5" fill="#FFFFFF"/></svg>Escucha</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 200 200"><circle cx="24" cy="112" r="9" fill="#FFC800"/><circle cx="55" cy="112" r="11" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><circle cx="145" cy="112" r="11" fill="#FF5FAE"/><circle cx="176" cy="112" r="9" fill="#9BE22D"/><circle cx="89" cy="72" r="8.5" fill="#FFFFFF"/><circle cx="92" cy="68" r="4.5" fill="#1B1340"/><circle cx="111" cy="72" r="8.5" fill="#FFFFFF"/><circle cx="114" cy="68" r="4.5" fill="#1B1340"/></svg>Piensa</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 200 200"><rect x="14" y="72" width="20" height="80" rx="10" fill="#FFC800"/><rect x="42" y="40" width="26" height="144" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="40" width="26" height="144" rx="13" fill="#FF5FAE"/><rect x="166" y="72" width="20" height="80" rx="10" fill="#9BE22D"/><circle cx="89" cy="70" r="8.5" fill="#FFFFFF"/><circle cx="90" cy="72" r="4.5" fill="#1B1340"/><circle cx="111" cy="70" r="8.5" fill="#FFFFFF"/><circle cx="112" cy="72" r="4.5" fill="#1B1340"/><ellipse cx="100" cy="100" rx="10" ry="9" fill="#FFFFFF"/></svg>Habla</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 200 200"><rect x="14" y="36" width="20" height="120" rx="10" fill="#FFC800"/><rect x="42" y="56" width="26" height="110" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="56" width="26" height="110" rx="13" fill="#FF5FAE"/><rect x="166" y="36" width="20" height="120" rx="10" fill="#9BE22D"/><path d="M82 74 Q89 64 96 74" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M104 74 Q111 64 118 74" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M88 90 Q100 112 112 90 Z" fill="#FFFFFF"/></svg>Celebra</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 200 200"><rect x="14" y="96" width="20" height="40" rx="10" fill="#FFC800"/><rect x="46" y="70" width="26" height="96" rx="13" fill="#FF6B3D" transform="rotate(10 59 166)"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="128" y="70" width="26" height="96" rx="13" fill="#FF5FAE" transform="rotate(-10 141 166)"/><rect x="166" y="96" width="20" height="40" rx="10" fill="#9BE22D"/><path d="M82 74 Q89 80 96 74 M104 74 Q111 80 118 74" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M90 94 Q100 104 110 94" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none"/></svg>Ánimo</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 200 200"><rect x="14" y="150" width="20" height="16" rx="8" fill="#FFC800"/><rect x="42" y="148" width="26" height="18" rx="9" fill="#FF6B3D"/><rect x="74" y="60" width="52" height="120" rx="26" fill="#3D5AFE"/><rect x="132" y="148" width="26" height="18" rx="9" fill="#FF5FAE"/><rect x="166" y="150" width="20" height="16" rx="8" fill="#9BE22D"/><path d="M82 98 Q89 104 96 98 M104 98 Q111 104 118 98" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none"/></svg>Descansa</span>
+</div>
+<div style="display: flex; align-items: flex-end; gap: 22px; padding-top: 8px; border-top: 1.5px solid #ECEEF8">
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; font-weight: 700"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 200 200"><rect x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/><rect x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE"/><rect x="166" y="88" width="20" height="48" rx="10" fill="#9BE22D"/><circle cx="90" cy="76" r="10" fill="#FFFFFF"/><circle cx="112" cy="76" r="10" fill="#FFFFFF"/></svg>64</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; font-weight: 700"><svg aria-hidden="true" width="40" height="40" viewBox="0 0 200 200"><rect x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/><rect x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE"/><rect x="166" y="88" width="20" height="48" rx="10" fill="#9BE22D"/><circle cx="90" cy="76" r="11" fill="#FFFFFF"/><circle cx="112" cy="76" r="11" fill="#FFFFFF"/></svg>40 · avatar</span>
+<span style="display: flex; align-items: center; gap: 8px"><svg aria-hidden="true" width="40" height="40" viewBox="0 0 200 200"><rect x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/><rect x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE"/><rect x="166" y="88" width="20" height="48" rx="10" fill="#9BE22D"/><circle cx="90" cy="76" r="10" fill="#FFFFFF"/><circle cx="112" cy="76" r="10" fill="#FFFFFF"/></svg><span class="disp" style="font-size: 26px; font-weight: 800; letter-spacing: -0.045em">iabuddy</span></span>
+<span style="font-size: 12px; font-weight: 600; color: #4A4366; flex: 1">Detalle completo en la hoja de personaje (página Exploración).</span>
+</div>
+</section>
+
+<section style="padding: 24px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Íconos</h2>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; font-size: 11px; font-weight: 700; color: #4A4366; text-align: center">
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/></svg>mic</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>escuchar</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>repetir</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.2" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>conversar</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>escenario</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.2" stroke-linecap="round"><path d="M2 10v3M6 6v11M10 3v18M14 8v7M18 5v13M22 10v3"/></svg>sonidos</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>racha</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>protector</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>XP</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>estrella</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>hecho</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.2" stroke-linecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>bloqueado</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>ajustes</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.4 10.4 0 0 1 12 5c7 0 10 7 10 7a13.2 13.2 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.5 13.5 0 0 0 2 12s3 7 10 7a9.7 9.7 0 0 0 5.39-1.61"/><path d="M2 2l20 20"/></svg>ocultar</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>tiempo</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.2" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>guardar</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>siguiente</span>
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>cerrar</span>
+</div>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">Trazo redondeado 2–2,4 px, 24 px. Decorativos con <span class="mono">aria-hidden</span>; en botones, con <span class="mono">aria-label</span>.</span>
+</section>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1760}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

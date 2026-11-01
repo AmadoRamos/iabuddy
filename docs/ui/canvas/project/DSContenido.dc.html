@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sistema de diseño · Contenido y formatos</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@500;700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.mono{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1400px; padding: 56px; background: #F6F7FF; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 22px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .14em; color: #2338C9">IABUDDY · SISTEMA DE DISEÑO · 16</span>
+<h1 class="disp" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.045em; line-height: 1">Contenido y formatos</h1>
+<p style="margin: 0; font-size: 17px; font-weight: 600; color: #4A4366">Buddy habla como un compañero paciente: cercano, concreto y sin culpa. La interfaz va en español de Colombia; lo que se practica, en inglés.</p>
+</div>
+
+<section style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px">
+<div style="padding: 20px; border-radius: 26px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 10px">
+<span class="disp" style="font-size: 20px; font-weight: 800">Cercano, no infantil</span>
+<span style="padding: 10px 12px; border-radius: 14px; background: #EEFAD9; color: #2F5208; font-weight: 700; font-size: 14px">✓ ¿Hablamos un rato?</span>
+<span style="padding: 10px 12px; border-radius: 14px; background: #FFE8DF; color: #9A3412; font-weight: 700; font-size: 14px">✗ ¡¡Yupi, a aprender!!</span>
+</div>
+<div style="padding: 20px; border-radius: 26px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 10px">
+<span class="disp" style="font-size: 20px; font-weight: 800">Sin culpa</span>
+<span style="padding: 10px 12px; border-radius: 14px; background: #EEFAD9; color: #2F5208; font-weight: 700; font-size: 14px">✓ Casi perfecto: con «yesterday» se dice <span lang="en">I went</span>.</span>
+<span style="padding: 10px 12px; border-radius: 14px; background: #FFE8DF; color: #9A3412; font-weight: 700; font-size: 14px">✗ Error: tiempo verbal incorrecto.</span>
+</div>
+<div style="padding: 20px; border-radius: 26px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 10px">
+<span class="disp" style="font-size: 20px; font-weight: 800">Concreto</span>
+<span style="padding: 10px 12px; border-radius: 14px; background: #EEFAD9; color: #2F5208; font-weight: 700; font-size: 14px">✓ Te faltan 6 minutos para la meta.</span>
+<span style="padding: 10px 12px; border-radius: 14px; background: #FFE8DF; color: #9A3412; font-weight: 700; font-size: 14px">✗ ¡Sigue esforzándote!</span>
+</div>
+<div style="padding: 20px; border-radius: 26px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 10px">
+<span class="disp" style="font-size: 20px; font-weight: 800">Honesto con lo técnico</span>
+<span style="padding: 10px 12px; border-radius: 14px; background: #EEFAD9; color: #2F5208; font-weight: 700; font-size: 14px">✓ Falta el modelo de transcripción.</span>
+<span style="padding: 10px 12px; border-radius: 14px; background: #FFE8DF; color: #9A3412; font-weight: 700; font-size: 14px">✗ Algo salió mal.</span>
+</div>
+</section>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px">
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 10px">
+<h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Formatos · español de Colombia</h2>
+<div style="display: grid; grid-template-columns: 150px 1fr 1fr; gap: 8px 14px; align-items: center; font-size: 14px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">TIPO</span><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #2F5208">ASÍ</span><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #9A3412">ASÍ NO</span>
+<span style="font-weight: 700">Miles</span><span class="mono">2.340 XP</span><span class="mono" style="color: #4A4366">2,340 XP · 2340XP</span>
+<span style="font-weight: 700">Decimales</span><span class="mono">0,8 s · 14,6</span><span class="mono" style="color: #4A4366">0.8s · 14.6</span>
+<span style="font-weight: 700">Porcentaje</span><span class="mono">64 %</span><span class="mono" style="color: #4A4366">64%</span>
+<span style="font-weight: 700">Hora (texto)</span><span class="mono">7:30 p. m.</span><span class="mono" style="color: #4A4366">7:30 PM · 7.30pm</span>
+<span style="font-weight: 700">Hora (campo)</span><span class="mono">19:30</span><span class="mono" style="color: #4A4366">7:30</span>
+<span style="font-weight: 700">Fecha corta</span><span class="mono">sáb 31 oct</span><span class="mono" style="color: #4A4366">10/31 · Oct 31</span>
+<span style="font-weight: 700">Fecha larga</span><span class="mono">31 de octubre de 2026</span><span class="mono" style="color: #4A4366">October 31st</span>
+<span style="font-weight: 700">Duración</span><span class="mono">12:40 · 12 min</span><span class="mono" style="color: #4A4366">12.67 min</span>
+<span style="font-weight: 700">Ordinal</span><span class="mono">1.ª frase · 3.º turno</span><span class="mono" style="color: #4A4366">1ra · 3er</span>
+<span style="font-weight: 700">Comillas</span><span class="mono">«español» · “English”</span><span class="mono" style="color: #4A4366">"mezcladas"</span>
+</div>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">En código: <span class="mono">Intl.NumberFormat('es-CO')</span> e <span class="mono">Intl.DateTimeFormat('es-CO')</span>.</span>
+</section>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 10px">
+<h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Idiomas</h2>
+<ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 15px; font-weight: 600; color: #4A4366; line-height: 1.5">
+<li><strong style="color: #1B1340">Interfaz:</strong> español neutro de Colombia, tuteo («pulsa», «tu meta»).</li>
+<li><strong style="color: #1B1340">Buddy y la práctica:</strong> siempre en inglés americano, marcado con <span class="mono">lang="en"</span>.</li>
+<li><strong style="color: #1B1340">Explicaciones del tutor:</strong> en español por defecto (configurable), citando el inglés entre comillas o resaltado.</li>
+<li><strong style="color: #1B1340">Términos de juego:</strong> en español (racha, meta, nivel), salvo XP.</li>
+<li><strong style="color: #1B1340">Nunca</strong> se traduce la frase del alumno sin que la pida; se ofrece la versión corregida.</li>
+</ul>
+<h3 style="margin: 8px 0 0; font-size: 16px; font-weight: 800">Mayúsculas y botones</h3>
+<ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 15px; font-weight: 600; color: #4A4366; line-height: 1.5">
+<li>Títulos y botones en tipo oración: «Guardar escenario», no «Guardar Escenario».</li>
+<li>Botones: verbo + objeto, hasta 3 palabras («Empezar a hablar»).</li>
+<li>Rótulos pequeños en MAYÚSCULAS con espaciado: «PROMPT DEL DÍA».</li>
+</ul>
+</section>
+</div>
+
+<div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 22px">
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 10px">
+<h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Glosario del producto</h2>
+<div style="display: grid; grid-template-columns: 170px 1fr; gap: 8px 14px; font-size: 14px; align-items: baseline">
+<span style="font-weight: 800">Turno</span><span style="font-weight: 600; color: #4A4366">Lo que dices desde que abres el micrófono hasta el silencio.</span>
+<span style="font-weight: 800">Meta diaria</span><span style="font-weight: 600; color: #4A4366">Minutos hablando al día (5–30).</span>
+<span style="font-weight: 800">Racha</span><span style="font-weight: 600; color: #4A4366">Días seguidos cumpliendo la meta.</span>
+<span style="font-weight: 800">Protector</span><span style="font-weight: 600; color: #4A4366">Un día libre por semana sin perder la racha.</span>
+<span style="font-weight: 800">Escenario</span><span style="font-weight: 600; color: #4A4366">Roleplay con objetivos (no «lección»).</span>
+<span style="font-weight: 800">Objetivo</span><span style="font-weight: 600; color: #4A4366">Algo que debes lograr dentro de un escenario.</span>
+<span style="font-weight: 800">Drill de sonidos</span><span style="font-weight: 600; color: #4A4366">Leer frases para practicar pronunciación.</span>
+<span style="font-weight: 800">Así se dice</span><span style="font-weight: 600; color: #4A4366">Corrección implícita (recast): Buddy repite bien lo que dijiste.</span>
+<span style="font-weight: 800">A practicar</span><span style="font-weight: 600; color: #4A4366">Lo que en otras apps sería «error» o «incorrecto».</span>
+</div>
+</section>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 10px">
+<h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Longitudes máximas</h2>
+<div style="display: grid; grid-template-columns: 1fr 150px; gap: 10px 14px; font-size: 14px; align-items: center">
+<span style="font-weight: 700">Respuesta de Buddy</span><span class="mono" style="font-weight: 700">1–3 frases + pregunta</span>
+<span style="font-weight: 700">Explicación del tutor</span><span class="mono" style="font-weight: 700">≤ 140 caracteres</span>
+<span style="font-weight: 700">Botón</span><span class="mono" style="font-weight: 700">≤ 24 caracteres</span>
+<span style="font-weight: 700">Título de aviso</span><span class="mono" style="font-weight: 700">≤ 40 caracteres</span>
+<span style="font-weight: 700">Cuerpo de aviso</span><span class="mono" style="font-weight: 700">≤ 2 líneas</span>
+<span style="font-weight: 700">Título de escenario</span><span class="mono" style="font-weight: 700">≤ 60 caracteres</span>
+</div>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">Si no cabe, se resume; nunca se corta con «…» en mitad de una corrección.</span>
+</section>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

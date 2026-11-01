@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sistema de diseño · Accesibilidad</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@500;700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.mono{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1560px; padding: 56px; background: #F6F7FF; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 24px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .14em; color: #2338C9">IABUDDY · SISTEMA DE DISEÑO · 07</span>
+<h1 class="disp" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.045em; line-height: 1">Accesibilidad</h1>
+<p style="margin: 0; font-size: 17px; font-weight: 600; color: #4A4366">Objetivo: WCAG 2.2 nivel AA. Contrastes calculados con la fórmula de luminancia relativa de WCAG.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 24px">
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Contraste de color</h2><span style="font-size: 13px; font-weight: 700; color: #4A4366">texto ≥ 4,5 · texto grande y UI ≥ 3</span></div>
+<div style="display: grid; grid-template-columns: 1fr 70px 110px; gap: 8px 12px; align-items: center; font-size: 14px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">PAREJA</span><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">RATIO</span><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">RESULTADO</span>
+<span style="display: flex; align-items: center; gap: 10px"><span style="padding: 4px 10px; border-radius: 8px; background: #3D5AFE; color: #FFFFFF; font-weight: 800">Aa</span>Blanco sobre azul</span><span style="font-weight: 800">5,13</span><span style="font-weight: 800; color: #2F5208">AA</span>
+<span style="display: flex; align-items: center; gap: 10px"><span style="padding: 4px 10px; border-radius: 8px; background: #FF6B3D; color: #1B1340; font-weight: 800">Aa</span>Tinta sobre coral</span><span style="font-weight: 800">6,12</span><span style="font-weight: 800; color: #2F5208">AA</span>
+<span style="display: flex; align-items: center; gap: 10px"><span style="padding: 4px 10px; border-radius: 8px; background: #FF5FAE; color: #1B1340; font-weight: 800">Aa</span>Tinta sobre rosa</span><span style="font-weight: 800">6,18</span><span style="font-weight: 800; color: #2F5208">AA</span>
+<span style="display: flex; align-items: center; gap: 10px"><span style="padding: 4px 10px; border-radius: 8px; background: #FFC800; color: #1B1340; font-weight: 800">Aa</span>Tinta sobre amarillo</span><span style="font-weight: 800">11,13</span><span style="font-weight: 800; color: #2F5208">AAA</span>
+<span style="display: flex; align-items: center; gap: 10px"><span style="padding: 4px 10px; border-radius: 8px; background: #9BE22D; color: #1B1340; font-weight: 800">Aa</span>Tinta sobre lima</span><span style="font-weight: 800">10,97</span><span style="font-weight: 800; color: #2F5208">AAA</span>
+<span style="display: flex; align-items: center; gap: 10px"><span style="padding: 4px 10px; border-radius: 8px; background: #F6F7FF; box-shadow: inset 0 0 0 1px #E6E8F2; color: #5B5478; font-weight: 800">Aa</span>Texto 3 sobre fondo</span><span style="font-weight: 800">6,59</span><span style="font-weight: 800; color: #2F5208">AA</span>
+<span style="display: flex; align-items: center; gap: 10px"><span style="padding: 4px 10px; border-radius: 8px; background: #E3E8FF; color: #2338C9; font-weight: 800">Aa</span>Tinte azul</span><span style="font-weight: 800">6,96</span><span style="font-weight: 800; color: #2F5208">AA</span>
+<span style="display: flex; align-items: center; gap: 10px"><span style="padding: 4px 10px; border-radius: 8px; background: #FFF4C7; color: #854D0E; font-weight: 800">Aa</span>Tinte amarillo (el más bajo de los tintes)</span><span style="font-weight: 800">6,20</span><span style="font-weight: 800; color: #2F5208">AA</span>
+<span style="display: flex; align-items: center; gap: 10px"><span style="padding: 4px 10px; border-radius: 8px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #E6E8F2; color: #3D5AFE; font-weight: 800">Aa</span>Azul sobre blanco (anillo de foco)</span><span style="font-weight: 800">5,13</span><span style="font-weight: 800; color: #2F5208">AA</span>
+<span style="display: flex; align-items: center; gap: 10px"><span style="width: 44px; height: 24px; border-radius: 999px; background: #7D7898"></span>Interruptor apagado</span><span style="font-weight: 800">4,19</span><span style="font-weight: 800; color: #2F5208">UI ✓</span>
+<span style="display: flex; align-items: center; gap: 10px"><span style="width: 44px; height: 24px; border-radius: 8px; box-shadow: inset 0 0 0 2px #8A86A3"></span>Borde de campo</span><span style="font-weight: 800">3,49</span><span style="font-weight: 800; color: #2F5208">UI ✓</span>
+</div>
+<div style="margin-top: 8px; padding: 14px 16px; border-radius: 18px; background: #FFE8DF; display: flex; flex-direction: column; gap: 6px">
+<span style="font-weight: 800; font-size: 14px; color: #9A3412">PROHIBIDO</span>
+<span style="font-size: 14px; font-weight: 600; color: #4A2410; line-height: 1.5">Blanco sobre coral (2,83) · amarillo o lima como texto sobre blanco (1,55 / 1,58) · gris #CBD0E3 en controles (1,54). Amarillo y lima solo como relleno, con texto tinta encima.</span>
+</div>
+</section>
+
+<div style="display: flex; flex-direction: column; gap: 24px">
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Tamaños táctiles</h2>
+<div style="display: flex; align-items: center; gap: 26px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><span style="position: relative; width: 44px; height: 44px; border-radius: 50%; border: 2px dashed #3D5AFE; display: flex; align-items: center; justify-content: center"><span style="width: 24px; height: 24px; border-radius: 6px; background: #E3E8FF"></span></span><span style="font-size: 12px; font-weight: 700">ícono 24 · área 44</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><span style="min-height: 44px; padding: 0 16px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 14px; display: flex; align-items: center">44 mín.</span><span style="font-size: 12px; font-weight: 700">botón S</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><span style="display: flex; gap: 8px"><span style="width: 44px; height: 44px; border-radius: 50%; background: #F1F3FF"></span><span style="width: 44px; height: 44px; border-radius: 50%; background: #F1F3FF"></span></span><span style="font-size: 12px; font-weight: 700">8 px entre objetivos</span></div>
+</div>
+<span style="font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.5">Todo lo que se pulsa mide al menos 44 × 44 px, incluidas las palabras del drill y los días del calendario.</span>
+</section>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 12px">
+<h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Teclado</h2>
+<div style="display: grid; grid-template-columns: 130px 1fr; gap: 10px 14px; align-items: center; font-size: 14px; font-weight: 600">
+<span style="justify-self: start; padding: 5px 12px; border-radius: 8px; border: 2px solid #1B1340; border-bottom-width: 4px; font-weight: 800; font-size: 13px">ESPACIO</span><span>Abre y cierra tu turno. Solo cuando el foco no está en un botón o campo; la tecla es configurable.</span>
+<span style="justify-self: start; padding: 5px 12px; border-radius: 8px; border: 2px solid #1B1340; border-bottom-width: 4px; font-weight: 800; font-size: 13px">TAB</span><span>Recorre los controles en orden visual. Primer elemento: «Saltar al contenido».</span>
+<span style="justify-self: start; padding: 5px 12px; border-radius: 8px; border: 2px solid #1B1340; border-bottom-width: 4px; font-weight: 800; font-size: 13px">← →</span><span>Cambian la opción en segmentados, filtros y deslizadores.</span>
+<span style="justify-self: start; padding: 5px 12px; border-radius: 8px; border: 2px solid #1B1340; border-bottom-width: 4px; font-weight: 800; font-size: 13px">ESC</span><span>Cierra modales y tooltips; el foco vuelve a donde estaba.</span>
+</div>
+</section>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 12px">
+<h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">El color nunca va solo</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<span style="display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 12px; background: #FFE8DF; font-weight: 700; font-size: 14px">think <span style="padding: 1px 8px; border-radius: 999px; background: #FF6B3D; font-weight: 800; font-size: 12px">62</span> a practicar</span>
+</div>
+<ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.5">
+<li>Puntuaciones: color + cifra + palabra («a practicar»).</li>
+<li>Correcciones: tachado y resaltado, además del color.</li>
+<li>Calendario: punteado = protector, borde grueso = hoy, y etiqueta accesible por día.</li>
+<li>Gravedad: barras de 1 a 3 + texto BAJA, MEDIA, ALTA.</li>
+</ul>
+</section>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 12px">
+<h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Lectores de pantalla</h2>
+<ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.5">
+<li>El estado de Onda se anuncia en una región <span class="mono">aria-live="polite"</span>: «Te escucho», «Pensando», «Buddy está hablando».</li>
+<li>La transcripción es un <span class="mono">role="log"</span>; cada turno nuevo se lee una vez.</li>
+<li>Todo texto en inglés lleva <span class="mono">lang="en"</span>, para que el lector cambie de voz.</li>
+<li>Botones de ícono con <span class="mono">aria-label</span>; SVG decorativos con <span class="mono">aria-hidden</span>.</li>
+</ul>
+</section>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 12px">
+<h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Movimiento y tiempo</h2>
+<ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.5">
+<li>Con <span class="mono">prefers-reduced-motion</span> se detienen ondas, anillos y confeti; el estado sigue indicado con texto.</li>
+<li>Nada parpadea más de 3 veces por segundo.</li>
+<li>Silencio de fin de turno ajustable (0,4–2 s) para quien necesita más tiempo para pensar.</li>
+<li>Los escenarios no cortan de golpe: el límite de minutos solo sugiere cerrar.</li>
+</ul>
+</section>
+</div>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 8px"><h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Audio con texto</h2><span style="font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.5">Todo lo que dice Buddy aparece como texto en la conversación y se puede volver a escuchar. Velocidad de voz ajustable (0,8×–1,1×).</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Texto ampliado</h2><span style="font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.5">Las pantallas son fluidas: al 200 % de zoom las columnas pasan a una sola y no hay scroll horizontal. Texto de cuerpo mínimo 14 px.</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Tono sin culpa</h2><span style="font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.5">La XP nunca resta y los errores se presentan como «a practicar». El rojo de alarma no existe en la paleta.</span></div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1560}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

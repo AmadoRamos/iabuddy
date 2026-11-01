@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sistema de diseño · Gráficas</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@500;700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font-family:inherit;cursor:pointer}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.mono{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+button:focus-visible{outline:3px solid #3D5AFE;outline-offset:3px}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1400px; padding: 56px; background: #F6F7FF; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 22px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .14em; color: #2338C9">IABUDDY · SISTEMA DE DISEÑO · 17</span>
+<h1 class="disp" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.045em; line-height: 1">Gráficas</h1>
+<p style="margin: 0; font-size: 17px; font-weight: 600; color: #4A4366">Para ver tu evolución. Los colores de las series se validaron para daltonismo y contraste; pasa el cursor por la línea.</p>
+</div>
+
+<section style="padding: 24px 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 28px">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #5B5478">SERIES · ORDEN FIJO</span>
+<div style="display: flex; gap: 10px">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px"><span style="height: 40px; border-radius: 10px; background: #3D5AFE"></span><span style="font-weight: 800; font-size: 13px">1 · Conversación</span><span class="mono" style="font-size: 11px">#3D5AFE</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px"><span style="height: 40px; border-radius: 10px; background: #D9480F"></span><span style="font-weight: 800; font-size: 13px">2 · Escenarios</span><span class="mono" style="font-size: 11px">#D9480F</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px"><span style="height: 40px; border-radius: 10px; background: #C0287A"></span><span style="font-weight: 800; font-size: 13px">3 · Sonidos</span><span class="mono" style="font-size: 11px">#C0287A</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px"><span style="height: 40px; border-radius: 10px; background: #4D7C0F"></span><span style="font-weight: 800; font-size: 13px">4 · Otros</span><span class="mono" style="font-size: 11px">#4D7C0F</span></div>
+</div>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366; line-height: 1.45">Validadas: banda de luminosidad, croma, separación con daltonismo (ΔE ≥ 10,7), visión normal (≥ 15,7) y contraste ≥ 3:1 sobre blanco. Son tonos profundos de la marca: el amarillo y la lima puros no pasan en gráficas.</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #5B5478">SECUENCIAL · MAGNITUD</span>
+<div style="display: flex; gap: 4px"><span style="flex: 1; height: 40px; border-radius: 8px; background: #EEF0F8"></span><span style="flex: 1; height: 40px; border-radius: 8px; background: #C6CFFF"></span><span style="flex: 1; height: 40px; border-radius: 8px; background: #8C9FFF"></span><span style="flex: 1; height: 40px; border-radius: 8px; background: #3D5AFE"></span><span style="flex: 1; height: 40px; border-radius: 8px; background: #2338C9"></span></div>
+<div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: #4A4366"><span>0 min</span><span>15+ min</span></div>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366; line-height: 1.45">Un solo tono, de claro a oscuro. Para el calendario de práctica.</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #5B5478">REGLAS</span>
+<ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 5px; font-size: 13px; font-weight: 600; color: #4A4366; line-height: 1.45">
+<li>Un solo eje Y. Dos medidas = dos gráficas.</li>
+<li>El color sigue a la serie, nunca a su posición.</li>
+<li>Textos y cifras en tinta, no en el color de la serie.</li>
+<li>Leyenda con 2 series o más; una sola serie se nombra en el título.</li>
+<li>Siempre hay «Ver como tabla».</li>
+<li>Los colores de estado no se usan como series.</li>
+</ul>
+</div>
+</section>
+
+<div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 22px">
+<section style="padding: 24px 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Palabras por minuto</h2><span style="font-size: 13px; font-weight: 600; color: #4A4366">Media semanal · últimas 8 semanas</span></div>
+<button type="button" onClick="{{toggleTable}}" aria-pressed="{{tableOn}}" style="min-height: 40px; padding: 0 14px; border: none; border-radius: 999px; background: {{tableBg}}; color: {{tableFg}}; font-weight: 800; font-size: 13px">Ver como tabla</button>
+</div>
+<sc-if value="{{chartOn}}" hint-placeholder-val="{{ true }}">
+<div style="position: relative; height: 290px" onMouseLeave="{{clear}}">
+<svg role="img" aria-label="Palabras por minuto, de 88 la semana del 7 de septiembre a 112 la del 26 de octubre" width="100%" height="260" viewBox="0 0 600 260" preserveAspectRatio="none" style="display: block">
+<g stroke="#ECEEF8" stroke-width="1"><line x1="50" y1="20" x2="580" y2="20"/><line x1="50" y1="70" x2="580" y2="70"/><line x1="50" y1="120" x2="580" y2="120"/><line x1="50" y1="170" x2="580" y2="170"/></g>
+<line x1="50" y1="220" x2="580" y2="220" stroke="#8A86A3" stroke-width="1"/>
+<g font-family="Figtree, sans-serif" font-size="11" font-weight="700" fill="#5B5478" text-anchor="end"><text x="42" y="24">120</text><text x="42" y="74">110</text><text x="42" y="124">100</text><text x="42" y="174">90</text><text x="42" y="224">80</text></g>
+<polyline points="50,180 125.7,160 201.4,145 277.1,125 352.9,115 428.6,100 504.3,80 580,60" fill="none" stroke="#3D5AFE" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+</svg>
+<div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 0; height: 260px">
+<sc-for list="{{pts}}" as="p" hint-placeholder-count="8">
+<span onMouseEnter="{{p.hover}}" style="position: absolute; left: {{p.hitLeft}}; width: {{p.hitW}}; top: 0; bottom: 0"></span>
+<span style="position: absolute; left: {{p.left}}; top: {{p.top}}; width: {{p.size}}; height: {{p.size}}; margin: {{p.margin}}; border-radius: 50%; background: #3D5AFE; box-shadow: 0 0 0 2px #FFFFFF; pointer-events: none"></span>
+</sc-for>
+<sc-if value="{{hasHover}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; left: {{hv.left}}; top: 20px; bottom: 40px; width: 1px; background: #8A86A3; pointer-events: none"></span>
+<span style="position: absolute; left: {{hv.left}}; top: {{hv.tipTop}}; transform: translate(-50%, -100%); padding: 8px 12px; border-radius: 12px; background: #1B1340; color: #FFFFFF; font-size: 13px; font-weight: 700; white-space: nowrap; pointer-events: none">{{hv.label}} · <strong>{{hv.v}} ppm</strong></span>
+</sc-if>
+</div>
+<span class="disp" style="position: absolute; right: 0; top: 34px; font-size: 15px; font-weight: 800">112</span>
+<div style="display: flex; justify-content: space-between; padding: 6px 0 0 50px; font-size: 11px; font-weight: 700; color: #5B5478"><span>7 sep</span><span>14</span><span>21</span><span>28</span><span>5 oct</span><span>12</span><span>19</span><span>26</span></div>
+</div>
+</sc-if>
+<sc-if value="{{tableOn}}" hint-placeholder-val="{{ false }}">
+<table style="width: 100%; border-collapse: collapse; font-size: 14px">
+<thead><tr style="text-align: left; font-size: 12px; letter-spacing: .08em; color: #5B5478"><th style="padding: 8px 10px">SEMANA</th><th style="padding: 8px 10px">PALABRAS POR MINUTO</th></tr></thead>
+<tbody>
+<sc-for list="{{pts}}" as="p" hint-placeholder-count="8"><tr style="border-top: 1.5px solid #ECEEF8"><td style="padding: 7px 10px; font-weight: 600">{{p.label}}</td><td style="padding: 7px 10px; font-weight: 800">{{p.v}}</td></tr></sc-for>
+</tbody>
+</table>
+</sc-if>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">Línea 2 px; solo se rotula el último valor; puntos de 8 px; guías claras.</span>
+</section>
+
+<section style="padding: 24px 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Minutos por día y modo</h2><span style="font-size: 13px; font-weight: 600; color: #4A4366">Esta semana · 38 min en total</span></div>
+<div style="display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; font-weight: 700">
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 12px; height: 12px; border-radius: 3px; background: #3D5AFE"></span>Conversación</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 12px; height: 12px; border-radius: 3px; background: #D9480F"></span>Escenarios</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 12px; height: 12px; border-radius: 3px; background: #C0287A"></span>Sonidos</span>
+</div>
+<div role="img" aria-label="Lunes 6 minutos, martes 8, miércoles 5, jueves 0 con protector, viernes 10, sábado 9, domingo sin datos" style="display: grid; grid-template-columns: 34px repeat(7, minmax(0, 1fr)); gap: 12px; height: 250px">
+<div style="display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-bottom: 26px; font-size: 11px; font-weight: 700; color: #5B5478"><span>12</span><span>6</span><span>0</span></div>
+<div style="display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 6px"><span style="font-size: 12px; font-weight: 800">6</span><span style="width: 100%; max-width: 34px; height: 33px; border-radius: 4px 4px 0 0; background: #C0287A"></span><span style="width: 100%; max-width: 34px; height: 66px; margin-top: -6px; border-top: 2px solid #FFFFFF; background: #3D5AFE"></span><span style="font-size: 12px; font-weight: 700; color: #4A4366">L</span></div>
+<div style="display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 6px"><span style="font-size: 12px; font-weight: 800">8</span><span style="width: 100%; max-width: 34px; height: 83px; border-radius: 4px 4px 0 0; background: #D9480F"></span><span style="width: 100%; max-width: 34px; height: 50px; margin-top: -6px; border-top: 2px solid #FFFFFF; background: #3D5AFE"></span><span style="font-size: 12px; font-weight: 700; color: #4A4366">M</span></div>
+<div style="display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 6px"><span style="font-size: 12px; font-weight: 800">5</span><span style="width: 100%; max-width: 34px; height: 50px; border-radius: 4px 4px 0 0; background: #C0287A"></span><span style="width: 100%; max-width: 34px; height: 33px; margin-top: -6px; border-top: 2px solid #FFFFFF; background: #3D5AFE"></span><span style="font-size: 12px; font-weight: 700; color: #4A4366">X</span></div>
+<div style="display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 6px"><span style="font-size: 11px; font-weight: 800; color: #2338C9">protector</span><span style="width: 100%; max-width: 34px; height: 4px; border-radius: 4px; background: #E6E8F2"></span><span style="font-size: 12px; font-weight: 700; color: #4A4366">J</span></div>
+<div style="display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 6px"><span style="font-size: 12px; font-weight: 800">10</span><span style="width: 100%; max-width: 34px; height: 100px; border-radius: 4px 4px 0 0; background: #D9480F"></span><span style="width: 100%; max-width: 34px; height: 66px; margin-top: -6px; border-top: 2px solid #FFFFFF; background: #3D5AFE"></span><span style="font-size: 12px; font-weight: 700; color: #4A4366">V</span></div>
+<div style="display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 6px"><span style="font-size: 12px; font-weight: 800">9</span><span style="width: 100%; max-width: 34px; height: 100px; border-radius: 4px 4px 0 0; background: #D9480F"></span><span style="width: 100%; max-width: 34px; height: 50px; margin-top: -6px; border-top: 2px solid #FFFFFF; background: #3D5AFE"></span><span style="font-size: 12px; font-weight: 700; color: #4A4366">S</span></div>
+<div style="display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 6px"><span style="font-size: 12px; font-weight: 800; color: #5B5478">—</span><span style="width: 100%; max-width: 34px; height: 4px; border-radius: 4px; background: #E6E8F2"></span><span style="font-size: 12px; font-weight: 700; color: #4A4366">D</span></div>
+</div>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">Barras apiladas con 2 px de separación blanca y esquinas de 4 px solo arriba. Total sobre cada barra, en tinta.</span>
+</section>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px">
+<section style="padding: 24px 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Calendario de práctica</h2><span style="font-size: 13px; font-weight: 600; color: #4A4366">Octubre 2026 · minutos por día</span></div>
+<div role="img" aria-label="Mapa de calor de minutos por día en octubre" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px">
+<sc-for list="{{heat}}" as="h" hint-placeholder-count="35"><span style="height: 34px; border-radius: 8px; background: {{h.c}}; box-shadow: {{h.ring}}"></span></sc-for>
+</div>
+<div style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #4A4366"><span>Menos</span><span style="width: 18px; height: 14px; border-radius: 4px; background: #EEF0F8"></span><span style="width: 18px; height: 14px; border-radius: 4px; background: #C6CFFF"></span><span style="width: 18px; height: 14px; border-radius: 4px; background: #8C9FFF"></span><span style="width: 18px; height: 14px; border-radius: 4px; background: #3D5AFE"></span><span style="width: 18px; height: 14px; border-radius: 4px; background: #2338C9"></span><span>Más</span><span style="margin-left: auto">borde = hoy</span></div>
+</section>
+
+<section style="padding: 24px 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 12px">
+<h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">¿Gráfica o cifra?</h2>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px">
+<div style="padding: 16px; border-radius: 20px; background: #F6F7FF; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">TURNOS SIN ERRORES</span><span class="disp" style="font-size: 40px; font-weight: 800; letter-spacing: -0.04em">64 %</span><span style="font-size: 13px; font-weight: 700; color: #2F5208">↑ 6 puntos vs. semana pasada</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.5">
+<span>Un solo dato con comparación → <strong style="color: #1B1340">cifra destacada</strong>.</span>
+<span>Evolución en el tiempo → <strong style="color: #1B1340">línea</strong>.</span>
+<span>Partes de un total por día → <strong style="color: #1B1340">barras apiladas</strong>.</span>
+<span>Constancia en el mes → <strong style="color: #1B1340">calendario de calor</strong>.</span>
+<span>Nunca: tartas, 3D ni doble eje.</span>
+</div>
+</div>
+</section>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { hover: null, table: false }; }
+  renderVals() {
+    const st = this.state;
+    const vals = [88, 92, 95, 99, 101, 104, 108, 112];
+    const labels = ['7 sep', '14 sep', '21 sep', '28 sep', '5 oct', '12 oct', '19 oct', '26 oct'];
+    const pts = vals.map((v, i) => {
+      const x = 50 + i * (530 / 7), y = 220 - (v - 80) / 40 * 200;
+      return {
+        v, label: 'Semana del ' + labels[i],
+        left: (x / 600 * 100) + '%', top: (y / 260 * 260) + 'px',
+        size: st.hover === i ? '12px' : '8px', margin: st.hover === i ? '-6px 0 0 -6px' : '-4px 0 0 -4px',
+        hitLeft: ((x - 37) / 600 * 100) + '%', hitW: (75.7 / 600 * 100) + '%',
+        hover: () => this.setState({ hover: i })
+      };
+    });
+    const h = st.hover;
+    const hv = h === null ? null : { left: pts[h].left, tipTop: (220 - (vals[h] - 80) / 40 * 200 - 12) + 'px', label: labels[h], v: vals[h] };
+    const mins = { 1: 12, 2: 8, 3: 15, 4: 0, 5: 10, 6: 16, 7: 9, 8: 15, 9: 0, 10: 6, 11: 0, 12: 18, 13: 15, 14: 9, 15: 20, 16: 15, 17: 7, 18: 0, 19: 15, 20: 16, 21: 15, 22: 22, 23: 15, 24: 17, 25: 15, 26: 6, 27: 8, 28: 5, 29: 0, 30: 10, 31: 9 };
+    const ramp = (m) => m === 0 ? '#EEF0F8' : m < 5 ? '#C6CFFF' : m < 10 ? '#8C9FFF' : m < 15 ? '#3D5AFE' : '#2338C9';
+    const heat = [];
+    for (let i = 0; i < 3; i++) heat.push({ c: 'transparent', ring: 'none' });
+    for (let d = 1; d <= 31; d++) heat.push({ c: ramp(mins[d]), ring: d === 31 ? '0 0 0 2px #FFFFFF, 0 0 0 4px #1B1340' : 'none' });
+    heat.push({ c: 'transparent', ring: 'none' });
+    return {
+      pts, hasHover: h !== null && !st.table, hv: hv || { left: '0', tipTop: '0', label: '', v: '' },
+      clear: () => this.setState({ hover: null }),
+      chartOn: !st.table, tableOn: st.table,
+      tableBg: st.table ? '#3D5AFE' : '#E3E8FF', tableFg: st.table ? '#FFFFFF' : '#2338C9',
+      toggleTable: () => this.setState({ table: !st.table }),
+      heat
+    };
+  }
+}
+</script>
+</body>
+</html>

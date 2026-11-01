@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Onda · en contexto</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&display=swap">
+<style>
+body{margin:0}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+@keyframes blink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+@keyframes sway{0%,100%{transform:scaleY(.7)}50%{transform:scaleY(1)}}
+@keyframes talk{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
+@keyframes dot{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-6px)}}
+@keyframes twinkle{0%,100%{transform:scale(.6) rotate(0)}50%{transform:scale(1.15) rotate(25deg)}}
+@keyframes load{from{width:0}}
+.blink{animation:blink 4.2s infinite;transform-box:fill-box;transform-origin:center}
+.sway{animation:sway 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.talk{animation:talk .42s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.dot{animation:dot 1.2s ease-in-out infinite;transform-box:fill-box}
+.twinkle{animation:twinkle 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.load{animation:load 2.2s cubic-bezier(.2,.8,.2,1) both}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div style="width: 1600px; height: 1160px; box-sizing: border-box; padding: 56px; background: #FFFDF7; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 28px">
+
+<div style="display: flex; gap: 24px; align-items: stretch">
+
+<div style="flex: 1; display: flex; flex-direction: column; gap: 14px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .12em; color: #5B5478">LOGO</span>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; flex: 1">
+<div style="border-radius: 26px; background: #FFFFFF; border: 2.5px solid #1B1340; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 30px 16px">
+<svg aria-hidden="true" width="64" height="64" viewBox="0 0 200 200"><rect x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/><rect x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE"/><rect x="166" y="88" width="20" height="48" rx="10" fill="#9BE22D"/><circle cx="89" cy="72" r="8.5" fill="#FFFFFF"/><circle cx="90" cy="74" r="4.5" fill="#1B1340"/><circle cx="111" cy="72" r="8.5" fill="#FFFFFF"/><circle cx="112" cy="74" r="4.5" fill="#1B1340"/><path d="M91 94 Q100 103 109 94" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none"/></svg>
+<span class="disp" style="font-size: 46px; font-weight: 800; letter-spacing: -0.045em">iabuddy</span>
+</div>
+<div style="border-radius: 26px; background: #3D5AFE; border: 2.5px solid #1B1340; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 30px 16px; color: #FFFFFF">
+<svg aria-hidden="true" width="64" height="64" viewBox="0 0 200 200"><rect x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/><rect x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#FFFFFF"/><rect x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE"/><rect x="166" y="88" width="20" height="48" rx="10" fill="#9BE22D"/><circle cx="90" cy="74" r="7" fill="#1B1340"/><circle cx="112" cy="74" r="7" fill="#1B1340"/><path d="M91 94 Q100 103 109 94" stroke="#3D5AFE" stroke-width="5" stroke-linecap="round" fill="none"/></svg>
+<span class="disp" style="font-size: 46px; font-weight: 800; letter-spacing: -0.045em">iabuddy</span>
+</div>
+<div style="border-radius: 26px; background: #FFF1D6; border: 2.5px solid #1B1340; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 30px 16px">
+<svg aria-hidden="true" width="64" height="64" viewBox="0 0 200 200"><g fill="#1B1340"><rect x="14" y="88" width="20" height="48" rx="10"/><rect x="42" y="64" width="26" height="96" rx="13"/><rect x="74" y="30" width="52" height="150" rx="26"/><rect x="132" y="64" width="26" height="96" rx="13"/><rect x="166" y="88" width="20" height="48" rx="10"/></g><circle cx="90" cy="74" r="8" fill="#FFF1D6"/><circle cx="112" cy="74" r="8" fill="#FFF1D6"/><path d="M91 94 Q100 103 109 94" stroke="#FFF1D6" stroke-width="5" stroke-linecap="round" fill="none"/></svg>
+<span class="disp" style="font-size: 46px; font-weight: 800; letter-spacing: -0.045em">iabuddy</span>
+</div>
+</div>
+</div>
+
+<div style="flex: 0 0 470px; display: flex; flex-direction: column; gap: 14px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .12em; color: #5B5478">ÍCONO DE APP Y FAVICON</span>
+<div style="flex: 1; border-radius: 26px; background: #FFFFFF; border: 2.5px solid #1B1340; display: flex; align-items: flex-end; justify-content: center; gap: 22px; padding: 22px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px">
+<span style="width: 132px; height: 132px; border-radius: 34px; background: #3D5AFE; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 22px -12px rgba(61,90,254,.8)">
+<svg aria-hidden="true" width="96" height="96" viewBox="0 0 200 200"><rect x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/><rect x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#FFFFFF"/><rect x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE"/><rect x="166" y="88" width="20" height="48" rx="10" fill="#9BE22D"/><circle cx="90" cy="74" r="8" fill="#1B1340"/><circle cx="112" cy="74" r="8" fill="#1B1340"/><path d="M91 96 Q100 105 109 96" stroke="#3D5AFE" stroke-width="6" stroke-linecap="round" fill="none"/></svg></span>
+<span style="font-weight: 700; font-size: 13px">App</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px">
+<span style="width: 64px; height: 64px; border-radius: 17px; background: #3D5AFE; display: flex; align-items: center; justify-content: center">
+<svg aria-hidden="true" width="46" height="46" viewBox="0 0 200 200"><rect x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/><rect x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#FFFFFF"/><rect x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE"/><rect x="166" y="88" width="20" height="48" rx="10" fill="#9BE22D"/><circle cx="90" cy="76" r="10" fill="#1B1340"/><circle cx="112" cy="76" r="10" fill="#1B1340"/></svg></span>
+<span style="font-weight: 700; font-size: 13px">64</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px">
+<span style="width: 32px; height: 32px; border-radius: 9px; background: #3D5AFE; display: flex; align-items: center; justify-content: center">
+<svg aria-hidden="true" width="24" height="24" viewBox="0 0 200 200"><rect x="14" y="80" width="26" height="60" rx="13" fill="#FFC800"/><rect x="46" y="56" width="30" height="108" rx="15" fill="#FF6B3D"/><rect x="82" y="30" width="36" height="150" rx="18" fill="#FFFFFF"/><rect x="124" y="56" width="30" height="108" rx="15" fill="#FF5FAE"/><rect x="160" y="80" width="26" height="60" rx="13" fill="#9BE22D"/></svg></span>
+<span style="font-weight: 700; font-size: 13px">32</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px">
+<span style="width: 16px; height: 16px; border-radius: 4px; background: #3D5AFE; display: flex; align-items: center; justify-content: center">
+<svg aria-hidden="true" width="12" height="12" viewBox="0 0 200 200"><rect x="10" y="70" width="44" height="80" rx="22" fill="#FF6B3D"/><rect x="72" y="20" width="56" height="170" rx="28" fill="#FFFFFF"/><rect x="146" y="70" width="44" height="80" rx="22" fill="#FF5FAE"/></svg></span>
+<span style="font-weight: 700; font-size: 13px">16</span></div>
+</div>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 14px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .12em; color: #5B5478">EN LA CONVERSACIÓN · ONDA ES EL VISUALIZADOR DE VOZ</span>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+
+<div style="display: flex; align-items: center; gap: 18px; padding: 18px 22px; border-radius: 26px; background: #FFF1EB; border: 2.5px solid #1B1340">
+<svg aria-hidden="true" width="96" height="96" viewBox="0 0 200 200" style="flex: none">
+<rect class="talk" x="14" y="72" width="20" height="80" rx="10" fill="#FFC800" style="animation-duration: .7s"/>
+<rect class="talk" x="42" y="40" width="26" height="144" rx="13" fill="#FF6B3D" style="animation-duration: .55s; animation-delay: -.2s"/>
+<rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/>
+<rect class="talk" x="132" y="40" width="26" height="144" rx="13" fill="#FF5FAE" style="animation-duration: .65s; animation-delay: -.35s"/>
+<rect class="talk" x="166" y="72" width="20" height="80" rx="10" fill="#9BE22D" style="animation-duration: .8s; animation-delay: -.1s"/>
+<circle cx="89" cy="72" r="10" fill="#FFFFFF"/><circle cx="89" cy="71" r="5.5" fill="#1B1340"/><circle cx="111" cy="72" r="10" fill="#FFFFFF"/><circle cx="111" cy="71" r="5.5" fill="#1B1340"/>
+<circle cx="100" cy="98" r="4.5" fill="#FFFFFF"/>
+</svg>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span class="disp" style="font-size: 26px; font-weight: 800; letter-spacing: -0.02em">Te escucho…</span>
+<span style="font-size: 14px; line-height: 1.4; font-weight: 600; color: #4A4366">Las barras siguen el volumen de tu micrófono. Cierro el turno tras 0,8 s de silencio.</span>
+</div>
+</div>
+
+<div style="display: flex; align-items: center; gap: 18px; padding: 18px 22px; border-radius: 26px; background: #FFF6E0; border: 2.5px solid #1B1340">
+<svg aria-hidden="true" width="96" height="96" viewBox="0 0 200 200" style="flex: none">
+<circle class="dot" cx="24" cy="112" r="9" fill="#FFC800"/>
+<circle class="dot" cx="55" cy="112" r="11" fill="#FF6B3D" style="animation-delay: .15s"/>
+<rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/>
+<circle class="dot" cx="145" cy="112" r="11" fill="#FF5FAE" style="animation-delay: .3s"/>
+<circle class="dot" cx="176" cy="112" r="9" fill="#9BE22D" style="animation-delay: .45s"/>
+<circle cx="89" cy="72" r="8.5" fill="#FFFFFF"/><circle cx="92" cy="68" r="4.5" fill="#1B1340"/><circle cx="111" cy="72" r="8.5" fill="#FFFFFF"/><circle cx="114" cy="68" r="4.5" fill="#1B1340"/>
+<path d="M92 98 H108" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+</svg>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span class="disp" style="font-size: 26px; font-weight: 800; letter-spacing: -0.02em">Pensando</span>
+<span style="font-size: 14px; line-height: 1.4; font-weight: 600; color: #4A4366">Las barras se vuelven puntos mientras transcribe y prepara la respuesta.</span>
+</div>
+</div>
+
+<div style="display: flex; align-items: center; gap: 18px; padding: 18px 22px; border-radius: 26px; background: #E9EDFF; border: 2.5px solid #1B1340">
+<svg aria-hidden="true" width="96" height="96" viewBox="0 0 200 200" style="flex: none">
+<rect class="sway" x="14" y="88" width="20" height="48" rx="10" fill="#FFC800" style="animation-duration: .5s"/>
+<rect class="sway" x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D" style="animation-duration: .45s; animation-delay: -.2s"/>
+<rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/>
+<rect class="sway" x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE" style="animation-duration: .5s; animation-delay: -.3s"/>
+<rect class="sway" x="166" y="88" width="20" height="48" rx="10" fill="#9BE22D" style="animation-duration: .55s"/>
+<g class="blink"><circle cx="89" cy="70" r="8.5" fill="#FFFFFF"/><circle cx="90" cy="72" r="4.5" fill="#1B1340"/><circle cx="111" cy="70" r="8.5" fill="#FFFFFF"/><circle cx="112" cy="72" r="4.5" fill="#1B1340"/></g>
+<ellipse class="talk" cx="100" cy="100" rx="10" ry="9" fill="#FFFFFF"/>
+</svg>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span class="disp" style="font-size: 26px; font-weight: 800; letter-spacing: -0.02em">Buddy habla</span>
+<span style="font-size: 14px; line-height: 1.4; font-weight: 600; color: #4A4366">Las barras siguen su voz; la boca, el ritmo de cada frase.</span>
+</div>
+</div>
+</div>
+</div>
+
+<div style="display: flex; gap: 24px; align-items: stretch; flex: 1">
+
+<div style="flex: 0 0 560px; display: flex; flex-direction: column; gap: 14px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .12em; color: #5B5478">PANTALLA DE CARGA</span>
+<div style="flex: 1; border-radius: 28px; background: #3D5AFE; color: #FFFFFF; border: 2.5px solid #1B1340; padding: 28px; display: flex; flex-direction: column; align-items: center; gap: 16px">
+<svg aria-hidden="true" width="110" height="110" viewBox="0 0 200 200">
+<rect class="sway" x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/>
+<rect class="sway" x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D" style="animation-delay: -.3s"/>
+<rect x="74" y="30" width="52" height="150" rx="26" fill="#FFFFFF"/>
+<rect class="sway" x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE" style="animation-delay: -.6s"/>
+<rect class="sway" x="166" y="88" width="20" height="48" rx="10" fill="#9BE22D" style="animation-delay: -.9s"/>
+<circle cx="90" cy="70" r="7" fill="#1B1340"/><circle cx="112" cy="70" r="7" fill="#1B1340"/>
+<path d="M92 96 H108" stroke="#3D5AFE" stroke-width="5" stroke-linecap="round"/>
+</svg>
+<span class="disp" style="font-size: 28px; font-weight: 800; letter-spacing: -0.02em">Despertando a Buddy…</span>
+<div style="width: 100%; display: flex; flex-direction: column; gap: 9px; font-size: 15px; font-weight: 700">
+<div style="display: flex; justify-content: space-between"><span>VAD · Silero</span><span>listo</span></div>
+<div style="display: flex; justify-content: space-between"><span>STT</span><span>listo</span></div>
+<div style="display: flex; justify-content: space-between"><span>LLM · Ollama</span><span>cargando</span></div>
+<div style="height: 12px; border-radius: 999px; background: rgba(255,255,255,.25); overflow: hidden"><div class="load" style="width: 64%; height: 100%; border-radius: 999px; background: #FFC800"></div></div>
+<div style="display: flex; justify-content: space-between; opacity: .85"><span>TTS · Fonemas</span><span>en cola</span></div>
+</div>
+</div>
+</div>
+
+<div style="flex: 1; display: flex; flex-direction: column; gap: 14px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .12em; color: #5B5478">AVISOS</span>
+
+<div style="display: flex; align-items: center; gap: 16px; padding: 14px 20px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340; box-shadow: 5px 5px 0 #1B1340">
+<svg aria-hidden="true" width="70" height="70" viewBox="0 0 200 200" style="flex: none"><rect x="14" y="36" width="20" height="120" rx="10" fill="#FFC800"/><rect x="42" y="56" width="26" height="110" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="56" width="26" height="110" rx="13" fill="#FF5FAE"/><rect x="166" y="36" width="20" height="120" rx="10" fill="#9BE22D"/><path d="M82 74 Q89 64 96 74" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M104 74 Q111 64 118 74" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M88 90 Q100 112 112 90 Z" fill="#FFFFFF"/></svg>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 800; font-size: 19px">¡Meta de hoy cumplida!</span><span style="font-weight: 600; font-size: 15px; color: #4A4366">15 minutos hablando. Tu racha sube a 13 días.</span></div>
+<span style="padding: 6px 12px; border-radius: 999px; background: #9BE22D; border: 2px solid #1B1340; font-weight: 800; font-size: 15px">+25 XP</span>
+</div>
+
+<div style="display: flex; align-items: center; gap: 16px; padding: 14px 20px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340; box-shadow: 5px 5px 0 #1B1340">
+<svg aria-hidden="true" width="70" height="70" viewBox="0 0 200 200" style="flex: none"><rect x="14" y="96" width="20" height="40" rx="10" fill="#FFC800"/><rect x="46" y="70" width="26" height="96" rx="13" fill="#FF6B3D" transform="rotate(10 59 166)"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="128" y="70" width="26" height="96" rx="13" fill="#FF5FAE" transform="rotate(-10 141 166)"/><rect x="166" y="96" width="20" height="40" rx="10" fill="#9BE22D"/><path d="M82 74 Q89 80 96 74" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M104 74 Q111 80 118 74" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M90 94 Q100 104 110 94" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" fill="none"/></svg>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 800; font-size: 19px">Casi perfecto</span><span style="font-weight: 600; font-size: 15px; color: #4A4366">Con «yesterday» se dice <strong style="color: #1B1340">I went</strong>. Sigue hablando, vas muy bien.</span></div>
+</div>
+
+<div style="display: flex; align-items: center; gap: 16px; padding: 14px 20px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340; box-shadow: 5px 5px 0 #1B1340">
+<svg aria-hidden="true" width="70" height="70" viewBox="0 0 200 200" style="flex: none"><rect x="14" y="116" width="20" height="20" rx="10" fill="#FFC800" fill-opacity=".55"/><rect x="42" y="104" width="26" height="40" rx="13" fill="#FF6B3D" fill-opacity=".55"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="104" width="26" height="40" rx="13" fill="#FF5FAE" fill-opacity=".55"/><rect x="166" y="116" width="20" height="20" rx="10" fill="#9BE22D" fill-opacity=".55"/><path d="M82 60 L96 64 M118 60 L104 64" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/><circle cx="89" cy="74" r="8" fill="#FFFFFF"/><circle cx="89" cy="76" r="4.5" fill="#1B1340"/><circle cx="111" cy="74" r="8" fill="#FFFFFF"/><circle cx="111" cy="76" r="4.5" fill="#1B1340"/><path d="M90 100 Q95 95 100 100 Q105 105 110 100" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" fill="none"/></svg>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 800; font-size: 19px">Tu racha de 12 días te espera</span><span style="font-weight: 600; font-size: 15px; color: #4A4366">Con 5 minutos basta. Aún tienes 1 protector esta semana.</span></div>
+<span style="padding: 6px 12px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; border: 2px solid #1B1340; font-weight: 800; font-size: 14px">Hablar</span>
+</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":1160}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

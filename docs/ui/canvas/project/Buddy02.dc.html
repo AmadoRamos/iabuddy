@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Buddy 02 · Auri</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&display=swap">
+<style>
+body{margin:0}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes blink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+@keyframes talk{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+@keyframes pulse{0%{opacity:0}40%{opacity:1}100%{opacity:0}}
+@keyframes twinkle{0%,100%{transform:scale(.6) rotate(0)}50%{transform:scale(1.15) rotate(25deg)}}
+@keyframes dot{0%,100%{opacity:.3}50%{opacity:1}}
+.a-bob{animation:bob 3.6s ease-in-out infinite}
+.blink{animation:blink 4.2s infinite;transform-box:fill-box;transform-origin:center}
+.talk{animation:talk .38s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.pulse{animation:pulse 1.4s ease-out infinite}
+.twinkle{animation:twinkle 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.dot{animation:dot 1.2s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div style="width: 1100px; height: 820px; box-sizing: border-box; padding: 44px 48px; background: #FFFDF7; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 30px">
+
+<div style="display: flex; gap: 44px; align-items: stretch">
+<div style="position: relative; flex: none; width: 440px; height: 400px; border-radius: 40px; background: #EDE4FF; border: 3px solid #1B1340; overflow: hidden; display: flex; align-items: center; justify-content: center">
+<div aria-hidden="true" style="position: absolute; width: 300px; height: 300px; border-radius: 50%; background: #DDCCFF"></div>
+<svg class="a-bob" role="img" aria-label="Auri, un personaje redondo morado con audífonos naranjas y micrófono" width="320" height="320" viewBox="0 0 200 200" style="position: relative">
+<path d="M33 106 A67 67 0 0 1 167 106" stroke="#1B1340" stroke-width="10" stroke-linecap="round" fill="none"/>
+<circle cx="100" cy="114" r="60" fill="#7C3AED" stroke="#1B1340" stroke-width="5"/>
+<path d="M58 92 Q64 70 86 62" stroke="#FFFFFF" stroke-opacity=".4" stroke-width="6" stroke-linecap="round" fill="none"/>
+<rect x="22" y="94" width="22" height="44" rx="10" fill="#FF8A00" stroke="#1B1340" stroke-width="5"/>
+<rect x="156" y="94" width="22" height="44" rx="10" fill="#FF8A00" stroke="#1B1340" stroke-width="5"/>
+<path d="M33 138 Q36 172 72 168" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/>
+<circle cx="80" cy="167" r="9" fill="#FF5FAE" stroke="#1B1340" stroke-width="4"/>
+<g class="blink"><ellipse cx="82" cy="104" rx="13" ry="16" fill="#FFFFFF" stroke="#1B1340" stroke-width="4"/><circle cx="84" cy="108" r="7" fill="#1B1340"/><ellipse cx="118" cy="104" rx="13" ry="16" fill="#FFFFFF" stroke="#1B1340" stroke-width="4"/><circle cx="120" cy="108" r="7" fill="#1B1340"/></g>
+<ellipse cx="64" cy="130" rx="8" ry="5" fill="#FF5FAE"/><ellipse cx="136" cy="130" rx="8" ry="5" fill="#FF5FAE"/>
+<path d="M89 132 Q100 144 111 132" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/>
+</svg>
+</div>
+
+<div style="flex: 1; display: flex; flex-direction: column; gap: 16px; padding-top: 6px">
+<span style="font-weight: 800; font-size: 14px; letter-spacing: .14em; color: #6D28D9">CONCEPTO 02</span>
+<h1 class="disp" style="margin: 0; font-size: 64px; line-height: .95; font-weight: 800; letter-spacing: -0.035em">Auri</h1>
+<p style="margin: 0; font-size: 21px; line-height: 1.4; font-weight: 600">La evolución del Buddy actual: un amigo con audífonos y micrófono.</p>
+<ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 16px; line-height: 1.45; font-weight: 500">
+<li>Los audífonos dicen «te escucho» y recuerdan usar la app con audífonos.</li>
+<li>Los auriculares se iluminan al escuchar; el micrófono, al hablar.</li>
+<li>Riesgo: el cuerpo redondo es genérico; la identidad depende del accesorio.</li>
+</ul>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<span style="padding: 6px 12px; border-radius: 999px; background: #FFFFFF; border: 2px solid #1B1340; font-weight: 700; font-size: 14px">Atento</span>
+<span style="padding: 6px 12px; border-radius: 999px; background: #FFFFFF; border: 2px solid #1B1340; font-weight: 700; font-size: 14px">Paciente</span>
+<span style="padding: 6px 12px; border-radius: 999px; background: #FFFFFF; border: 2px solid #1B1340; font-weight: 700; font-size: 14px">Cercano</span>
+</div>
+<div style="display: flex; gap: 10px; margin-top: auto">
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #7C3AED; border: 2px solid #1B1340"></span>#7C3AED</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #FF8A00; border: 2px solid #1B1340"></span>#FF8A00</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #FF5FAE; border: 2px solid #1B1340"></span>#FF5FAE</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #1B1340; border: 2px solid #1B1340"></span>#1B1340</div>
+</div>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px">
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340">
+<svg role="img" aria-label="Escucha" width="130" height="130" viewBox="0 0 200 200">
+<path d="M33 106 A67 67 0 0 1 167 106" stroke="#1B1340" stroke-width="10" stroke-linecap="round" fill="none"/>
+<circle cx="100" cy="114" r="60" fill="#7C3AED" stroke="#1B1340" stroke-width="5"/>
+<rect x="22" y="94" width="22" height="44" rx="10" fill="#FFC14D" stroke="#1B1340" stroke-width="5"/>
+<rect x="156" y="94" width="22" height="44" rx="10" fill="#FFC14D" stroke="#1B1340" stroke-width="5"/>
+<path class="pulse" d="M12 98 Q2 116 12 134" stroke="#FF8A00" stroke-width="5" stroke-linecap="round" fill="none"/>
+<path class="pulse" d="M188 98 Q198 116 188 134" stroke="#FF8A00" stroke-width="5" stroke-linecap="round" fill="none"/>
+<ellipse cx="82" cy="102" rx="14" ry="19" fill="#FFFFFF" stroke="#1B1340" stroke-width="4"/><circle cx="82" cy="100" r="8" fill="#1B1340"/><ellipse cx="118" cy="102" rx="14" ry="19" fill="#FFFFFF" stroke="#1B1340" stroke-width="4"/><circle cx="118" cy="100" r="8" fill="#1B1340"/>
+<circle cx="100" cy="138" r="6" fill="#1B1340"/>
+</svg>
+<span style="font-weight: 800; font-size: 17px">Escucha</span>
+<span style="font-weight: 600; font-size: 13px; color: #5B5478; text-align: center">Auriculares encendidos</span>
+</div>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340">
+<svg role="img" aria-label="Piensa" width="130" height="130" viewBox="0 0 200 200">
+<path d="M33 106 A67 67 0 0 1 167 106" stroke="#1B1340" stroke-width="10" stroke-linecap="round" fill="none"/>
+<circle cx="100" cy="114" r="60" fill="#7C3AED" stroke="#1B1340" stroke-width="5"/>
+<rect x="22" y="94" width="22" height="44" rx="10" fill="#FF8A00" stroke="#1B1340" stroke-width="5"/>
+<rect x="156" y="94" width="22" height="44" rx="10" fill="#FF8A00" stroke="#1B1340" stroke-width="5"/>
+<ellipse cx="82" cy="104" rx="13" ry="16" fill="#FFFFFF" stroke="#1B1340" stroke-width="4"/><circle cx="78" cy="98" r="7" fill="#1B1340"/><ellipse cx="118" cy="104" rx="13" ry="16" fill="#FFFFFF" stroke="#1B1340" stroke-width="4"/><circle cx="114" cy="98" r="7" fill="#1B1340"/>
+<path d="M90 136 L111 131" stroke="#1B1340" stroke-width="5" stroke-linecap="round"/>
+<circle class="dot" cx="150" cy="24" r="7" fill="#FF8A00"/><circle class="dot" cx="170" cy="16" r="5" fill="#FF8A00" style="animation-delay: .2s"/><circle class="dot" cx="186" cy="10" r="4" fill="#FF8A00" style="animation-delay: .4s"/>
+</svg>
+<span style="font-weight: 800; font-size: 17px">Piensa</span>
+<span style="font-weight: 600; font-size: 13px; color: #5B5478; text-align: center">Transcribe y prepara</span>
+</div>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340">
+<svg role="img" aria-label="Habla" width="130" height="130" viewBox="0 0 200 200">
+<path d="M33 106 A67 67 0 0 1 167 106" stroke="#1B1340" stroke-width="10" stroke-linecap="round" fill="none"/>
+<circle cx="100" cy="114" r="60" fill="#7C3AED" stroke="#1B1340" stroke-width="5"/>
+<rect x="22" y="94" width="22" height="44" rx="10" fill="#FF8A00" stroke="#1B1340" stroke-width="5"/>
+<rect x="156" y="94" width="22" height="44" rx="10" fill="#FF8A00" stroke="#1B1340" stroke-width="5"/>
+<path d="M33 138 Q36 172 72 168" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/>
+<circle class="pulse" cx="80" cy="167" r="16" fill="#FF5FAE" fill-opacity=".45"/>
+<circle cx="80" cy="167" r="9" fill="#FF5FAE" stroke="#1B1340" stroke-width="4"/>
+<g class="blink"><ellipse cx="82" cy="102" rx="13" ry="15" fill="#FFFFFF" stroke="#1B1340" stroke-width="4"/><circle cx="84" cy="106" r="7" fill="#1B1340"/><ellipse cx="118" cy="102" rx="13" ry="15" fill="#FFFFFF" stroke="#1B1340" stroke-width="4"/><circle cx="120" cy="106" r="7" fill="#1B1340"/></g>
+<g class="talk"><ellipse cx="100" cy="136" rx="15" ry="12" fill="#1B1340"/><ellipse cx="100" cy="142" rx="7" ry="4" fill="#FF5FAE"/></g>
+</svg>
+<span style="font-weight: 800; font-size: 17px">Habla</span>
+<span style="font-weight: 600; font-size: 13px; color: #5B5478; text-align: center">Micrófono encendido</span>
+</div>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340">
+<svg role="img" aria-label="Celebra" width="130" height="130" viewBox="0 0 200 200">
+<path d="M33 106 A67 67 0 0 1 167 106" stroke="#1B1340" stroke-width="10" stroke-linecap="round" fill="none"/>
+<circle cx="100" cy="114" r="60" fill="#7C3AED" stroke="#1B1340" stroke-width="5"/>
+<rect x="22" y="94" width="22" height="44" rx="10" fill="#FF8A00" stroke="#1B1340" stroke-width="5"/>
+<rect x="156" y="94" width="22" height="44" rx="10" fill="#FF8A00" stroke="#1B1340" stroke-width="5"/>
+<path d="M68 106 Q82 90 96 106" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M104 106 Q118 90 132 106" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" fill="none"/>
+<path d="M80 126 Q100 158 120 126 Z" fill="#1B1340" stroke="#1B1340" stroke-width="4" stroke-linejoin="round"/>
+<rect class="twinkle" x="20" y="20" width="12" height="18" rx="3" fill="#FF5FAE" stroke="#1B1340" stroke-width="2.5"/>
+<rect class="twinkle" x="168" y="26" width="12" height="18" rx="3" fill="#FFD23F" stroke="#1B1340" stroke-width="2.5" style="animation-delay: .4s"/>
+<rect class="twinkle" x="96" y="2" width="10" height="14" rx="3" fill="#5EEAD4" stroke="#1B1340" stroke-width="2.5" style="animation-delay: .8s"/>
+</svg>
+<span style="font-weight: 800; font-size: 17px">Celebra</span>
+<span style="font-weight: 600; font-size: 13px; color: #5B5478; text-align: center">Meta u objetivo cumplido</span>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1100,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

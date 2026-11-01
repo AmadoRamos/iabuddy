@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sistema de diseño · Primer uso</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@500&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font-family:inherit;cursor:pointer}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.mono{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+button:focus-visible{outline:3px solid #3D5AFE;outline-offset:3px}
+@keyframes hand{0%,100%{transform:rotate(8deg)}50%{transform:rotate(32deg)}}
+@keyframes sway{0%,100%{transform:scaleY(.6)}50%{transform:scaleY(1)}}
+@keyframes lvl{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+@keyframes popin{0%{transform:translateY(10px);opacity:0}100%{transform:none;opacity:1}}
+.hand{animation:hand .8s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.sway{animation:sway 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.lvl{animation:lvl .7s ease-in-out infinite;transform-origin:bottom}
+.pop{animation:popin .35s ease-out both}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1240px; padding: 56px; background: #F6F7FF; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 24px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .14em; color: #2338C9">IABUDDY · SISTEMA DE DISEÑO · 15</span>
+<h1 class="disp" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.045em; line-height: 1">Primer uso</h1>
+<p style="margin: 0; font-size: 17px; font-weight: 600; color: #4A4366">6 pasos, menos de 3 minutos, y se termina hablando. Recórrelo con Siguiente o eligiendo un paso.</p>
+</div>
+
+<div style="display: flex; gap: 28px; align-items: stretch">
+
+<div style="flex: 0 0 760px; height: 900px; border-radius: 36px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; overflow: hidden">
+<div style="display: flex; align-items: center; gap: 14px; padding: 22px 28px">
+<button type="button" onClick="{{back}}" aria-label="Paso anterior" disabled="{{isFirst}}" style="width: 44px; height: 44px; border: none; border-radius: 50%; background: #F6F7FF; color: {{backFg}}; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+<div aria-label="{{progressLabel}}" style="flex: 1; display: flex; gap: 6px">
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="6"><span style="flex: 1; height: 8px; border-radius: 9px; background: {{b.c}}"></span></sc-for>
+</div>
+<sc-if value="{{skippable}}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{nextStep}}" style="min-height: 44px; padding: 0 12px; border: none; border-radius: 999px; background: transparent; color: #2338C9; font-weight: 800; font-size: 14px">Saltar</button></sc-if>
+</div>
+
+<div class="pop" style="flex: 1; padding: 10px 56px 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; text-align: center">
+
+<sc-if value="{{s0}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 20px">
+<svg aria-hidden="true" width="190" height="190" viewBox="0 0 200 200"><rect x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/><rect x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE"/><rect class="hand" x="168" y="40" width="20" height="74" rx="10" fill="#9BE22D"/><circle cx="89" cy="72" r="8.5" fill="#FFFFFF"/><circle cx="90" cy="74" r="4.5" fill="#1B1340"/><circle cx="111" cy="72" r="8.5" fill="#FFFFFF"/><circle cx="112" cy="74" r="4.5" fill="#1B1340"/><path d="M89 92 Q100 108 111 92 Z" fill="#FFFFFF"/></svg>
+<h2 class="disp" style="margin: 0; font-size: 46px; font-weight: 800; letter-spacing: -0.04em; line-height: 1">¡Hola! Soy Buddy.</h2>
+<p style="margin: 0; max-width: 30ch; font-size: 19px; font-weight: 600; color: #4A4366; line-height: 1.5">Vamos a practicar tu inglés hablando, a tu ritmo y sin miedo a equivocarte.</p>
+<span style="padding: 8px 14px; border-radius: 999px; background: #EEFAD9; color: #2F5208; font-weight: 800; font-size: 14px">100 % local: tu voz no sale de este equipo</span>
+</div>
+</sc-if>
+
+<sc-if value="{{s1}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 20px">
+<svg aria-hidden="true" width="150" height="150" viewBox="0 0 200 200"><rect class="sway" x="14" y="98" width="20" height="28" rx="10" fill="#FFC800"/><rect class="sway" x="42" y="88" width="26" height="48" rx="13" fill="#FF6B3D" style="animation-delay: -.3s"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect class="sway" x="132" y="88" width="26" height="48" rx="13" fill="#FF5FAE" style="animation-delay: -.6s"/><rect class="sway" x="166" y="98" width="20" height="28" rx="10" fill="#9BE22D" style="animation-delay: -.9s"/><circle cx="89" cy="72" r="10" fill="#FFFFFF"/><circle cx="89" cy="71" r="5.5" fill="#1B1340"/><circle cx="111" cy="72" r="10" fill="#FFFFFF"/><circle cx="111" cy="71" r="5.5" fill="#1B1340"/><circle cx="100" cy="98" r="4.5" fill="#FFFFFF"/></svg>
+<h2 class="disp" style="margin: 0; font-size: 40px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.05">Necesito oírte</h2>
+<p style="margin: 0; max-width: 32ch; font-size: 18px; font-weight: 600; color: #4A4366; line-height: 1.5">El navegador te pedirá permiso para usar el micrófono. Elige «Permitir».</p>
+</div>
+</sc-if>
+
+<sc-if value="{{s2}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%">
+<h2 class="disp" style="margin: 0; font-size: 40px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.05">Di «Hello, Buddy!»</h2>
+<div role="meter" aria-label="Nivel del micrófono" aria-valuemin="-60" aria-valuemax="0" aria-valuenow="-18" style="width: 100%; max-width: 440px; display: flex; gap: 4px; height: 40px; align-items: flex-end">
+<span class="lvl" style="flex: 1; height: 100%; border-radius: 5px; background: #9BE22D"></span><span class="lvl" style="flex: 1; height: 100%; border-radius: 5px; background: #9BE22D; animation-delay: -.1s"></span><span class="lvl" style="flex: 1; height: 100%; border-radius: 5px; background: #9BE22D; animation-delay: -.2s"></span><span class="lvl" style="flex: 1; height: 100%; border-radius: 5px; background: #9BE22D; animation-delay: -.3s"></span><span class="lvl" style="flex: 1; height: 100%; border-radius: 5px; background: #9BE22D; animation-delay: -.4s"></span><span class="lvl" style="flex: 1; height: 100%; border-radius: 5px; background: #9BE22D; animation-delay: -.5s"></span><span style="flex: 1; height: 100%; border-radius: 5px; background: #E6E8F2"></span><span style="flex: 1; height: 100%; border-radius: 5px; background: #E6E8F2"></span><span style="flex: 1; height: 100%; border-radius: 5px; background: #E6E8F2"></span><span style="flex: 1; height: 100%; border-radius: 5px; background: #E6E8F2"></span>
+</div>
+<span style="font-weight: 800; font-size: 16px; color: #2F5208">Perfecto, te escucho claro.</span>
+<div style="width: 100%; max-width: 440px; padding: 16px; border-radius: 20px; background: #F6F7FF; display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left"><span style="font-weight: 700; font-size: 15px">¿Escuchas a Buddy en tus audífonos?</span><span style="padding: 10px 14px; border-radius: 999px; background: #E3E8FF; color: #2338C9; font-weight: 800; font-size: 14px">Probar sonido</span></div>
+</div>
+</sc-if>
+
+<sc-if value="{{s3}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 18px">
+<h2 class="disp" style="margin: 0; font-size: 40px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.05">¿Cuánto quieres hablar al día?</h2>
+<div role="group" aria-label="Meta diaria" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px">
+<sc-for list="{{goals}}" as="g" hint-placeholder-count="5"><button type="button" onClick="{{g.pick}}" aria-pressed="{{g.on}}" style="display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 96px; padding: 14px 12px; border: none; border-radius: 20px; background: {{g.bg}}; color: {{g.fg}}; box-shadow: {{g.ring}}"><span class="disp" style="font-size: 28px; font-weight: 800">{{g.min}}</span><span style="font-size: 12px; font-weight: 800">{{g.label}}</span></button></sc-for>
+</div>
+<span style="font-size: 15px; font-weight: 600; color: #4A4366">Lo puedes cambiar cuando quieras en Ajustes.</span>
+</div>
+</sc-if>
+
+<sc-if value="{{s4}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 18px">
+<h2 class="disp" style="margin: 0; font-size: 40px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.05">Charla corta para conocerte</h2>
+<p lang="en" style="margin: 0; padding: 14px 18px; border-radius: 22px 22px 22px 6px; background: #EEF1FF; font-size: 19px; font-weight: 600">Tell me a little about yourself and your work.</p>
+<p style="margin: 0; max-width: 34ch; font-size: 16px; font-weight: 600; color: #4A4366; line-height: 1.5">Habla 1 minuto, sin preparación. Con eso ajusto el vocabulario y la velocidad.</p>
+<span style="padding: 10px 16px; border-radius: 999px; background: #E3E8FF; color: #2338C9; font-weight: 800; font-size: 15px">Nivel sugerido: B1–B2 · puedes cambiarlo</span>
+</div>
+</sc-if>
+
+<sc-if value="{{s5}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 18px">
+<svg aria-hidden="true" width="170" height="170" viewBox="0 0 200 200"><rect x="14" y="36" width="20" height="120" rx="10" fill="#FFC800"/><rect x="42" y="56" width="26" height="110" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="56" width="26" height="110" rx="13" fill="#FF5FAE"/><rect x="166" y="36" width="20" height="120" rx="10" fill="#9BE22D"/><path d="M82 74 Q89 64 96 74" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M104 74 Q111 64 118 74" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M88 90 Q100 112 112 90 Z" fill="#FFFFFF"/></svg>
+<h2 class="disp" style="margin: 0; font-size: 44px; font-weight: 800; letter-spacing: -0.04em; line-height: 1">¡Todo listo!</h2>
+<p style="margin: 0; font-size: 18px; font-weight: 600; color: #4A4366">Tu meta: <strong style="color: #1B1340">{{goalText}}</strong>. Con la charla ya llevas 1 minuto.</p>
+<span style="display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; color: #4A4366">Pulsa <span style="padding: 6px 14px; border-radius: 10px; border: 2px solid #1B1340; border-bottom-width: 5px; color: #1B1340; font-weight: 800">ESPACIO</span> para hablar en cualquier momento</span>
+</div>
+</sc-if>
+</div>
+
+<div style="padding: 0 28px 28px">
+<button type="button" onClick="{{nextStep}}" style="width: 100%; min-height: 60px; border: none; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 18px">{{cta}}</button>
+</div>
+</div>
+
+<div style="flex: 1; display: flex; flex-direction: column; gap: 18px">
+<section style="padding: 22px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 6px">
+<sc-for list="{{steps}}" as="s" hint-placeholder-count="6">
+<button type="button" onClick="{{s.pick}}" aria-current="{{s.current}}" style="display: flex; align-items: center; gap: 14px; min-height: 56px; padding: 0 14px; border: none; border-radius: 16px; background: {{s.bg}}; color: #1B1340; text-align: left">
+<span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: {{s.dot}}; color: {{s.dotFg}}; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px">{{s.n}}</span>
+<span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 800; font-size: 15px">{{s.title}}</span><span style="font-weight: 600; font-size: 13px; color: #4A4366">{{s.note}}</span></span>
+</button>
+</sc-for>
+</section>
+<section style="padding: 22px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 8px">
+<h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Reglas</h2>
+<ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.5">
+<li>Una sola decisión por pantalla y un botón principal abajo, siempre en el mismo sitio.</li>
+<li>Meta y charla de nivel se pueden saltar; el micrófono no, porque sin él no hay práctica.</li>
+<li>Se puede volver atrás sin perder nada.</li>
+<li>Si el permiso falla, se muestra la pantalla de «micrófono bloqueado» (lámina 12).</li>
+<li>Al terminar, se aterriza en la Conversación, no en Inicio.</li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1240}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { step: 0, goal: 15 }; }
+  renderVals() {
+    const st = this.state;
+    const meta = [['Bienvenida', 'Quién es Buddy y que todo es local'], ['Micrófono', 'Permiso del navegador · obligatorio'], ['Prueba de audio', 'Nivel del micro y audífonos'], ['Meta diaria', 'Opcional · 15 min por defecto'], ['Charla de nivel', 'Opcional · 1 minuto hablando'], ['¡Listo!', 'Directo a la primera conversación']];
+    const ctas = ['Empezar', 'Permitir micrófono', 'Suena bien', 'Guardar meta', 'Empezar a hablar', 'Hablar ahora'];
+    const steps = meta.map((m, i) => ({
+      n: i < st.step ? '✓' : i + 1, title: m[0], note: m[1],
+      current: i === st.step ? 'step' : 'false',
+      bg: i === st.step ? '#E3E8FF' : 'transparent',
+      dot: i < st.step ? '#9BE22D' : i === st.step ? '#3D5AFE' : '#EEF0F8',
+      dotFg: i === st.step ? '#FFFFFF' : '#1B1340',
+      pick: () => this.setState({ step: i })
+    }));
+    const goals = [[5, 'suave'], [10, 'ligera'], [15, 'normal'], [20, 'intensa'], [30, 'a fondo']].map((g) => {
+      const on = st.goal === g[0];
+      return { min: g[0], label: g[1], on, bg: on ? '#3D5AFE' : '#F6F7FF', fg: on ? '#FFFFFF' : '#1B1340', ring: on ? '0 0 0 3px #FFFFFF, 0 0 0 6px #3D5AFE' : 'none', pick: () => this.setState({ goal: g[0] }) };
+    });
+    const v = { goals, steps, cta: ctas[st.step], isFirst: st.step === 0, backFg: st.step === 0 ? '#8A86A3' : '#1B1340',
+      skippable: st.step === 3 || st.step === 4,
+      progressLabel: 'Paso ' + (st.step + 1) + ' de 6',
+      bars: [0, 1, 2, 3, 4, 5].map((i) => ({ c: i <= st.step ? '#3D5AFE' : '#E3E8FF' })),
+      goalText: st.goal + ' minutos al día',
+      back: () => this.setState({ step: Math.max(0, st.step - 1) }),
+      nextStep: () => this.setState({ step: (st.step + 1) % 6 }) };
+    for (let i = 0; i < 6; i++) v['s' + i] = st.step === i;
+    return v;
+  }
+}
+</script>
+</body>
+</html>

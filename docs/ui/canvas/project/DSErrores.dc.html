@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sistema de diseño · Errores del sistema local</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@500;700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font-family:inherit;cursor:pointer}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.mono{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+button:focus-visible{outline:3px solid #3D5AFE;outline-offset:3px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes zz{0%{opacity:0;transform:translate(0,0)}50%{opacity:1}100%{opacity:0;transform:translate(6px,-12px)}}
+.spin{animation:spin .9s linear infinite}
+.zz{animation:zz 2.4s ease-out infinite;transform-box:fill-box}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1520px; padding: 56px; background: #F6F7FF; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 24px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .14em; color: #2338C9">IABUDDY · SISTEMA DE DISEÑO · 14</span>
+<h1 class="disp" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.045em; line-height: 1">Errores del sistema local</h1>
+<p style="margin: 0; font-size: 17px; font-weight: 600; color: #4A4366">Todo corre en tu equipo, así que los fallos son de modelos, audio o del motor local. Nunca se pierde lo que dijiste.</p>
+</div>
+
+<section style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+<div style="padding: 20px; border-radius: 24px; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px"><span style="padding: 4px 10px; align-self: flex-start; border-radius: 999px; background: #E3E8FF; color: #2338C9; font-weight: 800; font-size: 12px">TRANSITORIO · AVISO</span><span style="font-weight: 800; font-size: 16px">Se resuelve solo</span><span style="font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.45">Reconexión en menos de 3 s, audio recuperado. Aviso abajo a la derecha.</span></div>
+<div style="padding: 20px; border-radius: 24px; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px"><span style="padding: 4px 10px; align-self: flex-start; border-radius: 999px; background: #FFF4C7; color: #854D0E; font-weight: 800; font-size: 12px">DEGRADADO · BANDA</span><span style="font-weight: 800; font-size: 16px">Puedes seguir, con límites</span><span style="font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.45">Motor desconectado o el análisis de pronunciación no está. Banda bajo la barra superior.</span></div>
+<div style="padding: 20px; border-radius: 24px; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px"><span style="padding: 4px 10px; align-self: flex-start; border-radius: 999px; background: #FFE8DF; color: #9A3412; font-weight: 800; font-size: 12px">BLOQUEANTE · PANTALLA</span><span style="font-weight: 800; font-size: 16px">No se puede practicar</span><span style="font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.45">Falta un modelo o no hay micrófono. Pantalla con pasos para arreglarlo.</span></div>
+</section>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Conexión con el motor local</h2><span style="font-size: 13px; font-weight: 700; color: #4A4366">pulsa el botón para ver los 3 estados · role="status"</span></div>
+<sc-if value="{{isDown}}" hint-placeholder-val="{{ true }}">
+<div role="status" style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 18px; background: #FFF4C7; color: #854D0E">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l20 20"/><path d="M8.5 16.5a5 5 0 0 1 7 0M5 13a10 10 0 0 1 5.17-2.8M19 13a10 10 0 0 0-2.17-1.55M2 8.82a15 15 0 0 1 4.17-2.65M22 8.82a15 15 0 0 0-11.29-3.76M12 20h.01"/></svg>
+<div style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 800; font-size: 16px">Se perdió la conexión con el motor local</span><span style="font-weight: 600; font-size: 14px">Tu conversación está guardada. Reintentando en 3 s…</span></div>
+<button type="button" onClick="{{next}}" style="min-height: 44px; padding: 0 18px; border: none; border-radius: 999px; background: #FFFFFF; color: #1B1340; font-weight: 800; font-size: 14px">Reintentar ahora</button>
+</div>
+</sc-if>
+<sc-if value="{{isRetry}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 18px; background: #E3E8FF; color: #2338C9">
+<span class="spin" style="width: 20px; height: 20px; border-radius: 50%; border: 3px solid #C6CFFF; border-top-color: #3D5AFE"></span>
+<div style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 800; font-size: 16px">Reconectando…</span><span style="font-weight: 600; font-size: 14px">Intento 2 de 5 · <span class="mono">ws://localhost:8765</span></span></div>
+<button type="button" onClick="{{next}}" style="min-height: 44px; padding: 0 18px; border: none; border-radius: 999px; background: #FFFFFF; color: #1B1340; font-weight: 800; font-size: 14px">Simular éxito</button>
+</div>
+</sc-if>
+<sc-if value="{{isOk}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 18px; background: #EEFAD9; color: #2F5208">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+<div style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 800; font-size: 16px">Conectado de nuevo</span><span style="font-weight: 600; font-size: 14px">Puedes seguir hablando donde lo dejaste. (Desaparece en 3 s.)</span></div>
+<button type="button" onClick="{{next}}" style="min-height: 44px; padding: 0 18px; border: none; border-radius: 999px; background: #FFFFFF; color: #1B1340; font-weight: 800; font-size: 14px">Repetir demo</button>
+</div>
+</sc-if>
+</section>
+
+<div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px">
+<section style="padding: 28px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #9A3412">PANTALLA BLOQUEANTE</span>
+<div style="display: flex; gap: 18px; align-items: center">
+<svg aria-hidden="true" width="96" height="96" viewBox="0 0 200 200" style="flex: none"><rect x="14" y="150" width="20" height="16" rx="8" fill="#FFC800"/><rect x="42" y="148" width="26" height="18" rx="9" fill="#FF6B3D"/><rect x="74" y="60" width="52" height="120" rx="26" fill="#3D5AFE"/><rect x="132" y="148" width="26" height="18" rx="9" fill="#FF5FAE"/><rect x="166" y="150" width="20" height="16" rx="8" fill="#9BE22D"/><path d="M82 98 Q89 104 96 98 M104 98 Q111 104 118 98" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none"/><text class="zz" x="140" y="62" font-family="Bricolage Grotesque, sans-serif" font-size="30" font-weight="800" fill="#3D5AFE">z</text></svg>
+<div style="display: flex; flex-direction: column; gap: 6px"><h2 class="disp" style="margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.02em">Falta el modelo de transcripción</h2><span style="font-size: 15px; font-weight: 600; color: #4A4366; line-height: 1.5">Sin él, Buddy no puede entender lo que dices. Lo demás está listo.</span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<span style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 14px; background: #EEFAD9; color: #2F5208; font-weight: 800; font-size: 14px"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>VAD</span>
+<span style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 14px; background: #FFE8DF; color: #9A3412; font-weight: 800; font-size: 14px; box-shadow: inset 0 0 0 2px #D9480F"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>STT · falta</span>
+<span style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 14px; background: #EEFAD9; color: #2F5208; font-weight: 800; font-size: 14px"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>LLM</span>
+<span style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 14px; background: #EEFAD9; color: #2F5208; font-weight: 800; font-size: 14px"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>TTS</span>
+<span style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 14px; background: #EEFAD9; color: #2F5208; font-weight: 800; font-size: 14px"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Fonemas</span>
+</div>
+<span style="font-size: 14px; font-weight: 700">Se buscó en <span class="mono" style="padding: 2px 6px; border-radius: 6px; background: #F6F7FF">C:\Models\stt\</span></span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<span style="min-height: 48px; padding: 0 20px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 15px; display: flex; align-items: center">Reintentar</span>
+<span style="min-height: 48px; padding: 0 20px; border-radius: 999px; box-shadow: inset 0 0 0 2px #1B1340; font-weight: 800; font-size: 15px; display: flex; align-items: center">Abrir la carpeta</span>
+<span style="min-height: 48px; padding: 0 20px; border-radius: 999px; background: #E3E8FF; color: #2338C9; font-weight: 800; font-size: 15px; display: flex; align-items: center">Ver guía de instalación</span>
+</div>
+<button type="button" onClick="{{toggleDetails}}" aria-expanded="{{detailsOpen}}" style="align-self: flex-start; display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 4px; border: none; background: transparent; color: #2338C9; font-weight: 800; font-size: 14px"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{chev}}"/></svg>Detalles técnicos</button>
+<sc-if value="{{detailsOpen}}" hint-placeholder-val="{{ true }}">
+<pre class="mono" style="margin: 0; padding: 14px 16px; border-radius: 16px; background: #1B1340; color: #E3E8FF; font-size: 12px; line-height: 1.6; white-space: pre-wrap">STT_MODEL_NOT_FOUND
+path: C:\Models\stt\[modelo]
+14:02:11  loader.py:42  FileNotFoundError</pre>
+</sc-if>
+</section>
+
+<div style="display: flex; flex-direction: column; gap: 24px">
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 12px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #854D0E">EN LA CONVERSACIÓN · EL LLM NO RESPONDE</span>
+<span lang="en" style="align-self: flex-end; max-width: 85%; padding: 12px 16px; border-radius: 22px 22px 6px 22px; background: #FFE8DF; font-size: 16px; font-weight: 600">I led the migration to a new database.</span>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; border-radius: 22px 22px 22px 6px; border: 2.5px dashed #A16207; background: #FFFBEA">
+<span style="font-weight: 800; font-size: 15px; color: #854D0E">Buddy no pudo responder a tiempo</span>
+<span style="font-size: 14px; font-weight: 600; color: #4A4366">Tu turno quedó guardado y cuenta para tu XP.</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span style="min-height: 42px; padding: 0 16px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 14px; display: flex; align-items: center">Reintentar respuesta</span><span style="min-height: 42px; padding: 0 16px; border-radius: 999px; box-shadow: inset 0 0 0 2px #1B1340; font-weight: 800; font-size: 14px; display: flex; align-items: center">Seguir hablando</span></div>
+</div>
+</section>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 12px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #5B5478">AUDIO</span>
+<div role="alert" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: #FFE8DF; color: #9A3412; font-weight: 700; font-size: 14px"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M2 2l20 20"/></svg><span style="flex: 1">Otra aplicación está usando el micrófono.</span><span style="padding: 8px 12px; border-radius: 999px; background: #FFFFFF; color: #1B1340; font-weight: 800; font-size: 13px">Reintentar</span></div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: #FFF4C7; color: #854D0E; font-weight: 700; font-size: 14px"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg><span style="flex: 1">Se desconectaron los audífonos. Sesión en pausa.</span><span style="padding: 8px 12px; border-radius: 999px; background: #FFFFFF; color: #1B1340; font-weight: 800; font-size: 13px">Continuar</span></div>
+</section>
+</div>
+</div>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 16px">1 · Qué pasó</span><span style="font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.5">En una frase, sin jerga: «Falta el modelo de transcripción».</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 16px">2 · Qué significa</span><span style="font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.5">Qué funciona y qué no, y que lo dicho está a salvo.</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 16px">3 · Qué hacer</span><span style="font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.5">Una acción principal (Reintentar) y como mucho dos secundarias.</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 16px">4 · Detalles</span><span style="font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.5">Código, ruta y log plegados, para depurar sin asustar.</span></div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1520}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { conn: 0, details: true }; }
+  renderVals() {
+    const st = this.state;
+    return {
+      isDown: st.conn === 0, isRetry: st.conn === 1, isOk: st.conn === 2,
+      next: () => this.setState({ conn: (st.conn + 1) % 3 }),
+      detailsOpen: st.details,
+      toggleDetails: () => this.setState({ details: !st.details }),
+      chev: st.details ? 'M6 15l6-6 6 6' : 'M6 9l6 6 6-6'
+    };
+  }
+}
+</script>
+</body>
+</html>

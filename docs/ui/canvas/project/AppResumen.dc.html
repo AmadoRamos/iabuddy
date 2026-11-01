@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>IABuddy — Resumen de sesión</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#3D5AFE}a:hover{color:#1B1340}
+button{font-family:inherit;cursor:pointer}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.ipa{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+a:focus-visible,button:focus-visible{outline:3px solid #3D5AFE;outline-offset:3px}
+.lift{transition:transform .2s ease}
+.lift:hover{transform:translateY(-2px)}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fall{0%{transform:translateY(-60px) rotate(0);opacity:0}10%{opacity:1}100%{transform:translateY(320px) rotate(260deg);opacity:0}}
+@keyframes twinkle{0%,100%{transform:scale(.6) rotate(0)}50%{transform:scale(1.15) rotate(25deg)}}
+@keyframes popin{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+@keyframes fill{from{width:0}}
+.bob{animation:bob 2.6s ease-in-out infinite}
+.fall{animation:fall 3.2s linear infinite}
+.twinkle{animation:twinkle 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.pop{animation:popin .6s cubic-bezier(.3,1.5,.5,1) both}
+.fill{animation:fill 1.6s cubic-bezier(.2,.8,.2,1) both}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="background: #F6F7FF; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif">
+
+<header style="max-width: 1320px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 40px) 8px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="AppInicio.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #1B1340; min-height: 44px">
+<svg aria-hidden="true" width="44" height="44" viewBox="0 0 200 200"><rect x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/><rect x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE"/><rect x="166" y="88" width="20" height="48" rx="10" fill="#9BE22D"/><circle cx="90" cy="76" r="10" fill="#FFFFFF"/><circle cx="112" cy="76" r="10" fill="#FFFFFF"/></svg>
+<span class="disp" style="font-size: 28px; font-weight: 800; letter-spacing: -0.045em">iabuddy</span>
+</a>
+<nav aria-label="Principal" style="display: flex; flex-wrap: wrap; gap: 4px; padding: 5px; background: #FFFFFF; border: 2.5px solid #1B1340; border-radius: 999px">
+<a href="AppInicio.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Hoy</a>
+<a href="AppConversacion.dc.html" aria-current="page" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 15px; text-decoration: none">Conversar</a>
+<a href="AppEscenarios.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Escenarios</a>
+<a href="AppPronunciacion.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Sonidos</a>
+<a href="AppProgreso.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Progreso</a>
+</nav>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+<span style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: #FFC800; border: 2.5px solid #1B1340; font-weight: 800; font-size: 15px"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="#FF6B3D" stroke="#1B1340" stroke-width="1.8" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>13 días</span>
+<span style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: #9BE22D; border: 2.5px solid #1B1340; font-weight: 800; font-size: 15px">2.540 XP</span>
+<a href="AppAjustes.dc.html" aria-label="Ajustes" style="width: 44px; height: 44px; border-radius: 50%; background: #FFFFFF; border: 2.5px solid #1B1340; display: flex; align-items: center; justify-content: center; color: #1B1340"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></a>
+</div>
+</header>
+
+<main style="max-width: 1320px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 40px) 56px; display: flex; flex-direction: column; gap: 24px">
+
+<section style="position: relative; overflow: hidden; padding: 40px clamp(20px, 4vw, 48px); border-radius: 36px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-wrap: wrap; align-items: center; gap: 36px">
+<div aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none">
+<span class="fall" style="position: absolute; left: 8%; top: 0; width: 10px; height: 26px; border-radius: 9px; background: #FFC800"></span>
+<span class="fall" style="position: absolute; left: 22%; top: 0; width: 10px; height: 20px; border-radius: 9px; background: #FF6B3D; animation-delay: .6s"></span>
+<span class="fall" style="position: absolute; left: 47%; top: 0; width: 10px; height: 30px; border-radius: 9px; background: #3D5AFE; animation-delay: 1.4s"></span>
+<span class="fall" style="position: absolute; left: 63%; top: 0; width: 10px; height: 22px; border-radius: 9px; background: #FF5FAE; animation-delay: .3s"></span>
+<span class="fall" style="position: absolute; left: 81%; top: 0; width: 10px; height: 26px; border-radius: 9px; background: #9BE22D; animation-delay: 1s"></span>
+<span class="fall" style="position: absolute; left: 93%; top: 0; width: 10px; height: 18px; border-radius: 9px; background: #FFC800; animation-delay: 2s"></span>
+</div>
+<svg class="bob" aria-hidden="true" width="190" height="190" viewBox="0 0 200 200" style="position: relative; flex: none"><rect x="14" y="36" width="20" height="120" rx="10" fill="#FFC800"/><rect x="42" y="56" width="26" height="110" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="56" width="26" height="110" rx="13" fill="#FF5FAE"/><rect x="166" y="36" width="20" height="120" rx="10" fill="#9BE22D"/><path d="M82 74 Q89 64 96 74" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M104 74 Q111 64 118 74" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M88 90 Q100 112 112 90 Z" fill="#FFFFFF"/><path class="twinkle" transform="translate(100 12)" d="M0 -10 L3 -3 L10 -3 L4 1.6 L6.2 10 L0 5 L-6.2 10 L-4 1.6 L-10 -3 L-3 -3 Z" fill="#FFC800"/></svg>
+<div style="position: relative; flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .12em; color: #3D5AFE">ENTREVISTA TÉCNICA — BACKEND PYTHON · 12:40 MIN HABLANDO</span>
+<h1 class="disp" style="margin: 0; font-size: clamp(40px, 5vw, 64px); font-weight: 800; letter-spacing: -0.04em; line-height: 1">¡Sesión completada!</h1>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px">
+<span aria-label="2 de 3 estrellas" style="font-size: 34px; letter-spacing: 4px">★★☆</span>
+<span style="font-weight: 700; font-size: 16px; color: #4A4366">3 de 4 objetivos · te falta uno para las 3 estrellas</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px">
+<span style="padding: 7px 14px; border-radius: 999px; background: #FFE8DF; font-weight: 700; font-size: 14px">12 min hablando · <strong>+60</strong></span>
+<span style="padding: 7px 14px; border-radius: 999px; background: #FFE8F3; font-weight: 700; font-size: 14px">5 turnos largos · <strong>+25</strong></span>
+<span style="padding: 7px 14px; border-radius: 999px; background: #E3E8FF; font-weight: 700; font-size: 14px">3 objetivos · <strong>+90</strong></span>
+<span style="padding: 7px 14px; border-radius: 999px; background: #FFF4C7; font-weight: 700; font-size: 14px">Meta diaria · <strong>+25</strong></span>
+</div>
+</div>
+<div class="pop" style="position: relative; flex: 1 1 220px; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 24px; border-radius: 30px; background: #EEFAD9">
+<span class="disp" style="font-size: 64px; font-weight: 800; letter-spacing: -0.05em; line-height: 1; color: #2F5208">+200</span>
+<span style="font-weight: 800; font-size: 15px; color: #2F5208">XP en esta sesión</span>
+<div style="width: 100%; height: 12px; border-radius: 99px; background: #FFFFFF; overflow: hidden"><div class="fill" style="width: 90.7%; height: 100%; border-radius: 99px; background: #9BE22D"></div></div>
+<span style="font-weight: 700; font-size: 13px; color: #2F5208">2.540 / 2.800 · racha sube a 13 días</span>
+</div>
+</section>
+
+<section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 18px">
+<div style="padding: 22px; border-radius: 26px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 13px; letter-spacing: .1em; color: #5B5478">PALABRAS POR MINUTO</span><span class="disp" style="font-size: 44px; font-weight: 800; letter-spacing: -0.04em">112</span><span style="height: 6px; width: 60px; border-radius: 9px; background: #FF6B3D"></span></div>
+<div style="padding: 22px; border-radius: 26px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 13px; letter-spacing: .1em; color: #5B5478">PALABRAS POR TURNO</span><span class="disp" style="font-size: 44px; font-weight: 800; letter-spacing: -0.04em">14,6</span><span style="height: 6px; width: 60px; border-radius: 9px; background: #FF5FAE"></span></div>
+<div style="padding: 22px; border-radius: 26px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 13px; letter-spacing: .1em; color: #5B5478">TURNOS SIN ERRORES</span><span class="disp" style="font-size: 44px; font-weight: 800; letter-spacing: -0.04em">64 %</span><span style="height: 6px; width: 60px; border-radius: 9px; background: #9BE22D"></span></div>
+<div style="padding: 22px; border-radius: 26px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 13px; letter-spacing: .1em; color: #5B5478">TIEMPO HABLANDO</span><span class="disp" style="font-size: 44px; font-weight: 800; letter-spacing: -0.04em">12:40</span><span style="height: 6px; width: 60px; border-radius: 9px; background: #FFC800"></span></div>
+</section>
+
+<section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 22px">
+<div style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<h2 class="disp" style="margin: 0; font-size: 26px; font-weight: 800">Objetivos · 3 de 4</h2>
+<div lang="en" style="display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 16px"><span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #9BE22D; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Introduce yourself in under 1 minute</div>
+<div lang="en" style="display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 16px"><span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #9BE22D; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Describe a project you are proud of</div>
+<div lang="en" style="display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 16px"><span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #9BE22D; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Explain a technical trade-off you made</div>
+<div style="display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 16px; color: #4A4366"><span style="flex: none; width: 30px; height: 30px; border-radius: 50%; border: 3px dashed #6E7BC4"></span><span lang="en">Ask the interviewer two questions</span><span style="margin-left: auto; padding: 3px 10px; border-radius: 999px; background: #F6F7FF; font-size: 13px">hiciste 1</span></div>
+</div>
+
+<div style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<h2 class="disp" style="margin: 0; font-size: 26px; font-weight: 800">Frases útiles que no usaste</h2>
+<div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 18px; background: #F6F7FF"><span lang="en" style="flex: 1; font-weight: 700; font-size: 16px">“One trade-off we made was…”</span><button type="button" aria-label="Escuchar la frase" style="width: 44px; height: 44px; border: none; border-radius: 50%; background: #FFFFFF; color: #1B1340; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button></div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 18px; background: #F6F7FF"><span lang="en" style="flex: 1; font-weight: 700; font-size: 16px">“I took ownership of the migration.”</span><button type="button" aria-label="Escuchar la frase" style="width: 44px; height: 44px; border: none; border-radius: 50%; background: #FFFFFF; color: #1B1340; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button></div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 18px; background: #F6F7FF"><span lang="en" style="flex: 1; font-weight: 700; font-size: 16px">“Could you tell me more about the team’s on-call process?”</span><button type="button" aria-label="Escuchar la frase" style="width: 44px; height: 44px; border: none; border-radius: 50%; background: #FFFFFF; color: #1B1340; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button></div>
+</div>
+</section>
+
+<section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 22px">
+<div style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Errores recurrentes</h2>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 15px"><span>Pasado simple <span lang="en" style="color: #4A4366; font-weight: 600">(go → went)</span></span><span>×4</span></div><div style="height: 12px; border-radius: 99px; background: #F1F3FB"><div style="width: 100%; height: 100%; border-radius: 99px; background: #FF6B3D"></div></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 15px"><span>Preposiciones <span lang="en" style="color: #4A4366; font-weight: 600">(depend of → on)</span></span><span>×2</span></div><div style="height: 12px; border-radius: 99px; background: #F1F3FB"><div style="width: 50%; height: 100%; border-radius: 99px; background: #FF5FAE"></div></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 15px"><span>Artículos <span lang="en" style="color: #4A4366; font-weight: 600">(the / a)</span></span><span>×2</span></div><div style="height: 12px; border-radius: 99px; background: #F1F3FB"><div style="width: 50%; height: 100%; border-radius: 99px; background: #FFC800"></div></div></div>
+</div>
+
+<div style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Vocabulario</h2>
+<span style="font-size: 13px; font-weight: 800; letter-spacing: .08em; color: #5B5478">USASTE</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span lang="en" style="padding: 6px 12px; border-radius: 10px; background: #EEFAD9; color: #2F5208; font-weight: 700; font-size: 14px">scalability</span><span lang="en" style="padding: 6px 12px; border-radius: 10px; background: #EEFAD9; color: #2F5208; font-weight: 700; font-size: 14px">deadline</span><span lang="en" style="padding: 6px 12px; border-radius: 10px; background: #EEFAD9; color: #2F5208; font-weight: 700; font-size: 14px">trade-off</span></div>
+<span style="font-size: 13px; font-weight: 800; letter-spacing: .08em; color: #5B5478">PARA LA PRÓXIMA</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span lang="en" style="padding: 6px 12px; border-radius: 10px; background: #FFE8DF; font-weight: 700; font-size: 14px">ownership</span><span lang="en" style="padding: 6px 12px; border-radius: 10px; background: #FFE8DF; font-weight: 700; font-size: 14px">stakeholder</span></div>
+</div>
+
+<div style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 12px">
+<h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Pronunciación</h2>
+<div style="display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px"><span lang="en" style="flex: 1">thought</span><span class="ipa" style="font-size: 13px">/θ/</span><span style="padding: 2px 10px; border-radius: 999px; background: #FF6B3D; font-size: 13px; font-weight: 800">52</span></div>
+<div style="display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px"><span lang="en" style="flex: 1">database</span><span class="ipa" style="font-size: 13px">/eɪ/</span><span style="padding: 2px 10px; border-radius: 999px; background: #FF6B3D; font-size: 13px; font-weight: 800">61</span></div>
+<div style="display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px"><span lang="en" style="flex: 1">worked</span><span class="ipa" style="font-size: 13px">-ed</span><span style="padding: 2px 10px; border-radius: 999px; background: #FFC800; font-size: 13px; font-weight: 800">78</span></div>
+<a class="lift" href="AppPronunciacion.dc.html" style="align-self: flex-start; display: flex; align-items: center; min-height: 46px; padding: 0 18px; border-radius: 999px; background: #FFE8F3; color: #9D174D; font-weight: 800; font-size: 15px; text-decoration: none; margin-top: 4px">Repasar en el drill</a>
+</div>
+</section>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; padding-top: 8px">
+<a class="lift" href="AppEscenarios.dc.html" style="display: flex; align-items: center; min-height: 56px; padding: 0 24px; border-radius: 999px; background: #FFFFFF; color: #1B1340; box-shadow: inset 0 0 0 2px #1B1340; font-weight: 800; font-size: 16px; text-decoration: none">Repetir por las 3 estrellas</a>
+<a class="lift" href="AppInicio.dc.html" style="display: flex; align-items: center; min-height: 56px; padding: 0 28px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 16px; text-decoration: none">Volver al inicio</a>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

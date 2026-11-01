@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sistema de diseño · Estados de los componentes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@500;700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button,input{font-family:inherit}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.mono{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+.cell{display:flex;align-items:center;justify-content:center;min-height:64px}
+.f{box-shadow:0 0 0 3px #FFFFFF,0 0 0 6px #3D5AFE}
+.d-btn{min-height:48px;padding:0 20px;border:none;border-radius:999px;background:#3D5AFE;color:#FFFFFF;font-weight:800;font-size:15px;cursor:pointer;transition:transform .15s,box-shadow .15s,background .15s}
+.d-btn:hover{transform:translateY(-2px);box-shadow:0 12px 24px -10px rgba(61,90,254,.8)}
+.d-btn:active{transform:translateY(1px);background:#2A43D9;box-shadow:none}
+.d-btn:focus-visible{outline:none;box-shadow:0 0 0 3px #FFFFFF,0 0 0 6px #3D5AFE}
+.d-btn:disabled{background:#E6E8F2;color:#6B6788;cursor:not-allowed;transform:none;box-shadow:none}
+.d-chip{min-height:44px;padding:0 16px;border:none;border-radius:999px;background:#FFFFFF;box-shadow:inset 0 0 0 1.5px #8A86A3;color:#1B1340;font-weight:800;font-size:14px;cursor:pointer;transition:background .15s}
+.d-chip:hover{background:#F1F3FF}
+.d-chip:active{background:#E3E8FF}
+.d-chip:focus-visible{outline:3px solid #3D5AFE;outline-offset:3px}
+.d-chip[aria-pressed=true]{background:#1B1340;color:#FFFFFF;box-shadow:none}
+.d-in{min-height:48px;padding:0 14px;border:none;border-radius:14px;background:#FFFFFF;box-shadow:inset 0 0 0 2px #8A86A3;font-size:15px;font-weight:600;color:#1B1340;transition:box-shadow .15s}
+.d-in:hover{box-shadow:inset 0 0 0 2px #4A4366}
+.d-in:focus{outline:none;box-shadow:inset 0 0 0 2px #3D5AFE,0 0 0 4px #E3E8FF}
+.d-in:disabled{background:#F1F2F8;box-shadow:inset 0 0 0 2px #E6E8F2;color:#6B6788}
+.d-card{width:150px;padding:0;border:none;border-radius:20px;background:#FFFFFF;box-shadow:0 14px 30px -20px rgba(27,19,64,.5);overflow:hidden;cursor:pointer;text-align:left;transition:transform .15s,box-shadow .15s}
+.d-card:hover{transform:translateY(-3px);box-shadow:0 20px 36px -20px rgba(27,19,64,.6)}
+.d-card:active{transform:scale(.98)}
+.d-card:focus-visible{outline:none;box-shadow:0 0 0 3px #FFFFFF,0 0 0 6px #3D5AFE}
+.d-card[aria-pressed=true]{box-shadow:0 0 0 4px #FF6B3D,0 14px 30px -20px rgba(27,19,64,.5)}
+.d-link{color:#2338C9;font-weight:700;text-decoration:underline;text-underline-offset:4px;border-radius:6px}
+.d-link:hover{color:#1B1340;text-decoration-thickness:3px}
+.d-link:focus-visible{outline:3px solid #3D5AFE;outline-offset:3px}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1560px; padding: 56px; background: #F6F7FF; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 24px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .14em; color: #2338C9">IABUDDY · SISTEMA DE DISEÑO · 06</span>
+<h1 class="disp" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.045em; line-height: 1">Estados de todos los componentes</h1>
+</div>
+
+<section style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px">
+<div style="padding: 18px; border-radius: 22px; background: #FFFFFF; display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 15px">Hover</span><span style="font-size: 13px; font-weight: 600; color: #4A4366; line-height: 1.45">Sube 2–3 px o el fondo pasa al tinte siguiente. 150 ms.</span></div>
+<div style="padding: 18px; border-radius: 22px; background: #FFFFFF; display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 15px">Foco</span><span style="font-size: 13px; font-weight: 600; color: #4A4366; line-height: 1.45">Anillo azul 3 px con 3 px de aire blanco. Solo con teclado (<span class="mono">:focus-visible</span>), siempre visible.</span></div>
+<div style="padding: 18px; border-radius: 22px; background: #FFFFFF; display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 15px">Activo</span><span style="font-size: 13px; font-weight: 600; color: #4A4366; line-height: 1.45">Al presionar: baja 1 px y el tono se oscurece un paso.</span></div>
+<div style="padding: 18px; border-radius: 22px; background: #FFFFFF; display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 15px">Seleccionado</span><span style="font-size: 13px; font-weight: 600; color: #4A4366; line-height: 1.45">Relleno azul (o tinta en filtros) o anillo de 4 px del color de la sección. Con <span class="mono">aria-pressed</span>, <span class="mono">aria-current</span> o <span class="mono">aria-checked</span>.</span></div>
+<div style="padding: 18px; border-radius: 22px; background: #FFFFFF; display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 15px">Desactivado</span><span style="font-size: 13px; font-weight: 600; color: #4A4366; line-height: 1.45">Fondo #E6E8F2, texto #6B6788, sin sombra ni hover. Se explica el motivo cerca. <strong style="color: #1B1340">Cargando:</strong> ver lámina 09.</span></div>
+</section>
+
+<section style="padding: 22px 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column">
+<div style="display: grid; grid-template-columns: 190px repeat(6, minmax(0, 1fr)); gap: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #ECEEF8; font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #5B5478">
+<span>COMPONENTE</span><span style="text-align: center">NORMAL</span><span style="text-align: center">HOVER</span><span style="text-align: center">FOCO</span><span style="text-align: center">ACTIVO</span><span style="text-align: center">SELECCIONADO</span><span style="text-align: center">DESACTIVADO</span>
+</div>
+
+<div style="display: grid; grid-template-columns: 190px repeat(6, minmax(0, 1fr)); gap: 12px; align-items: center; border-bottom: 1.5px solid #ECEEF8">
+<span style="font-weight: 800; font-size: 14px">Enlace de menú</span>
+<div class="cell"><span style="padding: 10px 16px; border-radius: 999px; font-weight: 700; font-size: 14px">Escenarios</span></div>
+<div class="cell"><span style="padding: 10px 16px; border-radius: 999px; background: #F1F3FF; font-weight: 700; font-size: 14px">Escenarios</span></div>
+<div class="cell"><span class="f" style="padding: 10px 16px; border-radius: 999px; font-weight: 700; font-size: 14px">Escenarios</span></div>
+<div class="cell"><span style="padding: 10px 16px; border-radius: 999px; background: #E3E8FF; font-weight: 700; font-size: 14px">Escenarios</span></div>
+<div class="cell"><span style="padding: 10px 16px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 14px">Escenarios</span></div>
+<div class="cell"><span style="padding: 10px 16px; border-radius: 999px; color: #6B6788; font-weight: 700; font-size: 14px">Escenarios</span></div>
+</div>
+
+<div style="display: grid; grid-template-columns: 190px repeat(6, minmax(0, 1fr)); gap: 12px; align-items: center; border-bottom: 1.5px solid #ECEEF8">
+<span style="font-weight: 800; font-size: 14px">Segmento / opción</span>
+<div class="cell"><span style="padding: 4px; border-radius: 999px; background: #F1F3FF"><span style="display: block; padding: 8px 14px; border-radius: 999px; font-weight: 800; font-size: 13px">Panel</span></span></div>
+<div class="cell"><span style="padding: 4px; border-radius: 999px; background: #F1F3FF"><span style="display: block; padding: 8px 14px; border-radius: 999px; background: #FFFFFF; font-weight: 800; font-size: 13px">Panel</span></span></div>
+<div class="cell"><span style="padding: 4px; border-radius: 999px; background: #F1F3FF"><span class="f" style="display: block; padding: 8px 14px; border-radius: 999px; font-weight: 800; font-size: 13px">Panel</span></span></div>
+<div class="cell"><span style="padding: 4px; border-radius: 999px; background: #F1F3FF"><span style="display: block; padding: 8px 14px; border-radius: 999px; background: #E3E8FF; font-weight: 800; font-size: 13px">Panel</span></span></div>
+<div class="cell"><span style="padding: 4px; border-radius: 999px; background: #F1F3FF"><span style="display: block; padding: 8px 14px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 13px">Panel</span></span></div>
+<div class="cell"><span style="padding: 4px; border-radius: 999px; background: #F1F2F8"><span style="display: block; padding: 8px 14px; border-radius: 999px; color: #6B6788; font-weight: 800; font-size: 13px">Panel</span></span></div>
+</div>
+
+<div style="display: grid; grid-template-columns: 190px repeat(6, minmax(0, 1fr)); gap: 12px; align-items: center; border-bottom: 1.5px solid #ECEEF8">
+<span style="font-weight: 800; font-size: 14px">Chip / filtro</span>
+<div class="cell"><span style="padding: 9px 14px; border-radius: 999px; box-shadow: inset 0 0 0 1.5px #8A86A3; font-weight: 800; font-size: 13px">Trabajo</span></div>
+<div class="cell"><span style="padding: 9px 14px; border-radius: 999px; background: #F1F3FF; box-shadow: inset 0 0 0 1.5px #8A86A3; font-weight: 800; font-size: 13px">Trabajo</span></div>
+<div class="cell"><span class="f" style="padding: 9px 14px; border-radius: 999px; font-weight: 800; font-size: 13px">Trabajo</span></div>
+<div class="cell"><span style="padding: 9px 14px; border-radius: 999px; background: #E3E8FF; box-shadow: inset 0 0 0 1.5px #8A86A3; font-weight: 800; font-size: 13px">Trabajo</span></div>
+<div class="cell"><span style="padding: 9px 14px; border-radius: 999px; background: #1B1340; color: #FFFFFF; font-weight: 800; font-size: 13px">Trabajo</span></div>
+<div class="cell"><span style="padding: 9px 14px; border-radius: 999px; background: #F1F2F8; color: #6B6788; font-weight: 800; font-size: 13px">Trabajo</span></div>
+</div>
+
+<div style="display: grid; grid-template-columns: 190px repeat(6, minmax(0, 1fr)); gap: 12px; align-items: center; border-bottom: 1.5px solid #ECEEF8">
+<span style="font-weight: 800; font-size: 14px">Interruptor</span>
+<div class="cell"><span style="width: 56px; height: 32px; padding: 4px; border-radius: 999px; background: #7D7898; display: flex"><span style="width: 24px; height: 24px; border-radius: 50%; background: #FFFFFF"></span></span></div>
+<div class="cell"><span style="width: 56px; height: 32px; padding: 4px; border-radius: 999px; background: #6B6788; display: flex"><span style="width: 24px; height: 24px; border-radius: 50%; background: #FFFFFF"></span></span></div>
+<div class="cell"><span class="f" style="width: 56px; height: 32px; padding: 4px; border-radius: 999px; background: #7D7898; display: flex"><span style="width: 24px; height: 24px; border-radius: 50%; background: #FFFFFF"></span></span></div>
+<div class="cell"><span style="width: 56px; height: 32px; padding: 4px; border-radius: 999px; background: #6B6788; display: flex"><span style="width: 32px; height: 24px; border-radius: 999px; background: #FFFFFF"></span></span></div>
+<div class="cell"><span style="width: 56px; height: 32px; padding: 4px; border-radius: 999px; background: #3D5AFE; display: flex; justify-content: flex-end"><span style="width: 24px; height: 24px; border-radius: 50%; background: #FFFFFF"></span></span></div>
+<div class="cell"><span style="width: 56px; height: 32px; padding: 4px; border-radius: 999px; background: #E6E8F2; display: flex"><span style="width: 24px; height: 24px; border-radius: 50%; background: #F6F7FF"></span></span></div>
+</div>
+
+<div style="display: grid; grid-template-columns: 190px repeat(6, minmax(0, 1fr)); gap: 12px; align-items: center; border-bottom: 1.5px solid #ECEEF8">
+<div style="display: flex; flex-direction: column"><span style="font-weight: 800; font-size: 14px">Campo y selector</span><span style="font-size: 12px; font-weight: 600; color: #4A4366">seleccionado = con aviso</span></div>
+<div class="cell"><span style="width: 100%; padding: 12px; border-radius: 12px; box-shadow: inset 0 0 0 2px #8A86A3; font-size: 13px; font-weight: 600; color: #5B5478">Nombre…</span></div>
+<div class="cell"><span style="width: 100%; padding: 12px; border-radius: 12px; box-shadow: inset 0 0 0 2px #4A4366; font-size: 13px; font-weight: 600; color: #5B5478">Nombre…</span></div>
+<div class="cell"><span style="width: 100%; padding: 12px; border-radius: 12px; box-shadow: inset 0 0 0 2px #3D5AFE, 0 0 0 4px #E3E8FF; font-size: 13px; font-weight: 600">Daily|</span></div>
+<div class="cell"><span style="width: 100%; padding: 12px; border-radius: 12px; box-shadow: inset 0 0 0 2px #3D5AFE; font-size: 13px; font-weight: 600">Daily con…</span></div>
+<div class="cell"><span style="width: 100%; padding: 12px; border-radius: 12px; background: #FFF6F2; box-shadow: inset 0 0 0 2px #D9480F; font-size: 13px; font-weight: 600">mi escenario!!</span></div>
+<div class="cell"><span style="width: 100%; padding: 12px; border-radius: 12px; background: #F1F2F8; box-shadow: inset 0 0 0 2px #E6E8F2; font-size: 13px; font-weight: 600; color: #6B6788">Bloqueado</span></div>
+</div>
+
+<div style="display: grid; grid-template-columns: 190px repeat(6, minmax(0, 1fr)); gap: 12px; align-items: center; border-bottom: 1.5px solid #ECEEF8">
+<span style="font-weight: 800; font-size: 14px">Casilla de objetivo</span>
+<div class="cell"><span style="width: 30px; height: 30px; border-radius: 50%; border: 3px dashed #6E7BC4"></span></div>
+<div class="cell"><span style="width: 30px; height: 30px; border-radius: 50%; border: 3px dashed #3D5AFE; background: #F1F3FF"></span></div>
+<div class="cell"><span class="f" style="width: 30px; height: 30px; border-radius: 50%; border: 3px dashed #6E7BC4"></span></div>
+<div class="cell"><span style="width: 30px; height: 30px; border-radius: 50%; background: #E3E8FF; transform: scale(.9)"></span></div>
+<div class="cell"><span style="width: 30px; height: 30px; border-radius: 50%; background: #9BE22D; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+<div class="cell"><span style="width: 30px; height: 30px; border-radius: 50%; background: #E6E8F2"></span></div>
+</div>
+
+<div style="display: grid; grid-template-columns: 190px repeat(6, minmax(0, 1fr)); gap: 12px; align-items: center; border-bottom: 1.5px solid #ECEEF8">
+<span style="font-weight: 800; font-size: 14px">Tarjeta seleccionable</span>
+<div class="cell" style="min-height: 92px"><span style="width: 110px; height: 66px; border-radius: 18px; background: #FFFFFF; box-shadow: 0 12px 24px -16px rgba(27,19,64,.6), inset 0 0 0 1px #F0F1F8"></span></div>
+<div class="cell" style="min-height: 92px"><span style="width: 110px; height: 66px; border-radius: 18px; background: #FFFFFF; box-shadow: 0 20px 30px -16px rgba(27,19,64,.6), inset 0 0 0 1px #F0F1F8; transform: translateY(-3px)"></span></div>
+<div class="cell" style="min-height: 92px"><span class="f" style="width: 110px; height: 66px; border-radius: 18px; background: #FFFFFF"></span></div>
+<div class="cell" style="min-height: 92px"><span style="width: 110px; height: 66px; border-radius: 18px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #F0F1F8; transform: scale(.97)"></span></div>
+<div class="cell" style="min-height: 92px"><span style="width: 110px; height: 66px; border-radius: 18px; background: #FFFFFF; box-shadow: 0 0 0 4px #FF6B3D"></span></div>
+<div class="cell" style="min-height: 92px"><span style="width: 110px; height: 66px; border-radius: 18px; background: #F1F2F8; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B6788" stroke-width="2.4" stroke-linecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span></div>
+</div>
+
+<div style="display: grid; grid-template-columns: 190px repeat(6, minmax(0, 1fr)); gap: 12px; align-items: center; border-bottom: 1.5px solid #ECEEF8">
+<span style="font-weight: 800; font-size: 14px">Palabra del drill</span>
+<div class="cell"><span lang="en" class="disp" style="padding: 6px 10px; border-radius: 12px; font-size: 22px; font-weight: 800; border-bottom: 5px solid #FF6B3D">think</span></div>
+<div class="cell"><span lang="en" class="disp" style="padding: 6px 10px; border-radius: 12px; background: #F6F7FF; font-size: 22px; font-weight: 800; border-bottom: 5px solid #FF6B3D">think</span></div>
+<div class="cell"><span lang="en" class="disp f" style="padding: 6px 10px; border-radius: 12px; font-size: 22px; font-weight: 800">think</span></div>
+<div class="cell"><span lang="en" class="disp" style="padding: 6px 10px; border-radius: 12px; background: #D5DCFF; font-size: 22px; font-weight: 800">think</span></div>
+<div class="cell"><span lang="en" class="disp" style="padding: 6px 10px; border-radius: 12px; background: #E3E8FF; font-size: 22px; font-weight: 800; border-bottom: 5px solid #FF6B3D">think</span></div>
+<div class="cell"><span lang="en" class="disp" style="padding: 6px 10px; border-radius: 12px; font-size: 22px; font-weight: 800; color: #6B6788">think</span></div>
+</div>
+
+<div style="display: grid; grid-template-columns: 190px repeat(6, minmax(0, 1fr)); gap: 12px; align-items: center; border-bottom: 1.5px solid #ECEEF8">
+<div style="display: flex; flex-direction: column"><span style="font-weight: 800; font-size: 14px">Botón de ícono</span><span style="font-size: 12px; font-weight: 600; color: #4A4366">seleccionado = alternado</span></div>
+<div class="cell"><span style="width: 44px; height: 44px; border-radius: 50%; background: #F6F7FF; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></span></div>
+<div class="cell"><span style="width: 44px; height: 44px; border-radius: 50%; background: #E3E8FF; display: flex; align-items: center; justify-content: center; transform: translateY(-2px)"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></span></div>
+<div class="cell"><span class="f" style="width: 44px; height: 44px; border-radius: 50%; background: #F6F7FF; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></span></div>
+<div class="cell"><span style="width: 44px; height: 44px; border-radius: 50%; background: #C6CFFF; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></span></div>
+<div class="cell"><span style="width: 44px; height: 44px; border-radius: 50%; background: #3D5AFE; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></span></div>
+<div class="cell"><span style="width: 44px; height: 44px; border-radius: 50%; background: #F1F2F8; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A86A3" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></span></div>
+</div>
+
+<div style="display: grid; grid-template-columns: 190px repeat(6, minmax(0, 1fr)); gap: 12px; align-items: center">
+<span style="font-weight: 800; font-size: 14px">Enlace de texto</span>
+<div class="cell"><span style="color: #2338C9; font-weight: 700; font-size: 14px; text-decoration: underline; text-underline-offset: 4px">Ver todos</span></div>
+<div class="cell"><span style="color: #1B1340; font-weight: 700; font-size: 14px; text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 4px">Ver todos</span></div>
+<div class="cell"><span class="f" style="padding: 2px 6px; border-radius: 6px; color: #2338C9; font-weight: 700; font-size: 14px; text-decoration: underline; text-underline-offset: 4px">Ver todos</span></div>
+<div class="cell"><span style="color: #1B1340; font-weight: 700; font-size: 14px; text-decoration: underline; text-underline-offset: 4px; background: #E3E8FF; padding: 2px 6px; border-radius: 6px">Ver todos</span></div>
+<div class="cell"><span style="color: #1B1340; font-weight: 800; font-size: 14px">Ver todos (actual)</span></div>
+<div class="cell"><span style="color: #6B6788; font-weight: 700; font-size: 14px">Ver todos</span></div>
+</div>
+</section>
+
+<section style="padding: 24px 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Pruébalo: ratón y teclado (Tab, Espacio, Enter)</h2><span style="font-size: 13px; font-weight: 700; color: #4A4366">Estos elementos usan los estados reales</span></div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 22px">
+<button type="button" class="d-btn">Responder</button>
+<button type="button" class="d-btn" disabled>Desactivado</button>
+<button type="button" class="d-chip" aria-pressed="{{chip}}" onClick="{{toggleChip}}">Trabajo</button>
+<label style="display: flex; flex-direction: column; gap: 4px; font-weight: 800; font-size: 13px">Escenario<input class="d-in" type="text" placeholder="Escribe aquí"></label>
+<label style="display: flex; flex-direction: column; gap: 4px; font-weight: 800; font-size: 13px; color: #4A4366">Desactivado<input class="d-in" type="text" value="Sin edición" disabled></label>
+<button type="button" class="d-card" aria-pressed="{{card}}" onClick="{{toggleCard}}"><span style="display: block; height: 44px; background: #FFE8DF"></span><span style="display: block; padding: 10px 12px; font-weight: 800; font-size: 13px; color: #1B1340">Restaurante</span></button>
+<a class="d-link" href="#demo">Ver todos</a>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1560}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { chip: false, card: false }; }
+  renderVals() {
+    return {
+      chip: this.state.chip ? 'true' : 'false',
+      card: this.state.card ? 'true' : 'false',
+      toggleChip: () => this.setState({ chip: !this.state.chip }),
+      toggleCard: () => this.setState({ card: !this.state.card })
+    };
+  }
+}
+</script>
+</body>
+</html>

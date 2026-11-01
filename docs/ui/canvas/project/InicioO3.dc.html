@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>IABuddy — Inicio O3 · Ecualizador</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#3D5AFE}a:hover{color:#1B1340}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.ipa{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+a:focus-visible,button:focus-visible{outline:3px solid #1B1340;outline-offset:3px}
+.lift{transition:transform .18s cubic-bezier(.3,1.6,.5,1)}
+.lift:hover{transform:translateY(-3px) scale(1.02)}
+@keyframes eq{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes blink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+@keyframes mini{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+.eq{animation:eq 3.2s ease-in-out infinite}
+.blink{animation:blink 4.2s infinite;transform-origin:center}
+.mini{animation:mini 1s ease-in-out infinite;transform-origin:bottom}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="position: relative; overflow: hidden; background: #FFFDF7; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif">
+
+<header style="max-width: 1320px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 40px) 8px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="InicioO3.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #1B1340; min-height: 44px">
+<svg aria-hidden="true" width="44" height="44" viewBox="0 0 200 200"><rect x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/><rect x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE"/><rect x="166" y="88" width="20" height="48" rx="10" fill="#9BE22D"/><circle cx="90" cy="76" r="10" fill="#FFFFFF"/><circle cx="112" cy="76" r="10" fill="#FFFFFF"/></svg>
+<span class="disp" style="font-size: 28px; font-weight: 800; letter-spacing: -0.045em">iabuddy</span>
+</a>
+<nav aria-label="Principal" style="display: flex; flex-wrap: wrap; gap: 4px; padding: 5px; background: #FFFFFF; border: 2.5px solid #1B1340; border-radius: 999px">
+<a href="InicioO3.dc.html" aria-current="page" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 15px; text-decoration: none">Hoy</a>
+<a href="Conversacion.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Conversar</a>
+<a href="InicioO3.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Escenarios</a>
+<a href="InicioO3.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Sonidos</a>
+<a href="InicioO3.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Progreso</a>
+</nav>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+<span style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: #FFC800; border: 2.5px solid #1B1340; font-weight: 800; font-size: 15px"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="#FF6B3D" stroke="#1B1340" stroke-width="1.8" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>12 días</span>
+<span style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: #9BE22D; border: 2.5px solid #1B1340; font-weight: 800; font-size: 15px">2.340 XP</span>
+<a href="InicioO3.dc.html" aria-label="Ajustes" style="width: 44px; height: 44px; border-radius: 50%; background: #FFFFFF; border: 2.5px solid #1B1340; display: flex; align-items: center; justify-content: center; color: #1B1340"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></a>
+</div>
+</header>
+
+<main style="max-width: 1400px; margin: 0 auto; padding: 28px 20px 56px; display: flex; flex-direction: column; gap: 40px">
+
+<section aria-label="Tu día" style="position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 18px">
+<div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 50%; border-top: 3px dashed #C9D2FF"></div>
+
+<div class="eq" style="position: relative; flex: 1 1 190px; max-width: 210px; min-height: 440px; padding: 96px 20px; border-radius: 105px; background: #FFC800; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; animation-delay: -.4s">
+<svg aria-hidden="true" width="44" height="44" viewBox="0 0 24 24" fill="#FF6B3D" stroke="#1B1340" stroke-width="1.6" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+<span class="disp" style="font-size: 64px; font-weight: 800; line-height: .9; letter-spacing: -0.04em">12</span>
+<span style="font-weight: 800; font-size: 16px">días de racha</span>
+<div aria-label="Semana: 5 cumplidos, jueves protegido" style="display: flex; gap: 4px"><span style="width: 9px; height: 18px; border-radius: 9px; background: #1B1340"></span><span style="width: 9px; height: 18px; border-radius: 9px; background: #1B1340"></span><span style="width: 9px; height: 18px; border-radius: 9px; background: #1B1340"></span><span style="width: 9px; height: 18px; border-radius: 9px; border: 2px solid #1B1340"></span><span style="width: 9px; height: 18px; border-radius: 9px; background: #1B1340"></span><span style="width: 9px; height: 18px; border-radius: 9px; background: #FFFFFF"></span><span style="width: 9px; height: 18px; border-radius: 9px; background: rgba(27,19,64,.2)"></span></div>
+<span style="font-weight: 700; font-size: 13px">1 protector libre</span>
+</div>
+
+<div class="eq" style="position: relative; flex: 1 1 250px; max-width: 270px; min-height: 680px; padding: 120px 26px; border-radius: 135px; background: #FF6B3D; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; animation-delay: -.8s">
+<svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="#FFFFFF" stroke="#1B1340" stroke-width="1.8" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+<h2 class="disp" style="margin: 0; font-size: 34px; font-weight: 800; letter-spacing: -0.03em; line-height: 1">Conversar</h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.45; font-weight: 600">Charla libre o un escenario con objetivos.</p>
+<div style="width: 100%; display: flex; flex-direction: column; gap: 8px; text-align: left">
+<a class="lift" href="Conversacion.dc.html" style="display: flex; justify-content: space-between; align-items: center; min-height: 48px; padding: 0 16px; border-radius: 999px; background: #FFFFFF; color: #1B1340; font-weight: 800; font-size: 15px; text-decoration: none">Charla libre <span style="font-weight: 600; font-size: 12px">Weekend plans</span></a>
+<a class="lift" href="InicioO3.dc.html" style="display: flex; justify-content: space-between; align-items: center; min-height: 48px; padding: 0 16px; border-radius: 999px; background: rgba(255,255,255,.55); color: #1B1340; font-weight: 700; font-size: 14px; text-decoration: none">Entrevista técnica <span aria-label="2 de 3 estrellas">★★☆</span></a>
+<a class="lift" href="InicioO3.dc.html" style="display: flex; justify-content: space-between; align-items: center; min-height: 48px; padding: 0 16px; border-radius: 999px; background: rgba(255,255,255,.55); color: #1B1340; font-weight: 700; font-size: 14px; text-decoration: none">Daily standup <span aria-label="3 de 3 estrellas">★★★</span></a>
+<a class="lift" href="InicioO3.dc.html" style="display: flex; justify-content: space-between; align-items: center; min-height: 48px; padding: 0 16px; border-radius: 999px; background: rgba(255,255,255,.55); color: #1B1340; font-weight: 700; font-size: 14px; text-decoration: none">Restaurante <span aria-label="1 de 3 estrellas">★☆☆</span></a>
+</div>
+</div>
+
+<div class="eq" style="position: relative; flex: 1 1 360px; max-width: 390px; min-height: 960px; padding: 70px 34px 150px; border-radius: 195px; background: #3D5AFE; color: #FFFFFF; display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center">
+<div aria-hidden="true" style="display: flex; flex-direction: column; align-items: center; gap: 18px; margin-top: 30px">
+<div style="display: flex; gap: 34px">
+<span class="blink" style="width: 66px; height: 66px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><span style="width: 32px; height: 32px; border-radius: 50%; background: #1B1340; margin-top: 10px"></span></span>
+<span class="blink" style="width: 66px; height: 66px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><span style="width: 32px; height: 32px; border-radius: 50%; background: #1B1340; margin-top: 10px"></span></span>
+</div>
+<span style="width: 70px; height: 30px; border-radius: 0 0 40px 40px; background: #FFFFFF"></span>
+</div>
+<h1 class="disp" style="margin: 16px 0 0; font-size: 50px; font-weight: 800; line-height: .95; letter-spacing: -0.04em">¡Hola, Amado!</h1>
+<p style="margin: 0; font-size: 19px; line-height: 1.45; font-weight: 600">Te faltan 6 minutos para la meta de hoy.</p>
+<div role="img" aria-label="Meta: 9 de 15 minutos" style="display: flex; align-items: flex-end; gap: 5px; height: 56px">
+<span class="mini" style="width: 10px; height: 40%; border-radius: 9px; background: #FFFFFF"></span><span class="mini" style="width: 10px; height: 70%; border-radius: 9px; background: #FFFFFF; animation-delay: -.1s"></span><span class="mini" style="width: 10px; height: 100%; border-radius: 9px; background: #FFFFFF; animation-delay: -.2s"></span><span class="mini" style="width: 10px; height: 70%; border-radius: 9px; background: #FFFFFF; animation-delay: -.3s"></span><span class="mini" style="width: 10px; height: 50%; border-radius: 9px; background: #FFFFFF; animation-delay: -.4s"></span><span class="mini" style="width: 10px; height: 80%; border-radius: 9px; background: #FFFFFF; animation-delay: -.5s"></span><span class="mini" style="width: 10px; height: 60%; border-radius: 9px; background: #FFFFFF; animation-delay: -.6s"></span><span class="mini" style="width: 10px; height: 90%; border-radius: 9px; background: #FFFFFF; animation-delay: -.7s"></span><span class="mini" style="width: 10px; height: 45%; border-radius: 9px; background: #FFFFFF; animation-delay: -.8s"></span>
+<span style="width: 10px; height: 60%; border-radius: 9px; background: rgba(255,255,255,.3)"></span><span style="width: 10px; height: 85%; border-radius: 9px; background: rgba(255,255,255,.3)"></span><span style="width: 10px; height: 55%; border-radius: 9px; background: rgba(255,255,255,.3)"></span><span style="width: 10px; height: 40%; border-radius: 9px; background: rgba(255,255,255,.3)"></span><span style="width: 10px; height: 65%; border-radius: 9px; background: rgba(255,255,255,.3)"></span><span style="width: 10px; height: 30%; border-radius: 9px; background: rgba(255,255,255,.3)"></span>
+</div>
+<span style="font-weight: 800; font-size: 15px">9 de 15 min</span>
+<a class="lift" href="Conversacion.dc.html" style="display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; min-height: 66px; border-radius: 999px; background: #FFFFFF; color: #1B1340; font-weight: 800; font-size: 20px; text-decoration: none; box-shadow: 0 10px 0 #2238C8">Hablar <span style="padding: 4px 10px; border-radius: 8px; background: #3D5AFE; color: #FFFFFF; font-size: 13px">Espacio</span></a>
+<div style="width: 100%; padding: 18px; border-radius: 26px; background: rgba(255,255,255,.14); display: flex; flex-direction: column; gap: 6px; text-align: left">
+<span style="font-weight: 800; font-size: 12px; letter-spacing: .12em">PROMPT DEL DÍA</span>
+<span lang="en" style="font-weight: 700; font-size: 17px; line-height: 1.4">“Tell me about something you built that you’re proud of.”</span>
+</div>
+</div>
+
+<div class="eq" style="position: relative; flex: 1 1 250px; max-width: 270px; min-height: 680px; padding: 120px 26px; border-radius: 135px; background: #FF5FAE; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; animation-delay: -1.2s">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .12em">SONIDO DE HOY</span>
+<span class="ipa" style="font-size: 88px; font-weight: 700; line-height: 1">θ</span>
+<span lang="en" class="disp" style="font-size: 26px; font-weight: 800">think · three</span>
+<div style="width: 100%; display: flex; flex-direction: column; gap: 6px">
+<div style="position: relative; height: 14px; border-radius: 99px; background: rgba(255,255,255,.55)"><div style="width: 48%; height: 100%; border-radius: 99px; background: #1B1340"></div><span aria-hidden="true" style="position: absolute; left: 85%; top: -5px; width: 3px; height: 24px; border-radius: 2px; background: #FFFFFF"></span></div>
+<span style="font-weight: 700; font-size: 13px">48 · meta 85 · nivel 1 de 5</span>
+</div>
+<a class="lift" href="InicioO3.dc.html" style="display: flex; align-items: center; justify-content: center; width: 100%; min-height: 50px; border-radius: 999px; background: #FFFFFF; color: #1B1340; font-weight: 800; font-size: 15px; text-decoration: none">Drill de 3 min</a>
+<span style="font-weight: 600; font-size: 13px">Después: <span class="ipa">ɪ/iː</span>, <span class="ipa">v/b</span></span>
+</div>
+
+<div class="eq" style="position: relative; flex: 1 1 190px; max-width: 210px; min-height: 440px; padding: 96px 20px; border-radius: 105px; background: #9BE22D; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; animation-delay: -1.6s">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .12em">NIVEL</span>
+<span class="disp" style="font-size: 72px; font-weight: 800; line-height: .9">7</span>
+<span style="font-weight: 800; font-size: 16px">Conversador</span>
+<div style="width: 100%; height: 12px; border-radius: 99px; background: rgba(255,255,255,.6); overflow: hidden"><div style="width: 83.5%; height: 100%; background: #1B1340"></div></div>
+<span style="font-weight: 700; font-size: 13px">460 XP para Narrador</span>
+</div>
+</section>
+
+<section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 18px; max-width: 1240px; width: 100%; margin: 0 auto">
+<div style="display: flex; align-items: center; gap: 14px; padding: 16px 20px; border-radius: 999px; background: #FFFFFF; border: 2.5px solid #1B1340"><span style="flex: none; width: 12px; height: 40px; border-radius: 9px; background: #FF6B3D"></span><div style="flex: 1; display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 15px">Habla 60 min · 38/60</span><div style="height: 10px; border-radius: 99px; background: #F1ECDF; overflow: hidden"><div style="width: 63%; height: 100%; background: #FF6B3D"></div></div></div><span style="font-weight: 800; font-size: 13px">+60 XP</span></div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 16px 20px; border-radius: 999px; background: #FFFFFF; border: 2.5px solid #1B1340"><span style="flex: none; width: 12px; height: 40px; border-radius: 9px; background: #3D5AFE"></span><div style="flex: 1; display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 15px">2 escenarios · 1/2</span><div style="height: 10px; border-radius: 99px; background: #F1ECDF; overflow: hidden"><div style="width: 50%; height: 100%; background: #3D5AFE"></div></div></div><span style="font-weight: 800; font-size: 13px">+80 XP</span></div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 16px 20px; border-radius: 999px; background: #FFFFFF; border: 2.5px solid #1B1340"><span style="flex: none; width: 12px; height: 40px; border-radius: 9px; background: #FF5FAE"></span><div style="flex: 1; display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 15px"><span class="ipa">/θ/</span> en 3 sesiones · 1/3</span><div style="height: 10px; border-radius: 99px; background: #F1ECDF; overflow: hidden"><div style="width: 33%; height: 100%; background: #FF5FAE"></div></div></div><span style="font-weight: 800; font-size: 13px">+60 XP</span></div>
+</section>
+
+<footer style="max-width: 1240px; width: 100%; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; font-weight: 600; font-size: 14px; color: #5B5478"><span>100 % local · VAD, STT, LLM, TTS y fonemas en tu equipo</span><span>Referencia: inglés americano</span></footer>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

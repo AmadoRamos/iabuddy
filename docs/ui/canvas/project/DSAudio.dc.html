@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sistema de diseño · Audio y micrófono</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@500;700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font-family:inherit;cursor:pointer}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.mono{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+button:focus-visible{outline:3px solid #3D5AFE;outline-offset:3px}
+@keyframes lvl{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+@keyframes sway{0%,100%{transform:scaleY(.6)}50%{transform:scaleY(1)}}
+.lvl{animation:lvl .7s ease-in-out infinite;transform-origin:bottom}
+.pulse{animation:pulse 1.2s ease-in-out infinite}
+.sway{animation:sway 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1520px; padding: 56px; background: #F6F7FF; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 24px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .14em; color: #2338C9">IABUDDY · SISTEMA DE DISEÑO · 12</span>
+<h1 class="disp" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.045em; line-height: 1">Audio y micrófono</h1>
+<p style="margin: 0; font-size: 17px; font-weight: 600; color: #4A4366">Componentes propios de una app de voz. El reproductor A/B funciona con Play.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px">
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Medidor de nivel</h2><span style="font-size: 13px; font-weight: 700; color: #4A4366">role="meter" · aria-valuenow en dB</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 14px"><span>Muy bajo</span><span style="color: #9A3412">Acércate al micrófono</span></div>
+<div role="meter" aria-label="Nivel del micrófono" aria-valuemin="-60" aria-valuemax="0" aria-valuenow="-48" style="display: flex; gap: 3px; height: 26px; align-items: flex-end">
+<span style="flex: 1; height: 100%; border-radius: 4px; background: #FF6B3D"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #FF6B3D"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #E6E8F2"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #E6E8F2"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #E6E8F2"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #E6E8F2"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #E6E8F2"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #E6E8F2"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #E6E8F2"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #E6E8F2"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #E6E8F2"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #E6E8F2"></span>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 14px"><span>Bien</span><span style="color: #2F5208">Perfecto, te escucho claro</span></div>
+<div role="meter" aria-label="Nivel del micrófono" aria-valuemin="-60" aria-valuemax="0" aria-valuenow="-18" style="display: flex; gap: 3px; height: 26px; align-items: flex-end">
+<span class="lvl" style="flex: 1; height: 100%; border-radius: 4px; background: #9BE22D"></span><span class="lvl" style="flex: 1; height: 100%; border-radius: 4px; background: #9BE22D; animation-delay: -.1s"></span><span class="lvl" style="flex: 1; height: 100%; border-radius: 4px; background: #9BE22D; animation-delay: -.2s"></span><span class="lvl" style="flex: 1; height: 100%; border-radius: 4px; background: #9BE22D; animation-delay: -.3s"></span><span class="lvl" style="flex: 1; height: 100%; border-radius: 4px; background: #9BE22D; animation-delay: -.4s"></span><span class="lvl" style="flex: 1; height: 100%; border-radius: 4px; background: #9BE22D; animation-delay: -.5s"></span><span class="lvl" style="flex: 1; height: 100%; border-radius: 4px; background: #9BE22D; animation-delay: -.15s"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #E6E8F2"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #E6E8F2"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #E6E8F2"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #E6E8F2"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #E6E8F2"></span>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 14px"><span>Saturado</span><span style="color: #854D0E">Muy fuerte: aléjate un poco</span></div>
+<div role="meter" aria-label="Nivel del micrófono" aria-valuemin="-60" aria-valuemax="0" aria-valuenow="-1" style="display: flex; gap: 3px; height: 26px; align-items: flex-end">
+<span style="flex: 1; height: 100%; border-radius: 4px; background: #9BE22D"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #9BE22D"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #9BE22D"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #9BE22D"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #9BE22D"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #9BE22D"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #9BE22D"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #9BE22D"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #FFC800"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #FFC800"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #FFC800"></span><span style="flex: 1; height: 100%; border-radius: 4px; background: #FFC800"></span>
+</div>
+</div>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">12 segmentos. El texto dice qué hacer; el color solo acompaña.</span>
+<div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: #FFF6F2">
+<span class="pulse" style="width: 12px; height: 12px; border-radius: 50%; background: #FF6B3D"></span><span style="font-weight: 800; font-size: 15px">Grabando · 0:03</span><span style="margin-left: auto; font-size: 13px; font-weight: 700; color: #4A4366">indicador de grabación activa</span>
+</div>
+</section>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Prueba de micrófono y audífonos</h2><span style="font-size: 13px; font-weight: 700; color: #4A4366">paso 2 de 3</span></div>
+<div style="display: flex; gap: 6px"><span style="flex: 1; height: 8px; border-radius: 9px; background: #9BE22D"></span><span style="flex: 1; height: 8px; border-radius: 9px; background: #3D5AFE"></span><span style="flex: 1; height: 8px; border-radius: 9px; background: #E3E8FF"></span></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px"><span style="width: 26px; height: 26px; border-radius: 50%; background: #9BE22D; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>1 · Micrófono: dijiste <span lang="en">“Hello, Buddy!”</span></span></div>
+<div style="padding: 18px; border-radius: 22px; background: #F6F7FF; display: flex; flex-direction: column; gap: 12px">
+<span style="font-weight: 800; font-size: 17px">2 · ¿Escuchas a Buddy en tus audífonos?</span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
+<button type="button" style="display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 18px; border: none; border-radius: 999px; background: #E3E8FF; color: #2338C9; font-weight: 800; font-size: 15px"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>Reproducir prueba</button>
+<button type="button" style="min-height: 48px; padding: 0 18px; border: none; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 15px">Sí, lo escucho</button>
+<button type="button" style="min-height: 48px; padding: 0 18px; border: none; border-radius: 999px; background: #FFFFFF; box-shadow: inset 0 0 0 2px #1B1340; color: #1B1340; font-weight: 800; font-size: 15px">No</button>
+</div>
+<label style="display: flex; flex-direction: column; gap: 6px; font-weight: 800; font-size: 14px">Salida de audio<span style="display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 0 14px; border-radius: 14px; background: #FFFFFF; box-shadow: inset 0 0 0 2px #8A86A3; font-weight: 600; font-size: 15px">Audífonos USB<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></label>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: #FFF4C7; color: #854D0E; font-weight: 700; font-size: 14px"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 7v6M12 17h.01"/></svg>Si se detecta eco (parlantes), se sugiere usar audífonos.</div>
+<span style="display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; color: #4A4366"><span style="width: 26px; height: 26px; border-radius: 50%; border: 3px dashed #6E7BC4"></span>3 · Elegir tecla para hablar</span>
+</section>
+</div>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Reproductor A/B · tu voz vs. referencia</h2><span style="font-size: 13px; font-weight: 700; color: #4A4366">en el drill y en el resumen · las palabras marcadas son clicables</span></div>
+
+<sc-for list="{{tracks}}" as="t" hint-placeholder-count="2">
+<div style="display: flex; align-items: center; gap: 16px; padding: 14px 16px; border-radius: 22px; background: {{t.tint}}">
+<button type="button" onClick="{{t.toggle}}" aria-label="{{t.btnLabel}}" aria-pressed="{{t.playing}}" style="flex: none; width: 52px; height: 52px; border: none; border-radius: 50%; background: {{t.color}}; color: {{t.fg}}; display: flex; align-items: center; justify-content: center">
+<sc-if value="{{t.playing}}" hint-placeholder-val="{{ false }}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="4" width="5" height="16" rx="1.5"/><rect x="14" y="4" width="5" height="16" rx="1.5"/></svg></sc-if>
+<sc-if value="{{t.paused}}" hint-placeholder-val="{{ true }}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="7 4 20 12 7 20 7 4"/></svg></sc-if>
+</button>
+<div style="flex: none; width: 150px; display: flex; flex-direction: column"><span style="font-weight: 800; font-size: 15px">{{t.title}}</span><span style="font-weight: 600; font-size: 13px; color: #4A4366">{{t.sub}}</span></div>
+<div aria-hidden="true" style="flex: 1; display: flex; align-items: center; gap: 3px; height: 54px">
+<sc-for list="{{t.bars}}" as="b" hint-placeholder-count="48"><span class="{{b.cls}}" style="flex: 1; height: {{b.h}}; border-radius: 3px; background: {{b.c}}"></span></sc-for>
+</div>
+<span class="mono" style="flex: none; font-size: 13px; font-weight: 700">{{t.time}}</span>
+</div>
+</sc-for>
+<div lang="en" style="display: flex; gap: 8px; padding-left: 234px; font-weight: 800; font-size: 14px">
+<span style="padding: 4px 10px; border-radius: 10px; background: #F6F7FF">I</span><span style="padding: 4px 10px; border-radius: 10px; background: #FFE8DF; box-shadow: inset 0 0 0 2px #D9480F">think</span><span style="padding: 4px 10px; border-radius: 10px; background: #F6F7FF">three of them…</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+<div role="group" aria-label="Velocidad" style="display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #F1F3FF">
+<sc-for list="{{speeds}}" as="s" hint-placeholder-count="3"><button type="button" onClick="{{s.pick}}" aria-pressed="{{s.on}}" style="min-height: 40px; padding: 0 14px; border: none; border-radius: 999px; background: {{s.bg}}; color: {{s.fg}}; font-weight: 800; font-size: 14px">{{s.label}}</button></sc-for>
+</div>
+<button type="button" style="min-height: 44px; padding: 0 16px; border: none; border-radius: 999px; background: #1B1340; color: #FFFFFF; font-weight: 800; font-size: 14px">Alternar A/B palabra por palabra</button>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">Tu voz en coral y la referencia en azul, siempre con su nombre. Solo suena una pista a la vez.</span>
+</div>
+</section>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px">
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; gap: 20px; align-items: center">
+<svg aria-hidden="true" width="120" height="120" viewBox="0 0 200 200" style="flex: none"><rect class="sway" x="14" y="98" width="20" height="28" rx="10" fill="#FFC800"/><rect class="sway" x="42" y="88" width="26" height="48" rx="13" fill="#FF6B3D" style="animation-delay: -.3s"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect class="sway" x="132" y="88" width="26" height="48" rx="13" fill="#FF5FAE" style="animation-delay: -.6s"/><rect class="sway" x="166" y="98" width="20" height="28" rx="10" fill="#9BE22D" style="animation-delay: -.9s"/><circle cx="89" cy="72" r="10" fill="#FFFFFF"/><circle cx="89" cy="71" r="5.5" fill="#1B1340"/><circle cx="111" cy="72" r="10" fill="#FFFFFF"/><circle cx="111" cy="71" r="5.5" fill="#1B1340"/><circle cx="100" cy="98" r="4.5" fill="#FFFFFF"/></svg>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #5B5478">ANTES DEL PERMISO DEL NAVEGADOR</span>
+<h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Buddy necesita oírte</h2>
+<p style="margin: 0; font-size: 15px; font-weight: 600; color: #4A4366; line-height: 1.5">Tu voz se procesa solo en este equipo. Nada sale a internet.</p>
+<span style="align-self: flex-start; min-height: 48px; padding: 0 20px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 15px; display: flex; align-items: center">Permitir micrófono</span>
+</div>
+</section>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #9A3412">PERMISO DENEGADO</span>
+<h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">El micrófono está bloqueado</h2>
+<ol style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; font-size: 15px; font-weight: 600; color: #4A4366; line-height: 1.5">
+<li>Haz clic en el candado junto a la dirección (localhost).</li>
+<li>En «Micrófono», elige <strong style="color: #1B1340">Permitir</strong>.</li>
+<li>Vuelve aquí y pulsa Reintentar.</li>
+</ol>
+<div style="display: flex; gap: 10px"><span style="min-height: 46px; padding: 0 18px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 15px; display: flex; align-items: center">Reintentar</span><span style="min-height: 46px; padding: 0 18px; border-radius: 999px; box-shadow: inset 0 0 0 2px #1B1340; font-weight: 800; font-size: 15px; display: flex; align-items: center">Usar otro micrófono</span></div>
+</section>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1520}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { playing: null, speed: '1×' }; }
+  renderVals() {
+    const st = this.state;
+    const shape = [30,45,60,40,70,85,55,35,25,50,75,95,80,60,40,30,45,65,90,70,50,35,20,40,60,80,65,45,30,25,50,70,85,60,40,30,55,75,60,45,35,25,40,55,45,30,20,15];
+    const mk = (id, title, sub, color, fg, tint, played, time, offset) => {
+      const playing = st.playing === id;
+      return {
+        title, sub, color, fg, tint, time, playing, paused: !playing,
+        btnLabel: (playing ? 'Pausar ' : 'Reproducir ') + title,
+        toggle: () => this.setState({ playing: playing ? null : id }),
+        bars: shape.map((h, i) => {
+          const hh = Math.max(12, Math.min(100, h + ((i * offset) % 17) - 8));
+          const done = i < played;
+          const mark = i >= 6 && i <= 13;
+          return { h: hh + '%', c: done ? color : (mark && id === 'tu' ? '#FFC9B5' : '#DDE0EE'), cls: playing && i >= played && i < played + 6 ? 'lvl' : '' };
+        })
+      };
+    };
+    const speeds = ['0,75×', '1×', '1,25×'].map((v) => ({ label: v, on: st.speed === v, bg: st.speed === v ? '#3D5AFE' : 'transparent', fg: st.speed === v ? '#FFFFFF' : '#1B1340', pick: () => this.setState({ speed: v }) }));
+    return {
+      tracks: [
+        mk('tu', 'Tu voz', 'grabada hace 1 min', '#FF6B3D', '#1B1340', '#FFF6F2', 18, '0:01 / 0:03', 5),
+        mk('ref', 'Referencia', 'inglés americano', '#3D5AFE', '#FFFFFF', '#F3F5FF', 0, '0:00 / 0:03', 3)
+      ],
+      speeds
+    };
+  }
+}
+</script>
+</body>
+</html>

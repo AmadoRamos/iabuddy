@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>IABuddy — Inicio B · Ruta de aventura</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Rubik:wght@400;500;600;700;800&family=Noto+Sans+Mono:wght@600;700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#5B2EE0}a:hover{color:#23203A}
+.disp{font-family:'Lilita One','Arial Rounded MT Bold',system-ui,sans-serif;font-weight:400}
+.ipa{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+a:focus-visible,button:focus-visible{outline:3px solid #5B2EE0;outline-offset:3px}
+.press{transition:transform .12s}
+.press:hover{transform:translateY(-2px)}
+.press:active{transform:translateY(5px)}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes drift{0%,100%{transform:translateX(0)}50%{transform:translateX(30px)}}
+@keyframes ring{0%{transform:scale(.95);opacity:.9}100%{transform:scale(1.55);opacity:0}}
+@keyframes blink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+@keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}60%{transform:translateY(0)}70%{transform:translateY(-4px)}}
+@keyframes shine{0%,100%{transform:rotate(-8deg) scale(1)}50%{transform:rotate(8deg) scale(1.1)}}
+.a-bob{animation:bob 3.5s ease-in-out infinite}
+.a-drift{animation:drift 14s ease-in-out infinite}
+.a-ring{animation:ring 1.6s ease-out infinite}
+.a-blink{animation:blink 4s infinite;transform-origin:center}
+.a-hop{animation:hop 2.2s ease-in-out infinite}
+.a-shine{animation:shine 2.6s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="position: relative; overflow: hidden; background: #D3EEFF; color: #23203A; font-family: 'Rubik', system-ui, sans-serif; min-height: 1640px">
+
+<div aria-hidden="true" class="a-drift" style="position: absolute; top: 120px; left: 8%; width: 180px; height: 56px; border-radius: 999px; background: #FFFFFF; opacity: .9"></div>
+<div aria-hidden="true" class="a-drift" style="position: absolute; top: 420px; right: 10%; width: 240px; height: 70px; border-radius: 999px; background: #FFFFFF; opacity: .8; animation-delay: -6s"></div>
+<div aria-hidden="true" class="a-drift" style="position: absolute; top: 900px; left: 30%; width: 140px; height: 46px; border-radius: 999px; background: #FFFFFF; opacity: .8; animation-delay: -3s"></div>
+<svg aria-hidden="true" viewBox="0 0 1440 360" preserveAspectRatio="none" style="position: absolute; left: 0; bottom: 0; width: 100%; height: 360px">
+<path d="M0 170 C 220 80 420 90 640 160 S 1100 260 1440 120 L1440 360 L0 360 Z" fill="#9BE3C7"/>
+<path d="M0 250 C 260 170 520 200 760 250 S 1200 320 1440 230 L1440 360 L0 360 Z" fill="#5FD3A7"/>
+</svg>
+
+<div style="position: relative; z-index: 1; max-width: 1340px; margin: 0 auto; padding: 28px clamp(16px, 3vw, 32px) 80px; display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start">
+
+<aside style="flex: 1 1 210px; max-width: 100%; display: flex; flex-direction: column; gap: 18px">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #23203A; min-height: 48px">
+<span aria-hidden="true" style="width: 46px; height: 46px; border-radius: 50%; background: #7B4DFF; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 0 #4E2BC2"><span style="width: 10px; height: 14px; border-radius: 50%; background: #FFFFFF"></span><span style="width: 10px; height: 14px; border-radius: 50%; background: #FFFFFF"></span></span>
+<span class="disp" style="font-size: 30px; color: #5B2EE0">iabuddy</span>
+</a>
+<nav aria-label="Principal" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(190px, 100%), 1fr)); gap: 8px">
+<a href="InicioB.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 14px; border-radius: 16px; background: #EDE6FF; border: 2px solid #7B4DFF; color: #4E2BC2; font-weight: 800; font-size: 15px; letter-spacing: .06em; text-decoration: none">
+<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>RUTA</a>
+<a href="Conversacion.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 14px; border-radius: 16px; color: #4A4766; font-weight: 800; font-size: 15px; letter-spacing: .06em; text-decoration: none">
+<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>CONVERSAR</a>
+<a href="InicioB.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 14px; border-radius: 16px; color: #4A4766; font-weight: 800; font-size: 15px; letter-spacing: .06em; text-decoration: none">
+<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>ESCENARIOS</a>
+<a href="InicioB.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 14px; border-radius: 16px; color: #4A4766; font-weight: 800; font-size: 15px; letter-spacing: .06em; text-decoration: none">
+<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 10v3M6 6v11M10 3v18M14 8v7M18 5v13M22 10v3"/></svg>SONIDOS</a>
+<a href="InicioB.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 14px; border-radius: 16px; color: #4A4766; font-weight: 800; font-size: 15px; letter-spacing: .06em; text-decoration: none">
+<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>LOGROS</a>
+<a href="InicioB.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 14px; border-radius: 16px; color: #4A4766; font-weight: 800; font-size: 15px; letter-spacing: .06em; text-decoration: none">
+<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>AJUSTES</a>
+</nav>
+</aside>
+
+<main style="flex: 999 1 520px; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 22px">
+
+<div style="width: 100%; max-width: 620px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 20px 22px; border-radius: 22px; background: #FF8A00; color: #23203A; box-shadow: 0 6px 0 #C25E00">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .1em">UNIDAD 3 · B1</span>
+<h1 class="disp" style="margin: 0; font-size: 32px; line-height: 1.05">Hablar de tu fin de semana</h1>
+</div>
+<a class="press" href="InicioB.dc.html" style="display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 18px; border-radius: 14px; background: #FFFFFF; color: #23203A; box-shadow: 0 4px 0 #C25E00; font-weight: 800; font-size: 14px; letter-spacing: .06em; text-decoration: none">
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M6.5 17H20v4H6.5A2.5 2.5 0 0 1 4 18.5"/></svg>FRASES ÚTILES</a>
+</div>
+
+<div style="width: 100%; max-width: 620px; display: flex; flex-direction: column; align-items: center; gap: 26px; padding: 18px 0 40px">
+
+<div style="margin-left: 0px; display: flex; flex-direction: column; align-items: center; gap: 6px">
+<a class="press" href="InicioB.dc.html" aria-label="Completado: Saludos y presentaciones" style="width: 84px; height: 78px; border-radius: 50%; background: #FFC800; box-shadow: 0 8px 0 #D69A00; display: flex; align-items: center; justify-content: center; color: #23203A">
+<svg aria-hidden="true" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></a>
+</div>
+
+<div style="margin-left: 150px; display: flex; flex-direction: column; align-items: center">
+<a class="press" href="InicioB.dc.html" aria-label="Completado: pronunciación de -ed" style="width: 84px; height: 78px; border-radius: 50%; background: #FFC800; box-shadow: 0 8px 0 #D69A00; display: flex; align-items: center; justify-content: center; color: #23203A">
+<svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/></svg></a>
+</div>
+
+<div style="position: relative; margin-left: 210px; display: flex; flex-direction: column; align-items: center; gap: 14px">
+<div class="a-hop" style="position: relative; padding: 12px 16px; border-radius: 16px; background: #FFFFFF; border: 2.5px solid #D7E3EE; font-weight: 800; font-size: 15px; letter-spacing: .04em; color: #7B4DFF; white-space: nowrap">EMPIEZA · 5 MIN
+<span aria-hidden="true" style="position: absolute; left: 50%; bottom: -9px; width: 16px; height: 16px; margin-left: -8px; background: #FFFFFF; border-right: 2.5px solid #D7E3EE; border-bottom: 2.5px solid #D7E3EE; transform: rotate(45deg)"></span></div>
+<div style="position: relative; width: 104px; height: 98px">
+<span aria-hidden="true" class="a-ring" style="position: absolute; inset: -6px; border-radius: 50%; border: 6px solid #7B4DFF"></span>
+<a class="press" href="Conversacion.dc.html" aria-label="Empezar: conversación sobre tu fin de semana" style="position: absolute; inset: 0; border-radius: 50%; background: #7B4DFF; box-shadow: 0 9px 0 #4E2BC2; display: flex; align-items: center; justify-content: center; color: #FFFFFF">
+<svg aria-hidden="true" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></a>
+</div>
+
+<div aria-hidden="true" class="a-bob" style="position: absolute; left: -250px; top: 10px; width: 150px; height: 170px">
+<div style="position: absolute; left: 10px; top: 10px; width: 130px; height: 70px; border: 9px solid #23203A; border-bottom: none; border-radius: 70px 70px 0 0"></div>
+<div style="position: absolute; left: 15px; top: 30px; width: 120px; height: 120px; border-radius: 50%; background: #7B4DFF; box-shadow: inset -10px -12px 0 #6237EE; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px">
+<span style="display: flex; gap: 14px"><span class="a-blink" style="width: 24px; height: 32px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px"><span style="width: 12px; height: 13px; border-radius: 50%; background: #23203A"></span></span><span class="a-blink" style="width: 24px; height: 32px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px"><span style="width: 12px; height: 13px; border-radius: 50%; background: #23203A"></span></span></span>
+<span style="width: 34px; height: 14px; border-radius: 0 0 20px 20px; background: #23203A"></span>
+</div>
+<div style="position: absolute; left: 0; top: 66px; width: 26px; height: 46px; border-radius: 10px; background: #FF8A00; border: 3px solid #23203A"></div>
+<div style="position: absolute; right: 0; top: 66px; width: 26px; height: 46px; border-radius: 10px; background: #FF8A00; border: 3px solid #23203A"></div>
+<div style="position: absolute; left: 6px; top: 108px; width: 40px; height: 34px; border-left: 4px solid #23203A; border-bottom: 4px solid #23203A; border-radius: 0 0 0 20px"></div>
+<div style="position: absolute; left: 42px; top: 136px; width: 14px; height: 14px; border-radius: 50%; background: #E8358C; border: 3px solid #23203A"></div>
+</div>
+</div>
+
+<div style="margin-left: 110px; display: flex; flex-direction: column; align-items: center; gap: 8px">
+<span aria-label="Bloqueado: sonidos ship y sheep" style="width: 84px; height: 78px; border-radius: 50%; background: #E3E8EF; box-shadow: 0 8px 0 #C3CCD8; display: flex; align-items: center; justify-content: center">
+<span class="ipa" style="font-weight: 700; font-size: 22px; color: #8A93A6">ɪ·iː</span></span>
+</div>
+
+<div style="margin-left: -60px; display: flex; flex-direction: column; align-items: center">
+<span aria-label="Cofre: +25 XP" style="width: 96px; height: 80px; display: flex; align-items: center; justify-content: center">
+<svg aria-hidden="true" width="86" height="72" viewBox="0 0 86 72"><rect x="6" y="28" width="74" height="40" rx="8" fill="#C8D1DD" stroke="#9AA6B8" stroke-width="3"/><path d="M6 32 Q6 8 43 8 Q80 8 80 32 Z" fill="#DCE3EC" stroke="#9AA6B8" stroke-width="3"/><rect x="36" y="26" width="14" height="18" rx="3" fill="#9AA6B8"/></svg></span>
+</div>
+
+<div style="margin-left: -170px; display: flex; flex-direction: column; align-items: center">
+<span aria-label="Bloqueado: conversación con preguntas" style="width: 84px; height: 78px; border-radius: 50%; background: #E3E8EF; box-shadow: 0 8px 0 #C3CCD8; display: flex; align-items: center; justify-content: center; color: #8A93A6">
+<svg aria-hidden="true" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span>
+</div>
+
+<div style="margin-left: -40px; display: flex; flex-direction: column; align-items: center; gap: 14px; margin-top: 10px">
+<span aria-label="Desafío de unidad: escenario restaurante" style="width: 128px; height: 120px; border-radius: 36px; background: #E8E4F7; box-shadow: 0 10px 0 #C9C1E6; display: flex; align-items: center; justify-content: center; transform: rotate(45deg)">
+<svg aria-hidden="true" width="56" height="56" viewBox="0 0 24 24" fill="#C9C1E6" stroke="#8A7FB8" stroke-width="1.6" stroke-linejoin="round" style="transform: rotate(-45deg)"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+<span style="margin-top: 12px; padding: 8px 14px; border-radius: 12px; background: #FFFFFF; font-weight: 800; font-size: 14px; color: #4A4766">Desafío: pedir en un restaurante</span>
+</div>
+</div>
+</main>
+
+<aside style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between">
+<span title="Racha" style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; font-weight: 800; font-size: 18px; color: #C25E00">
+<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="#FF8A00" stroke="#C25E00" stroke-width="1.4" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>12</span>
+<span title="XP" style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; font-weight: 800; font-size: 18px; color: #5B2EE0">
+<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="#7B4DFF" stroke="#4E2BC2" stroke-width="1.4" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>2.340</span>
+<span title="Protector de racha" style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; font-weight: 800; font-size: 18px; color: #0E8A80">
+<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="#2EC4B6" stroke="#0E8A80" stroke-width="1.4" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>1</span>
+<span title="Nivel" style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; font-weight: 800; font-size: 18px; color: #B3266F">
+<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="#E8358C" stroke="#B3266F" stroke-width="1.4" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Nv 7</span>
+</div>
+
+<div style="background: #FFFFFF; border: 2.5px solid #D7E3EE; border-radius: 22px; box-shadow: 0 5px 0 #D7E3EE; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px">
+<h2 class="disp" style="margin: 0; font-size: 24px">Meta diaria</h2>
+<a href="InicioB.dc.html" style="font-weight: 800; font-size: 13px; letter-spacing: .08em; min-height: 44px; display: flex; align-items: center">EDITAR</a>
+</div>
+<div style="display: flex; align-items: center; gap: 14px">
+<svg class="a-shine" aria-hidden="true" width="60" height="52" viewBox="0 0 86 72"><rect x="6" y="28" width="74" height="40" rx="8" fill="#FF8A00" stroke="#23203A" stroke-width="3"/><path d="M6 32 Q6 8 43 8 Q80 8 80 32 Z" fill="#FFC800" stroke="#23203A" stroke-width="3"/><rect x="36" y="26" width="14" height="18" rx="3" fill="#23203A"/></svg>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 8px">
+<span style="font-weight: 700; font-size: 15px">Habla 15 minutos</span>
+<div role="progressbar" aria-label="Meta diaria" aria-valuemin="0" aria-valuemax="15" aria-valuenow="9" style="position: relative; height: 22px; border-radius: 999px; background: #E3E8EF; overflow: hidden">
+<div style="width: 60%; height: 100%; border-radius: 999px; background: #FFC800"><div style="margin: 5px 10px 0; height: 5px; border-radius: 999px; background: rgba(255,255,255,.6)"></div></div>
+<span style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px">9 / 15 min</span>
+</div>
+</div>
+</div>
+</div>
+
+<div style="background: #FFFFFF; border: 2.5px solid #D7E3EE; border-radius: 22px; box-shadow: 0 5px 0 #D7E3EE; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 class="disp" style="margin: 0; font-size: 24px">Nivel 7 · Conversador</h2>
+<div style="height: 18px; border-radius: 999px; background: #E3E8EF; overflow: hidden"><div style="width: 83.5%; height: 100%; border-radius: 999px; background: #E8358C"></div></div>
+<span style="font-weight: 600; font-size: 14px; color: #4A4766">2.340 / 2.800 XP · faltan 460 para <strong style="color: #23203A">8 · Narrador</strong></span>
+</div>
+
+<div style="background: #FFFFFF; border: 2.5px solid #D7E3EE; border-radius: 22px; box-shadow: 0 5px 0 #D7E3EE; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px">
+<h2 class="disp" style="margin: 0; font-size: 24px">Retos de la semana</h2>
+<span style="font-weight: 700; font-size: 13px; color: #4A4766">3 días</span>
+</div>
+<div style="display: flex; align-items: center; gap: 12px">
+<span style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: #FFE8CC; display: flex; align-items: center; justify-content: center; color: #C25E00"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 700; font-size: 14px">Habla 60 min · 38/60</span><div style="height: 12px; border-radius: 999px; background: #E3E8EF; overflow: hidden"><div style="width: 63%; height: 100%; background: #FF8A00"></div></div></div>
+</div>
+<div style="display: flex; align-items: center; gap: 12px">
+<span style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: #EDE6FF; display: flex; align-items: center; justify-content: center; color: #5B2EE0"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 700; font-size: 14px">2 escenarios · 1/2</span><div style="height: 12px; border-radius: 999px; background: #E3E8EF; overflow: hidden"><div style="width: 50%; height: 100%; background: #7B4DFF"></div></div></div>
+</div>
+<div style="display: flex; align-items: center; gap: 12px">
+<span class="ipa" style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: #FFE0EE; display: flex; align-items: center; justify-content: center; color: #B3266F; font-weight: 700; font-size: 18px">θ</span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 700; font-size: 14px">/θ/ en 3 sesiones · 1/3</span><div style="height: 12px; border-radius: 999px; background: #E3E8EF; overflow: hidden"><div style="width: 33%; height: 100%; background: #E8358C"></div></div></div>
+</div>
+</div>
+
+<div style="background: #2EC4B6; border-radius: 22px; box-shadow: 0 5px 0 #0E8A80; padding: 20px; display: flex; flex-direction: column; gap: 10px; color: #0B2E2B">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .1em">SONIDO MÁS DÉBIL</span>
+<div style="display: flex; align-items: center; gap: 14px">
+<span class="ipa" style="width: 64px; height: 64px; border-radius: 18px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 700">θ</span>
+<div style="display: flex; flex-direction: column"><span class="disp" style="font-size: 24px">think · three</span><span style="font-weight: 700; font-size: 14px">Nivel 1 de 5</span></div>
+</div>
+<a class="press" href="InicioB.dc.html" style="display: flex; align-items: center; justify-content: center; min-height: 48px; border-radius: 14px; background: #FFFFFF; color: #0B2E2B; box-shadow: 0 4px 0 #0E8A80; font-weight: 800; font-size: 14px; letter-spacing: .06em; text-decoration: none">PRACTICAR · +XP</a>
+</div>
+</aside>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1640}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

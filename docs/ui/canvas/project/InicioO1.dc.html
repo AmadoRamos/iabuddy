@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>IABuddy — Inicio O1 · Pop con Onda</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#3D5AFE}a:hover{color:#1B1340}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.ipa{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+a:focus-visible,button:focus-visible{outline:3px solid #3D5AFE;outline-offset:3px}
+.lift{transition:transform .18s cubic-bezier(.3,1.6,.5,1)}
+.lift:hover{transform:translate(-3px,-3px)}
+.lift:active{transform:translate(2px,2px)}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes blink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+@keyframes sway{0%,100%{transform:scaleY(.7)}50%{transform:scaleY(1)}}
+@keyframes talk{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+@keyframes hand{0%,100%{transform:rotate(8deg)}50%{transform:rotate(32deg)}}
+@keyframes twinkle{0%,100%{transform:scale(.6) rotate(0)}50%{transform:scale(1.15) rotate(25deg)}}
+@keyframes grow{from{transform:scaleY(0)}}
+@keyframes stripes{to{background-position:28px 0}}
+@keyframes wiggle{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.a-bob{animation:bob 3.8s ease-in-out infinite}
+.blink{animation:blink 4.2s infinite;transform-box:fill-box;transform-origin:center}
+.sway{animation:sway 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.talk{animation:talk .42s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.hand{animation:hand .8s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.twinkle{animation:twinkle 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.grow{animation:grow .9s cubic-bezier(.3,1.5,.5,1) both;transform-origin:bottom}
+.a-stripes{animation:stripes 1.2s linear infinite}
+.a-wiggle{animation:wiggle 2.6s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="position: relative; overflow: hidden; background-color: #FFF6E0; background-image: radial-gradient(rgba(27,19,64,0.09) 1.4px, transparent 1.4px); background-size: 24px 24px; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif">
+
+<header style="max-width: 1320px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 40px) 8px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="InicioO1.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #1B1340; min-height: 44px">
+<svg aria-hidden="true" width="44" height="44" viewBox="0 0 200 200"><rect x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/><rect x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE"/><rect x="166" y="88" width="20" height="48" rx="10" fill="#9BE22D"/><circle cx="90" cy="76" r="10" fill="#FFFFFF"/><circle cx="112" cy="76" r="10" fill="#FFFFFF"/></svg>
+<span class="disp" style="font-size: 28px; font-weight: 800; letter-spacing: -0.045em">iabuddy</span>
+</a>
+<nav aria-label="Principal" style="display: flex; flex-wrap: wrap; gap: 4px; padding: 5px; background: #FFFFFF; border: 2.5px solid #1B1340; border-radius: 999px">
+<a href="InicioO1.dc.html" aria-current="page" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 15px; text-decoration: none">Hoy</a>
+<a href="Conversacion.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Conversar</a>
+<a href="InicioO1.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Escenarios</a>
+<a href="InicioO1.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Sonidos</a>
+<a href="InicioO1.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Progreso</a>
+</nav>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+<span style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: #FFC800; border: 2.5px solid #1B1340; font-weight: 800; font-size: 15px"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="#FF6B3D" stroke="#1B1340" stroke-width="1.8" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>12 días</span>
+<span style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: #9BE22D; border: 2.5px solid #1B1340; font-weight: 800; font-size: 15px">2.340 XP</span>
+<a href="InicioO1.dc.html" aria-label="Ajustes" style="width: 44px; height: 44px; border-radius: 50%; background: #FFFFFF; border: 2.5px solid #1B1340; display: flex; align-items: center; justify-content: center; color: #1B1340"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></a>
+</div>
+</header>
+
+<main style="max-width: 1320px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 40px) 56px; display: flex; flex-direction: column; gap: 56px">
+
+<section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(480px, 100%), 1fr)); gap: 28px">
+
+<div style="position: relative; overflow: hidden; min-height: 470px; padding: clamp(24px, 4vw, 44px); border-radius: 36px; background: #FFFFFF; border: 3px solid #1B1340; box-shadow: 8px 8px 0 #1B1340; display: flex; flex-direction: column; gap: 20px">
+<div aria-hidden="true" style="position: absolute; right: 24px; bottom: 0; display: flex; align-items: flex-end; gap: 10px; opacity: .22">
+<span style="width: 34px; height: 120px; border-radius: 17px 17px 0 0; background: #FFC800"></span><span style="width: 44px; height: 220px; border-radius: 22px 22px 0 0; background: #FF6B3D"></span><span style="width: 80px; height: 330px; border-radius: 40px 40px 0 0; background: #3D5AFE"></span><span style="width: 44px; height: 220px; border-radius: 22px 22px 0 0; background: #FF5FAE"></span><span style="width: 34px; height: 120px; border-radius: 17px 17px 0 0; background: #9BE22D"></span>
+</div>
+<span style="position: relative; align-self: flex-start; padding: 8px 14px; border-radius: 999px; background: #FFF6E0; border: 2px solid #1B1340; font-weight: 700; font-size: 14px">Sábado 31 oct · meta de hoy: 15 min</span>
+<h1 class="disp" style="position: relative; margin: 0; font-size: clamp(44px, 5.6vw, 72px); line-height: .95; letter-spacing: -0.04em; font-weight: 800; max-width: 10ch">¡Hola, Amado! ¿Hablamos?</h1>
+<p style="position: relative; margin: 0; font-size: 19px; line-height: 1.45; font-weight: 600; max-width: 26ch">Te faltan <strong>6 minutos</strong> para cumplir la meta de hoy.</p>
+<div style="position: relative; display: flex; flex-wrap: wrap; gap: 14px; margin-top: auto">
+<a class="lift" href="Conversacion.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 0 22px 0 26px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; border: 3px solid #1B1340; box-shadow: 5px 5px 0 #1B1340; font-weight: 800; font-size: 18px; text-decoration: none">Empezar a hablar <span style="padding: 4px 10px; border-radius: 8px; background: #FFFFFF; color: #1B1340; font-size: 13px">Espacio</span></a>
+<a class="lift" href="InicioO1.dc.html" style="display: flex; align-items: center; min-height: 60px; padding: 0 24px; border-radius: 999px; background: #FF5FAE; color: #1B1340; border: 3px solid #1B1340; box-shadow: 5px 5px 0 #1B1340; font-weight: 800; font-size: 17px; text-decoration: none">Drill de sonidos</a>
+</div>
+<svg class="a-bob" aria-hidden="true" width="220" height="220" viewBox="0 0 200 200" style="position: absolute; right: 40px; top: 70px">
+<rect class="sway" x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/>
+<rect class="sway" x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D" style="animation-delay: -.4s"/>
+<rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/>
+<rect class="sway" x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE" style="animation-delay: -.8s"/>
+<rect class="hand" x="168" y="40" width="20" height="74" rx="10" fill="#9BE22D"/>
+<g class="blink"><circle cx="89" cy="72" r="8.5" fill="#FFFFFF"/><circle cx="90" cy="74" r="4.5" fill="#1B1340"/><circle cx="111" cy="72" r="8.5" fill="#FFFFFF"/><circle cx="112" cy="74" r="4.5" fill="#1B1340"/></g>
+<path d="M89 92 Q100 108 111 92 Z" fill="#FFFFFF"/>
+</svg>
+<span class="a-wiggle" lang="en" style="position: absolute; right: 230px; top: 46px; padding: 10px 14px; border-radius: 18px 18px 4px 18px; background: #FFC800; border: 2.5px solid #1B1340; font-weight: 800; font-size: 15px; white-space: nowrap">Hey! What did you do today?</span>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 22px">
+<div style="padding: 24px; border-radius: 30px; background: #FFFFFF; border: 3px solid #1B1340; box-shadow: 6px 6px 0 #1B1340; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Meta diaria</h2><span style="font-weight: 800; font-size: 15px">9 de 15 min</span></div>
+<div role="img" aria-label="9 de 15 minutos hablados" style="display: flex; align-items: center; gap: 6px; height: 84px">
+<span class="grow" style="flex: 1; height: 40%; border-radius: 99px; background: #FFC800"></span><span class="grow" style="flex: 1; height: 65%; border-radius: 99px; background: #FF6B3D; animation-delay: .05s"></span><span class="grow" style="flex: 1; height: 90%; border-radius: 99px; background: #3D5AFE; animation-delay: .1s"></span><span class="grow" style="flex: 1; height: 65%; border-radius: 99px; background: #FF5FAE; animation-delay: .15s"></span><span class="grow" style="flex: 1; height: 40%; border-radius: 99px; background: #9BE22D; animation-delay: .2s"></span><span class="grow" style="flex: 1; height: 55%; border-radius: 99px; background: #FFC800; animation-delay: .25s"></span><span class="grow" style="flex: 1; height: 80%; border-radius: 99px; background: #FF6B3D; animation-delay: .3s"></span><span class="grow" style="flex: 1; height: 100%; border-radius: 99px; background: #3D5AFE; animation-delay: .35s"></span><span class="grow" style="flex: 1; height: 70%; border-radius: 99px; background: #FF5FAE; animation-delay: .4s"></span>
+<span style="flex: 1; height: 45%; border-radius: 99px; background: #EDE5D2"></span><span style="flex: 1; height: 60%; border-radius: 99px; background: #EDE5D2"></span><span style="flex: 1; height: 85%; border-radius: 99px; background: #EDE5D2"></span><span style="flex: 1; height: 60%; border-radius: 99px; background: #EDE5D2"></span><span style="flex: 1; height: 40%; border-radius: 99px; background: #EDE5D2"></span><span style="flex: 1; height: 25%; border-radius: 99px; background: #EDE5D2"></span>
+</div>
+<span style="font-weight: 600; font-size: 14px; color: #5B5478">Cada minuto hablando es una barra · al completarla: <strong style="color: #1B1340">+25 XP</strong></span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 22px">
+<div style="padding: 22px; border-radius: 30px; background: #FF6B3D; border: 3px solid #1B1340; box-shadow: 6px 6px 0 #1B1340; display: flex; flex-direction: column; gap: 10px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .1em">RACHA</span>
+<span class="disp" style="font-size: 56px; font-weight: 800; line-height: .9">12 <span style="font-size: 20px">días</span></span>
+<div aria-label="Semana: 5 cumplidos, 1 protegido, hoy en curso" style="display: flex; align-items: flex-end; gap: 5px; height: 30px">
+<span style="flex: 1; height: 100%; border-radius: 99px; background: #1B1340"></span><span style="flex: 1; height: 100%; border-radius: 99px; background: #1B1340"></span><span style="flex: 1; height: 100%; border-radius: 99px; background: #1B1340"></span><span style="flex: 1; height: 100%; border-radius: 99px; background: #FFFFFF; border: 2px solid #1B1340"></span><span style="flex: 1; height: 100%; border-radius: 99px; background: #1B1340"></span><span style="flex: 1; height: 60%; border-radius: 99px; background: #FFC800; border: 2px solid #1B1340"></span><span style="flex: 1; height: 20%; border-radius: 99px; background: rgba(27,19,64,.25)"></span>
+</div>
+<span style="font-weight: 700; font-size: 13px">Jueves protegido · queda 1 protector</span>
+</div>
+<div style="padding: 22px; border-radius: 30px; background: #FFFFFF; border: 3px solid #1B1340; box-shadow: 6px 6px 0 #1B1340; display: flex; flex-direction: column; gap: 10px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .1em; color: #5B5478">NIVEL 7</span>
+<span class="disp" style="font-size: 30px; font-weight: 800; letter-spacing: -0.02em">Conversador</span>
+<div style="height: 22px; border-radius: 999px; border: 2.5px solid #1B1340; background: #FFF6E0; overflow: hidden"><div class="a-stripes" style="width: 83.5%; height: 100%; background-color: #9BE22D; background-image: repeating-linear-gradient(45deg, rgba(27,19,64,.14) 0 10px, transparent 10px 20px); background-size: 28px 28px"></div></div>
+<span style="font-weight: 600; font-size: 13px; color: #5B5478">460 XP para 8 · Narrador</span>
+</div>
+</div>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 22px">
+<h2 class="disp" style="margin: 0; font-size: clamp(32px, 4vw, 44px); font-weight: 800; letter-spacing: -0.03em">Elige cómo practicar</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 28px">
+
+<a class="lift" href="Conversacion.dc.html" style="display: flex; flex-direction: column; text-decoration: none; color: #1B1340; background: #FF6B3D; border: 3px solid #1B1340; border-radius: 30px; box-shadow: 7px 7px 0 #1B1340; overflow: hidden">
+<div style="height: 170px; border-bottom: 3px solid #1B1340; background: #FFE3D8; display: flex; align-items: center; justify-content: center">
+<svg aria-hidden="true" width="140" height="140" viewBox="0 0 200 200"><rect class="talk" x="14" y="72" width="20" height="80" rx="10" fill="#FFC800"/><rect class="talk" x="42" y="40" width="26" height="144" rx="13" fill="#FF6B3D" style="animation-delay: -.15s"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect class="talk" x="132" y="40" width="26" height="144" rx="13" fill="#FF5FAE" style="animation-delay: -.3s"/><rect class="talk" x="166" y="72" width="20" height="80" rx="10" fill="#9BE22D" style="animation-delay: -.1s"/><g class="blink"><circle cx="89" cy="70" r="8.5" fill="#FFFFFF"/><circle cx="90" cy="72" r="4.5" fill="#1B1340"/><circle cx="111" cy="70" r="8.5" fill="#FFFFFF"/><circle cx="112" cy="72" r="4.5" fill="#1B1340"/></g><ellipse class="talk" cx="100" cy="100" rx="10" ry="9" fill="#FFFFFF"/></svg>
+</div>
+<div style="padding: 24px 26px 28px; display: flex; flex-direction: column; gap: 10px">
+<h3 class="disp" style="margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.02em">Conversación libre</h3>
+<p style="margin: 0; font-size: 17px; line-height: 1.45; font-weight: 600">Charla de lo que quieras. Buddy responde en 1–3 frases y siempre te devuelve una pregunta.</p>
+</div>
+</a>
+
+<a class="lift" href="InicioO1.dc.html" style="display: flex; flex-direction: column; text-decoration: none; color: #FFFFFF; background: #3D5AFE; border: 3px solid #1B1340; border-radius: 30px; box-shadow: 7px 7px 0 #1B1340; overflow: hidden">
+<div style="height: 170px; border-bottom: 3px solid #1B1340; background: #DCE3FF; display: flex; align-items: center; justify-content: center">
+<svg aria-hidden="true" width="140" height="140" viewBox="0 0 200 200"><rect x="14" y="36" width="20" height="120" rx="10" fill="#FFC800"/><rect x="42" y="56" width="26" height="110" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="56" width="26" height="110" rx="13" fill="#FF5FAE"/><rect x="166" y="36" width="20" height="120" rx="10" fill="#9BE22D"/><path d="M82 74 Q89 64 96 74" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M104 74 Q111 64 118 74" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M88 90 Q100 112 112 90 Z" fill="#FFFFFF"/><path class="twinkle" transform="translate(100 12)" d="M0 -10 L3 -3 L10 -3 L4 1.6 L6.2 10 L0 5 L-6.2 10 L-4 1.6 L-10 -3 L-3 -3 Z" fill="#FFC800"/></svg>
+</div>
+<div style="padding: 24px 26px 28px; display: flex; flex-direction: column; gap: 10px">
+<h3 class="disp" style="margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.02em">Escenarios</h3>
+<p style="margin: 0; font-size: 17px; line-height: 1.45; font-weight: 600">Entrevista técnica, daily standup, restaurante, hotel y small talk. Cumple objetivos y gana estrellas.</p>
+</div>
+</a>
+
+<a class="lift" href="InicioO1.dc.html" style="display: flex; flex-direction: column; text-decoration: none; color: #1B1340; background: #FF5FAE; border: 3px solid #1B1340; border-radius: 30px; box-shadow: 7px 7px 0 #1B1340; overflow: hidden">
+<div style="height: 170px; border-bottom: 3px solid #1B1340; background: #FFE3F1; display: flex; align-items: center; justify-content: center">
+<svg aria-hidden="true" width="140" height="140" viewBox="0 0 200 200"><rect class="sway" x="14" y="98" width="20" height="28" rx="10" fill="#FFC800"/><rect class="sway" x="42" y="88" width="26" height="48" rx="13" fill="#FF6B3D" style="animation-delay: -.3s"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect class="sway" x="132" y="88" width="26" height="48" rx="13" fill="#FF5FAE" style="animation-delay: -.6s"/><rect class="sway" x="166" y="98" width="20" height="28" rx="10" fill="#9BE22D" style="animation-delay: -.9s"/><circle cx="89" cy="72" r="10" fill="#FFFFFF"/><circle cx="89" cy="71" r="5.5" fill="#1B1340"/><circle cx="111" cy="72" r="10" fill="#FFFFFF"/><circle cx="111" cy="71" r="5.5" fill="#1B1340"/><circle cx="100" cy="98" r="4.5" fill="#FFFFFF"/></svg>
+</div>
+<div style="padding: 24px 26px 28px; display: flex; flex-direction: column; gap: 10px">
+<h3 class="disp" style="margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.02em">Drill de sonidos</h3>
+<p style="margin: 0; font-size: 17px; line-height: 1.45; font-weight: 600">Lee frases y recibe puntuación por palabra y por fonema. Hoy toca <span class="ipa">/θ/</span>: think, three.</p>
+</div>
+</a>
+</div>
+</section>
+
+<section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 28px">
+<div style="padding: 26px; border-radius: 30px; background: #FFC800; border: 3px solid #1B1340; box-shadow: 6px 6px 0 #1B1340; display: flex; flex-direction: column; gap: 14px">
+<h2 class="disp" style="margin: 0; font-size: 26px; font-weight: 800">Retos semanales</h2>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 15px"><span>Habla 60 min</span><span>38/60</span></div><div style="height: 14px; border-radius: 99px; background: #FFFFFF; border: 2px solid #1B1340; overflow: hidden"><div style="width: 63%; height: 100%; background: #FF6B3D"></div></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 15px"><span>Completa 2 escenarios</span><span>1/2</span></div><div style="height: 14px; border-radius: 99px; background: #FFFFFF; border: 2px solid #1B1340; overflow: hidden"><div style="width: 50%; height: 100%; background: #3D5AFE"></div></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 15px"><span>Practica <span class="ipa">/θ/</span> en 3 sesiones</span><span>1/3</span></div><div style="height: 14px; border-radius: 99px; background: #FFFFFF; border: 2px solid #1B1340; overflow: hidden"><div style="width: 33%; height: 100%; background: #FF5FAE"></div></div></div>
+</div>
+<div style="padding: 26px; border-radius: 30px; background: #FFFFFF; border: 3px solid #1B1340; box-shadow: 6px 6px 0 #1B1340; display: flex; flex-direction: column; gap: 12px">
+<h2 class="disp" style="margin: 0; font-size: 26px; font-weight: 800">Sonidos para hoy</h2>
+<div style="display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 15px"><span class="ipa" style="min-width: 70px; padding: 6px; border-radius: 10px; background: #FF5FAE; border: 2px solid #1B1340; text-align: center">θ · ð</span><span style="flex: 1">think · this</span><span>Nv 1</span></div>
+<div style="display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 15px"><span class="ipa" style="min-width: 70px; padding: 6px; border-radius: 10px; background: #FFC800; border: 2px solid #1B1340; text-align: center">ɪ · iː</span><span style="flex: 1">ship · sheep</span><span>Nv 2</span></div>
+<div style="display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 15px"><span class="ipa" style="min-width: 70px; padding: 6px; border-radius: 10px; background: #9BE22D; border: 2px solid #1B1340; text-align: center">v · b</span><span style="flex: 1">very · berry</span><span>Nv 3</span></div>
+</div>
+<div style="padding: 26px; border-radius: 30px; background: #9BE22D; border: 3px solid #1B1340; box-shadow: 6px 6px 0 #1B1340; display: flex; flex-direction: column; gap: 12px">
+<h2 class="disp" style="margin: 0; font-size: 26px; font-weight: 800">Logros recientes</h2>
+<span style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 16px; background: #FFFFFF; border: 2px solid #1B1340; font-weight: 800; font-size: 15px">Racha de 10 días <span style="margin-left: auto; font-weight: 600; font-size: 13px; color: #5B5478">hace 2 días</span></span>
+<span style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 16px; background: #FFFFFF; border: 2px solid #1B1340; font-weight: 800; font-size: 15px">Primera entrevista <span style="margin-left: auto; font-weight: 600; font-size: 13px; color: #5B5478">ayer</span></span>
+<span style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 16px; background: #FFFFFF; border: 2px solid #1B1340; font-weight: 800; font-size: 15px">50 turnos largos <span style="margin-left: auto; font-weight: 600; font-size: 13px; color: #5B5478">esta semana</span></span>
+</div>
+</section>
+
+<footer style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; font-weight: 600; font-size: 14px; color: #5B5478"><span>100 % local · VAD, STT, LLM, TTS y fonemas en tu equipo</span><span>Referencia: inglés americano</span></footer>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

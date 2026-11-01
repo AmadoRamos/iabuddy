@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sistema de diseño · Modales, tooltips y avisos</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@500;700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font-family:inherit;cursor:pointer}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.mono{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+button:focus-visible{outline:3px solid #3D5AFE;outline-offset:3px}
+.tt-wrap{position:relative;display:inline-flex}
+.tt-wrap .tt{opacity:0;transform:translate(-50%,4px);transition:opacity .15s ease .3s, transform .15s ease .3s;pointer-events:none}
+.tt-wrap:hover .tt,.tt-wrap:focus-within .tt{opacity:1;transform:translate(-50%,0)}
+@keyframes shimmer{0%{background-position:-300px 0}100%{background-position:300px 0}}
+@keyframes popin{0%{transform:scale(.92);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes zz{0%{opacity:0;transform:translate(0,0)}50%{opacity:1}100%{opacity:0;transform:translate(6px,-10px)}}
+.sk{background:linear-gradient(90deg,#EEF0F8 0,#F8F9FF 50%,#EEF0F8 100%);background-size:600px 100%;animation:shimmer 1.6s linear infinite}
+.pop{animation:popin .25s ease-out both}
+.zz{animation:zz 2.4s ease-out infinite;transform-box:fill-box}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1500px; padding: 56px; background: #F6F7FF; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 26px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .14em; color: #2338C9">IABUDDY · SISTEMA DE DISEÑO · 04</span>
+<h1 class="disp" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.045em; line-height: 1">Modales, tooltips y avisos</h1>
+<p style="margin: 0; font-size: 17px; font-weight: 600; color: #4A4366">El feedback nunca regaña: sin rojo, sin alarmas. Los errores del alumno se tratan con coral suave y tono de ánimo.</p>
+</div>
+
+<section style="padding: 28px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px"><h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Modales</h2><span style="font-size: 13px; font-weight: 700; color: #4A4366">role="dialog" · aria-modal · foco atrapado · Esc cierra · el foco vuelve al botón que lo abrió</span></div>
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px">
+
+<div style="position: relative; height: 360px; border-radius: 24px; background: rgba(27,19,64,.45); display: flex; align-items: center; justify-content: center; padding: 20px">
+<div role="dialog" aria-modal="true" aria-labelledby="m1" style="position: relative; width: 100%; padding: 26px; border-radius: 28px; background: #FFFFFF; box-shadow: 0 30px 60px -20px rgba(27,19,64,.5); display: flex; flex-direction: column; gap: 12px">
+<span aria-label="Cerrar" style="position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; border-radius: 50%; background: #F6F7FF; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+<h3 id="m1" class="disp" style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.02em; padding-right: 40px">¿Terminar la sesión?</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.5; font-weight: 600; color: #4A4366">Llevas 6:42 y 3 de 4 objetivos. Tu progreso se guarda.</p>
+<div style="display: flex; flex-direction: column; gap: 8px; margin-top: 6px">
+<span style="min-height: 48px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center">Terminar y ver resumen</span>
+<span style="min-height: 48px; border-radius: 999px; background: #FFFFFF; box-shadow: inset 0 0 0 2px #1B1340; font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center">Seguir practicando</span>
+</div>
+</div>
+<span style="position: absolute; left: 14px; bottom: 10px; font-size: 12px; font-weight: 700; color: #FFFFFF">Confirmación</span>
+</div>
+
+<div style="position: relative; height: 360px; border-radius: 24px; background: rgba(27,19,64,.45); display: flex; align-items: center; justify-content: center; padding: 20px">
+<div role="dialog" aria-modal="true" aria-labelledby="m2" style="width: 100%; padding: 22px 24px; border-radius: 28px; background: #FFFFFF; box-shadow: 0 30px 60px -20px rgba(27,19,64,.5); display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center">
+<svg aria-hidden="true" width="84" height="84" viewBox="0 0 200 200"><rect x="14" y="36" width="20" height="120" rx="10" fill="#FFC800"/><rect x="42" y="56" width="26" height="110" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="56" width="26" height="110" rx="13" fill="#FF5FAE"/><rect x="166" y="36" width="20" height="120" rx="10" fill="#9BE22D"/><path d="M82 74 Q89 64 96 74" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M104 74 Q111 64 118 74" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M88 90 Q100 112 112 90 Z" fill="#FFFFFF"/></svg>
+<h3 id="m2" class="disp" style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.02em">¡Nivel 8 · Narrador!</h3>
+<p style="margin: 0; font-size: 14px; font-weight: 600; color: #4A4366">2.800 XP hablando inglés. Sigue así.</p>
+<span style="width: 100%; min-height: 48px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center">¡Genial!</span>
+</div>
+<span style="position: absolute; left: 14px; bottom: 10px; font-size: 12px; font-weight: 700; color: #FFFFFF">Celebración</span>
+</div>
+
+<div style="position: relative; height: 360px; border-radius: 24px; background: #F6F7FF; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 20px">
+<span style="font-weight: 800; font-size: 15px">Demo interactiva</span>
+<button type="button" onClick="{{openModal}}" style="min-height: 48px; padding: 0 22px; border: none; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 15px">Abrir modal</button>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366; text-align: center">Fondo: tinta al 45 %. Entrada: 0,25 s.</span>
+<sc-if value="{{modal}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; background: rgba(27,19,64,.45); display: flex; align-items: center; justify-content: center; padding: 20px">
+<div class="pop" role="dialog" aria-modal="true" aria-labelledby="m3" style="width: 100%; padding: 22px; border-radius: 26px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+<h3 id="m3" class="disp" style="margin: 0; font-size: 20px; font-weight: 800">¿Cambiar de escenario?</h3>
+<p style="margin: 0; font-size: 14px; font-weight: 600; color: #4A4366">Guardamos lo que llevas.</p>
+<button type="button" onClick="{{closeModal}}" style="min-height: 46px; border: none; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 15px">Cambiar</button>
+<button type="button" onClick="{{closeModal}}" style="min-height: 46px; border: none; border-radius: 999px; background: #FFFFFF; box-shadow: inset 0 0 0 2px #1B1340; color: #1B1340; font-weight: 800; font-size: 15px">Cancelar</button>
+</div>
+</div>
+</sc-if>
+</div>
+</div>
+</section>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px">
+<section style="padding: 28px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Tooltips</h2><span style="font-size: 13px; font-weight: 700; color: #4A4366">pasa el cursor o el foco</span></div>
+<div style="display: flex; justify-content: space-around; align-items: flex-end; height: 120px">
+<span class="tt-wrap"><button type="button" aria-describedby="tt1" style="width: 44px; height: 44px; border: none; border-radius: 50%; background: #F6F7FF; display: flex; align-items: center; justify-content: center" aria-label="Escuchar"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button><span id="tt1" role="tooltip" class="tt" style="position: absolute; left: 50%; bottom: calc(100% + 10px); padding: 8px 12px; border-radius: 12px; background: #1B1340; color: #FFFFFF; font-weight: 700; font-size: 13px; white-space: nowrap">Volver a escuchar</span></span>
+<span class="tt-wrap"><button type="button" aria-describedby="tt2" lang="en" style="min-height: 44px; padding: 0 10px; border: none; border-radius: 12px; background: #FFE8DF; font-weight: 700; font-size: 17px; color: #1B1340; text-decoration: underline dotted #E0398C; text-decoration-thickness: 3px; text-underline-offset: 6px">brother</button><span id="tt2" role="tooltip" class="tt" style="position: absolute; left: 50%; bottom: calc(100% + 10px); padding: 10px 12px; border-radius: 14px; background: #1B1340; color: #FFFFFF; font-weight: 700; font-size: 13px; white-space: nowrap; display: flex; align-items: center; gap: 8px">/ð/ · 58 · <span style="padding: 1px 8px; border-radius: 999px; background: #FF6B3D; color: #1B1340">a practicar</span></span></span>
+<span class="tt-wrap"><span tabindex="0" class="mono" aria-describedby="tt3" style="min-height: 44px; padding: 0 14px; border-radius: 12px; background: #FFE8F3; display: flex; align-items: center; font-weight: 700; font-size: 18px">θ</span><span id="tt3" role="tooltip" class="tt" style="position: absolute; left: 50%; bottom: calc(100% + 10px); width: 220px; padding: 10px 12px; border-radius: 14px; background: #1B1340; color: #FFFFFF; font-weight: 600; font-size: 13px; line-height: 1.4">Lengua entre los dientes, sopla suave. Como en <em lang="en">think</em>.</span></span>
+</div>
+<div style="display: flex; gap: 24px; align-items: flex-start">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 0">
+<span style="padding: 8px 12px; border-radius: 12px; background: #1B1340; color: #FFFFFF; font-weight: 700; font-size: 13px">Arriba</span>
+<span style="width: 12px; height: 12px; margin-top: -6px; background: #1B1340; transform: rotate(45deg)"></span>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center">
+<span style="width: 12px; height: 12px; margin-bottom: -6px; background: #FFFFFF; box-shadow: -1px -1px 0 #E6E8F2; transform: rotate(45deg); position: relative; z-index: 1"></span>
+<span style="padding: 8px 12px; border-radius: 12px; background: #FFFFFF; box-shadow: 0 8px 20px -8px rgba(27,19,64,.35), 0 0 0 1px #E6E8F2; font-weight: 700; font-size: 13px">Claro · sobre fondos oscuros</span>
+</div>
+</div>
+<ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.45">
+<li>Aparece al pasar el cursor <strong>y</strong> al recibir foco, con 300 ms de espera.</li>
+<li>Se cierra con Esc; nunca contiene información imprescindible.</li>
+<li>Tinta #1B1340 + blanco: 17,3:1.</li>
+</ul>
+</section>
+
+<section style="padding: 28px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Avisos (toasts)</h2><span style="font-size: 13px; font-weight: 700; color: #4A4366">abajo a la derecha · role="status" · 5 s</span></div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 22px; background: #FFFFFF; box-shadow: 0 14px 30px -14px rgba(27,19,64,.45), inset 0 0 0 1.5px #ECEEF8">
+<span style="flex: none; width: 10px; align-self: stretch; border-radius: 9px; background: #9BE22D"></span>
+<div style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 800; font-size: 16px">¡Meta de hoy cumplida!</span><span style="font-weight: 600; font-size: 14px; color: #4A4366">Tu racha sube a 13 días.</span></div>
+<span style="padding: 4px 10px; border-radius: 999px; background: #EEFAD9; color: #2F5208; font-weight: 800; font-size: 13px">+25 XP</span>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 22px; background: #FFFFFF; box-shadow: 0 14px 30px -14px rgba(27,19,64,.45), inset 0 0 0 1.5px #ECEEF8">
+<span style="flex: none; width: 10px; align-self: stretch; border-radius: 9px; background: #3D5AFE"></span>
+<div style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 800; font-size: 16px">Casi perfecto</span><span style="font-weight: 600; font-size: 14px; color: #4A4366">Con «yesterday» se dice <strong lang="en" style="color: #1B1340">I went</strong>.</span></div>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 22px; background: #FFFFFF; box-shadow: 0 14px 30px -14px rgba(27,19,64,.45), inset 0 0 0 1.5px #ECEEF8">
+<span style="flex: none; width: 10px; align-self: stretch; border-radius: 9px; background: #FFC800"></span>
+<div style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 800; font-size: 16px">Tu racha de 12 días te espera</span><span style="font-weight: 600; font-size: 14px; color: #4A4366">Con 5 minutos basta.</span></div>
+<span style="min-height: 40px; padding: 0 14px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 14px; display: flex; align-items: center">Hablar</span>
+</div>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">Con acción: no se cierra solo. Máximo 1 aviso a la vez.</span>
+</section>
+</div>
+
+<div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px">
+<section style="padding: 28px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 12px">
+<h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Alertas en línea</h2>
+<div role="note" style="display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 18px; background: #E3E8FF; color: #2338C9; font-weight: 700; font-size: 15px"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Usa audífonos: así el micrófono no capta la voz de Buddy.</div>
+<div role="status" style="display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 18px; background: #FFF4C7; color: #854D0E; font-weight: 700; font-size: 15px"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>El modelo de lenguaje tarda más de lo normal. Sigue hablando, no se pierde nada.</div>
+<div role="alert" style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 18px; background: #FFE8DF; color: #9A3412; font-weight: 700; font-size: 15px"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M2 2l20 20"/></svg><span style="flex: 1">No detecto el micrófono.</span><span style="min-height: 40px; padding: 0 14px; border-radius: 999px; background: #FFFFFF; color: #1B1340; font-weight: 800; font-size: 14px; display: flex; align-items: center">Revisar micrófono</span></div>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">Información (azul), aviso (amarillo), problema técnico (coral). Siempre con ícono y texto, nunca solo color.</span>
+</section>
+
+<section style="padding: 28px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Vacío y carga</h2>
+<div style="display: flex; align-items: center; gap: 16px; padding: 16px; border-radius: 22px; background: #F6F7FF">
+<svg aria-hidden="true" width="80" height="80" viewBox="0 0 200 200" style="flex: none"><rect x="14" y="150" width="20" height="16" rx="8" fill="#FFC800"/><rect x="42" y="148" width="26" height="18" rx="9" fill="#FF6B3D"/><rect x="74" y="60" width="52" height="120" rx="26" fill="#3D5AFE"/><rect x="132" y="148" width="26" height="18" rx="9" fill="#FF5FAE"/><rect x="166" y="150" width="20" height="16" rx="8" fill="#9BE22D"/><path d="M82 98 Q89 104 96 98 M104 98 Q111 104 118 98" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none"/><text class="zz" x="140" y="62" font-family="Bricolage Grotesque, sans-serif" font-size="30" font-weight="800" fill="#3D5AFE">z</text></svg>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 800; font-size: 16px">Aún no hay sesiones esta semana</span><span style="font-weight: 600; font-size: 14px; color: #4A4366">Onda está descansando. ¿La despiertas?</span><span style="align-self: flex-start; min-height: 40px; padding: 0 14px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 14px; display: flex; align-items: center">Empezar a hablar</span></div>
+</div>
+<div aria-busy="true" aria-label="Cargando resumen" style="display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 22px; background: #FFFFFF; box-shadow: inset 0 0 0 1.5px #ECEEF8">
+<span class="sk" style="width: 40%; height: 16px; border-radius: 9px"></span>
+<span class="sk" style="width: 90%; height: 12px; border-radius: 9px"></span>
+<span class="sk" style="width: 70%; height: 12px; border-radius: 9px"></span>
+<div style="display: flex; gap: 8px"><span class="sk" style="flex: 1; height: 44px; border-radius: 14px"></span><span class="sk" style="flex: 1; height: 44px; border-radius: 14px"></span><span class="sk" style="flex: 1; height: 44px; border-radius: 14px"></span></div>
+</div>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">Esqueleto con <span class="mono">aria-busy</span>; con movimiento reducido queda estático.</span>
+</section>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { modal: false }; }
+  renderVals() {
+    return {
+      modal: this.state.modal,
+      openModal: () => this.setState({ modal: true }),
+      closeModal: () => this.setState({ modal: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

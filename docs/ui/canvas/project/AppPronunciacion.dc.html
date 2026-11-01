@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>IABuddy — Drill de pronunciación</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@500;700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#3D5AFE}a:hover{color:#1B1340}
+button{font-family:inherit;cursor:pointer}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.ipa{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+a:focus-visible,button:focus-visible{outline:3px solid #3D5AFE;outline-offset:3px}
+.lift{transition:transform .2s ease}
+.lift:hover{transform:translateY(-2px)}
+@keyframes ring{0%{transform:scale(.85);opacity:0}30%{opacity:.9}100%{transform:scale(1.35);opacity:0}}
+@keyframes sway{0%,100%{transform:scaleY(.6)}50%{transform:scaleY(1)}}
+@keyframes popin{0%{transform:translateY(8px);opacity:0}100%{transform:none;opacity:1}}
+.ring{animation:ring 2.4s ease-out infinite}
+.sway{animation:sway 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.pop{animation:popin .4s ease-out both}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="background: #F6F7FF; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif">
+
+<header style="max-width: 1320px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 40px) 8px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="AppInicio.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #1B1340; min-height: 44px">
+<svg aria-hidden="true" width="44" height="44" viewBox="0 0 200 200"><rect x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/><rect x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE"/><rect x="166" y="88" width="20" height="48" rx="10" fill="#9BE22D"/><circle cx="90" cy="76" r="10" fill="#FFFFFF"/><circle cx="112" cy="76" r="10" fill="#FFFFFF"/></svg>
+<span class="disp" style="font-size: 28px; font-weight: 800; letter-spacing: -0.045em">iabuddy</span>
+</a>
+<nav aria-label="Principal" style="display: flex; flex-wrap: wrap; gap: 4px; padding: 5px; background: #FFFFFF; border: 2.5px solid #1B1340; border-radius: 999px">
+<a href="AppInicio.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Hoy</a>
+<a href="AppConversacion.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Conversar</a>
+<a href="AppEscenarios.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Escenarios</a>
+<a href="AppPronunciacion.dc.html" aria-current="page" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 15px; text-decoration: none">Sonidos</a>
+<a href="AppProgreso.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Progreso</a>
+</nav>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+<span style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: #FFC800; border: 2.5px solid #1B1340; font-weight: 800; font-size: 15px"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="#FF6B3D" stroke="#1B1340" stroke-width="1.8" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>12 días</span>
+<span style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: #9BE22D; border: 2.5px solid #1B1340; font-weight: 800; font-size: 15px">2.340 XP</span>
+<a href="AppAjustes.dc.html" aria-label="Ajustes" style="width: 44px; height: 44px; border-radius: 50%; background: #FFFFFF; border: 2.5px solid #1B1340; display: flex; align-items: center; justify-content: center; color: #1B1340"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></a>
+</div>
+</header>
+
+<main style="max-width: 1320px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 40px) 56px; display: flex; flex-direction: column; gap: 24px">
+
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h1 class="disp" style="margin: 0; font-size: clamp(40px, 5vw, 60px); font-weight: 800; letter-spacing: -0.04em; line-height: 1">Drill de pronunciación</h1>
+<p style="margin: 0; font-size: 18px; font-weight: 600; color: #4A4366">Lee la frase en voz alta. Puntuación por palabra y por fonema, referencia en inglés americano.</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<span class="ipa" style="display: flex; align-items: center; min-height: 40px; padding: 0 14px; border-radius: 999px; background: #FFE8F3; color: #9D174D; font-weight: 700; font-size: 14px">Foco: θ · ð</span>
+<span style="display: flex; align-items: center; min-height: 40px; padding: 0 14px; border-radius: 999px; background: #EEFAD9; color: #2F5208; font-weight: 800; font-size: 14px">+10 XP por frase</span>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+<aside aria-label="Sonidos" style="flex: 1 1 290px; min-width: 0; padding: 22px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 10px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .12em; color: #5B5478">TUS SONIDOS · NIVEL 1–5</span>
+<sc-for list="{{sounds}}" as="s" hint-placeholder-count="8">
+<div style="display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 18px; background: {{s.bg}}">
+<span class="ipa" style="min-width: 64px; padding: 6px 8px; border-radius: 12px; background: #FFFFFF; font-weight: 700; font-size: 15px; text-align: center">{{s.ipa}}</span>
+<span style="flex: 1; display: flex; flex-direction: column"><span lang="en" style="font-weight: 700; font-size: 14px">{{s.ex}}</span><span style="font-weight: 600; font-size: 12px; color: #5B5478">{{s.score}}</span></span>
+<span aria-label="{{s.levelLabel}}" style="display: flex; align-items: flex-end; gap: 3px; height: 22px">
+<sc-for list="{{s.bars}}" as="b" hint-placeholder-count="5"><span style="width: 5px; height: {{b.h}}; border-radius: 3px; background: {{b.c}}"></span></sc-for>
+</span>
+</div>
+</sc-for>
+<span style="font-size: 13px; font-weight: 600; color: #5B5478; line-height: 1.45">Un sonido sube de nivel al pasar de 85 en 3 sesiones distintas.</span>
+</aside>
+
+<section style="flex: 999 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+
+<div style="padding: 26px 28px; border-radius: 32px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; align-items: center; gap: 14px">
+<span style="font-weight: 700; font-size: 14px; color: #5B5478; white-space: nowrap">Frase 3 de 8</span>
+<div style="flex: 1; display: flex; gap: 4px"><span style="flex: 1; height: 8px; border-radius: 9px; background: #3D5AFE"></span><span style="flex: 1; height: 8px; border-radius: 9px; background: #3D5AFE"></span><span style="flex: 1; height: 8px; border-radius: 9px; background: #3D5AFE"></span><span style="flex: 1; height: 8px; border-radius: 9px; background: #E3E8FF"></span><span style="flex: 1; height: 8px; border-radius: 9px; background: #E3E8FF"></span><span style="flex: 1; height: 8px; border-radius: 9px; background: #E3E8FF"></span><span style="flex: 1; height: 8px; border-radius: 9px; background: #E3E8FF"></span><span style="flex: 1; height: 8px; border-radius: 9px; background: #E3E8FF"></span></div>
+<span style="padding: 4px 12px; border-radius: 999px; background: #F6F7FF; font-weight: 800; font-size: 14px">Total 74</span>
+</div>
+
+<div lang="en" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 8px">
+<sc-for list="{{words}}" as="w" hint-placeholder-count="9">
+<button type="button" onClick="{{w.pick}}" aria-pressed="{{w.selected}}" aria-label="{{w.label}}" style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 10px; border: none; border-radius: 16px; background: {{w.bg}}; color: #1B1340">
+<span class="disp" style="font-size: clamp(28px, 3.2vw, 40px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1">{{w.text}}</span>
+<span style="width: 100%; height: 6px; border-radius: 9px; background: {{w.color}}"></span>
+<span style="font-size: 13px; font-weight: 800; color: {{w.ink}}">{{w.score}}</span>
+</button>
+</sc-for>
+</div>
+<p style="margin: 0; text-align: center; font-size: 15px; font-weight: 600; color: #5B5478">Creo que tres de ellos estuvieron allí este jueves.</p>
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 28px">
+<button type="button" class="lift" style="display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 20px; border: none; border-radius: 999px; background: #E3E8FF; color: #2338C9; font-weight: 800; font-size: 15px"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>Escuchar referencia</button>
+<div style="position: relative; width: 128px; height: 128px">
+<span aria-hidden="true" class="ring" style="position: absolute; inset: 0; border-radius: 50%; border: 4px solid #FF5FAE"></span>
+<span aria-hidden="true" class="ring" style="position: absolute; inset: 0; border-radius: 50%; border: 4px solid #FF6B3D; animation-delay: 1.2s"></span>
+<button type="button" class="lift" aria-label="Leer en voz alta (mantén Espacio)" style="position: absolute; inset: 8px; border: none; border-radius: 50%; background: #FFFFFF; box-shadow: 0 16px 34px -18px rgba(61,90,254,.7); display: flex; align-items: center; justify-content: center">
+<svg aria-hidden="true" width="80" height="80" viewBox="0 0 200 200"><rect class="sway" x="14" y="98" width="20" height="28" rx="10" fill="#FFC800"/><rect class="sway" x="42" y="88" width="26" height="48" rx="13" fill="#FF6B3D" style="animation-delay: -.3s"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect class="sway" x="132" y="88" width="26" height="48" rx="13" fill="#FF5FAE" style="animation-delay: -.6s"/><rect class="sway" x="166" y="98" width="20" height="28" rx="10" fill="#9BE22D" style="animation-delay: -.9s"/><circle cx="89" cy="72" r="10" fill="#FFFFFF"/><circle cx="89" cy="71" r="5.5" fill="#1B1340"/><circle cx="111" cy="72" r="10" fill="#FFFFFF"/><circle cx="111" cy="71" r="5.5" fill="#1B1340"/><circle cx="100" cy="98" r="4.5" fill="#FFFFFF"/></svg>
+</button>
+</div>
+<button type="button" class="lift" style="display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 20px; border: none; border-radius: 999px; background: #1B1340; color: #FFFFFF; font-weight: 800; font-size: 15px">Siguiente frase<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+</div>
+<span style="text-align: center; font-size: 14px; font-weight: 700; color: #4A4366">Mantén <span style="padding: 4px 12px; border-radius: 8px; background: #FFFFFF; border: 2px solid #1B1340; border-bottom-width: 4px; color: #1B1340">ESPACIO</span> y lee la frase</span>
+</div>
+
+<div class="pop" style="padding: 26px 28px; border-radius: 32px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-wrap: wrap; gap: 26px">
+<div style="flex: 999 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap"><span lang="en" class="disp" style="font-size: 34px; font-weight: 800; letter-spacing: -0.03em">{{sel.text}}</span><span style="font-weight: 700; font-size: 15px; color: #5B5478">fonemas esperados vs. lo que se escuchó</span></div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<sc-for list="{{sel.ph}}" as="p" hint-placeholder-count="4">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px; width: 84px">
+<span class="ipa" style="width: 100%; padding: 10px 0; border-radius: 14px; background: #F6F7FF; text-align: center; font-size: 24px; font-weight: 700">{{p.exp}}</span>
+<span class="ipa" style="width: 100%; padding: 10px 0; border-radius: 14px; background: {{p.bg}}; text-align: center; font-size: 24px; font-weight: 700">{{p.rec}}</span>
+<span style="width: 100%; height: 6px; border-radius: 9px; background: #EEF0F8; overflow: hidden"><span style="display: block; width: {{p.w}}; height: 100%; background: {{p.color}}"></span></span>
+<span style="font-size: 13px; font-weight: 800">{{p.score}}</span>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; gap: 14px; font-size: 13px; font-weight: 700; color: #5B5478"><span>Arriba: esperado (espeak-ng, en-us)</span><span>Abajo: reconocido (wav2vec2)</span></div>
+</div>
+<div style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 20px; border-radius: 24px; background: #E3E8FF">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .12em; color: #2338C9">CÓMO MEJORARLO</span>
+<p style="margin: 0; font-size: 16px; line-height: 1.55; font-weight: 600">{{sel.tip}}</p>
+<span style="font-size: 13px; font-weight: 700; color: #2338C9">{{sel.rule}}</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sel: 1 };
+  }
+  renderVals() {
+    const band = (s) => s >= 85 ? ['#9BE22D', '#2F5208', '#EEFAD9'] : s >= 70 ? ['#FFC800', '#854D0E', '#FFF4C7'] : ['#FF6B3D', '#B13A12', '#FFE8DF'];
+    const tipTh = 'Pon la punta de la lengua entre los dientes y sopla suave. No la apoyes detrás de los dientes como en la «t».';
+    const tipDh = 'Igual que /θ/, pero con voz: la garganta vibra. Piensa en una «d» muy suave con la lengua asomada.';
+    const W = [
+      { text: 'I', score: 96, ph: [['aɪ', 'aɪ', 96]], tip: '¡Perfecto! Diptongo claro y bien abierto.', rule: '' },
+      { text: 'think', score: 62, ph: [['θ', 't', 31], ['ɪ', 'ɪ', 88], ['ŋ', 'ŋ', 92], ['k', 'k', 95]], tip: tipTh, rule: '/θ/ · nivel 1 → 2: pasa de 85 en 3 sesiones distintas (0 de 3)' },
+      { text: 'three', score: 55, ph: [['θ', 't', 28], ['ɹ', 'ɹ', 84], ['iː', 'iː', 90]], tip: tipTh, rule: '/θ/ · nivel 1 → 2: pasa de 85 en 3 sesiones distintas (0 de 3)' },
+      { text: 'of', score: 90, ph: [['ʌ', 'ʌ', 92], ['v', 'v', 88]], tip: 'Bien: la /v/ final suena con los dientes sobre el labio, no como «b».', rule: '' },
+      { text: 'them', score: 71, ph: [['ð', 'd', 46], ['ɛ', 'ɛ', 90], ['m', 'm', 94]], tip: tipDh, rule: '/ð/ · se entrena junto con /θ/' },
+      { text: 'were', score: 88, ph: [['w', 'w', 90], ['ɜː', 'ɜː', 86]], tip: 'Muy bien. Mantén la /ɜː/ sin redondear los labios.', rule: '' },
+      { text: 'there', score: 74, ph: [['ð', 'd', 52], ['ɛ', 'ɛ', 88], ['ɹ', 'ɹ', 85]], tip: tipDh, rule: '/ð/ · se entrena junto con /θ/' },
+      { text: 'this', score: 80, ph: [['ð', 'ð', 82], ['ɪ', 'iː', 61], ['s', 's', 95]], tip: '/ɪ/ es corta y relajada, entre «i» y «e». No la alargues: «this» no es «thees».', rule: '/ɪ/–/iː/ · nivel 2' },
+      { text: 'Thursday', score: 58, ph: [['θ', 't', 30], ['ɜː', 'ɜː', 80], ['z', 's', 55], ['d', 'd', 92], ['eɪ', 'eɪ', 88]], tip: tipTh + ' Además, la «s» de Thursday suena /z/: haz vibrar la garganta.', rule: '/θ/ · nivel 1 → 2 (0 de 3) · /z/ · nivel 2' }
+    ];
+    const words = W.map((w, i) => {
+      const b = band(w.score);
+      const selected = this.state.sel === i;
+      return { text: w.text, score: w.score, color: b[0], ink: b[1], bg: selected ? '#E3E8FF' : 'transparent', selected, label: w.text + ', puntuación ' + w.score, pick: () => this.setState({ sel: i }) };
+    });
+    const s = W[this.state.sel];
+    const sel = {
+      text: s.text, tip: s.tip, rule: s.rule || 'Sigue así: este sonido ya está por encima de 85.',
+      ph: s.ph.map((p) => { const b = band(p[2]); return { exp: p[0], rec: p[1], score: p[2], w: p[2] + '%', color: b[0], bg: p[0] === p[1] ? '#EEFAD9' : '#FFE8DF' }; })
+    };
+    const S = [['θ · ð', 'think · this', 48, 1, true], ['ɪ · iː', 'ship · sheep', 66, 2], ['v · b', 'very · berry', 74, 3], ['ʃ · tʃ', 'share · chair', 77, 3], ['z', 'easy · Thursday', 69, 2], ['-ed', 'worked · wanted', 88, 4], ['s-', 'speak · school', 86, 4], ['ə', 'about · banana', 64, 2]];
+    const cols = ['#FFC800', '#FF6B3D', '#3D5AFE', '#FF5FAE', '#9BE22D'];
+    const sounds = S.map((x) => ({
+      ipa: x[0], ex: x[1], score: 'puntuación ' + x[2], bg: x[4] ? '#FFE8F3' : 'transparent', levelLabel: 'Nivel ' + x[3] + ' de 5',
+      bars: [0, 1, 2, 3, 4].map((k) => ({ h: (40 + k * 15) + '%', c: k < x[3] ? cols[k] : '#E6E8F2' }))
+    }));
+    return { words, sel, sounds };
+  }
+}
+</script>
+</body>
+</html>

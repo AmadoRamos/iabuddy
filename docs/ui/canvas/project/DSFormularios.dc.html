@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sistema de diseño · Formularios y validación</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@500;700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button,input,textarea{font-family:inherit}
+button{cursor:pointer}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.mono{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+a:focus-visible,button:focus-visible{outline:3px solid #3D5AFE;outline-offset:3px}
+input:focus,textarea:focus{outline:none;box-shadow:inset 0 0 0 2px #3D5AFE,0 0 0 4px #E3E8FF!important}
+button:disabled{cursor:not-allowed}
+.day:hover{background:#F1F3FF}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1560px; padding: 56px; background: #F6F7FF; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 24px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .14em; color: #2338C9">IABUDDY · SISTEMA DE DISEÑO · 11</span>
+<h1 class="disp" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.045em; line-height: 1">Formularios y validación</h1>
+<p style="margin: 0; font-size: 17px; font-weight: 600; color: #4A4366">El formulario, el calendario, la hora y los steppers funcionan: escribe, sal del campo y prueba con teclado.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px; align-items: start">
+
+<section style="padding: 28px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><h2 class="disp" style="margin: 0; font-size: 26px; font-weight: 800">Crear escenario</h2><span style="font-size: 13px; font-weight: 700; color: #4A4366"><span aria-hidden="true" style="color: #9A3412">*</span> obligatorio</span></div>
+
+<sc-if value="{{showSummary}}" hint-placeholder-val="{{ false }}">
+<div role="alert" style="display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border-radius: 18px; background: #FFE8DF; color: #9A3412">
+<span style="font-weight: 800; font-size: 15px">Revisa {{errorCount}} campo(s) antes de guardar</span>
+<sc-if value="{{nameError}}" hint-placeholder-val="{{ true }}"><a href="#f-name" style="color: #9A3412; font-weight: 700; font-size: 14px">Identificador: {{nameMsg}}</a></sc-if>
+<sc-if value="{{titleError}}" hint-placeholder-val="{{ false }}"><a href="#f-title" style="color: #9A3412; font-weight: 700; font-size: 14px">Título: {{titleMsg}}</a></sc-if>
+</div>
+</sc-if>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="f-name" style="font-weight: 800; font-size: 15px">Identificador del archivo <span aria-hidden="true" style="color: #9A3412">*</span></label>
+<div style="position: relative">
+<input id="f-name" type="text" required aria-required="true" aria-invalid="{{nameInvalid}}" aria-describedby="f-name-msg" value="{{name}}" onChange="{{setName}}" onBlur="{{touchName}}" placeholder="entrevista_cliente" class="mono" style="width: 100%; min-height: 50px; padding: 0 44px 0 16px; border: none; border-radius: 16px; background: {{nameBg}}; box-shadow: inset 0 0 0 2px {{nameBorder}}; font-size: 16px; color: #1B1340">
+<sc-if value="{{nameOk}}" hint-placeholder-val="{{ false }}"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4D7C0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; right: 14px; top: 15px"><path d="M20 6 9 17l-5-5"/></svg></sc-if>
+<sc-if value="{{nameError}}" hint-placeholder-val="{{ true }}"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D9480F" stroke-width="2.6" stroke-linecap="round" style="position: absolute; right: 14px; top: 15px"><circle cx="12" cy="12" r="10"/><path d="M12 7v6M12 17h.01"/></svg></sc-if>
+</div>
+<span id="f-name-msg" style="font-size: 13px; font-weight: 700; color: {{nameMsgColor}}">{{nameMsgShown}}</span>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><label for="f-title" style="font-weight: 800; font-size: 15px">Título visible <span aria-hidden="true" style="color: #9A3412">*</span></label><span aria-live="polite" style="font-size: 13px; font-weight: 700; color: {{countColor}}">{{titleCount}}/60</span></div>
+<input id="f-title" type="text" required aria-required="true" aria-invalid="{{titleInvalid}}" aria-describedby="f-title-msg" value="{{title}}" onChange="{{setTitle}}" onBlur="{{touchTitle}}" placeholder="Reunión con un cliente" style="width: 100%; min-height: 50px; padding: 0 16px; border: none; border-radius: 16px; background: {{titleBg}}; box-shadow: inset 0 0 0 2px {{titleBorder}}; font-size: 16px; font-weight: 600; color: #1B1340">
+<span id="f-title-msg" style="font-size: 13px; font-weight: 700; color: {{titleMsgColor}}">{{titleMsgShown}}</span>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="f-role" style="font-weight: 800; font-size: 15px">Rol de Buddy <span style="font-weight: 600; color: #4A4366">(opcional)</span></label>
+<textarea id="f-role" rows="2" aria-describedby="f-role-help" placeholder="Cliente exigente pero amable" style="width: 100%; padding: 12px 16px; border: none; border-radius: 16px; background: #FFFFFF; box-shadow: inset 0 0 0 2px #8A86A3; font-size: 16px; font-weight: 600; color: #1B1340; resize: vertical"></textarea>
+<span id="f-role-help" style="font-size: 13px; font-weight: 600; color: #4A4366">Describe quién es y cómo habla. En español o en inglés.</span>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span id="lbl-dur" style="font-weight: 800; font-size: 15px">Duración máxima</span>
+<div role="group" aria-labelledby="lbl-dur" style="display: flex; align-items: center; gap: 6px; padding: 4px; border-radius: 999px; background: #F1F3FF; align-self: flex-start">
+<button type="button" onClick="{{durDown}}" disabled="{{durMin}}" aria-label="Menos minutos" style="width: 44px; height: 44px; border: none; border-radius: 50%; background: {{durDownBg}}; color: {{durDownFg}}; font-size: 22px; font-weight: 800">−</button>
+<span aria-live="polite" style="min-width: 80px; text-align: center; font-weight: 800; font-size: 17px">{{dur}} min</span>
+<button type="button" onClick="{{durUp}}" disabled="{{durMax}}" aria-label="Más minutos" style="width: 44px; height: 44px; border: none; border-radius: 50%; background: {{durUpBg}}; color: {{durUpFg}}; font-size: 22px; font-weight: 800">+</button>
+</div>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">De 3 a 30. Los límites desactivan el botón.</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span id="lbl-goals" style="font-weight: 800; font-size: 15px">Objetivos</span>
+<div role="group" aria-labelledby="lbl-goals" style="display: flex; align-items: center; gap: 6px; padding: 4px; border-radius: 999px; background: #F1F3FF; align-self: flex-start">
+<button type="button" onClick="{{goalsDown}}" aria-label="Menos objetivos" style="width: 44px; height: 44px; border: none; border-radius: 50%; background: #FFFFFF; color: #1B1340; font-size: 22px; font-weight: 800">−</button>
+<span aria-live="polite" style="min-width: 60px; text-align: center; font-weight: 800; font-size: 17px">{{goals}}</span>
+<button type="button" onClick="{{goalsUp}}" aria-label="Más objetivos" style="width: 44px; height: 44px; border: none; border-radius: 50%; background: #FFFFFF; color: #1B1340; font-size: 22px; font-weight: 800">+</button>
+</div>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">+30 XP por cada uno.</span>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 12px; padding-top: 6px">
+<button type="button" onClick="{{submit}}" style="min-height: 54px; padding: 0 26px; border: none; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 16px">Guardar escenario</button>
+<button type="button" style="min-height: 54px; padding: 0 22px; border: none; border-radius: 999px; background: #FFFFFF; box-shadow: inset 0 0 0 2px #1B1340; color: #1B1340; font-weight: 800; font-size: 16px">Cancelar</button>
+<sc-if value="{{saved}}" hint-placeholder-val="{{ false }}"><span role="status" style="display: flex; align-items: center; gap: 8px; padding: 0 14px; border-radius: 999px; background: #EEFAD9; color: #2F5208; font-weight: 800; font-size: 14px"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Guardado en scenarios/</span></sc-if>
+</div>
+</section>
+
+<div style="display: flex; flex-direction: column; gap: 24px">
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 12px">
+<h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Reglas de validación</h2>
+<ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.5">
+<li><strong style="color: #1B1340">Cuándo:</strong> al salir del campo la primera vez; después, en vivo mientras corriges. Nunca mientras escribes por primera vez.</li>
+<li><strong style="color: #1B1340">Obligatorio:</strong> asterisco visible + <span class="mono">aria-required</span>; la leyenda «* obligatorio» va arriba.</li>
+<li><strong style="color: #1B1340">Error:</strong> borde #D9480F (4:1), fondo coral suave, ícono y mensaje que dice cómo arreglarlo. <span class="mono">aria-invalid</span> + <span class="mono">aria-describedby</span>.</li>
+<li><strong style="color: #1B1340">Éxito:</strong> borde verde #4D7C0F y check, solo donde el formato es difícil.</li>
+<li><strong style="color: #1B1340">Ayuda:</strong> bajo la etiqueta; el error la reemplaza mientras exista.</li>
+<li><strong style="color: #1B1340">Al guardar:</strong> resumen arriba con enlaces a cada campo y foco en el resumen.</li>
+</ul>
+</section>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Selector de fecha</h2><span style="font-size: 13px; font-weight: 700; color: #4A4366">flechas · RePág/AvPág mes · Enter</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-weight: 800; font-size: 14px">Ver sesiones desde</span>
+<span style="display: flex; align-items: center; justify-content: space-between; min-height: 50px; padding: 0 14px; border-radius: 16px; box-shadow: inset 0 0 0 2px #3D5AFE, 0 0 0 4px #E3E8FF; font-weight: 700; font-size: 16px">{{dateLabel}}<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>
+</div>
+<div role="dialog" aria-label="Elegir fecha" style="padding: 14px; border-radius: 22px; background: #FFFFFF; box-shadow: 0 20px 40px -20px rgba(27,19,64,.5), 0 0 0 1px #ECEEF8; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: center; justify-content: space-between"><button type="button" aria-label="Mes anterior" style="width: 40px; height: 40px; border: none; border-radius: 50%; background: #F6F7FF; color: #1B1340; font-weight: 800">‹</button><span class="disp" style="font-size: 18px; font-weight: 800">Octubre 2026</span><button type="button" aria-label="Mes siguiente" style="width: 40px; height: 40px; border: none; border-radius: 50%; background: #F6F7FF; color: #1B1340; font-weight: 800">›</button></div>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; text-align: center; font-size: 12px; font-weight: 800; color: #5B5478"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+<div role="grid" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px">
+<sc-for list="{{days}}" as="d" hint-placeholder-count="35">
+<button type="button" class="day" onClick="{{d.pick}}" disabled="{{d.blank}}" aria-pressed="{{d.sel}}" aria-label="{{d.label}}" style="height: 40px; border: {{d.border}}; border-radius: 12px; background: {{d.bg}}; color: {{d.fg}}; font-weight: 800; font-size: 14px; visibility: {{d.vis}}">{{d.n}}</button>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<h2 class="disp" style="margin: 0; font-size: 22px; font-weight: 800">Selector de hora · recordatorio diario</h2>
+<div style="display: flex; align-items: center; gap: 14px">
+<div role="group" aria-label="Hora" style="display: flex; flex-direction: column; align-items: center; gap: 4px">
+<button type="button" onClick="{{hUp}}" aria-label="Subir hora" style="width: 44px; height: 36px; border: none; border-radius: 12px; background: #F1F3FF; color: #1B1340; font-weight: 800">▲</button>
+<span class="disp" style="width: 72px; padding: 6px 0; border-radius: 14px; background: #E3E8FF; text-align: center; font-size: 34px; font-weight: 800">{{hh}}</span>
+<button type="button" onClick="{{hDown}}" aria-label="Bajar hora" style="width: 44px; height: 36px; border: none; border-radius: 12px; background: #F1F3FF; color: #1B1340; font-weight: 800">▼</button>
+</div>
+<span class="disp" style="font-size: 34px; font-weight: 800">:</span>
+<div role="group" aria-label="Minutos" style="display: flex; flex-direction: column; align-items: center; gap: 4px">
+<button type="button" onClick="{{mUp}}" aria-label="Subir minutos" style="width: 44px; height: 36px; border: none; border-radius: 12px; background: #F1F3FF; color: #1B1340; font-weight: 800">▲</button>
+<span class="disp" style="width: 72px; padding: 6px 0; border-radius: 14px; background: #F6F7FF; text-align: center; font-size: 34px; font-weight: 800">{{mm}}</span>
+<button type="button" onClick="{{mDown}}" aria-label="Bajar minutos" style="width: 44px; height: 36px; border: none; border-radius: 12px; background: #F1F3FF; color: #1B1340; font-weight: 800">▼</button>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px; padding-left: 8px">
+<span aria-live="polite" style="font-weight: 800; font-size: 16px">{{timeLabel}}</span>
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{presets}}" as="p" hint-placeholder-count="4"><button type="button" onClick="{{p.pick}}" style="min-height: 40px; padding: 0 12px; border: none; border-radius: 999px; background: {{p.bg}}; color: {{p.fg}}; font-weight: 800; font-size: 13px">{{p.label}}</button></sc-for>
+</div>
+</div>
+</div>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">Minutos en pasos de 5. También se puede escribir la hora directamente.</span>
+</section>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1560}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { name: 'Entrevista Cliente', title: '', tName: true, tTitle: false, submitted: false, saved: false, dur: 10, goals: 4, day: 24, h: 19, m: 30 };
+  }
+  renderVals() {
+    const st = this.state;
+    const nameErr = !st.name ? 'Escribe un identificador.' : (!/^[a-z0-9_]+$/.test(st.name) ? 'Usa solo minúsculas, números y guion bajo (sin espacios).' : '');
+    const titleErr = !st.title.trim() ? 'Escribe un título.' : (st.title.length > 60 ? 'Máximo 60 caracteres.' : '');
+    const showName = st.tName || st.submitted, showTitle = st.tTitle || st.submitted;
+    const nameError = showName && !!nameErr, titleError = showTitle && !!titleErr;
+    const nameOk = showName && !nameErr;
+    const days = [];
+    for (let i = 0; i < 3; i++) days.push({ n: '', blank: true, vis: 'hidden', bg: 'transparent', fg: '#1B1340', border: 'none', sel: 'false', label: '', pick: () => {} });
+    for (let d = 1; d <= 31; d++) {
+      const sel = st.day === d, today = d === 31, inRange = d > st.day && d <= 31;
+      days.push({
+        n: d, blank: false, vis: 'visible', sel: sel ? 'true' : 'false',
+        label: d + ' de octubre' + (today ? ', hoy' : ''),
+        bg: sel ? '#3D5AFE' : inRange ? '#E3E8FF' : 'transparent',
+        fg: sel ? '#FFFFFF' : '#1B1340',
+        border: today && !sel ? '2px solid #1B1340' : 'none',
+        pick: () => this.setState({ day: d })
+      });
+    }
+    const pad = (x) => String(x).padStart(2, '0');
+    const h12 = ((st.h + 11) % 12) + 1;
+    const presets = [[7, 0], [12, 30], [19, 30], [21, 0]].map((p) => {
+      const on = st.h === p[0] && st.m === p[1];
+      return { label: pad(p[0]) + ':' + pad(p[1]), bg: on ? '#3D5AFE' : '#F1F3FF', fg: on ? '#FFFFFF' : '#1B1340', pick: () => this.setState({ h: p[0], m: p[1] }) };
+    });
+    const durMin = st.dur <= 3, durMax = st.dur >= 30;
+    return {
+      name: st.name, title: st.title,
+      setName: (e) => this.setState({ name: e.target.value, saved: false }),
+      setTitle: (e) => this.setState({ title: e.target.value, saved: false }),
+      touchName: () => this.setState({ tName: true }),
+      touchTitle: () => this.setState({ tTitle: true }),
+      nameError, titleError, nameOk,
+      nameInvalid: nameError ? 'true' : 'false', titleInvalid: titleError ? 'true' : 'false',
+      nameMsg: nameErr, titleMsg: titleErr,
+      nameBg: nameError ? '#FFF6F2' : '#FFFFFF', nameBorder: nameError ? '#D9480F' : nameOk ? '#4D7C0F' : '#8A86A3',
+      nameMsgShown: nameError ? nameErr : nameOk ? 'Perfecto: así se llamará el archivo .yaml' : 'Solo minúsculas, números y guion bajo.',
+      nameMsgColor: nameError ? '#9A3412' : nameOk ? '#2F5208' : '#4A4366',
+      titleBg: titleError ? '#FFF6F2' : '#FFFFFF', titleBorder: titleError ? '#D9480F' : '#8A86A3',
+      titleMsgShown: titleError ? titleErr : 'Así lo verás en la lista de escenarios.',
+      titleMsgColor: titleError ? '#9A3412' : '#4A4366',
+      titleCount: st.title.length, countColor: st.title.length > 60 ? '#9A3412' : '#4A4366',
+      showSummary: st.submitted && (!!nameErr || !!titleErr),
+      errorCount: (nameErr ? 1 : 0) + (titleErr ? 1 : 0),
+      submit: () => this.setState({ submitted: true, saved: !nameErr && !titleErr }),
+      saved: st.saved,
+      dur: st.dur, durMin, durMax,
+      durDown: () => this.setState({ dur: Math.max(3, st.dur - 1) }), durUp: () => this.setState({ dur: Math.min(30, st.dur + 1) }),
+      durDownBg: durMin ? '#E6E8F2' : '#FFFFFF', durDownFg: durMin ? '#8A86A3' : '#1B1340',
+      durUpBg: durMax ? '#E6E8F2' : '#FFFFFF', durUpFg: durMax ? '#8A86A3' : '#1B1340',
+      goals: st.goals,
+      goalsDown: () => this.setState({ goals: Math.max(1, st.goals - 1) }), goalsUp: () => this.setState({ goals: Math.min(6, st.goals + 1) }),
+      days, dateLabel: st.day + ' oct 2026 → hoy',
+      hh: pad(st.h), mm: pad(st.m),
+      hUp: () => this.setState({ h: (st.h + 1) % 24 }), hDown: () => this.setState({ h: (st.h + 23) % 24 }),
+      mUp: () => this.setState({ m: (st.m + 5) % 60 }), mDown: () => this.setState({ m: (st.m + 55) % 60 }),
+      timeLabel: 'Todos los días a las ' + h12 + ':' + pad(st.m) + (st.h < 12 ? ' a. m.' : ' p. m.'),
+      presets
+    };
+  }
+}
+</script>
+</body>
+</html>

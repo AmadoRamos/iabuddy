@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Buddy 06 · Pip</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@700&display=swap">
+<style>
+body{margin:0}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.ipa{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+@keyframes bob{0%,100%{transform:translateY(0) scale(1,1)}45%{transform:translateY(-12px) scale(.97,1.03)}90%{transform:translateY(0) scale(1.03,.97)}}
+@keyframes blink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+@keyframes talk{0%,100%{transform:scaleY(.45)}50%{transform:scaleY(1)}}
+@keyframes pulse{0%{opacity:0}40%{opacity:1}100%{opacity:0}}
+@keyframes dot{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes puff{0%{opacity:0;transform:translateX(0)}50%{opacity:1}100%{opacity:0;transform:translateX(10px)}}
+.a-bob{animation:bob 3s ease-in-out infinite;transform-origin:50% 100%}
+.blink{animation:blink 4.2s infinite;transform-box:fill-box;transform-origin:center}
+.talk{animation:talk .4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.pulse{animation:pulse 1.4s ease-out infinite}
+.dot{animation:dot 1.2s ease-in-out infinite}
+.puff{animation:puff 1.2s ease-out infinite}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div style="width: 1100px; height: 820px; box-sizing: border-box; padding: 44px 48px; background: #FFFDF7; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 30px">
+
+<div style="display: flex; gap: 44px; align-items: stretch">
+<div style="position: relative; flex: none; width: 440px; height: 400px; border-radius: 40px; background: #FFF4C2; border: 3px solid #1B1340; overflow: hidden; display: flex; align-items: center; justify-content: center">
+<div aria-hidden="true" style="position: absolute; width: 300px; height: 300px; border-radius: 50%; background: #FFE58A"></div>
+<svg class="a-bob" role="img" aria-label="Pip, un personaje amarillo con forma de frijol y una gran boca sonriente" width="320" height="320" viewBox="0 0 200 200" style="position: relative">
+<ellipse cx="78" cy="182" rx="16" ry="8" fill="#F59E0B"/><ellipse cx="122" cy="182" rx="16" ry="8" fill="#F59E0B"/>
+<ellipse cx="100" cy="110" rx="74" ry="68" fill="#FFC800"/>
+<ellipse cx="66" cy="72" rx="18" ry="10" fill="#FFFFFF" fill-opacity=".5" transform="rotate(-30 66 72)"/>
+<path d="M68 62 Q78 56 88 62 M112 62 Q122 56 132 62" stroke="#1B1340" stroke-width="4" stroke-linecap="round" fill="none"/>
+<g class="blink"><circle cx="78" cy="80" r="8" fill="#1B1340"/><circle cx="80.5" cy="77.5" r="2.6" fill="#FFFFFF"/><circle cx="122" cy="80" r="8" fill="#1B1340"/><circle cx="124.5" cy="77.5" r="2.6" fill="#FFFFFF"/></g>
+<path d="M62 104 Q100 156 138 104 Q100 118 62 104 Z" fill="#1B1340"/>
+<rect x="86" y="110" width="28" height="7" rx="2" fill="#FFFFFF"/>
+<ellipse cx="100" cy="124" rx="16" ry="5.5" fill="#FF5FAE"/>
+<ellipse cx="52" cy="112" rx="9" ry="6" fill="#FF8A3D" fill-opacity=".55"/><ellipse cx="148" cy="112" rx="9" ry="6" fill="#FF8A3D" fill-opacity=".55"/>
+</svg>
+</div>
+
+<div style="flex: 1; display: flex; flex-direction: column; gap: 16px; padding-top: 6px">
+<span style="font-weight: 800; font-size: 14px; letter-spacing: .14em; color: #B45309">CONCEPTO 06</span>
+<h1 class="disp" style="margin: 0; font-size: 64px; line-height: .95; font-weight: 800; letter-spacing: -0.035em">Pip</h1>
+<p style="margin: 0; font-size: 21px; line-height: 1.4; font-weight: 600">Una boca que enseña a pronunciar.</p>
+<ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 16px; line-height: 1.45; font-weight: 500">
+<li>Su boca muestra cómo articular: la lengua entre los dientes para <span class="ipa">/θ/</span>, el labio para <span class="ipa">/v/</span>.</li>
+<li>En el drill, Pip modela el sonido mientras lo escuchas.</li>
+<li>Riesgo: una boca tan protagonista puede verse rara si no se cuida el estilo.</li>
+</ul>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<span style="padding: 6px 12px; border-radius: 999px; background: #FFFFFF; border: 2px solid #1B1340; font-weight: 700; font-size: 14px">Didáctico</span>
+<span style="padding: 6px 12px; border-radius: 999px; background: #FFFFFF; border: 2px solid #1B1340; font-weight: 700; font-size: 14px">Gracioso</span>
+<span style="padding: 6px 12px; border-radius: 999px; background: #FFFFFF; border: 2px solid #1B1340; font-weight: 700; font-size: 14px">Expresivo</span>
+</div>
+<div style="display: flex; gap: 10px; margin-top: auto">
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #FFC800; border: 2px solid #1B1340"></span>#FFC800</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #F59E0B; border: 2px solid #1B1340"></span>#F59E0B</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #FF5FAE; border: 2px solid #1B1340"></span>#FF5FAE</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #3D5AFE; border: 2px solid #1B1340"></span>#3D5AFE</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #1B1340; border: 2px solid #1B1340"></span>#1B1340</div>
+</div>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px">
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340">
+<svg role="img" aria-label="Escucha" width="130" height="130" viewBox="0 0 200 200">
+<ellipse cx="78" cy="182" rx="16" ry="8" fill="#F59E0B"/><ellipse cx="122" cy="182" rx="16" ry="8" fill="#F59E0B"/>
+<ellipse cx="100" cy="110" rx="74" ry="68" fill="#FFC800"/>
+<circle cx="78" cy="80" r="10" fill="#1B1340"/><circle cx="81" cy="77" r="3" fill="#FFFFFF"/><circle cx="122" cy="80" r="10" fill="#1B1340"/><circle cx="125" cy="77" r="3" fill="#FFFFFF"/>
+<path d="M78 116 Q100 132 122 116" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/>
+<path class="pulse" d="M14 92 Q4 110 14 128" stroke="#3D5AFE" stroke-width="5" stroke-linecap="round" fill="none"/>
+<path class="pulse" d="M186 92 Q196 110 186 128" stroke="#3D5AFE" stroke-width="5" stroke-linecap="round" fill="none"/>
+</svg>
+<span style="font-weight: 800; font-size: 17px">Escucha</span>
+<span style="font-weight: 600; font-size: 13px; color: #5B5478; text-align: center">Boca cerrada, ojos grandes</span>
+</div>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340">
+<svg role="img" aria-label="Piensa" width="130" height="130" viewBox="0 0 200 200">
+<ellipse cx="78" cy="182" rx="16" ry="8" fill="#F59E0B"/><ellipse cx="122" cy="182" rx="16" ry="8" fill="#F59E0B"/>
+<ellipse cx="100" cy="110" rx="74" ry="68" fill="#FFC800"/>
+<path d="M68 60 Q78 52 88 58 M112 58 Q122 56 132 62" stroke="#1B1340" stroke-width="4" stroke-linecap="round" fill="none"/>
+<circle cx="80" cy="78" r="8" fill="#1B1340"/><circle cx="124" cy="78" r="8" fill="#1B1340"/>
+<path d="M86 124 Q104 114 118 126" stroke="#1B1340" stroke-width="5" stroke-linecap="round" fill="none"/>
+<circle class="dot" cx="158" cy="26" r="7" fill="#F59E0B"/><circle class="dot" cx="174" cy="16" r="5" fill="#F59E0B" style="animation-delay: .2s"/><circle class="dot" cx="188" cy="8" r="4" fill="#F59E0B" style="animation-delay: .4s"/>
+</svg>
+<span style="font-weight: 800; font-size: 17px">Piensa</span>
+<span style="font-weight: 600; font-size: 13px; color: #5B5478; text-align: center">Boca de lado, «hmm»</span>
+</div>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340">
+<svg role="img" aria-label="Habla" width="130" height="130" viewBox="0 0 200 200">
+<ellipse cx="78" cy="182" rx="16" ry="8" fill="#F59E0B"/><ellipse cx="122" cy="182" rx="16" ry="8" fill="#F59E0B"/>
+<ellipse cx="100" cy="110" rx="74" ry="68" fill="#FFC800"/>
+<g class="blink"><circle cx="78" cy="78" r="8" fill="#1B1340"/><circle cx="80.5" cy="75.5" r="2.6" fill="#FFFFFF"/><circle cx="122" cy="78" r="8" fill="#1B1340"/><circle cx="124.5" cy="75.5" r="2.6" fill="#FFFFFF"/></g>
+<g class="talk"><ellipse cx="100" cy="122" rx="26" ry="20" fill="#1B1340"/><rect x="86" y="103" width="28" height="7" rx="2" fill="#FFFFFF"/><ellipse cx="100" cy="134" rx="14" ry="6" fill="#FF5FAE"/></g>
+</svg>
+<span style="font-weight: 800; font-size: 17px">Habla</span>
+<span style="font-weight: 600; font-size: 13px; color: #5B5478; text-align: center">La boca sigue el audio</span>
+</div>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340">
+<svg role="img" aria-label="Enseña el sonido theta: lengua entre los dientes" width="130" height="130" viewBox="0 0 200 200">
+<ellipse cx="78" cy="182" rx="16" ry="8" fill="#F59E0B"/><ellipse cx="122" cy="182" rx="16" ry="8" fill="#F59E0B"/>
+<ellipse cx="100" cy="110" rx="74" ry="68" fill="#FFC800"/>
+<circle cx="78" cy="80" r="8" fill="#1B1340"/><circle cx="80.5" cy="77.5" r="2.6" fill="#FFFFFF"/><circle cx="122" cy="80" r="8" fill="#1B1340"/><circle cx="124.5" cy="77.5" r="2.6" fill="#FFFFFF"/>
+<rect x="64" y="108" width="72" height="28" rx="14" fill="#1B1340"/>
+<rect x="76" y="108" width="48" height="8" rx="2" fill="#FFFFFF"/>
+<rect x="78" y="128" width="44" height="8" rx="2" fill="#FFFFFF"/>
+<ellipse cx="100" cy="122" rx="24" ry="7" fill="#FF5FAE"/>
+<path class="puff" d="M144 116 h16 M146 126 h12" stroke="#3D5AFE" stroke-width="4" stroke-linecap="round"/>
+</svg>
+<span style="font-weight: 800; font-size: 17px">Enseña <span class="ipa">/θ/</span></span>
+<span style="font-weight: 600; font-size: 13px; color: #5B5478; text-align: center">Lengua entre los dientes</span>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1100,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

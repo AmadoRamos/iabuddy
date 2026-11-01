@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sistema de diseño · Tokens semánticos y tipografía responsive</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@500;700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.mono{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1560px; padding: 56px; background: #F6F7FF; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 24px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .14em; color: #2338C9">IABUDDY · SISTEMA DE DISEÑO · 08</span>
+<h1 class="disp" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.045em; line-height: 1">Tokens semánticos y tipografía responsive</h1>
+<p style="margin: 0; font-size: 17px; font-weight: 600; color: #4A4366">Los componentes nunca usan un hex directo: usan estos tokens. Así un cambio de color se hace en un solo lugar.</p>
+</div>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Estados semánticos</h2><span style="font-size: 13px; font-weight: 700; color: #4A4366">fondo · texto (≥ 4,5:1) · sólido · borde (≥ 3:1)</span></div>
+<div style="display: grid; grid-template-columns: 170px repeat(4, minmax(0, 1fr)) 1.3fr 1.6fr; gap: 10px 14px; align-items: center; font-size: 13px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">ESTADO</span><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">-BG</span><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">-FG</span><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">-SOLID</span><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">-BORDER</span><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">EJEMPLO</span><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">USO</span>
+
+<span class="mono" style="font-weight: 700">--success</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 22px; border-radius: 6px; background: #EEFAD9; box-shadow: inset 0 0 0 1px #DDE5C8"></span><span class="mono">#EEFAD9</span></span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 22px; border-radius: 6px; background: #2F5208"></span><span class="mono">#2F5208</span></span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 22px; border-radius: 6px; background: #9BE22D"></span><span class="mono">#9BE22D</span></span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 22px; border-radius: 6px; background: #4D7C0F"></span><span class="mono">#4D7C0F</span></span>
+<span style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 12px; background: #EEFAD9; color: #2F5208; font-weight: 800"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Guardado</span>
+<span style="font-weight: 600; color: #4A4366">Aciertos, logros, campo válido, modelo listo.</span>
+
+<span class="mono" style="font-weight: 700">--warning</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 22px; border-radius: 6px; background: #FFF4C7; box-shadow: inset 0 0 0 1px #EFE2A8"></span><span class="mono">#FFF4C7</span></span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 22px; border-radius: 6px; background: #854D0E"></span><span class="mono">#854D0E</span></span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 22px; border-radius: 6px; background: #FFC800"></span><span class="mono">#FFC800</span></span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 22px; border-radius: 6px; background: #A16207"></span><span class="mono">#A16207</span></span>
+<span style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 12px; background: #FFF4C7; color: #854D0E; font-weight: 800"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 7v6M12 17h.01"/></svg>Tarda más</span>
+<span style="font-weight: 600; color: #4A4366">Racha en peligro, latencia alta, «casi» (70–84).</span>
+
+<span class="mono" style="font-weight: 700">--error</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 22px; border-radius: 6px; background: #FFE8DF; box-shadow: inset 0 0 0 1px #F2D3C6"></span><span class="mono">#FFE8DF</span></span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 22px; border-radius: 6px; background: #9A3412"></span><span class="mono">#9A3412</span></span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 22px; border-radius: 6px; background: #FF6B3D"></span><span class="mono">#FF6B3D</span></span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 22px; border-radius: 6px; background: #D9480F"></span><span class="mono">#D9480F</span></span>
+<span style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 12px; background: #FFE8DF; color: #9A3412; font-weight: 800"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>Revisa el campo</span>
+<span style="font-weight: 600; color: #4A4366">Validación y fallos técnicos. Errores de inglés: «a practicar».</span>
+
+<span class="mono" style="font-weight: 700">--info</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 22px; border-radius: 6px; background: #E3E8FF; box-shadow: inset 0 0 0 1px #CDD5F5"></span><span class="mono">#E3E8FF</span></span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 22px; border-radius: 6px; background: #2338C9"></span><span class="mono">#2338C9</span></span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 22px; border-radius: 6px; background: #3D5AFE"></span><span class="mono">#3D5AFE</span></span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 22px; height: 22px; border-radius: 6px; background: #3D5AFE"></span><span class="mono">#3D5AFE</span></span>
+<span style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 12px; background: #E3E8FF; color: #2338C9; font-weight: 800"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Consejo</span>
+<span style="font-weight: 600; color: #4A4366">Consejos, ayuda, correcciones de gramática.</span>
+</div>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">Los sólidos (lima, amarillo, coral) son de 1,5 a 2,8:1 sobre blanco: se usan como relleno con texto tinta encima, nunca como texto ni como único borde. Cada estado lleva siempre su ícono.</span>
+</section>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px">
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 10px">
+<h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Tokens base</h2>
+<div style="display: grid; grid-template-columns: 200px 110px 1fr; gap: 8px 12px; font-size: 13px; align-items: center">
+<span class="mono" style="font-weight: 700">--action</span><span class="mono">#3D5AFE</span><span style="font-weight: 600; color: #4A4366">Botón primario, selección, enlaces de acción</span>
+<span class="mono" style="font-weight: 700">--action-pressed</span><span class="mono">#2A43D9</span><span style="font-weight: 600; color: #4A4366">Presionado</span>
+<span class="mono" style="font-weight: 700">--on-action</span><span class="mono">#FFFFFF</span><span style="font-weight: 600; color: #4A4366">Texto sobre acción (5,1:1)</span>
+<span class="mono" style="font-weight: 700">--text</span><span class="mono">#1B1340</span><span style="font-weight: 600; color: #4A4366">Texto principal (16,2:1)</span>
+<span class="mono" style="font-weight: 700">--text-2 / --text-3</span><span class="mono">#4A4366 · #5B5478</span><span style="font-weight: 600; color: #4A4366">Secundario y terciario</span>
+<span class="mono" style="font-weight: 700">--text-disabled</span><span class="mono">#6B6788</span><span style="font-weight: 600; color: #4A4366">Solo en controles desactivados</span>
+<span class="mono" style="font-weight: 700">--link</span><span class="mono">#2338C9</span><span style="font-weight: 600; color: #4A4366">Enlaces de texto, siempre subrayados</span>
+<span class="mono" style="font-weight: 700">--bg / --surface</span><span class="mono">#F6F7FF · #FFFFFF</span><span style="font-weight: 600; color: #4A4366">Fondo de la app y tarjetas</span>
+<span class="mono" style="font-weight: 700">--sunken / --track</span><span class="mono">#F1F3FF · #E6E8F2</span><span style="font-weight: 600; color: #4A4366">Pistas de segmentados y barras</span>
+<span class="mono" style="font-weight: 700">--border-control</span><span class="mono">#8A86A3</span><span style="font-weight: 600; color: #4A4366">Bordes de campos y chips (3,5:1)</span>
+<span class="mono" style="font-weight: 700">--border-subtle</span><span class="mono">#ECEEF8</span><span style="font-weight: 600; color: #4A4366">Separadores decorativos</span>
+<span class="mono" style="font-weight: 700">--focus-ring</span><span class="mono" style="font-size: 11px">0 0 0 3px #FFF, 0 0 0 6px #3D5AFE</span><span style="font-weight: 600; color: #4A4366">Foco por teclado en todo</span>
+</div>
+</section>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 10px">
+<h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Movimiento y preferencias</h2>
+<div style="display: grid; grid-template-columns: 200px 1fr; gap: 8px 12px; font-size: 13px; align-items: center">
+<span class="mono" style="font-weight: 700">--dur-fast</span><span style="font-weight: 600; color: #4A4366">150 ms · hover, presionado</span>
+<span class="mono" style="font-weight: 700">--dur-base</span><span style="font-weight: 600; color: #4A4366">250 ms · modales, tooltips, toasts</span>
+<span class="mono" style="font-weight: 700">--dur-slow</span><span style="font-weight: 600; color: #4A4366">500–900 ms · barras de progreso, celebración</span>
+<span class="mono" style="font-weight: 700">--ease-out</span><span style="font-weight: 600; color: #4A4366">cubic-bezier(.2, .8, .2, 1)</span>
+<span class="mono" style="font-weight: 700">--ease-pop</span><span style="font-weight: 600; color: #4A4366">cubic-bezier(.3, 1.5, .5, 1) · rebote suave</span>
+</div>
+<pre class="mono" style="margin: 6px 0 0; padding: 16px; border-radius: 18px; background: #1B1340; color: #E3E8FF; font-size: 12px; line-height: 1.6; white-space: pre-wrap">@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0ms; --dur-base: 0ms; --dur-slow: 0ms; }
+  .onda * { animation: none; }  /* el estado queda en texto */
+}
+[data-motion="reduced"] { /* misma regla, desde Ajustes */ }</pre>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">Ajustes añade «Animaciones: automáticas / reducidas», por si el sistema no lo indica.</span>
+</section>
+</div>
+
+<section style="padding: 26px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: grid; grid-template-columns: 1.5fr 1fr; gap: 28px">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><h2 class="disp" style="margin: 0; font-size: 24px; font-weight: 800">Escala tipográfica inclusiva</h2><span style="font-size: 13px; font-weight: 700; color: #4A4366">en rem: respeta el tamaño de letra del navegador</span></div>
+<div style="display: grid; grid-template-columns: 150px 80px 80px 1fr; gap: 7px 12px; font-size: 13px; align-items: center">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">TOKEN</span><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">ESCRIT.</span><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">MÓVIL</span><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">CSS</span>
+<span class="mono" style="font-weight: 700">--fs-display</span><span>76</span><span>44</span><span class="mono" style="font-size: 12px">clamp(2.75rem, 6vw, 4.75rem)</span>
+<span class="mono" style="font-weight: 700">--fs-h1</span><span>60</span><span>36</span><span class="mono" style="font-size: 12px">clamp(2.25rem, 5vw, 3.75rem)</span>
+<span class="mono" style="font-weight: 700">--fs-h2</span><span>30</span><span>24</span><span class="mono" style="font-size: 12px">clamp(1.5rem, 2.5vw, 1.875rem)</span>
+<span class="mono" style="font-weight: 700">--fs-metric</span><span>44</span><span>34</span><span class="mono" style="font-size: 12px">clamp(2.125rem, 3.5vw, 2.75rem)</span>
+<span class="mono" style="font-weight: 700">--fs-body-l</span><span>18</span><span>17</span><span class="mono" style="font-size: 12px">clamp(1.0625rem, 1.2vw, 1.125rem)</span>
+<span class="mono" style="font-weight: 700">--fs-body</span><span>16</span><span>16</span><span class="mono" style="font-size: 12px">1rem · campos siempre 16 (evita zoom en iOS)</span>
+<span class="mono" style="font-weight: 700">--fs-small</span><span>14</span><span>14</span><span class="mono" style="font-size: 12px">0.875rem</span>
+<span class="mono" style="font-weight: 700">--fs-caption</span><span>13</span><span>13</span><span class="mono" style="font-size: 12px">0.8125rem · mínimo absoluto 12</span>
+</div>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366">Interlineado 1,45–1,55 en texto, 1,0–1,1 en títulos. Líneas de 70 caracteres como máximo. Ningún texto por debajo de 12 px.</span>
+</div>
+<div style="display: flex; gap: 18px; align-items: flex-start; justify-content: center">
+<div style="width: 220px; padding: 18px 16px; border-radius: 30px; background: #F6F7FF; box-shadow: inset 0 0 0 6px #1B1340; display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 11px; font-weight: 800; letter-spacing: .1em; color: #5B5478">MÓVIL · 390</span>
+<span class="disp" style="font-size: 30px; font-weight: 800; letter-spacing: -0.04em; line-height: 1">Hola, Amado.</span>
+<span style="font-size: 15px; font-weight: 600; line-height: 1.45">Te faltan 6 minutos para la meta de hoy.</span>
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #5B5478">PROMPT DEL DÍA</span>
+<span lang="en" class="disp" style="font-size: 19px; font-weight: 700; line-height: 1.25">“Tell me about something you built.”</span>
+<span style="min-height: 44px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center">Responder</span>
+</div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 10px; padding-top: 10px">
+<span style="font-weight: 800; font-size: 15px">Tamaño de texto en Ajustes</span>
+<div style="display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #F1F3FF; align-self: flex-start"><span style="padding: 8px 12px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 13px">100 %</span><span style="padding: 8px 12px; font-weight: 800; font-size: 13px">115 %</span><span style="padding: 8px 12px; font-weight: 800; font-size: 13px">130 %</span></div>
+<span style="font-size: 13px; font-weight: 600; color: #4A4366; line-height: 1.5">Escala el tamaño raíz (<span class="mono">html { font-size }</span>); el diseño se reorganiza sin cortar texto.</span>
+</div>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1560}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

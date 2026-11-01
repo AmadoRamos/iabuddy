@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>IABuddy — Escenarios</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@500;700&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#3D5AFE}a:hover{color:#1B1340}
+button{font-family:inherit;cursor:pointer}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.mono{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+a:focus-visible,button:focus-visible{outline:3px solid #3D5AFE;outline-offset:3px}
+.lift{transition:transform .2s ease}
+.lift:hover{transform:translateY(-3px)}
+@keyframes popin{0%{transform:translateY(8px);opacity:0}100%{transform:none;opacity:1}}
+.pop{animation:popin .4s ease-out both}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="background: #F6F7FF; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif">
+
+<header style="max-width: 1320px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 40px) 8px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="InicioO2.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #1B1340; min-height: 44px">
+<svg aria-hidden="true" width="44" height="44" viewBox="0 0 200 200"><rect x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/><rect x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE"/><rect x="166" y="88" width="20" height="48" rx="10" fill="#9BE22D"/><circle cx="90" cy="76" r="10" fill="#FFFFFF"/><circle cx="112" cy="76" r="10" fill="#FFFFFF"/></svg>
+<span class="disp" style="font-size: 28px; font-weight: 800; letter-spacing: -0.045em">iabuddy</span>
+</a>
+<nav aria-label="Principal" style="display: flex; flex-wrap: wrap; gap: 4px; padding: 5px; background: #FFFFFF; border: 2.5px solid #1B1340; border-radius: 999px">
+<a href="InicioO2.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Hoy</a>
+<a href="O2Conversacion.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Conversar</a>
+<a href="O2Escenarios.dc.html" aria-current="page" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 15px; text-decoration: none">Escenarios</a>
+<a href="O2Pronunciacion.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Sonidos</a>
+<a href="O2Progreso.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Progreso</a>
+</nav>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+<span style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: #FFC800; border: 2.5px solid #1B1340; font-weight: 800; font-size: 15px"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="#FF6B3D" stroke="#1B1340" stroke-width="1.8" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>12 días</span>
+<span style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: #9BE22D; border: 2.5px solid #1B1340; font-weight: 800; font-size: 15px">2.340 XP</span>
+<a href="O2Ajustes.dc.html" aria-label="Ajustes" style="width: 44px; height: 44px; border-radius: 50%; background: #FFFFFF; border: 2.5px solid #1B1340; display: flex; align-items: center; justify-content: center; color: #1B1340"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></a>
+</div>
+</header>
+
+<main style="max-width: 1320px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 40px) 56px; display: flex; flex-direction: column; gap: 24px">
+
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h1 class="disp" style="margin: 0; font-size: clamp(40px, 5vw, 60px); font-weight: 800; letter-spacing: -0.04em; line-height: 1">Escenarios</h1>
+<p style="margin: 0; font-size: 18px; font-weight: 600; color: #4A4366">Roleplays con objetivos. Cada objetivo <strong style="color: #1B1340">+30 XP</strong>; todos, <strong style="color: #1B1340">+50 XP</strong>.</p>
+</div>
+<div role="group" aria-label="Filtrar escenarios" style="display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; border-radius: 999px; background: #FFFFFF">
+<button type="button" onClick="{{f.todos.pick}}" aria-pressed="{{f.todos.on}}" style="min-height: 44px; padding: 0 18px; border: none; border-radius: 999px; background: {{f.todos.bg}}; color: {{f.todos.fg}}; font-weight: 800; font-size: 15px">Todos</button>
+<button type="button" onClick="{{f.trabajo.pick}}" aria-pressed="{{f.trabajo.on}}" style="min-height: 44px; padding: 0 18px; border: none; border-radius: 999px; background: {{f.trabajo.bg}}; color: {{f.trabajo.fg}}; font-weight: 800; font-size: 15px">Trabajo</button>
+<button type="button" onClick="{{f.viajes.pick}}" aria-pressed="{{f.viajes.on}}" style="min-height: 44px; padding: 0 18px; border: none; border-radius: 999px; background: {{f.viajes.bg}}; color: {{f.viajes.fg}}; font-weight: 800; font-size: 15px">Viajes</button>
+<button type="button" onClick="{{f.social.pick}}" aria-pressed="{{f.social.on}}" style="min-height: 44px; padding: 0 18px; border: none; border-radius: 999px; background: {{f.social.bg}}; color: {{f.social.fg}}; font-weight: 800; font-size: 15px">Social</button>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+<section aria-label="Lista de escenarios" style="flex: 999 1 560px; min-width: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 18px">
+
+<sc-if value="{{c.entrevista.show}}" hint-placeholder-val="{{ true }}">
+<button type="button" class="lift" onClick="{{c.entrevista.pick}}" aria-pressed="{{c.entrevista.selected}}" style="text-align: left; padding: 0; border: none; border-radius: 28px; background: #FFFFFF; box-shadow: {{c.entrevista.shadow}}; overflow: hidden; display: flex; flex-direction: column; color: #1B1340; width: 100%">
+<span style="height: 104px; background: #E3E8FF; display: flex; align-items: center; justify-content: space-between; padding: 0 20px">
+<span style="width: 58px; height: 58px; border-radius: 20px; background: #3D5AFE; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+<span aria-label="2 de 3 estrellas" style="font-size: 22px; letter-spacing: 2px">★★☆</span>
+</span>
+<span style="padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 6px">
+<span class="disp" style="font-size: 22px; font-weight: 800; letter-spacing: -0.02em">Entrevista técnica — Backend Python</span>
+<span style="font-size: 14px; font-weight: 600; color: #4A4366">Trabajo · 15 min · 4 objetivos</span>
+</span>
+</button>
+</sc-if>
+
+<sc-if value="{{c.standup.show}}" hint-placeholder-val="{{ true }}">
+<button type="button" class="lift" onClick="{{c.standup.pick}}" aria-pressed="{{c.standup.selected}}" style="text-align: left; padding: 0; border: none; border-radius: 28px; background: #FFFFFF; box-shadow: {{c.standup.shadow}}; overflow: hidden; display: flex; flex-direction: column; color: #1B1340; width: 100%">
+<span style="height: 104px; background: #EEFAD9; display: flex; align-items: center; justify-content: space-between; padding: 0 20px">
+<span style="width: 58px; height: 58px; border-radius: 20px; background: #9BE22D; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 7v7M12 7v4M16 7v9"/></svg></span>
+<span aria-label="3 de 3 estrellas" style="font-size: 22px; letter-spacing: 2px">★★★</span>
+</span>
+<span style="padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 6px">
+<span class="disp" style="font-size: 22px; font-weight: 800; letter-spacing: -0.02em">Daily standup</span>
+<span style="font-size: 14px; font-weight: 600; color: #4A4366">Trabajo · 8 min · 4 objetivos</span>
+</span>
+</button>
+</sc-if>
+
+<sc-if value="{{c.restaurante.show}}" hint-placeholder-val="{{ true }}">
+<button type="button" class="lift" onClick="{{c.restaurante.pick}}" aria-pressed="{{c.restaurante.selected}}" style="text-align: left; padding: 0; border: none; border-radius: 28px; background: #FFFFFF; box-shadow: {{c.restaurante.shadow}}; overflow: hidden; display: flex; flex-direction: column; color: #1B1340; width: 100%">
+<span style="height: 104px; background: #FFE8DF; display: flex; align-items: center; justify-content: space-between; padding: 0 20px">
+<span style="width: 58px; height: 58px; border-radius: 20px; background: #FF6B3D; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg></span>
+<span aria-label="1 de 3 estrellas" style="font-size: 22px; letter-spacing: 2px">★☆☆</span>
+</span>
+<span style="padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 6px">
+<span class="disp" style="font-size: 22px; font-weight: 800; letter-spacing: -0.02em">Pedir en un restaurante</span>
+<span style="font-size: 14px; font-weight: 600; color: #4A4366">Viajes · 10 min · 4 objetivos</span>
+</span>
+</button>
+</sc-if>
+
+<sc-if value="{{c.hotel.show}}" hint-placeholder-val="{{ true }}">
+<button type="button" class="lift" onClick="{{c.hotel.pick}}" aria-pressed="{{c.hotel.selected}}" style="text-align: left; padding: 0; border: none; border-radius: 28px; background: #FFFFFF; box-shadow: {{c.hotel.shadow}}; overflow: hidden; display: flex; flex-direction: column; color: #1B1340; width: 100%">
+<span style="height: 104px; background: #FFF4C7; display: flex; align-items: center; justify-content: space-between; padding: 0 20px">
+<span style="width: 58px; height: 58px; border-radius: 20px; background: #FFC800; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg></span>
+<span style="padding: 4px 12px; border-radius: 999px; background: #1B1340; color: #FFC800; font-weight: 800; font-size: 13px">NUEVO</span>
+</span>
+<span style="padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 6px">
+<span class="disp" style="font-size: 22px; font-weight: 800; letter-spacing: -0.02em">Check-in en hotel</span>
+<span style="font-size: 14px; font-weight: 600; color: #4A4366">Viajes · 10 min · 4 objetivos</span>
+</span>
+</button>
+</sc-if>
+
+<sc-if value="{{c.smalltalk.show}}" hint-placeholder-val="{{ true }}">
+<button type="button" class="lift" onClick="{{c.smalltalk.pick}}" aria-pressed="{{c.smalltalk.selected}}" style="text-align: left; padding: 0; border: none; border-radius: 28px; background: #FFFFFF; box-shadow: {{c.smalltalk.shadow}}; overflow: hidden; display: flex; flex-direction: column; color: #1B1340; width: 100%">
+<span style="height: 104px; background: #FFE8F3; display: flex; align-items: center; justify-content: space-between; padding: 0 20px">
+<span style="width: 58px; height: 58px; border-radius: 20px; background: #FF5FAE; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1B1340" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><path d="M6 2v2M10 2v2M14 2v2"/></svg></span>
+<span aria-label="2 de 3 estrellas" style="font-size: 22px; letter-spacing: 2px">★★☆</span>
+</span>
+<span style="padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 6px">
+<span class="disp" style="font-size: 22px; font-weight: 800; letter-spacing: -0.02em">Small talk con un colega</span>
+<span style="font-size: 14px; font-weight: 600; color: #4A4366">Social · 6 min · 4 objetivos</span>
+</span>
+</button>
+</sc-if>
+
+<div style="border-radius: 28px; border: 3px dashed #B9C2F0; padding: 22px 20px; display: flex; flex-direction: column; gap: 10px; justify-content: center">
+<span class="disp" style="font-size: 22px; font-weight: 800; letter-spacing: -0.02em">Crea tu escenario</span>
+<span style="font-size: 14px; font-weight: 600; color: #4A4366; line-height: 1.45">Añade un archivo YAML con rol, contexto, objetivos, vocabulario y criterio de fin.</span>
+<span class="mono" style="align-self: flex-start; padding: 6px 10px; border-radius: 10px; background: #FFFFFF; font-size: 13px; font-weight: 500">scenarios/mi_escenario.yaml</span>
+</div>
+</section>
+
+<aside aria-label="Detalle del escenario" style="flex: 1 1 380px; min-width: 0; border-radius: 32px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); overflow: hidden">
+<div style="padding: 26px 28px; background: {{sel.color}}; color: {{sel.fg}}; display: flex; flex-direction: column; gap: 8px">
+<span style="font-weight: 800; font-size: 13px; letter-spacing: .12em">{{sel.meta}}</span>
+<h2 class="disp" style="margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.05">{{sel.title}}</h2>
+<span style="font-size: 20px; letter-spacing: 2px">{{sel.stars}}</span>
+</div>
+<div class="pop" style="padding: 24px 28px 28px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<div style="padding: 14px; border-radius: 18px; background: #F6F7FF; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">BUDDY HACE DE</span><span style="font-size: 15px; font-weight: 700; line-height: 1.4">{{sel.partner}}</span></div>
+<div style="padding: 14px; border-radius: 18px; background: #F6F7FF; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">TÚ ERES</span><span style="font-size: 15px; font-weight: 700; line-height: 1.4">{{sel.user}}</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">OBJETIVOS</span>
+<sc-for list="{{sel.goals}}" as="g" hint-placeholder-count="4">
+<div style="display: flex; align-items: center; gap: 12px">
+<span style="flex: none; width: 10px; height: 30px; border-radius: 9px; background: {{sel.color}}"></span>
+<span lang="en" style="flex: 1; font-size: 16px; font-weight: 700">{{g}}</span>
+<span style="padding: 2px 10px; border-radius: 999px; background: #EEFAD9; color: #2F5208; font-weight: 800; font-size: 13px">+30</span>
+</div>
+</sc-for>
+<span style="font-size: 14px; font-weight: 700; color: #4A4366">Todos los objetivos: <strong style="color: #1B1340">+50 XP extra</strong> · 1★ terminarlo · 2★ la mitad · 3★ todos</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: .08em; color: #5B5478">VOCABULARIO CLAVE</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{sel.vocab}}" as="v" hint-placeholder-count="5"><span lang="en" style="padding: 6px 12px; border-radius: 10px; background: {{sel.tint}}; font-weight: 700; font-size: 14px">{{v}}</span></sc-for>
+</div>
+</div>
+<span style="font-size: 14px; font-weight: 600; color: #4A4366">Termina con: <strong style="color: #1B1340">{{sel.end}}</strong></span>
+<a class="lift" href="O2Conversacion.dc.html" style="display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 58px; border-radius: 999px; background: #3D5AFE; color: #FFFFFF; font-weight: 800; font-size: 18px; text-decoration: none">Empezar roleplay <span style="padding: 4px 10px; border-radius: 8px; background: #FFFFFF; color: #1B1340; font-size: 13px">Espacio</span></a>
+</div>
+</aside>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sel: 'entrevista', filter: 'todos' };
+  }
+  renderVals() {
+    const data = {
+      entrevista: { cat: 'trabajo', color: '#3D5AFE', fg: '#FFFFFF', tint: '#E3E8FF', meta: 'TRABAJO · 15 MIN', stars: '★★☆', title: 'Entrevista técnica — Backend Python', partner: 'Hiring manager en una startup de EE. UU., amable pero incisivo', user: 'Candidato a un puesto remoto de backend senior', goals: ['Introduce yourself in under 1 minute', 'Describe a project you are proud of', 'Explain a technical trade-off you made', 'Ask the interviewer two questions'], vocab: ['scalability', 'trade-off', 'ownership', 'deadline', 'stakeholder'], end: 'todos los objetivos o 15 minutos' },
+      standup: { cat: 'trabajo', color: '#9BE22D', fg: '#1B1340', tint: '#EEFAD9', meta: 'TRABAJO · 8 MIN', stars: '★★★', title: 'Daily standup', partner: 'Tech lead de tu equipo remoto', user: 'Desarrollador backend del equipo', goals: ['Say what you did yesterday', 'Say what you will do today', 'Mention a blocker', 'Ask for help clearly'], vocab: ['blocker', 'pull request', 'merge', 'deploy', 'ETA'], end: 'todos los objetivos o 8 minutos' },
+      restaurante: { cat: 'viajes', color: '#FF6B3D', fg: '#1B1340', tint: '#FFE8DF', meta: 'VIAJES · 10 MIN', stars: '★☆☆', title: 'Pedir en un restaurante', partner: 'Mesero en un restaurante de Nueva York', user: 'Cliente que cena con un amigo', goals: ['Ask for a table for two', 'Ask for a recommendation', 'Order a main and a drink', 'Ask for the check'], vocab: ['reservation', 'appetizer', 'medium-rare', 'refill', 'check'], end: 'todos los objetivos o 10 minutos' },
+      hotel: { cat: 'viajes', color: '#FFC800', fg: '#1B1340', tint: '#FFF4C7', meta: 'VIAJES · 10 MIN · NUEVO', stars: '☆☆☆', title: 'Check-in en hotel', partner: 'Recepcionista de un hotel en Chicago', user: 'Huésped que llega tarde en la noche', goals: ['Give your name and reservation', 'Ask about breakfast time', 'Request a late checkout', 'Ask for the Wi-Fi password'], vocab: ['front desk', 'deposit', 'amenities', 'late checkout', 'key card'], end: 'todos los objetivos o 10 minutos' },
+      smalltalk: { cat: 'social', color: '#FF5FAE', fg: '#1B1340', tint: '#FFE8F3', meta: 'SOCIAL · 6 MIN', stars: '★★☆', title: 'Small talk con un colega', partner: 'Colega de otro equipo en la cocina de la oficina', user: 'Tú, en tu primera semana', goals: ['Greet and introduce yourself', 'Ask about their weekend', 'Share something about you', 'Close the chat politely'], vocab: ['catch up', 'by the way', 'anyway', 'grab a coffee', 'nice to meet you'], end: 'todos los objetivos o 6 minutos' }
+    };
+    const filter = this.state.filter;
+    const c = {};
+    Object.keys(data).forEach((k) => {
+      const d = data[k];
+      const selected = this.state.sel === k;
+      c[k] = {
+        selected,
+        show: filter === 'todos' || d.cat === filter,
+        shadow: selected ? '0 0 0 4px ' + d.color + ', 0 20px 44px -30px rgba(27,19,64,.5)' : '0 20px 44px -30px rgba(27,19,64,.4)',
+        pick: () => this.setState({ sel: k })
+      };
+    });
+    const f = {};
+    ['todos', 'trabajo', 'viajes', 'social'].forEach((k) => {
+      const on = filter === k;
+      f[k] = { on, bg: on ? '#1B1340' : 'transparent', fg: on ? '#FFFFFF' : '#1B1340', pick: () => this.setState({ filter: k }) };
+    });
+    return { c, f, sel: data[this.state.sel] };
+  }
+}
+</script>
+</body>
+</html>

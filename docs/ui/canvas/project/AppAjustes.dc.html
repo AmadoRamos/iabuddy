@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>IABuddy — Ajustes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&family=Noto+Sans+Mono:wght@500&display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#2338C9}a:hover{color:#1B1340}
+button{font-family:inherit;cursor:pointer}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+.mono{font-family:'Noto Sans Mono','DejaVu Sans Mono',monospace}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #3D5AFE;outline-offset:3px}
+input[type=range]{accent-color:#3D5AFE;width:100%;height:28px}
+@keyframes talk{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+.talk{animation:talk .45s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div style="background: #F6F7FF; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif">
+
+<header style="max-width: 1320px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 40px) 8px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="AppInicio.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #1B1340; min-height: 44px">
+<svg aria-hidden="true" width="44" height="44" viewBox="0 0 200 200"><rect x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/><rect x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE"/><rect x="166" y="88" width="20" height="48" rx="10" fill="#9BE22D"/><circle cx="90" cy="76" r="10" fill="#FFFFFF"/><circle cx="112" cy="76" r="10" fill="#FFFFFF"/></svg>
+<span class="disp" style="font-size: 28px; font-weight: 800; letter-spacing: -0.045em">iabuddy</span>
+</a>
+<nav aria-label="Principal" style="display: flex; flex-wrap: wrap; gap: 4px; padding: 5px; background: #FFFFFF; border: 2.5px solid #1B1340; border-radius: 999px">
+<a href="AppInicio.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Hoy</a>
+<a href="AppConversacion.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Conversar</a>
+<a href="AppEscenarios.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Escenarios</a>
+<a href="AppPronunciacion.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Sonidos</a>
+<a href="AppProgreso.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none">Progreso</a>
+</nav>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+<span style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: #FFC800; border: 2.5px solid #1B1340; font-weight: 800; font-size: 15px"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="#FF6B3D" stroke="#1B1340" stroke-width="1.8" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>12 días</span>
+<span style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: #9BE22D; border: 2.5px solid #1B1340; font-weight: 800; font-size: 15px">2.340 XP</span>
+<a href="AppAjustes.dc.html" aria-label="Ajustes" aria-current="page" style="width: 44px; height: 44px; border-radius: 50%; background: #3D5AFE; border: 2.5px solid #1B1340; display: flex; align-items: center; justify-content: center; color: #FFFFFF"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></a>
+</div>
+</header>
+
+<main style="max-width: 1320px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 40px) 56px; display: flex; flex-direction: column; gap: 24px">
+<h1 class="disp" style="margin: 0; font-size: clamp(40px, 5vw, 60px); font-weight: 800; letter-spacing: -0.04em; line-height: 1">Ajustes</h1>
+
+<div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+<nav aria-label="Secciones de ajustes" style="flex: 1 1 220px; display: flex; flex-direction: column; gap: 6px; padding: 14px; border-radius: 26px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4)">
+<a href="#conv" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 12px; border-radius: 14px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none"><span style="width: 8px; height: 24px; border-radius: 9px; background: #3D5AFE"></span>Conversación</a>
+<a href="#tutor" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 12px; border-radius: 14px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none"><span style="width: 8px; height: 24px; border-radius: 9px; background: #FF6B3D"></span>Corrección</a>
+<a href="#juego" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 12px; border-radius: 14px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none"><span style="width: 8px; height: 24px; border-radius: 9px; background: #FFC800"></span>Metas y XP</a>
+<a href="#pron" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 12px; border-radius: 14px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none"><span style="width: 8px; height: 24px; border-radius: 9px; background: #FF5FAE"></span>Pronunciación</a>
+<a href="#local" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 12px; border-radius: 14px; color: #1B1340; font-weight: 700; font-size: 15px; text-decoration: none"><span style="width: 8px; height: 24px; border-radius: 9px; background: #9BE22D"></span>Modelos locales</a>
+</nav>
+
+<div style="flex: 999 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+
+<section id="conv" style="padding: 26px 28px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 22px">
+<h2 class="disp" style="margin: 0; font-size: 26px; font-weight: 800">Conversación</h2>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 800; font-size: 16px">Tecla para abrir tu turno</span><span style="font-weight: 600; font-size: 14px; color: #5B5478">Evita que ruidos o la respiración disparen turnos falsos.</span></div>
+<div style="display: flex; align-items: center; gap: 10px"><span style="padding: 8px 16px; border-radius: 10px; background: #FFFFFF; border: 2px solid #1B1340; border-bottom-width: 5px; font-weight: 800">ESPACIO</span><button type="button" style="min-height: 44px; padding: 0 16px; border: none; border-radius: 999px; background: #E3E8FF; color: #2338C9; font-weight: 800; font-size: 14px">Cambiar</button></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><label for="sil" style="font-weight: 800; font-size: 16px">Silencio para cerrar el turno</label><span style="font-weight: 800; font-size: 18px; color: #2338C9">{{silenceLabel}}</span></div>
+<input id="sil" type="range" min="400" max="2000" step="100" value="{{silence}}" onChange="{{setSilence}}">
+<div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 13px; color: #5B5478"><span>0,4 s · más ágil</span><span>Silero VAD · por defecto 0,8 s</span><span>2 s · más paciente</span></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 800; font-size: 16px">Velocidad de la voz de Buddy</span><span style="font-weight: 600; font-size: 14px; color: #5B5478">Ajustada a B1–B2. Voz en inglés americano.</span></div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+<div role="group" aria-label="Velocidad" style="display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #F1F3FF">
+<sc-for list="{{speeds}}" as="o" hint-placeholder-count="4"><button type="button" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height: 40px; padding: 0 14px; border: none; border-radius: 999px; background: {{o.bg}}; color: {{o.fg}}; font-weight: 800; font-size: 14px">{{o.label}}</button></sc-for>
+</div>
+<button type="button" style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px 0 8px; border: none; border-radius: 999px; background: #E3E8FF; color: #2338C9; font-weight: 800; font-size: 14px"><svg aria-hidden="true" width="30" height="30" viewBox="0 0 200 200"><rect class="talk" x="14" y="72" width="20" height="80" rx="10" fill="#FFC800"/><rect class="talk" x="42" y="40" width="26" height="144" rx="13" fill="#FF6B3D" style="animation-delay: -.15s"/><rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/><rect class="talk" x="132" y="40" width="26" height="144" rx="13" fill="#FF5FAE" style="animation-delay: -.3s"/><rect class="talk" x="166" y="72" width="20" height="80" rx="10" fill="#9BE22D" style="animation-delay: -.1s"/></svg>Probar voz</button>
+</div>
+</div>
+</section>
+
+<section id="tutor" style="padding: 26px 28px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 22px">
+<h2 class="disp" style="margin: 0; font-size: 26px; font-weight: 800">Corrección</h2>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 800; font-size: 16px">Cómo te corrige el tutor</span><span style="font-weight: 600; font-size: 14px; color: #5B5478">{{fbHelp}}</span></div>
+<div role="group" aria-label="Modo de corrección" style="display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #F1F3FF">
+<sc-for list="{{fbs}}" as="o" hint-placeholder-count="3"><button type="button" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height: 40px; padding: 0 16px; border: none; border-radius: 999px; background: {{o.bg}}; color: {{o.fg}}; font-weight: 800; font-size: 14px">{{o.label}}</button></sc-for>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 800; font-size: 16px">Idioma de las explicaciones</span><span style="font-weight: 600; font-size: 14px; color: #5B5478">La conversación siempre es en inglés.</span></div>
+<div role="group" aria-label="Idioma" style="display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #F1F3FF">
+<sc-for list="{{langs}}" as="o" hint-placeholder-count="2"><button type="button" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height: 40px; padding: 0 16px; border: none; border-radius: 999px; background: {{o.bg}}; color: {{o.fg}}; font-weight: 800; font-size: 14px">{{o.label}}</button></sc-for>
+</div>
+</div>
+</section>
+
+<section id="juego" style="padding: 26px 28px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 22px">
+<h2 class="disp" style="margin: 0; font-size: 26px; font-weight: 800">Metas y XP</h2>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 800; font-size: 16px">Meta diaria hablando</span><span style="font-weight: 600; font-size: 14px; color: #5B5478">Al cumplirla: +25 XP y sumas un día a la racha.</span></div>
+<div role="group" aria-label="Meta diaria en minutos" style="display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #F1F3FF">
+<sc-for list="{{goals}}" as="o" hint-placeholder-count="5"><button type="button" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="min-height: 40px; padding: 0 14px; border: none; border-radius: 999px; background: {{o.bg}}; color: {{o.fg}}; font-weight: 800; font-size: 14px">{{o.label}}</button></sc-for>
+</div>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span id="lblxp" style="font-weight: 800; font-size: 16px">Ocultar XP durante la sesión</span><span style="font-weight: 600; font-size: 14px; color: #5B5478">La verás al final, en el resumen.</span></div>
+<button type="button" role="switch" aria-checked="{{hideXp}}" aria-labelledby="lblxp" onClick="{{toggleXp}}" style="flex: none; width: 60px; height: 34px; padding: 4px; border: none; border-radius: 999px; background: {{xpTrack}}; display: flex; justify-content: {{xpKnob}}"><span style="width: 26px; height: 26px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 2px 6px rgba(27,19,64,.3)"></span></button>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span id="lblpr" style="font-weight: 800; font-size: 16px">Protector de racha</span><span style="font-weight: 600; font-size: 14px; color: #5B5478">1 día libre por semana sin perder la racha.</span></div>
+<button type="button" role="switch" aria-checked="{{protector}}" aria-labelledby="lblpr" onClick="{{toggleProt}}" style="flex: none; width: 60px; height: 34px; padding: 4px; border: none; border-radius: 999px; background: {{prTrack}}; display: flex; justify-content: {{prKnob}}"><span style="width: 26px; height: 26px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 2px 6px rgba(27,19,64,.3)"></span></button>
+</div>
+</section>
+
+<section id="pron" style="padding: 26px 28px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 22px">
+<h2 class="disp" style="margin: 0; font-size: 26px; font-weight: 800">Pronunciación</h2>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 800; font-size: 16px">Referencia</span><span style="font-weight: 600; font-size: 14px; color: #5B5478">Fonemas esperados con espeak-ng (en-us).</span></div>
+<span style="padding: 8px 16px; border-radius: 999px; background: #FFE8F3; color: #9D174D; font-weight: 800; font-size: 14px">Inglés americano</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><label for="conf" style="font-weight: 800; font-size: 16px">Marcar palabras con confianza menor a</label><span style="font-weight: 800; font-size: 18px; color: #9D174D">{{confLabel}}</span></div>
+<input id="conf" type="range" min="40" max="90" step="5" value="{{conf}}" onChange="{{setConf}}">
+<div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 13px; color: #5B5478"><span>Menos marcas</span><span>Modo pasivo durante la conversación</span><span>Más marcas</span></div>
+</div>
+</section>
+
+<section id="local" style="padding: 26px 28px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 20px 44px -30px rgba(27,19,64,.4); display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 10px"><h2 class="disp" style="margin: 0; font-size: 26px; font-weight: 800">Modelos locales</h2><span style="font-weight: 700; font-size: 14px; color: #5B5478">Carpeta: <span class="mono" style="color: #1B1340">C:\Models</span></span></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 12px">
+<div style="display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 18px; background: #F6F7FF"><span style="width: 10px; height: 10px; border-radius: 50%; background: #16A34A"></span><span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 800; font-size: 15px">VAD</span><span style="font-weight: 600; font-size: 13px; color: #5B5478">Silero VAD</span></span><span style="font-weight: 700; font-size: 13px; color: #166534">listo</span></div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 18px; background: #F6F7FF"><span style="width: 10px; height: 10px; border-radius: 50%; background: #16A34A"></span><span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 800; font-size: 15px">STT</span><span style="font-weight: 600; font-size: 13px; color: #5B5478">[modelo STT]</span></span><span style="font-weight: 700; font-size: 13px; color: #166534">listo</span></div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 18px; background: #F6F7FF"><span style="width: 10px; height: 10px; border-radius: 50%; background: #16A34A"></span><span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 800; font-size: 15px">LLM</span><span style="font-weight: 600; font-size: 13px; color: #5B5478">Ollama · [modelo]</span></span><span style="font-weight: 700; font-size: 13px; color: #166534">listo</span></div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 18px; background: #F6F7FF"><span style="width: 10px; height: 10px; border-radius: 50%; background: #16A34A"></span><span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 800; font-size: 15px">TTS</span><span style="font-weight: 600; font-size: 13px; color: #5B5478">[voz en-US]</span></span><span style="font-weight: 700; font-size: 13px; color: #166534">listo</span></div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 18px; background: #F6F7FF"><span style="width: 10px; height: 10px; border-radius: 50%; background: #16A34A"></span><span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 800; font-size: 15px">Fonemas</span><span style="font-weight: 600; font-size: 13px; color: #5B5478">wav2vec2 + espeak-ng</span></span><span style="font-weight: 700; font-size: 13px; color: #166534">listo</span></div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 18px; background: #F6F7FF"><span style="width: 10px; height: 10px; border-radius: 50%; background: #16A34A"></span><span style="flex: 1; display: flex; flex-direction: column"><span style="font-weight: 800; font-size: 15px">Audio</span><span style="font-weight: 600; font-size: 13px; color: #5B5478">PCM 16 kHz · tramas de 20 ms</span></span><span style="font-weight: 700; font-size: 13px; color: #166534">listo</span></div>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 18px; background: #FFF4C7; font-weight: 700; font-size: 14px; color: #6B4A00">Usa audífonos: así el micrófono no capta la voz de Buddy.</div>
+</section>
+</div>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1600}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { silence: 800, speed: '0,9×', fb: 'Panel', lang: 'Español', goal: 15, hideXp: false, protector: true, conf: 60 };
+  }
+  renderVals() {
+    const st = this.state;
+    const group = (opts, key, fmt) => opts.map((v) => {
+      const on = st[key] === v;
+      return { label: fmt ? fmt(v) : v, on, bg: on ? '#3D5AFE' : 'transparent', fg: on ? '#FFFFFF' : '#1B1340', pick: () => this.setState({ [key]: v }) };
+    });
+    const help = { Silencioso: 'No interrumpe: las correcciones van al resumen.', Panel: 'Correcciones en un panel lateral, sin interrumpir.', 'En voz': 'Buddy añade una nota corta al final de su respuesta.' };
+    return {
+      silence: st.silence,
+      silenceLabel: (st.silence / 1000).toFixed(1).replace('.', ',') + ' s',
+      setSilence: (e) => this.setState({ silence: Number(e.target.value) }),
+      conf: st.conf,
+      confLabel: (st.conf / 100).toFixed(2).replace('.', ','),
+      setConf: (e) => this.setState({ conf: Number(e.target.value) }),
+      speeds: group(['0,8×', '0,9×', '1,0×', '1,1×'], 'speed'),
+      fbs: group(['Silencioso', 'Panel', 'En voz'], 'fb'),
+      fbHelp: help[st.fb],
+      langs: group(['Español', 'English'], 'lang'),
+      goals: group([5, 10, 15, 20, 30], 'goal', (v) => v + ' min'),
+      hideXp: st.hideXp, xpTrack: st.hideXp ? '#3D5AFE' : '#7D7898', xpKnob: st.hideXp ? 'flex-end' : 'flex-start',
+      toggleXp: () => this.setState({ hideXp: !st.hideXp }),
+      protector: st.protector, prTrack: st.protector ? '#3D5AFE' : '#7D7898', prKnob: st.protector ? 'flex-end' : 'flex-start',
+      toggleProt: () => this.setState({ protector: !st.protector })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Buddy 03 · Onda</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@500;600;700;800&display=swap">
+<style>
+body{margin:0}
+.disp{font-family:'Bricolage Grotesque','Arial Rounded MT Bold',system-ui,sans-serif}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes blink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+@keyframes sway{0%,100%{transform:scaleY(.7)}50%{transform:scaleY(1)}}
+@keyframes talk{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+@keyframes twinkle{0%,100%{transform:scale(.6) rotate(0)}50%{transform:scale(1.15) rotate(25deg)}}
+@keyframes dot{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-6px)}}
+.a-bob{animation:bob 3.6s ease-in-out infinite}
+.blink{animation:blink 4.2s infinite;transform-box:fill-box;transform-origin:center}
+.sway{animation:sway 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.talk{animation:talk .42s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.twinkle{animation:twinkle 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.dot{animation:dot 1.2s ease-in-out infinite;transform-box:fill-box}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div style="width: 1100px; height: 820px; box-sizing: border-box; padding: 44px 48px; background: #FFFDF7; color: #1B1340; font-family: 'Figtree', system-ui, sans-serif; display: flex; flex-direction: column; gap: 30px">
+
+<div style="display: flex; gap: 44px; align-items: stretch">
+<div style="position: relative; flex: none; width: 440px; height: 400px; border-radius: 40px; background: #FFF1D6; border: 3px solid #1B1340; overflow: hidden; display: flex; align-items: center; justify-content: center">
+<div aria-hidden="true" style="position: absolute; width: 300px; height: 300px; border-radius: 50%; background: #FFE2A8"></div>
+<svg class="a-bob" role="img" aria-label="Onda, un personaje hecho de cinco barras de onda de voz con cara en la barra central" width="320" height="320" viewBox="0 0 200 200" style="position: relative">
+<rect class="sway" x="14" y="88" width="20" height="48" rx="10" fill="#FFC800"/>
+<rect class="sway" x="42" y="64" width="26" height="96" rx="13" fill="#FF6B3D" style="animation-delay: -.4s"/>
+<rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/>
+<rect class="sway" x="132" y="64" width="26" height="96" rx="13" fill="#FF5FAE" style="animation-delay: -.8s"/>
+<rect class="sway" x="166" y="88" width="20" height="48" rx="10" fill="#9BE22D" style="animation-delay: -1.2s"/>
+<g class="blink"><circle cx="89" cy="72" r="8.5" fill="#FFFFFF"/><circle cx="90" cy="74" r="4.5" fill="#1B1340"/><circle cx="111" cy="72" r="8.5" fill="#FFFFFF"/><circle cx="112" cy="74" r="4.5" fill="#1B1340"/></g>
+<path d="M91 94 Q100 103 109 94" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" fill="none"/>
+</svg>
+</div>
+
+<div style="flex: 1; display: flex; flex-direction: column; gap: 16px; padding-top: 6px">
+<span style="font-weight: 800; font-size: 14px; letter-spacing: .14em; color: #C2410C">CONCEPTO 03</span>
+<h1 class="disp" style="margin: 0; font-size: 64px; line-height: .95; font-weight: 800; letter-spacing: -0.035em">Onda</h1>
+<p style="margin: 0; font-size: 21px; line-height: 1.4; font-weight: 600">La onda de voz hecha personaje.</p>
+<ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 16px; line-height: 1.45; font-weight: 500">
+<li>Sus barras se mueven con el volumen real de tu voz: es personaje y visualizador a la vez.</li>
+<li>Abstracto y moderno: funciona como logo sin necesidad de otra mascota.</li>
+<li>Riesgo: es menos expresivo; la emoción vive solo en la barra central.</li>
+</ul>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<span style="padding: 6px 12px; border-radius: 999px; background: #FFFFFF; border: 2px solid #1B1340; font-weight: 700; font-size: 14px">Rítmico</span>
+<span style="padding: 6px 12px; border-radius: 999px; background: #FFFFFF; border: 2px solid #1B1340; font-weight: 700; font-size: 14px">Enérgico</span>
+<span style="padding: 6px 12px; border-radius: 999px; background: #FFFFFF; border: 2px solid #1B1340; font-weight: 700; font-size: 14px">Moderno</span>
+</div>
+<div style="display: flex; gap: 10px; margin-top: auto">
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #3D5AFE; border: 2px solid #1B1340"></span>#3D5AFE</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #FF6B3D; border: 2px solid #1B1340"></span>#FF6B3D</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #FF5FAE; border: 2px solid #1B1340"></span>#FF5FAE</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #FFC800; border: 2px solid #1B1340"></span>#FFC800</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700"><span style="width: 64px; height: 44px; border-radius: 12px; background: #9BE22D; border: 2px solid #1B1340"></span>#9BE22D</div>
+</div>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px">
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340">
+<svg role="img" aria-label="Escucha" width="130" height="130" viewBox="0 0 200 200">
+<rect x="14" y="102" width="20" height="20" rx="10" fill="#FFC800"/>
+<rect x="42" y="94" width="26" height="36" rx="13" fill="#FF6B3D"/>
+<rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/>
+<rect x="132" y="94" width="26" height="36" rx="13" fill="#FF5FAE"/>
+<rect x="166" y="102" width="20" height="20" rx="10" fill="#9BE22D"/>
+<circle cx="89" cy="72" r="10" fill="#FFFFFF"/><circle cx="89" cy="71" r="5.5" fill="#1B1340"/><circle cx="111" cy="72" r="10" fill="#FFFFFF"/><circle cx="111" cy="71" r="5.5" fill="#1B1340"/>
+<circle cx="100" cy="98" r="4.5" fill="#FFFFFF"/>
+</svg>
+<span style="font-weight: 800; font-size: 17px">Escucha</span>
+<span style="font-weight: 600; font-size: 13px; color: #5B5478; text-align: center">Barras en reposo, atento</span>
+</div>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340">
+<svg role="img" aria-label="Piensa" width="130" height="130" viewBox="0 0 200 200">
+<circle class="dot" cx="24" cy="112" r="9" fill="#FFC800"/>
+<circle class="dot" cx="55" cy="112" r="11" fill="#FF6B3D" style="animation-delay: .15s"/>
+<rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/>
+<circle class="dot" cx="145" cy="112" r="11" fill="#FF5FAE" style="animation-delay: .3s"/>
+<circle class="dot" cx="176" cy="112" r="9" fill="#9BE22D" style="animation-delay: .45s"/>
+<circle cx="89" cy="72" r="8.5" fill="#FFFFFF"/><circle cx="92" cy="68" r="4.5" fill="#1B1340"/><circle cx="111" cy="72" r="8.5" fill="#FFFFFF"/><circle cx="114" cy="68" r="4.5" fill="#1B1340"/>
+<path d="M92 98 H108" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+</svg>
+<span style="font-weight: 800; font-size: 17px">Piensa</span>
+<span style="font-weight: 600; font-size: 13px; color: #5B5478; text-align: center">Las barras se vuelven puntos</span>
+</div>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340">
+<svg role="img" aria-label="Habla" width="130" height="130" viewBox="0 0 200 200">
+<rect class="talk" x="14" y="72" width="20" height="80" rx="10" fill="#FFC800"/>
+<rect class="talk" x="42" y="40" width="26" height="144" rx="13" fill="#FF6B3D" style="animation-delay: -.15s"/>
+<rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/>
+<rect class="talk" x="132" y="40" width="26" height="144" rx="13" fill="#FF5FAE" style="animation-delay: -.3s"/>
+<rect class="talk" x="166" y="72" width="20" height="80" rx="10" fill="#9BE22D" style="animation-delay: -.1s"/>
+<g class="blink"><circle cx="89" cy="70" r="8.5" fill="#FFFFFF"/><circle cx="90" cy="72" r="4.5" fill="#1B1340"/><circle cx="111" cy="70" r="8.5" fill="#FFFFFF"/><circle cx="112" cy="72" r="4.5" fill="#1B1340"/></g>
+<ellipse class="talk" cx="100" cy="100" rx="10" ry="9" fill="#FFFFFF"/>
+</svg>
+<span style="font-weight: 800; font-size: 17px">Habla</span>
+<span style="font-weight: 600; font-size: 13px; color: #5B5478; text-align: center">Barras al ritmo del TTS</span>
+</div>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; border-radius: 24px; background: #FFFFFF; border: 2.5px solid #1B1340">
+<svg role="img" aria-label="Celebra" width="130" height="130" viewBox="0 0 200 200">
+<rect x="14" y="36" width="20" height="120" rx="10" fill="#FFC800"/>
+<rect x="42" y="56" width="26" height="110" rx="13" fill="#FF6B3D"/>
+<rect x="74" y="30" width="52" height="150" rx="26" fill="#3D5AFE"/>
+<rect x="132" y="56" width="26" height="110" rx="13" fill="#FF5FAE"/>
+<rect x="166" y="36" width="20" height="120" rx="10" fill="#9BE22D"/>
+<path d="M82 74 Q89 64 96 74" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M104 74 Q111 64 118 74" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none"/>
+<path d="M88 90 Q100 112 112 90 Z" fill="#FFFFFF"/>
+<path class="twinkle" transform="translate(100 12)" d="M0 -10 L3 -3 L10 -3 L4 1.6 L6.2 10 L0 5 L-6.2 10 L-4 1.6 L-10 -3 L-3 -3 Z" fill="#FFC800"/>
+</svg>
+<span style="font-weight: 800; font-size: 17px">Celebra</span>
+<span style="font-weight: 600; font-size: 13px; color: #5B5478; text-align: center">Las barras forman una sonrisa</span>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1100,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
