@@ -1,32 +1,75 @@
-# IABuddy — Diseño de UI (v0)
+# IABuddy — Diseño de UI
 
-Diseño aprobado el 2026-10-28. Lienzo original: https://claude.ai/artifact/S3kr1JQh4sCtCvaMMCD98r (privado).
+Diseño vigente: **estilo O2 «Estudio con Onda»**, tema claro, con la mascota Onda. Lienzo: https://claude.ai/artifact/Bn2LdwneukJmkQPxm6No3a (privado). Copia descargada el 2026-11-01 en [canvas/project/](canvas/project/).
 
-## Pantallas
+El código que implementa este diseño está en [frontend/](../../frontend/): consulta [THEME.md](../../frontend/THEME.md), [COMPONENTS.md](../../frontend/COMPONENTS.md) y el catálogo [design-system.html](../../frontend/design-system.html).
 
-| Archivo | Pantalla | Interactiva |
-|---|---|---|
-| `Main.dc.html` | Inicio: meta diaria, racha semanal, retos, modos de práctica, sesiones recientes | navegación |
-| `Session.dc.html` | Sesión de conversación: chat, botón de turno con 4 estados, panel del tutor, XP por turno | sí (estados del turno, modo del tutor) |
-| `Scenarios.dc.html` | Escenarios: lista con estrellas, detalle con objetivos, vocabulario y recompensas | sí (selección) |
-| `Pronunciation.dc.html` | Pronunciación: puntuación por palabra y fonema, niveles por sonido | sí (selección de palabra) |
-| `Summary.dc.html` | Resumen de sesión: XP ganado, racha, logro, errores agrupados, repertorio | navegación |
-| `Progress.dc.html` | Progreso: nivel, estadísticas, mapa de actividad, récords, logros | navegación |
-| `Settings.dc.html` | Ajustes: turno de voz, voz de Buddy, tutor, motivación, motores, datos | sí (controles) |
-| `canvas.json` | Índice del lienzo (posición y tamaño de cada pantalla) | — |
+## Lienzo (`canvas/project/`)
 
-## Sistema visual
+[canvas.json](canvas/project/canvas.json) es el índice: guarda la página, la posición y el título de cada artboard. Las páginas del lienzo son estas:
 
-- **Tipografía:** Manrope (UI) + JetBrains Mono (cifras, latencias, fonemas).
-- **Fondo / superficies:** `#0E1014` · `#12151B` · `#161920` · `#1D2330` · bordes `#242833`.
-- **Texto:** `#ECEEF2` principal · `#A3AAB7` secundario.
-- **Azul `#7AB0FF`:** acción principal, Buddy, estado activo.
-- **Naranja `#FFB454`:** correcciones y errores.
-- **Violeta `#B79CFF`** (fondo `#241E38`, texto `#CDB9FF`): todo lo de gamificación (XP, racha, niveles, logros).
-- **Verde `#5FD39A`:** motores listos, objetivos cumplidos.
-- **Rojo suave `#FF8A8A`:** grabando tu turno.
-- **Navegación:** barra superior con cápsula de pestañas (Inicio, Conversación, Escenarios, Pronunciación, Progreso) + racha, nivel, estado de motores y botón de Ajustes.
+### App · O2: pantallas de la app
+
+| Archivo | Pantalla |
+|---|---|
+| `AppInicio.dc.html` | Inicio (Hoy): meta diaria, racha, retos, modos de práctica |
+| `AppConversacion.dc.html` | Conversación en vivo: chat, botón Onda con sus estados, panel del tutor |
+| `AppEscenarios.dc.html` | Escenarios: lista, detalle, objetivos y recompensas |
+| `AppPronunciacion.dc.html` | Drill de pronunciación: puntuación por palabra y fonema, niveles por sonido |
+| `AppResumen.dc.html` | Resumen de sesión |
+| `AppProgreso.dc.html` | Progreso: nivel, calendario de racha, semana, retos y logros |
+| `AppAjustes.dc.html` | Ajustes |
+
+Navegación: barra superior con cápsula de 5 destinos (Hoy, Conversar, Escenarios, Sonidos, Progreso) + racha, XP y Ajustes.
+
+### Sistema de diseño (`DS*.dc.html`)
+
+| # | Archivo | Tema | En código |
+|---|---|---|---|
+| 01 | `DSTema` | Colores de Onda, tintes, neutros, tipografía, espaciado, radios, movimiento | ✔ `theme.css` |
+| 02 | `DSBotones` | Botones, botones de ícono, teclas, botón Onda | ✔ |
+| 03 | `DSControles` | Segmentado, filtros, interruptor, deslizador, campos, casillas, navegación | ✔ |
+| 04 | `DSFeedback` | Modales, tooltips, avisos, alertas, vacío y carga | ✔ |
+| 05 | `DSDatos` | Tarjetas, etiquetas, progreso, pronunciación, conversación, Onda, íconos | ✔ |
+| 06 | `DSEstados` | Estados de todos los componentes | ✔ |
+| 07 | `DSA11y` | Accesibilidad | reglas en `THEME.md` |
+| 08 | `DSTokens` | Tokens semánticos y tipografía responsive | ✔ `tokens.css` |
+| 09 | `DSCarga` | Carga, háptica y sonido | parcial |
+| 10 | `DSNavegacion` | Barra, cajón y navegación inferior móvil, migas, paginador | parcial |
+| 11 | `DSFormularios` | Formularios, validación, selector de fecha y hora | parcial |
+| 12 | `DSAudio` | Medidor, prueba de micrófono, reproductor A/B | — |
+| 13 | `DSReticula` | Breakpoints y elevación | ✔ tokens |
+| 14 | `DSErrores` | Errores del sistema local (motor, modelos) | — |
+| 15 | `DSPrimerUso` | Primer uso | — |
+| 16 | `DSContenido` | Formatos, idiomas, glosario, longitudes | — |
+| 17 | `DSGraficas` | Gráficas | — |
+| 18 | `DSAcordeon` | Acordeón, búsqueda y atajos | — |
+| 19 | `DSLogros` | Logros e insignias | — |
+
+### Exploración: historial de decisiones
+
+- `Main`, `InicioB`–`InicioE`, `Conversacion` y `InicioC2`: 5 direcciones visuales para Inicio.
+- `Buddy01`–`Buddy06`: 6 conceptos de mascota. **Elegida: Onda** (`OndaHoja`, `OndaContexto`).
+- `InicioO1`–`InicioO4`: Inicio reimaginado con Onda. **Elegido: O2**. O3 (ecualizador) queda reservado para el futuro.
+- `O2*.dc.html`: primera versión de las pantallas en estilo O2. Las sustituyen las `App*`.
+
+## Sistema visual (resumen)
+
+- **Tema:** solo claro. Fondo `#F6F7FF`, tarjetas blancas de radio 30, tinta `#1B1340`.
+- **Colores de Onda**, cada uno con una función fija:
+  - azul `#3D5AFE`: acción y marca;
+  - coral `#FF6B3D`: tu voz y «a mejorar»;
+  - rosa `#FF5FAE`: sonidos;
+  - amarillo `#FFC800`: racha y XP;
+  - lima `#9BE22D`: logros y aciertos.
+- **Tipografía:** Bricolage Grotesque (títulos y cifras), Figtree (interfaz), Noto Sans Mono (IPA).
+- **Tono:** el feedback nunca regaña. Sin rojo ni alarmas: los errores del alumno usan coral suave.
+- **Tokens:** [tokens.json](tokens.json) (formato W3C), equivalente a [frontend/css/tokens.css](../../frontend/css/tokens.css). Si cambias uno, cambia el otro.
+
+## Diseño v0 (obsoleto)
+
+`Main.dc.html`, `Session.dc.html`, `Scenarios.dc.html`, `Pronunciation.dc.html`, `Summary.dc.html`, `Progress.dc.html`, `Settings.dc.html` y `canvas.json`, en esta carpeta, son el primer diseño (tema oscuro, Manrope, aprobado el 2026-10-28). Lo sustituye el lienzo de arriba y solo se conserva como referencia.
 
 ## Nota técnica
 
-Los `.dc.html` son el código fuente del lienzo de diseño: usan una plantilla (`{{...}}`, `<sc-for>`, `<sc-if>`) y un script `support.js` del editor, por eso **no se abren directamente en el navegador**. Sirven como referencia de estructura, textos, colores y medidas para construir el frontend real (`frontend/`). Los datos que aparecen son de ejemplo.
+Los `.dc.html` son el código fuente del lienzo de diseño. Usan una plantilla (`{{...}}`, `<sc-for>`, `<sc-if>`) y un script `support.js` del editor, así que **no se abren directamente en el navegador**. Sirven como referencia de estructura, textos, colores y medidas. Los datos que aparecen son de ejemplo.
