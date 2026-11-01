@@ -66,9 +66,9 @@ Navegación: barra superior con cápsula de 5 destinos (Hoy, Conversar, Escenari
 - **Tono:** el feedback nunca regaña. Sin rojo ni alarmas: los errores del alumno usan coral suave.
 - **Tokens:** [tokens.json](tokens.json) (formato W3C), equivalente a [frontend/css/tokens.css](../../frontend/css/tokens.css). Si cambias uno, cambia el otro.
 
-## Diseño v0 (obsoleto)
+## Diseño v0 (retirado)
 
-`Main.dc.html`, `Session.dc.html`, `Scenarios.dc.html`, `Pronunciation.dc.html`, `Summary.dc.html`, `Progress.dc.html`, `Settings.dc.html` y `canvas.json`, en esta carpeta, son el primer diseño (tema oscuro, Manrope, aprobado el 2026-10-28). Lo sustituye el lienzo de arriba y solo se conserva como referencia.
+El primer diseño (tema oscuro, Manrope, aprobado el 2026-10-28) se borró el 2026-11-01. Si lo necesitas, está en el historial de git: `git show caac978:docs/ui/Main.dc.html`.
 
 ## Nota técnica
 
