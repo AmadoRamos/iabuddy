@@ -8,7 +8,7 @@ Solo hay **tema claro**: el diseño lo decide así («Tema claro, nunca oscuro»
 | Archivo | Qué contiene |
 |---|---|
 | [css/tokens.css](css/tokens.css) | Variables CSS generadas desde el sistema de diseño. Se edita solo para cambiar un valor del sistema. |
-| [docs/ui/tokens.json](../docs/ui/tokens.json) | Los mismos tokens en formato W3C (`$value`, `$type`). Si cambias uno, cambia el otro. |
+| [docs/ui/tokens.json](../docs/ui/tokens.json) | Todos los tokens en formato W3C (`$value`, `$type`): los 92 de `tokens.css`, los 14 de componente de `theme.css` y los 4 breakpoints. Si cambias un valor en el CSS, cámbialo también aquí. Revisado el 2026-11-01: los valores coinciden. |
 | [css/theme.css](css/theme.css) | Importa fuentes y tokens, añade los tintes de componente que faltan en `tokens.css`, estilos base, tipografía, layout y animaciones. |
 
 Una página solo necesita esto:
@@ -41,7 +41,33 @@ Los cinco colores de Onda tienen una función fija. No se usan como decoración 
 | Aviso / amarillo | `--warning-bg` `#FFF4C7` | `--warning-text` `#854D0E` |
 | Éxito / lima | `--success-bg` `#EEFAD9` | `--success-text` `#2F5208` |
 
-**Neutros:** tinta `--text` `#1B1340`, `--text-2` `#4A4366`, `--text-3` `#5B5478`, fondo `--bg` `#F6F7FF`, superficie `--surface` `#FFFFFF`, pista `--track` `#E6E8F2`.
+Cada familia semántica (`info`, `success`, `warning`, `error`) tiene además `--*-fill` (relleno sólido) y `--*-border` (borde e icono).
+
+**Neutros:**
+
+| Token | Valor | Uso |
+|---|---|---|
+| `--text` | `#1B1340` | Texto principal (16,2:1) |
+| `--text-2` | `#4A4366` | Texto secundario |
+| `--text-3` | `#5B5478` | Texto terciario |
+| `--text-disabled` | `#6B6788` | Solo controles desactivados |
+| `--link` | `#2338C9` | Enlaces, siempre subrayados |
+| `--bg` | `#F6F7FF` | Fondo de la app |
+| `--surface` | `#FFFFFF` | Tarjetas |
+| `--sunken` | `#F1F3FF` | Pistas de segmentados, campos |
+| `--track` | `#E6E8F2` | Barras de progreso vacías |
+| `--border-control` | `#8A86A3` | Bordes de campos y chips (3,5:1) |
+| `--border-subtle` | `#ECEEF8` | Separadores y guías de gráficas |
+| `--switch-off` | `#7D7898` | Interruptor apagado (4,2:1) |
+| `--pending` | `#6E7BC4` | Borde discontinuo de pendiente o bloqueado |
+
+**Acción:** `--action` `#3D5AFE` (primario, selección) · `--action-pressed` `#2A43D9` · `--on-action` `#FFFFFF`.
+
+**Gráficas:**
+- Series: `--chart-1` `#3D5AFE` Conversación · `--chart-2` `#D9480F` Escenarios · `--chart-3` `#C0287A` Sonidos · `--chart-4` `#4D7C0F` Otros.
+- Escala secuencial de minutos al día: `--seq-0` `#EEF0F8` 0 · `--seq-1` `#C6CFFF` 1–4 · `--seq-2` `#8C9FFF` 5–9 · `--seq-3` `#3D5AFE` 10–14 · `--seq-4` `#2338C9` 15+.
+
+**Tokens de componente** (en `theme.css` y en el grupo `component` de `tokens.json`): `--pink-bg`, `--pink-text`, `--info-hover`, `--info-pressed`, `--disabled-*`, `--error-field-bg`, `--bubble-buddy`, `--bubble-you`, `--mark-recast`, `--mark-review`, `--strike`, `--scrim`.
 
 **Bandas de puntuación** (pronunciación): ≥ 85 lima (bien) · 70–84 amarillo (casi) · < 70 coral (a practicar). Siempre con la cifra al lado, nunca solo el color.
 
@@ -66,6 +92,8 @@ Escala responsive (clases en `theme.css`):
 | `.small` | `--fs-small` | 14 px |
 | `.caption`, `.overline` | `--fs-caption` | 13 px (mínimo absoluto 12) |
 
+Interlineado: `--lh-tight` 1.05 (títulos) · `--lh-body` 1.5 (texto).
+
 El inglés que se practica se marca con `lang="en"`. La interfaz y las explicaciones van en español.
 
 ## Espacio, radios y sombras
@@ -79,8 +107,9 @@ El inglés que se practica se marca con `lang="en"`. La interfaz y las explicaci
 
 ## Layout
 
-- Contenedor: `.container` (máx. 1320 px, margen `clamp(16px, 4vw, 40px)`).
-- Breakpoints: xs < 600 · sm 600–899 · md 900–1199 · lg ≥ 1200. Las variables CSS no funcionan dentro de `@media`, así que se escriben los números.
+- Contenedor: `.container` (`--container-max` 1320 px, margen `--margin` `clamp(16px, 4vw, 40px)`).
+- Medianil entre columnas: `--gutter` `clamp(16px, 2vw, 24px)`.
+- Breakpoints: xs < 600 · sm 600–899 · md 900–1199 · lg ≥ 1200. Están en `tokens.json` pero no en `tokens.css`: las variables CSS no funcionan dentro de `@media`, así que se escriben los números.
 - Utilidades: `.stack` (columna) y `.cluster` (fila que envuelve). El hueco se ajusta con `--gap`.
 
 ## Movimiento
