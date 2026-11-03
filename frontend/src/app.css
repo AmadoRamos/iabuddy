@@ -19,7 +19,34 @@
 
 .topics { justify-content: center; max-width: 560px; }
 
-.bubble-tip { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; background: var(--success-bg); }
+.your-turn { align-self: flex-end; max-width: 86%; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.your-turn .bubble { max-width: 100%; }
+.said-as {
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 12px;
+  padding: 10px 12px 10px 16px; border-radius: 18px; background: var(--success-bg); animation: popin .3s ease-out both;
+}
+.said-as .overline { grid-column: 1; color: var(--success-text); }
+.said-as p { grid-column: 1; font-weight: 700; }
+.said-as .icon-btn { grid-column: 2; grid-row: 1 / span 2; }
+.bubble-anchor { position: relative; display: flex; justify-content: flex-end; max-width: 100%; }
+.bubble-btn { border: none; text-align: left; font: inherit; color: inherit; cursor: pointer; transition: transform var(--dur-fast), box-shadow var(--dur-fast); }
+.bubble-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 18px -12px rgba(27, 19, 64, .45); }
+.bubble-btn:focus-visible { box-shadow: var(--focus-ring); }
+.bubble-btn[aria-expanded="true"] { box-shadow: 0 0 0 2.5px var(--coral); }
+/* Flota sobre el chat: no empuja las demás burbujas */
+.bubble-menu {
+  position: absolute; top: calc(100% + 6px); right: 0; z-index: 20;
+  display: flex; flex-direction: column; min-width: 240px; padding: 6px; border-radius: 18px;
+  background: var(--surface); box-shadow: 0 18px 40px -20px rgba(27, 19, 64, .55); animation: popin .15s ease-out both;
+}
+.bubble-menu-up { top: auto; bottom: calc(100% + 6px); }
+.bubble-menu button {
+  border: none; background: none; text-align: left; min-height: var(--touch-min); padding: 0 14px;
+  border-radius: 12px; font-weight: 700; color: var(--text);
+}
+.bubble-menu button:hover, .bubble-menu button:focus-visible { background: var(--sunken); outline: none; }
+.intent-form { width: min(460px, 70vw); display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.intent-form textarea { width: 100%; resize: vertical; }
 
 .feedback p { margin-top: 4px; line-height: 1.5; }
 .feedback-ok { display: flex; flex-direction: column; gap: 4px; background: var(--success-bg); color: var(--success-text); }

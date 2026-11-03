@@ -1,9 +1,13 @@
-"""Persistencia en SQLite (stdlib): sesiones, turnos, correcciones y temas sugeridos.
+"""Persistencia en SQLite (stdlib): sesiones, turnos, correcciones, temas y mensajes de inicio.
 
-Los temas viven en la tabla `topics`: para añadir, editar u ocultar uno, cambia la fila
-(`active = 0` lo oculta). La primera vez se siembran los de SEED_TOPICS.
+Configurable editando la base de datos (data/iabuddy.db):
+- `topics`: temas sugeridos. `active = 0` oculta uno; `position` los ordena.
+- `openers`: primer mensaje de Buddy. Varios por tema (`topic_id`) y para la conversación libre
+  (`topic_id` NULL). Se elige uno al azar sin repetir el de la última sesión de ese tema.
+La primera vez se siembran SEED_TOPICS y SEED_FREE_OPENERS.
 """
 
+import random
 import sqlite3
 import time
 from collections import Counter
@@ -13,13 +17,18 @@ SCHEMA = """
 CREATE TABLE IF NOT EXISTS topics (
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,          -- en español, para la UI
-    opener TEXT NOT NULL,         -- pregunta en inglés con la que Buddy abre el tema
     active INTEGER NOT NULL DEFAULT 1,
     position INTEGER NOT NULL DEFAULT 0
+);
+CREATE TABLE IF NOT EXISTS openers (
+    id INTEGER PRIMARY KEY,
+    topic_id INTEGER REFERENCES topics(id) ON DELETE CASCADE,  -- NULL = conversación libre
+    text TEXT NOT NULL            -- en inglés: saludo + pregunta con la que Buddy abre
 );
 CREATE TABLE IF NOT EXISTS sessions (
     id INTEGER PRIMARY KEY,
     topic_id INTEGER REFERENCES topics(id),
+    opener_id INTEGER REFERENCES openers(id),
     started_at REAL NOT NULL,
     ended_at REAL
 );
@@ -29,6 +38,7 @@ CREATE TABLE IF NOT EXISTS turns (
     speaker TEXT NOT NULL CHECK (speaker IN ('user', 'buddy')),
     text TEXT NOT NULL,
     corrected TEXT,               -- versión corregida del tutor (solo turnos del usuario)
+    intent TEXT,                  -- lo que el usuario escribió que quería decir (español o inglés)
     seconds REAL,                 -- duración de tu audio, para palabras por minuto
     created_at REAL NOT NULL
 );
@@ -44,14 +54,60 @@ CREATE TABLE IF NOT EXISTS corrections (
 """
 
 SEED_TOPICS = [
-    ("Tu fin de semana", "What did you do last weekend?"),
-    ("Trabajo y proyectos", "What are you working on these days?"),
-    ("Viajes", "What's the best trip you've ever taken?"),
-    ("Comida", "What's your favorite food to cook or eat?"),
-    ("Series y libros", "Have you watched or read anything good lately?"),
-    ("Tecnología", "What piece of tech could you not live without?"),
-    ("Planes y metas", "What's something you want to achieve this year?"),
-    ("Tu ciudad", "What do you like most about the city where you live?"),
+    ("Tu fin de semana", [
+        "Hey! Good to see you. What did you do last weekend?",
+        "Hi there! So, how was your weekend? Anything fun?",
+        "Hey! I always love hearing about weekends. Did you rest, or were you busy?",
+        "Welcome back! If you could describe your last weekend in three words, what would they be?",
+    ]),
+    ("Trabajo y proyectos", [
+        "Hey! Good to see you. What are you working on these days?",
+        "Hi! How's work going lately? Anything interesting happening?",
+        "Hey there! Tell me about a project you're excited about right now.",
+        "Welcome back! What was the most challenging part of your work this week?",
+    ]),
+    ("Viajes", [
+        "Hey! Good to see you. What's the best trip you've ever taken?",
+        "Hi there! If you could travel anywhere next month, where would you go?",
+        "Hey! Do you prefer beach trips, city trips or nature trips? Why?",
+        "Welcome back! Tell me about a place you visited that surprised you.",
+    ]),
+    ("Comida", [
+        "Hey! Good to see you. What's your favorite food to cook or eat?",
+        "Hi there! What did you have for lunch today? Was it good?",
+        "Hey! Is there a typical dish from your country that everyone should try?",
+        "Welcome back! Do you like cooking, or do you prefer eating out?",
+    ]),
+    ("Series y libros", [
+        "Hey! Good to see you. Have you watched or read anything good lately?",
+        "Hi there! What's a series or book you'd recommend to a friend?",
+        "Hey! Do you prefer reading books or watching series? Why?",
+        "Welcome back! Tell me about a story that stayed in your head for a long time.",
+    ]),
+    ("Tecnología", [
+        "Hey! Good to see you. What piece of tech could you not live without?",
+        "Hi there! What app do you use the most every day?",
+        "Hey! What do you think about AI tools? Do you use any of them?",
+        "Welcome back! Is there a gadget you'd really like to buy this year?",
+    ]),
+    ("Planes y metas", [
+        "Hey! Good to see you. What's something you want to achieve this year?",
+        "Hi there! Do you have any plans for the next few months?",
+        "Hey! Why are you learning English? What's your big goal?",
+        "Welcome back! What's a new habit you'd like to start?",
+    ]),
+    ("Tu ciudad", [
+        "Hey! Good to see you. What do you like most about the city where you live?",
+        "Hi there! If I visited your city, where should I go first?",
+        "Hey! What's the weather like in your city these days?",
+        "Welcome back! Is there anything you would change about your neighborhood?",
+    ]),
+]
+SEED_FREE_OPENERS = [
+    "Hey! Good to see you. How has your day been so far?",
+    "Hi there! What's new with you today?",
+    "Hey! How are you feeling today? Anything interesting happen?",
+    "Welcome back! What have you been up to since we last talked?",
 ]
 
 
@@ -63,10 +119,27 @@ class Store:
         self.db.row_factory = sqlite3.Row
         self.db.execute("PRAGMA foreign_keys = ON")
         self.db.executescript(SCHEMA)
+        self._migrate()
         if not self.db.execute("SELECT 1 FROM topics LIMIT 1").fetchone():
-            self.db.executemany("INSERT INTO topics (title, opener, position) VALUES (?, ?, ?)",
-                                [(t, o, i) for i, (t, o) in enumerate(SEED_TOPICS)])
+            self.db.executemany("INSERT INTO topics (title, position) VALUES (?, ?)",
+                                [(t, i) for i, (t, _) in enumerate(SEED_TOPICS)])
+        if not self.db.execute("SELECT 1 FROM openers LIMIT 1").fetchone():
+            ids = {r["title"]: r["id"] for r in self.db.execute("SELECT id, title FROM topics")}
+            rows = [(ids[t], o) for t, ops in SEED_TOPICS if t in ids for o in ops]
+            rows += [(None, o) for o in SEED_FREE_OPENERS]
+            self.db.executemany("INSERT INTO openers (topic_id, text) VALUES (?, ?)", rows)
         self.db.commit()
+
+    def _migrate(self) -> None:
+        """Bases creadas con versiones anteriores del esquema."""
+        def cols(table: str) -> set[str]:
+            return {r["name"] for r in self.db.execute(f"PRAGMA table_info({table})")}
+        if "intent" not in cols("turns"):
+            self.db.execute("ALTER TABLE turns ADD COLUMN intent TEXT")
+        if "opener_id" not in cols("sessions"):
+            self.db.execute("ALTER TABLE sessions ADD COLUMN opener_id INTEGER REFERENCES openers(id)")
+        if "opener" in cols("topics"):  # un solo inicio por tema → tabla openers
+            self.db.execute("ALTER TABLE topics DROP COLUMN opener")
 
     def _write(self, sql: str, args: tuple = ()) -> int:
         cur = self.db.execute(sql, args)
@@ -75,16 +148,25 @@ class Store:
 
     # ── Temas ──
     def topics(self) -> list[dict]:
-        rows = self.db.execute("SELECT id, title, opener FROM topics WHERE active ORDER BY position, id")
+        rows = self.db.execute("SELECT id, title FROM topics WHERE active ORDER BY position, id")
         return [dict(r) for r in rows]
 
     def topic(self, topic_id: int | None) -> dict | None:
-        row = self.db.execute("SELECT id, title, opener FROM topics WHERE id = ?", (topic_id,)).fetchone()
+        row = self.db.execute("SELECT id, title FROM topics WHERE id = ?", (topic_id,)).fetchone()
         return dict(row) if row else None
 
+    def pick_opener(self, topic_id: int | None) -> dict | None:
+        """Un inicio al azar del tema (NULL = libre), sin repetir el de la última sesión de ese tema."""
+        rows = self.db.execute("SELECT id, text FROM openers WHERE topic_id IS ?", (topic_id,)).fetchall()
+        last = self.db.execute("SELECT opener_id FROM sessions WHERE topic_id IS ? AND opener_id IS NOT NULL "
+                               "ORDER BY id DESC LIMIT 1", (topic_id,)).fetchone()
+        fresh = [r for r in rows if not last or r["id"] != last[0]] or rows
+        return dict(random.choice(fresh)) if fresh else None
+
     # ── Sesiones y turnos ──
-    def start_session(self, topic_id: int | None) -> int:
-        return self._write("INSERT INTO sessions (topic_id, started_at) VALUES (?, ?)", (topic_id, time.time()))
+    def start_session(self, topic_id: int | None, opener_id: int | None = None) -> int:
+        return self._write("INSERT INTO sessions (topic_id, opener_id, started_at) VALUES (?, ?, ?)",
+                           (topic_id, opener_id, time.time()))
 
     def add_turn(self, session_id: int, speaker: str, text: str, seconds: float | None = None) -> int:
         return self._write("INSERT INTO turns (session_id, speaker, text, seconds, created_at) VALUES (?, ?, ?, ?, ?)",
@@ -93,8 +175,11 @@ class Store:
     def delete_turn(self, turn_id: int) -> None:
         self._write("DELETE FROM turns WHERE id = ?", (turn_id,))
 
-    def add_feedback(self, turn_id: int, corrected: str, issues: list[dict]) -> None:
-        self.db.execute("UPDATE turns SET corrected = ? WHERE id = ?", (corrected, turn_id))
+    def add_feedback(self, turn_id: int, corrected: str, issues: list[dict], intent: str | None = None) -> None:
+        """Guarda el análisis del turno. Si ya había uno (p. ej. antes de escribir la intención), lo sustituye."""
+        self.db.execute("DELETE FROM corrections WHERE turn_id = ?", (turn_id,))
+        self.db.execute("UPDATE turns SET corrected = ?, intent = coalesce(?, intent) WHERE id = ?",
+                        (corrected, intent, turn_id))
         self.db.executemany(
             "INSERT INTO corrections (turn_id, type, original, fix, explanation, severity) VALUES (?, ?, ?, ?, ?, ?)",
             [(turn_id, i["type"], i["original"], i["fix"], i["explanation_es"], i["severity"]) for i in issues])
@@ -106,7 +191,7 @@ class Store:
         self._write("UPDATE sessions SET ended_at = ? WHERE id = ?", (now, session_id))
         started = self.db.execute("SELECT started_at FROM sessions WHERE id = ?", (session_id,)).fetchone()[0]
         turns = self.db.execute(
-            "SELECT id, text, corrected, seconds FROM turns WHERE session_id = ? AND speaker = 'user' ORDER BY id",
+            "SELECT id, text, corrected, intent, seconds FROM turns WHERE session_id = ? AND speaker = 'user' ORDER BY id",
             (session_id,)).fetchall()
         fixes = self.db.execute(
             "SELECT c.turn_id, c.type, c.original, c.fix, c.explanation FROM corrections c "
@@ -131,5 +216,8 @@ class Store:
             "by_type": dict(Counter(f["type"] for f in fixes)),
             "recurring": recurring,
             "review": [{"text": t["text"], "corrected": t["corrected"]} for t in turns
-                       if t["id"] in with_errors and t["corrected"]],
+                       if t["id"] in with_errors and t["corrected"] and not t["intent"]],
+            # Cuaderno de frases: lo que querías decir y cómo se dice
+            "phrases": [{"said": t["text"], "intent": t["intent"], "english": t["corrected"]}
+                        for t in turns if t["intent"] and t["corrected"]],
         }

@@ -18,6 +18,7 @@ export function useConversation() {
   const [summary, setSummary] = useState(null);
   const [feedbacks, setFeedbacks] = useState([]); // análisis del tutor, uno por turno tuyo
   const [mode, setMode] = useState('voz'); // corrección: 'silencioso' | 'panel' | 'voz' (TODO §1.3)
+  const [intents, setIntents] = useState({}); // turno → 'pending' | 'failed' mientras el tutor analiza lo que escribiste
 
   const ws = useRef(null);
   const mic = useRef(null);
@@ -58,11 +59,12 @@ export function useConversation() {
       case 'user_text':
         setMessages((ms) => [...ms.filter((x) => !x.live), { who: 'you', text: m.text, turn: m.turn }]);
         break;
-      case 'tip':
-        setMessages((ms) => [...ms, { who: 'buddy', tip: true, text: m.text }]);
-        break;
       case 'feedback':
         setFeedbacks((fs) => [m, ...fs.filter((f) => f.turn !== m.turn)]);
+        if (m.intent) setIntents(({ [m.turn]: _, ...rest }) => rest);
+        break;
+      case 'intent_failed':
+        setIntents((it) => ({ ...it, [m.turn]: 'failed' }));
         break;
       case 'summary':
         setSummary(m);
@@ -109,6 +111,7 @@ export function useConversation() {
     setError(null);
     setMessages([]);
     setFeedbacks([]);
+    setIntents({});
     setSummary(null);
     setMetrics(null);
     const hello = { type: 'hello', topic_id: topicId, feedback: mode };
@@ -149,6 +152,17 @@ export function useConversation() {
     send({ type: 'end' });
   }, []);
 
+  // Escribiste lo que querías decir en el turno `turn`
+  const sendIntent = useCallback((turn, text) => {
+    setIntents((it) => ({ ...it, [turn]: 'pending' }));
+    send({ type: 'intent', turn, text });
+  }, []);
+
+  // 🔊 Buddy lee una frase (solo si no está hablando)
+  const listen = useCallback((text) => {
+    if (!playing.current) send({ type: 'say', text });
+  }, []);
+
   const changeMode = useCallback((m) => {
     setMode(m);
     send({ type: 'settings', feedback: m });
@@ -169,6 +183,6 @@ export function useConversation() {
 
   useEffect(() => () => { ws.current?.close(); mic.current?.stop(); }, []);
 
-  return { ui, messages, metrics, error, health, topics, session, summary, feedbacks, mode,
-    start, toggle, end, changeMode, closeSummary: () => setSummary(null) };
+  return { ui, messages, metrics, error, health, topics, session, summary, feedbacks, mode, intents,
+    start, toggle, end, changeMode, sendIntent, listen, closeSummary: () => setSummary(null) };
 }

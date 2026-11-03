@@ -31,9 +31,10 @@
 - [x] **Qué corregir:** ¿solo errores que impiden entender, o también naturalidad/estilo? (Corregir todo abruma en B1–B2.) → **Todo** (gramática, vocabulario, naturalidad y estilo).
 - [x] **Persona:** un único compañero fijo o varias personalidades seleccionables. → **Fijo: Buddy.**
 - [x] **Temas de conversación libre:** totalmente libre, lista de temas sugeridos, o temas ligados a tus intereses (tecnología, entrevistas, etc.). → **Lista de temas sugeridos, configurable en la base de datos.**
-- **Cómo encajan «en voz» y «en español»** (propuesta para la Fase 2): la voz de Buddy (Kokoro `af_heart`) es inglesa y pronuncia mal el español.
-  - **En voz:** al final de su respuesta, Buddy da un *tip* corto en inglés con **el error más importante** del turno (*"Quick tip: with yesterday, say I went, not I go."*).
-  - **En texto:** el tutor registra **todos** los errores con su explicación en español (panel o historial y resumen de sesión). Así se corrige todo sin cortar la conversación con cinco correcciones por turno.
+- **Cómo encajan «en voz» y «en español»** (decidido por Amado el 2026-11-03): Buddy es amigo **e instructor**, y las correcciones son parte de la conversación.
+  - **En voz:** en su propia respuesta, Buddy reacciona a lo que dijiste (y contesta si le preguntaste algo), señala **uno o dos errores** con la forma correcta y un porqué breve, y sigue con una pregunta (*"Just a small tip, since we are talking about yesterday, you should say I went…"*). Habla en inglés porque su voz (Kokoro `af_heart`) es inglesa. No añade latencia: lo genera el mismo LLM que conversa.
+  - **En texto:** el tutor registra **todos** los errores con su explicación en español (panel y resumen de sesión).
+  - En los modos «panel» y «silencioso», Buddy no interrumpe y solo hace *recasting*.
 
 ### 1.4 Modelos 🟡 (se cierran con los spikes de la Fase 0)
 - [x] **STT:** whisper.cpp `large-v3-turbo` (Vulkan) vs. Parakeet TDT 0.6B (ONNX, CPU). Criterio principal: **transcripción literal de tus errores**, luego latencia. → **whisper.cpp `large-v3-q5_0` (v3 cuantizado, sin turbo), GPU por Vulkan, greedy y sin prompt** ([S1](docs/SPIKES.md#s1--stt-literal-2026-10-28)). Tiene la misma precisión que v3 con 1,8 GB de VRAM.
@@ -122,10 +123,17 @@
 - [x] Panel de correcciones en la UI, con los modos silencioso / panel / en voz y el *tip* hablado al final de la respuesta.
 - [x] Resumen de sesión: duración, turnos, palabras por minuto, turnos sin errores, errores que se repiten y frases para repasar.
 - [x] SQLite: `sessions`, `turns`, `corrections` y `topics` (temas sugeridos, editables en la tabla) → `data/iabuddy.db`.
+  - **Varios mensajes de inicio por tema** en la tabla `openers` (4 por tema y 4 para la conversación libre, editables). Se elige uno al azar sin repetir el de la última sesión de ese tema. Las bases antiguas se migran solas.
 - [x] **Un solo servidor Ollama.** Con el de la bandeja (11434) y el de la app (11435) cargando gemma a la vez, la VRAM llega a 16,8 GB y todo se ralentiza (el tutor pasó de 3 s a 18 s).
   - → Se queda **solo el de la app** (11435, `OLLAMA_NUM_PARALLEL=2`). `iabuddy.bat` cierra el de la bandeja al arrancar, sin tocar su configuración.
   - Con todo cargado, la VRAM total queda en 13,8 GB.
   - Ojo: `hablar_s6.bat` (spike) usaba el de la bandeja.
+- [x] **«¿Qué querías decir?»** (idea de Amado, 2026-11-03): al pulsar tu burbuja aparece un menú con «✎ ¿Qué querías decir?» y «🔊 Escuchar cómo se dice». Escribes, en español o inglés, lo que intentabas decir.
+  - El tutor lo compara con lo que dijiste y devuelve cómo decirlo en inglés (*Así se dice*), qué faltó y por qué, en español.
+  - En modo «voz», Buddy te lo dice y te invita a repetirlo. La conversación sigue el sentido de lo que querías decir.
+  - 🔊 *Escuchar* lee cualquier frase con la voz de Buddy.
+  - El resumen incluye **«Frases que querías decir»** (columna `turns.intent`).
+  - Solo se puede escribir **después** de hablar, para que no se convierta en traducir en vez de practicar.
 - [ ] Probar la Fase 2 con micrófono real.
 
 ### Fase 3 — Escenarios

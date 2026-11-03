@@ -9,8 +9,13 @@ Estados: idle → listening → thinking → speaking → idle.
 - Barge-in: `start` mientras el compañero habla cancela la generación y abre un turno nuevo.
   Lo que ya se envió a sonar queda en el historial; el navegador corta el audio por su cuenta.
 - Un turno sin voz no llega al STT (S6: whisper alucina "Thank you." con silencio).
-- Tutor (Fase 2): analiza tu turno en paralelo con la respuesta. Sus correcciones van al panel
-  (`feedback`) y, en modo «voz», Buddy termina su respuesta con el tip del error principal.
+- Modo de corrección: el prompt de Buddy cambia con él (partner/prompts.py). En «voz» Buddy
+  corrige dentro de su respuesta, como instructor; en «panel»/«silencioso» solo hace recasting.
+- Tutor (Fase 2): analiza tu turno en paralelo con la respuesta. Sus correcciones, todas y
+  explicadas en español, van al panel (`feedback`) y a la base de datos.
+- `intent`: escribes lo que querías decir en un turno ya dicho. El tutor lo compara con lo que
+  dijiste y, en modo «voz», Buddy te dice cómo decirlo y te invita a repetirlo.
+- `say`: 🔊 escuchar una frase con la voz de Buddy (no entra en la conversación).
 
 Al navegador: JSON {"type": ...} para estado y texto; binario = PCM int16 a 24 kHz.
 """
@@ -27,26 +32,28 @@ log = logging.getLogger("iabuddy")
 
 MIN_VOICE_FRAMES = 8  # ~250 ms de voz para que el turno cuente
 RESUME_FRAMES = 3  # ~100 ms de voz seguida reabren un turno que aún no ha respondido
-TIP_WAIT_S = 6  # cuánto espera Buddy al tutor tras su respuesta para decir el tip
-FEEDBACK_MODES = {"silencioso", "panel", "voz"}
+MAX_TEXT = 500  # límite para el texto que llega del navegador (intención, «escuchar»)
 
 
 class Session:
     def __init__(self, *, send_json: Callable[[dict], Awaitable], send_bytes: Callable[[bytes], Awaitable],
-                 vad, stt, llm, tts, silence_ms: int, system: str, greeting: str, free_opener: str = "",
+                 vad, stt, llm, tts, silence_ms: int, systems: dict[str, str], greeting: str,
                  tutor=None, store=None, clock: Callable[[], float] = time.perf_counter):
         self.send_json, self.send_bytes = send_json, send_bytes
         self.vad, self.stt, self.llm, self.tts = vad, stt, llm, tts
         self.tutor, self.store = tutor, store
-        self.silence_s, self.system, self.clock = silence_ms / 1000, system, clock
-        self.greeting, self.free_opener = greeting, free_opener
-        self.feedback = "voz"
-        self.messages: list[dict] = [{"role": "system", "content": system}]
+        self.silence_s, self.systems, self.clock = silence_ms / 1000, systems, clock
+        self.greeting = greeting  # solo si no hay base de datos (los inicios viven en la tabla openers)
+        self.feedback, self.topic_line = "voz", ""
+        self.messages: list[dict] = [{"role": "system", "content": self._system()}]
         self.state = "idle"
         self.task: asyncio.Task | None = None
         self.tutor_tasks: set[asyncio.Task] = set()
         self.session_id: int | None = None
         self.user_turns = 0
+        self.turns: dict[int, dict] = {}  # n.º de turno tuyo → {"text", "row"}, para la intención escrita
+        self.intent_turns: set[int] = set()
+        self.pending_line: tuple[str, str] | None = None  # reacción a una intención, si Buddy estaba ocupado
         self.spoken: list[str] = []
         self.closed_at = clock()
         self._reset_turn()
@@ -66,6 +73,11 @@ class Session:
             await self._close("tecla")
         elif kind == "end":
             await self._end()
+        elif kind == "intent":
+            self._intent(msg.get("turn"), str(msg.get("text", "")).strip()[:MAX_TEXT])
+        elif kind == "say" and self.state == "idle" and not self._busy():
+            if text := str(msg.get("text", "")).strip()[:MAX_TEXT]:
+                self.task = asyncio.create_task(self._run(self._say_only(text)))
 
     async def on_audio(self, pcm: bytes) -> None:
         if self.state == "listening":
@@ -89,21 +101,82 @@ class Session:
         for t in self.tutor_tasks:
             t.cancel()
 
+    def _system(self) -> str:
+        return self.systems[self.feedback] + self.topic_line
+
     def _set_feedback(self, mode: str | None) -> None:
-        if mode in FEEDBACK_MODES:
+        if mode in self.systems:  # también a mitad de sesión: cambia cómo corrige Buddy desde ya
             self.feedback = mode
+            self.messages[0]["content"] = self._system()
+
+    def _busy(self) -> bool:
+        return self.task is not None and not self.task.done()
+
+    # ── Lo que querías decir (intención escrita) ─────────────────────────────────
+
+    def _intent(self, turn, text: str) -> None:
+        if not (self.tutor and text and turn in self.turns):
+            return
+        self.intent_turns.add(turn)  # a partir de aquí manda este análisis, no el automático
+        task = asyncio.create_task(self._analyze_intent(turn, text))
+        self.tutor_tasks.add(task)
+        task.add_done_callback(self.tutor_tasks.discard)
+
+    async def _analyze_intent(self, turn: int, intent: str) -> None:
+        said, row = self.turns[turn]["text"], self.turns[turn]["row"]
+        try:
+            result = await self.tutor.analyze_intent(said, intent)
+        except asyncio.CancelledError:
+            raise
+        except Exception:
+            log.exception("Fallo del tutor (intención)")
+            await self.send_json({"type": "intent_failed", "turn": turn})
+            return
+        if self.store and row:
+            self.store.add_feedback(row, result["corrected"], result["issues"], intent=intent)
+        # Lo pediste tú: se muestra también en modo silencioso
+        await self.send_json({"type": "feedback", "turn": turn, "text": said, "intent": intent, **result})
+        english = result["corrected"]
+        if self.feedback != "voz" or not english:
+            return
+        # Buddy, como instructor, te dice cómo decirlo y te invita a repetirlo
+        note = f'(I could not say it well. What I meant: "{intent}". How do I say it?)'
+        line = f"Oh, I see what you mean! You can say: {english} Want to try saying it?"
+        if self.state == "idle" and not self._busy():
+            self.task = asyncio.create_task(self._run(self._speak_line(note, line)))
+        else:
+            self.pending_line = (note, line)  # lo dirá al terminar lo que esté diciendo
+
+    async def _speak_line(self, note: str, line: str) -> None:
+        self.messages.append({"role": "user", "content": note})
+
+        async def once() -> AsyncIterator[str]:
+            yield line
+        self.closed_at, self.audio_started = self.clock(), False
+        await self._speak(once(), {})
+
+    async def _say_only(self, text: str) -> None:
+        """🔊 Escuchar: Buddy lee una frase. No entra en la conversación."""
+        audio = await asyncio.to_thread(self.tts.synth, text)
+        await self._set_state("speaking")
+        await self.send_bytes(audio)
+        await self.send_json({"type": "partner_done"})
+        await self._set_state("idle")
 
     # ── Sesión ───────────────────────────────────────────────────────────────────
 
     async def _begin(self, topic_id: int | None) -> None:
         topic = self.store.topic(topic_id) if self.store and topic_id else None
+        # Primer mensaje: uno de los varios de la tabla openers, para que no se repita siempre igual
+        opener = self.store.pick_opener(topic and topic["id"]) if self.store else None
+        greeting = opener["text"] if opener else self.greeting
         if topic:
-            self.messages[0]["content"] = (f"{self.system}\n\nSuggested topic for today: {topic['opener']} "
-                                           "Start there, but follow the user if they change topic.")
+            self.topic_line = (f"\n\nToday's topic, chosen by the user (title in Spanish): {topic['title']}. "
+                               "Start there, but follow the user if they change topic.")
+            self.messages[0]["content"] = self._system()
         if self.store:
-            self.session_id = self.store.start_session(topic and topic["id"])
+            self.session_id = self.store.start_session(topic and topic["id"], opener and opener["id"])
         await self.send_json({"type": "session", "id": self.session_id, "topic": topic and topic["title"]})
-        greeting = f"{self.greeting} {topic['opener'] if topic else self.free_opener}".strip()
 
         async def once() -> AsyncIterator[str]:
             yield greeting
@@ -116,8 +189,10 @@ class Session:
             await asyncio.wait(self.tutor_tasks, timeout=15)
         summary = self.store.finish_session(self.session_id) if self.store and self.session_id else {}
         await self.send_json({"type": "summary", **summary})
-        self.messages = [{"role": "system", "content": self.system}]
-        self.session_id, self.user_turns = None, 0
+        self.topic_line = ""
+        self.messages = [{"role": "system", "content": self._system()}]
+        self.session_id, self.user_turns, self.pending_line = None, 0, None
+        self.turns, self.intent_turns = {}, set()
         self._reset_turn()
         await self._set_state("idle")
 
@@ -141,8 +216,9 @@ class Session:
         if self.state == "thinking" and not self.audio_started:
             await self._resume()  # aún no sonó nada: sigues en el mismo turno
             return
-        barge = self.task is not None and not self.task.done()
+        barge = self._busy()
         await self._cancel()
+        self.pending_line = None  # ya estás hablando de otra cosa
         if barge:
             await self.send_json({"type": "barge_in"})
         self._reset_turn()
@@ -164,6 +240,7 @@ class Session:
         del self.messages[self.turn_index:]  # quita tu mensaje si ya se había añadido
         if self.turn_tutor:  # el texto va a cambiar: ese análisis ya no vale
             self.turn_tutor.cancel()
+            self.turns.pop(self.user_turns, None)
             self.user_turns -= 1
         if self.turn_row and self.store:
             self.store.delete_turn(self.turn_row)
@@ -206,17 +283,17 @@ class Session:
         await self.send_json({"type": "user_text", "text": text, "turn": self.user_turns})
         if self.store and self.session_id:
             self.turn_row = self.store.add_turn(self.session_id, "user", text, seconds=len(pcm) / 32000)
+        self.turns[self.user_turns] = {"text": text, "row": self.turn_row}
         if self.tutor:
             partner_said = next((m["content"] for m in reversed(self.messages) if m["role"] == "assistant"), "")
             self.turn_tutor = asyncio.create_task(self._analyze(self.user_turns, text, partner_said, self.turn_row))
             self.tutor_tasks.add(self.turn_tutor)
             self.turn_tutor.add_done_callback(self.tutor_tasks.discard)
         self.messages.append({"role": "user", "content": text})
-        tip = self.turn_tutor if self.feedback == "voz" else None
-        await self._speak(self.llm.stream(self.messages), marks, tip)
+        await self._speak(self.llm.stream(self.messages), marks)
         await self.send_json({"type": "metrics", **marks})
 
-    async def _analyze(self, turn: int, text: str, partner_said: str, row: int | None) -> dict | None:
+    async def _analyze(self, turn: int, text: str, partner_said: str, row: int | None) -> None:
         """Tarea aparte: un barge-in no la cancela (el análisis sigue valiendo)."""
         try:
             result = await self.tutor.analyze(text, partner_said)
@@ -224,14 +301,15 @@ class Session:
             raise
         except Exception:
             log.exception("Fallo del tutor")
-            return None
+            return
+        if turn in self.intent_turns:  # ya escribiste lo que querías decir: manda ese análisis
+            return
         if self.store and row:
             self.store.add_feedback(row, result["corrected"], result["issues"])
         if self.feedback != "silencioso":
             await self.send_json({"type": "feedback", "turn": turn, "text": text, **result})
-        return result
 
-    async def _speak(self, pieces: AsyncIterator[str], marks: dict, tip: asyncio.Task | None = None) -> None:
+    async def _speak(self, pieces: AsyncIterator[str], marks: dict) -> None:
         chunker = Chunker()
         self.spoken = []
         try:
@@ -241,8 +319,6 @@ class Session:
                     await self._say(chunk, marks)
             if rest := chunker.flush():
                 await self._say(rest, marks)
-            if tip is not None:
-                await self._say_tip(tip, marks)
         finally:  # también al cancelar: lo que ya se envió a sonar queda en el historial
             if self.spoken:
                 said = " ".join(self.spoken)
@@ -252,15 +328,12 @@ class Session:
             self.spoken = []
         await self.send_json({"type": "partner_done"})
         await self._set_state("idle")
+        if self.pending_line:  # una intención que llegó mientras Buddy hablaba
+            note, line = self.pending_line
+            self.pending_line = None
+            self.task = asyncio.create_task(self._run(self._speak_line(note, line)))
 
-    async def _say_tip(self, tip: asyncio.Task, marks: dict) -> None:
-        # asyncio.wait no cancela la tarea si vence el plazo (wait_for sí lo haría)
-        done, _ = await asyncio.wait({tip}, timeout=TIP_WAIT_S)
-        result = tip.result() if done and not tip.cancelled() else None
-        if result and result["voice_tip"]:
-            await self._say(result["voice_tip"], marks, kind="tip")
-
-    async def _say(self, chunk: str, marks: dict, kind: str = "partner_text") -> None:
+    async def _say(self, chunk: str, marks: dict) -> None:
         marks.setdefault("first_chunk", self._ms())
         audio = await asyncio.to_thread(self.tts.synth, chunk)
         if not self.audio_started:
@@ -268,5 +341,5 @@ class Session:
             marks["first_audio"] = self._ms()
             await self._set_state("speaking")
         self.spoken.append(chunk)
-        await self.send_json({"type": kind, "text": chunk})
+        await self.send_json({"type": "partner_text", "text": chunk})
         await self.send_bytes(audio)

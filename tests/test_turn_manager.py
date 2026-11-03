@@ -54,7 +54,8 @@ def make(llm_pieces=("Oh, you went to the gym? ", "Nice! What did you do?"), stt
         events.append(b)
 
     s = Session(send_json=send_json, send_bytes=send_bytes, vad=FakeVad(), stt=stt or FakeSTT(),
-                llm=FakeLLM(list(llm_pieces)), tts=FakeTTS(), silence_ms=900, system="sys",
+                llm=FakeLLM(list(llm_pieces)), tts=FakeTTS(), silence_ms=900,
+                systems={"voz": "coach", "panel": "recast", "silencioso": "recast"},
                 greeting="Hi!", clock=lambda: now[0])
     return s, events, now
 

@@ -18,7 +18,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 
 from .config import settings
-from .partner.prompts import FREE_OPENER, GREETING, SYSTEM
+from .partner.prompts import GREETING, SYSTEMS
 from .pipeline.llm import OllamaLLM
 from .pipeline.stt import WhisperSTT
 from .pipeline.tts import KokoroTTS
@@ -77,7 +77,7 @@ async def ws_endpoint(ws: WebSocket) -> None:
         send_json=ws.send_json, send_bytes=ws.send_bytes,
         vad=StreamingVad(settings.vad_model), stt=app.state.stt, llm=app.state.llm, tts=app.state.tts,
         tutor=app.state.tutor, store=app.state.store,
-        silence_ms=settings.silence_ms, system=SYSTEM, greeting=GREETING, free_opener=FREE_OPENER,
+        silence_ms=settings.silence_ms, systems=SYSTEMS, greeting=GREETING,
     )
     try:
         while True:

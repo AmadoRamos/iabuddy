@@ -50,13 +50,14 @@ export default function App() {
 
         <div className="session-grid">
           <section className="card conversation" aria-label="Conversación">
-            {summary ? <Summary s={summary} onClose={c.closeSummary} />
-              : session ? <><ChatLog messages={c.messages} /><Dock ui={ui} onToggle={c.toggle} /></>
+            {summary ? <Summary s={summary} onClose={c.closeSummary} onListen={c.listen} />
+              : session ? <><ChatLog messages={c.messages} feedbacks={c.feedbacks} intents={c.intents}
+                  onIntent={c.sendIntent} onListen={c.listen} /><Dock ui={ui} onToggle={c.toggle} /></>
                 : <StartCard topics={c.topics} topicId={topicId} setTopicId={setTopicId}
                     onStart={() => c.start(topicId)} disabled={down || ui === 'connecting'} />}
           </section>
           <aside className="session-side">
-            <TutorPanel mode={c.mode} onMode={c.changeMode} feedbacks={c.feedbacks} />
+            <TutorPanel mode={c.mode} onMode={c.changeMode} feedbacks={c.feedbacks} onListen={c.listen} />
             <MetricsCard metrics={c.metrics} silenceMs={h?.silence_ms} />
           </aside>
         </div>
@@ -65,24 +66,110 @@ export default function App() {
   );
 }
 
-function ChatLog({ messages }) {
+function ChatLog({ messages, feedbacks, intents, onIntent, onListen }) {
   const end = useRef(null);
   // Con llaves: scrollIntoView devuelve una promesa en Chrome reciente y React la tomaría por la limpieza
-  useEffect(() => { end.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }); }, [messages]);
+  useEffect(() => { end.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }); }, [messages, feedbacks]);
   return (
     <div className="chat" aria-live="polite">
       {messages.map((m, i) => (m.who === 'buddy' ? (
         <div className="buddy-row" key={i}>
-          <svg aria-hidden="true" width="40" height="40" style={{ flex: 'none', visibility: m.tip ? 'hidden' : undefined }}><use href="#onda-logo" /></svg>
-          <span className={`bubble bubble-buddy${m.tip ? ' bubble-tip' : ''}`} lang="en">
-            {m.tip && <span className="tag tag-xp">Así se dice</span>}{m.text}{m.cut && ' …'}
-          </span>
+          <svg aria-hidden="true" width="40" height="40" style={{ flex: 'none' }}><use href="#onda-logo" /></svg>
+          <span className="bubble bubble-buddy" lang="en">{m.text}{m.cut && ' …'}</span>
         </div>
+      ) : m.live ? (
+        <span key={i} className="bubble bubble-live" lang="en">{m.text || '…'}</span>
       ) : (
-        <span key={i} className={`bubble ${m.live ? 'bubble-live' : 'bubble-you'}`} lang="en">{m.text || (m.live && '…')}</span>
+        <YourTurn key={i} m={m} fb={feedbacks.find((f) => f.turn === m.turn)} state={intents[m.turn]}
+          onIntent={onIntent} onListen={onListen} />
       )))}
       <div ref={end} />
     </div>
+  );
+}
+
+// Tu burbuja: al pulsarla, opciones («¿Qué querías decir?», escuchar). Escribes tu intención y
+// aparece cómo decirlo en inglés.
+function YourTurn({ m, fb, state, onIntent, onListen }) {
+  const [menu, setMenu] = useState(false);
+  const [up, setUp] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [text, setText] = useState('');
+  const box = useRef(null);
+
+  // El menú se cierra al pulsar fuera o con Esc
+  useEffect(() => {
+    if (!menu) return undefined;
+    const close = (e) => { if (e.type === 'keydown' ? e.key === 'Escape' : !box.current?.contains(e.target)) setMenu(false); };
+    document.addEventListener('mousedown', close);
+    document.addEventListener('keydown', close);
+    return () => { document.removeEventListener('mousedown', close); document.removeEventListener('keydown', close); };
+  }, [menu]);
+  const submit = (e) => {
+    e.preventDefault();
+    if (!text.trim()) return;
+    onIntent(m.turn, text.trim());
+    setOpen(false);
+  };
+  const pick = (action) => { setMenu(false); action(); };
+  return (
+    <div className="your-turn" ref={box}>
+      {/* La burbuja es un botón: al pulsarla aparecen sus opciones, flotando sobre el chat */}
+      <div className="bubble-anchor">
+      <button className="bubble bubble-you bubble-btn" lang="en" aria-haspopup="menu" aria-expanded={menu}
+        onClick={(e) => {
+          // Cerca del final del chat, el menú se abre hacia arriba para no quedar recortado
+          const chat = e.currentTarget.closest('.chat')?.getBoundingClientRect();
+          setUp(chat ? e.currentTarget.getBoundingClientRect().bottom + 120 > chat.bottom : false);
+          setMenu((v) => !v);
+        }}>{m.text}</button>
+      {menu && (
+        <div className={`bubble-menu${up ? ' bubble-menu-up' : ''}`} role="menu" aria-label="Opciones de tu frase">
+          <button role="menuitem" autoFocus onClick={() => pick(() => setOpen(true))}>
+            ✎ {fb?.intent ? 'Cambiar lo que querías decir' : '¿Qué querías decir?'}
+          </button>
+          {fb?.corrected && (
+            <button role="menuitem" onClick={() => pick(() => onListen(fb.corrected))}>
+              🔊 Escuchar cómo se dice
+            </button>
+          )}
+        </div>
+      )}
+      </div>
+      {state === 'failed' && !open && <span className="small muted">No pude analizar lo que escribiste. Inténtalo otra vez.</span>}
+      {fb?.intent && !open ? (
+        <div className="said-as">
+          <span className="overline">Así se dice</span>
+          <p lang="en">{highlight(fb.corrected, fb.issues.map((i) => i.fix), 'mark', 'recast')}</p>
+          <ListenButton text={fb.corrected} onListen={onListen} />
+        </div>
+      ) : state === 'pending' ? (
+        <span className="small muted" aria-busy="true">Buscando cómo decirlo… <span className="dots" aria-hidden="true"><i /><i /><i /></span></span>
+      ) : open ? (
+        <form className="intent-form" onSubmit={submit}>
+          <label className="visually-hidden" htmlFor={`intent-${m.turn}`}>¿Qué querías decir?</label>
+          <textarea id={`intent-${m.turn}`} className="input" rows={2} autoFocus value={text}
+            placeholder="Escribe lo que querías decir, en español o en inglés"
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) submit(e);
+              if (e.key === 'Escape') setOpen(false);
+            }} />
+          <div className="cluster">
+            <button type="button" className="btn btn-secondary btn-s" onClick={() => setOpen(false)}>Cancelar</button>
+            <button className="btn btn-primary btn-s">Enviar</button>
+          </div>
+        </form>
+      ) : null}
+    </div>
+  );
+}
+
+function ListenButton({ text, onListen }) {
+  return (
+    <button className="icon-btn" aria-label={`Escuchar: ${text}`} title="Escuchar" onClick={() => onListen(text)}>
+      <svg aria-hidden="true" width="20" height="20"><use href="#i-listen" /></svg>
+    </button>
   );
 }
 
@@ -132,7 +219,7 @@ function highlight(text, fragments, Tag, className) {
     (i % 2 ? <Tag key={i} className={className}>{p}</Tag> : p));
 }
 
-function TutorPanel({ mode, onMode, feedbacks }) {
+function TutorPanel({ mode, onMode, feedbacks, onListen }) {
   return (
     <>
       <div className="card card-tight stack">
@@ -146,19 +233,19 @@ function TutorPanel({ mode, onMode, feedbacks }) {
         </div>
         <p className="small muted">
           {mode === 'silencioso' ? 'Solo hablas. Las correcciones se guardan para el resumen de la sesión.'
-            : mode === 'voz' ? 'Buddy termina su respuesta con un tip sobre tu error principal. Aquí tienes todos.'
-              : 'Tus correcciones aparecen aquí, sin interrumpir la conversación.'}
+            : mode === 'voz' ? 'Buddy te corrige en la conversación. Aquí tienes todos los errores, explicados en español.'
+              : 'Buddy no te interrumpe: tus correcciones aparecen solo aquí.'}
         </p>
       </div>
       {mode !== 'silencioso' && (feedbacks.length
-        ? feedbacks.map((f) => <FeedbackCard key={f.turn} f={f} />)
+        ? feedbacks.map((f) => <FeedbackCard key={f.turn} f={f} onListen={onListen} />)
         : <div className="empty"><span className="small muted">Aquí aparecerán las correcciones de cada turno tuyo.</span></div>)}
     </>
   );
 }
 
-function FeedbackCard({ f }) {
-  if (!f.issues.length) {
+function FeedbackCard({ f, onListen }) {
+  if (!f.issues.length && !f.intent) {
     return (
       <article className="card card-tight feedback-ok">
         <strong>Tu turno {f.turn} · ¡sin errores!</strong>
@@ -166,17 +253,21 @@ function FeedbackCard({ f }) {
       </article>
     );
   }
-  const level = Math.max(...f.issues.map((i) => i.severity));
+  const level = Math.max(1, ...f.issues.map((i) => i.severity));
   return (
     <article className="card card-tight stack feedback">
       <div className="cluster" style={{ justifyContent: 'space-between' }}>
         <strong>Tu turno {f.turn}</strong>
-        <span className="tag severity" data-level={level}><span className="severity-bars"><i /><i /><i /></span>{SEVERITY[level]}</span>
+        {f.issues.length > 0 && <span className="tag severity" data-level={level}><span className="severity-bars"><i /><i /><i /></span>{SEVERITY[level]}</span>}
       </div>
       <div><span className="overline">Lo que dijiste</span>
         <p lang="en">{highlight(f.text, f.issues.map((i) => i.original), 's', 'wrong')}</p></div>
-      <div><span className="overline">Mejor así</span>
-        <p lang="en">{highlight(f.corrected, f.issues.map((i) => i.fix), 'mark', 'recast')}</p></div>
+      {f.intent && <div><span className="overline">Lo que querías decir</span><p>{f.intent}</p></div>}
+      <div className="cluster" style={{ justifyContent: 'space-between', flexWrap: 'nowrap' }}>
+        <div><span className="overline">{f.intent ? 'Así se dice' : 'Mejor así'}</span>
+          <p lang="en">{highlight(f.corrected, f.issues.map((i) => i.fix), 'mark', 'recast')}</p></div>
+        <ListenButton text={f.corrected} onListen={onListen} />
+      </div>
       <ul className="issues">
         {f.issues.map((i, n) => {
           const [cls, label] = ISSUE_TAG[i.type] ?? ['tag-info', i.type];
@@ -193,7 +284,7 @@ function FeedbackCard({ f }) {
   );
 }
 
-function Summary({ s, onClose }) {
+function Summary({ s, onClose, onListen }) {
   const min = (sec) => `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`;
   const errors = Object.values(s.by_type ?? {}).reduce((a, b) => a + b, 0);
   return (
@@ -216,6 +307,16 @@ function Summary({ s, onClose }) {
           <ul className="issues">{s.recurring.map((r, i) => (
             <li key={i}><span className="tag tag-new">×{r.count}</span>
               <span><strong lang="en">{r.original} → {r.fix}</strong>: {r.explanation}</span></li>))}</ul>
+        </section>
+      )}
+      {s.phrases?.length > 0 && (
+        <section className="stack"><h2 className="h2">Frases que querías decir</h2>
+          <ul className="review-list">{s.phrases.map((p, i) => (
+            <li key={i} className="phrase">
+              <span className="small muted">{p.intent}</span>
+              <span className="cluster" style={{ justifyContent: 'space-between', flexWrap: 'nowrap' }}>
+                <strong lang="en">{p.english}</strong><ListenButton text={p.english} onListen={onListen} /></span>
+            </li>))}</ul>
         </section>
       )}
       {s.review?.length > 0 && (

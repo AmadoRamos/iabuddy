@@ -1,7 +1,8 @@
 """Tutor: analiza cada turno del usuario y devuelve sus errores (TODO §1.3).
 
 - Corrige todo: gramática, vocabulario y naturalidad/estilo.
-- Explicaciones en español; el `voice_tip` va en inglés porque lo dice Buddy con voz inglesa.
+- Explicaciones en español, para el panel y el resumen. En voz corrige Buddy dentro de su respuesta
+  (partner/prompts.py); el tutor no espera a nadie ni retrasa la conversación.
 - Mismo LLM que el compañero (S2), en paralelo con su respuesta.
 """
 
@@ -20,8 +21,6 @@ they seem odd or don't match the conversation. The partner's line is only contex
 For each issue: "original" is the exact wrong fragment, "fix" its replacement, \
 "explanation_es" ONE short sentence in Spanish, "severity" 1 (minor) to 3 (blocks understanding).
 "corrected": the whole sentence fixed. "better": how a native would naturally say it.
-"voice_tip": if there are issues, ONE short friendly tip in English (max 15 words) about the most \
-important one, e.g. "Quick tip: with yesterday, say I went, not I go." Otherwise "".
 If the sentence is fine, return no issues and copy it into "corrected" and "better"."""
 
 SCHEMA = {
@@ -40,9 +39,28 @@ SCHEMA = {
         }},
         "corrected": {"type": "string"},
         "better": {"type": "string"},
-        "voice_tip": {"type": "string"},
     },
-    "required": ["issues", "corrected", "better", "voice_tip"],
+    "required": ["issues", "corrected", "better"],
+}
+
+
+INTENT_SYSTEM = """You are an English tutor for a Spanish-speaking learner at B1-B2 level. The learner \
+tried to say something in English (speech transcribed automatically: ignore punctuation, \
+capitalization and filler words) and then WROTE what they actually meant, in Spanish or English.
+
+"english": the natural English sentence that says exactly what they meant, at B1-B2 level, \
+reusing their own words where they were right. Keep their meaning; don't add ideas.
+"issues": compare what they SAID with "english": each wrong, missing or Spanish-influenced \
+fragment of what they said. "original" is the fragment they said (or "" if it was missing), "fix" \
+what they should say, "explanation_es" ONE short sentence in Spanish, "severity" 1 to 3, "type" \
+grammar | vocabulary | naturalness.
+"better": an even more natural way a native would say it (may equal "english")."""
+
+INTENT_SCHEMA = {
+    "type": "object",
+    "properties": {"english": {"type": "string"}, "issues": SCHEMA["properties"]["issues"],
+                   "better": {"type": "string"}},
+    "required": ["english", "issues", "better"],
 }
 
 
@@ -52,11 +70,12 @@ def _same(a: str, b: str) -> bool:
 
 def clean(result: dict) -> dict:
     """Quita el ruido del modelo: correcciones que no cambian nada (S2: «since → since»)."""
-    issues = [i for i in result.get("issues", []) if i["original"].strip() and not _same(i["original"], i["fix"])]
+    # original vacío solo vale si falta algo (fix con contenido): pasa con la intención escrita
+    issues = [i for i in result.get("issues", []) if (i["original"].strip() or i["fix"].strip())
+              and not _same(i["original"], i["fix"])]
     for i in issues:
         i["severity"] = min(3, max(1, int(i["severity"])))
-    return {"issues": issues, "corrected": result.get("corrected", ""), "better": result.get("better", ""),
-            "voice_tip": result.get("voice_tip", "").strip() if issues else ""}
+    return {"issues": issues, "corrected": result.get("corrected", ""), "better": result.get("better", "")}
 
 
 class Tutor:
@@ -67,3 +86,10 @@ class Tutor:
         user = f'Partner said: "{partner_said}"\nLearner said: "{text}"' if partner_said else f'Learner said: "{text}"'
         msgs = [{"role": "system", "content": SYSTEM}, {"role": "user", "content": user}]
         return clean(await self.llm.chat_json(msgs, SCHEMA))
+
+    async def analyze_intent(self, said: str, intent: str) -> dict:
+        """Lo que dijiste frente a lo que escribiste que querías decir → cómo decirlo en inglés."""
+        user = f'Learner SAID: "{said}"\nLearner MEANT (written): "{intent}"'
+        msgs = [{"role": "system", "content": INTENT_SYSTEM}, {"role": "user", "content": user}]
+        r = await self.llm.chat_json(msgs, INTENT_SCHEMA)
+        return clean({"issues": r.get("issues", []), "corrected": r.get("english", ""), "better": r.get("better", "")})
