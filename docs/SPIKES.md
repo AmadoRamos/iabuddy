@@ -258,3 +258,56 @@ Velocidad en CPU: unos **0,1 s por segundo de audio** (195 ms para una palabra, 
   - Solo se marcan errores cuando el margen es claro (umbral inicial de ~2 nats, a calibrar).
   - Cada error se acompaña de una explicación del rasgo típico (tabla anterior).
 - **Para producción:** exportar a ONNX para no depender de PyTorch en la app (la ruta prevista en el [diseño](DISENO.md)). PyTorch queda solo para los spikes.
+
+---
+
+## S6 — Ida y vuelta por terminal (2026-11-03)
+
+**Pregunta:** con todo lo elegido junto, ¿cuánto tarda el compañero en empezar a sonar después de que termines de hablar?
+
+**Criterio:** < 1,5 s desde el fin de tu frase hasta el primer audio.
+
+### Montaje
+- [spikes/s6_roundtrip.py](../spikes/s6_roundtrip.py), que se lanza con [hablar_s6.bat](../hablar_s6.bat). Pipeline:
+  1. micrófono → Silero VAD en *streaming*;
+  2. whisper `large-v3-q5_0` (`whisper-server`);
+  3. `gemma4:12b-it-qat` en *streaming* (Ollama);
+  4. el primer trozo se corta en la primera puntuación y el resto, frase a frase;
+  5. Kokoro `af_heart` a 0,9× en un hilo, reproduciendo en cola.
+- El turno se cierra con Espacio o con 1,5 s de silencio.
+- Se separan dos medidas:
+  - **desde el cierre** (tecla o disparo del silencio): es lo que tarda el sistema;
+  - **desde el fin de tu voz** (último tramo con voz según el VAD): es lo que percibes, e incluye tu reacción para pulsar o la espera de silencio.
+- Amado mantuvo 8 turnos de conversación libre: 5 cerrados con tecla y 3 por silencio.
+
+### Resultados (8 turnos)
+| Etapa | Mediana | Máx |
+|---|---|---|
+| STT | 317 ms | 475 ms |
+| LLM hasta el 1.er token | 181 ms | 235 ms |
+| LLM hasta el 1.er trozo | 293 ms | 451 ms |
+| TTS del 1.er trozo | 423 ms | 633 ms |
+| **Total desde el cierre del turno** | **1.051 ms** ✅ | **1.367 ms** ✅ |
+| Espera hasta el cierre: tecla (tu reacción) | 443 ms | 1.087 ms |
+| Espera hasta el cierre: silencio | 1.507 ms | 1.512 ms |
+| **Total desde el fin de tu voz** | **1.952 ms** ❌ | 2.871 ms |
+
+### Lectura
+1. **El pipeline cumple:** desde que se cierra el turno, el primer audio llega en unos 1,05 s (máximo 1,37 s), por debajo de 1,5 s en los 8 turnos.
+2. **Lo que falla es detectar el fin de tu turno, no el pipeline:**
+   - Con la tecla, tardas una mediana de unos 0,45 s en pulsar después de terminar (hasta 1,1 s cuando dudas si has acabado).
+   - Con silencio, la espera es de 1,5 s fijos.
+   - Por eso, desde el fin de tu voz, la mediana es de unos 1,95 s.
+3. **En vivo, el STT tarda el doble que en S1** (317 frente a unos 160 ms). Los turnos son más largos (frases de 3–6 s) y la GPU la comparte con gemma.
+4. **El TTS es la etapa más lenta** (423 ms de mediana). Con un primer trozo sin coma (*"That's a really cool detail to focus on."*) llega a 633 ms.
+5. **Alucinación:** el primer turno se transcribió como *"Thank you."* sin que hubiera voz real. Es la alucinación típica de whisper ante el silencio, que ya salió en S1.
+6. **Calidad:** whisper conserva tus errores en vivo (*"I like much reading"*, *"when characters going to new world"*). El compañero mantiene bien la conversación, pero no siempre hace *recasting*. Hay que reforzarlo en el prompt (Fase 1).
+
+### Mejoras para la Fase 1 (por impacto)
+1. **Fusión de turno + silencio a ~900 ms** (ver S4). Es lo que más reduce la latencia percibida cuando no se pulsa la tecla.
+2. **Primer trozo más corto:** cortar también tras unas 4–6 palabras si no hay puntuación. Kokoro tiene un coste fijo de ~300 ms, pero en este caso ahorra unos 200 ms.
+3. **No enviar a STT un turno sin voz:** si el VAD no detectó voz, se descarta. Elimina el *"Thank you."*.
+4. **Si hace falta más:** Kokoro en GPU con PyTorch + ROCm (S3) o empezar el STT mientras hablas (*streaming*).
+
+### Decisión
+**La Fase 0 queda cerrada.** El stack elegido cumple el criterio en lo que depende del sistema (1,05 s desde el cierre). La latencia percibida depende del fin de turno, que se ataca en la Fase 1 con las mejoras anteriores.

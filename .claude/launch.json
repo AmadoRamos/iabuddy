@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "frontend",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "python", "-c", "import mimetypes,functools,http.server as h; mimetypes.add_type('text/javascript','.js'); h.ThreadingHTTPServer(('127.0.0.1',8765),functools.partial(h.SimpleHTTPRequestHandler,directory='frontend')).serve_forever()"],
+      "port": 8765
+    }
+  ]
+}

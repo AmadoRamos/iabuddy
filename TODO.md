@@ -86,9 +86,13 @@
   - → [Resultados](docs/SPIKES.md#s4--fin-de-turno-2026-10-29): en habla libre haces pausas de hasta 2,5 s. Con 900 ms te cortaría 10 veces en 63 s y con 1.500 ms, 2 veces. **El fin de turno principal es la tecla.** El silencio queda como red de seguridad con **1.500 ms** por defecto. En la Fase 1 se añade la *fusión de turno* (si sigues hablando tras un corte, se cancela la respuesta y se une al turno).
 - [x] **S5 — Pronunciación.** wav2vec2 de fonemas sobre los pares mínimos: ¿distingue *ship* de *sheep* en tu voz?
   - → [Resultados](docs/SPIKES.md#s5--pronunciaci%C3%B3n-2026-10-29): **sí.** Gana la palabra que querías decir en 15/24. Los "fallos" con margen claro coinciden con rasgos típicos de hispanohablante (*ship → ʃi*, *three → tɹi*, *yet → dʒe*, *chair → ʃe*), así que probablemente es tu pronunciación real (**confírmalo escuchando**). Tarda unos 0,1 s por segundo de audio en CPU. Para producción hay que exportarlo a ONNX.
-- [ ] **S6 — Ida y vuelta por terminal.** Micrófono → VAD → STT → LLM → TTS → altavoz; medir la latencia total por etapa.
+- [x] **S6 — Ida y vuelta por terminal.** Micrófono → VAD → STT → LLM → TTS → altavoz; medir la latencia total por etapa.
   - ✅ Criterio: < 1,5 s del fin de tu frase al primer audio.
-- [ ] Documentar resultados en `docs/SPIKES.md` y cerrar las decisiones del punto 1.4.
+  - → [Resultados](docs/SPIKES.md#s6--ida-y-vuelta-por-terminal-2026-11-03), 8 turnos reales:
+    - **Desde el cierre del turno: 1,05 s de mediana y 1,37 s de máximo** ✅.
+    - **Desde el fin de tu voz: 1,95 s** ❌, por tu reacción para pulsar la tecla (unos 0,45 s) o por el silencio de 1,5 s.
+    - Mejoras para la Fase 1: fusión de turno con ~900 ms de silencio, primer trozo más corto y descartar turnos sin voz (alucinación *"Thank you."*).
+- [x] Documentar resultados en `docs/SPIKES.md` y cerrar las decisiones del punto 1.4.
 
 ---
 
@@ -130,5 +134,5 @@
 2. ~~Diseño de la UI~~ ✅ — 7 pantallas con gamificación, guardadas en [docs/ui/](docs/ui/README.md).
 3. ~~Preparación del entorno (sección 2)~~ ✅
 4. ~~Grabar el dataset (3.1)~~ ✅
-5. Ejecutar los **spikes** y cerrar **1.4** con datos.
+5. ~~Ejecutar los spikes y cerrar 1.4 con datos~~ ✅ ([docs/SPIKES.md](docs/SPIKES.md)).
 6. Arrancar la **Fase 1**. Las decisiones 1.3, 1.5 y 1.6 se pueden tomar durante la Fase 1.
