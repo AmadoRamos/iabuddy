@@ -15,6 +15,9 @@ Estados: idle → listening → thinking → speaking → idle.
   explicadas en español, van al panel (`feedback`) y a la base de datos.
 - `intent`: escribes lo que querías decir en un turno ya dicho. El tutor lo compara con lo que
   dijiste y, en modo «voz», Buddy te dice cómo decirlo y te invita a repetirlo.
+- Pronunciación (Fase 4): cuando Buddy termina de hablar se analiza el audio de tu turno, sin quitarle
+  CPU a Kokoro, y los sonidos con error claro van a `pronunciation`. `drill`: lees una frase conocida
+  (sin STT ni LLM) y `drill_result` trae la nota y los errores.
 - `say`: 🔊 escuchar una frase con la voz de Buddy (no entra en la conversación).
 - Escenarios (Fase 3): `hello` con `scenario` → Buddy interpreta un papel (partner/scenarios.py).
   Tras cada turno tuyo se revisan los objetivos (`goals`, en orden y sin solaparse con otra
@@ -30,23 +33,28 @@ import random
 import time
 from collections.abc import AsyncIterator, Awaitable, Callable
 
+from ..pronunciation.scorer import MIN_CLEAR
+from ..session_log import NoLog
 from .chunker import Chunker
 
 log = logging.getLogger("iabuddy")
 
 MIN_VOICE_FRAMES = 8  # ~250 ms de voz para que el turno cuente
 RESUME_FRAMES = 3  # ~100 ms de voz seguida reabren un turno que aún no ha respondido
+MAX_SOUNDS = 2  # sonidos por turno en la conversación: más abruma (el resumen y la práctica los tienen todos)
 MAX_TEXT = 500  # límite para el texto que llega del navegador (intención, «escuchar»)
 
 
 class Session:
     def __init__(self, *, send_json: Callable[[dict], Awaitable], send_bytes: Callable[[bytes], Awaitable],
                  vad, stt, llm, tts, silence_ms: int, systems: dict[str, str], greeting: str,
-                 tutor=None, store=None, scenarios: dict | None = None,
+                 tutor=None, store=None, scenarios: dict | None = None, scorer=None, log=None,
                  clock: Callable[[], float] = time.perf_counter):
-        self.send_json, self.send_bytes = send_json, send_bytes
+        self.deliver, self.send_bytes = send_json, send_bytes
+        self.log = log or NoLog()
         self.vad, self.stt, self.llm, self.tts = vad, stt, llm, tts
-        self.tutor, self.store = tutor, store
+        self.tutor, self.store, self.scorer = tutor, store, scorer
+        self.drill_text: str | None = None  # la frase que estás practicando en este turno
         self.silence_s, self.systems, self.clock = silence_ms / 1000, systems, clock
         self.greeting = greeting  # solo si no hay base de datos (los inicios viven en la tabla openers)
         self.feedback, self.topic_line = "voz", ""
@@ -68,15 +76,25 @@ class Session:
 
     # ── Entradas desde el WebSocket ──────────────────────────────────────────────
 
+    async def send_json(self, msg: dict) -> None:
+        self.log.event("out", msg)
+        await self.deliver(msg)
+
     async def on_control(self, msg: dict) -> None:
+        self.log.event("in", msg)
         kind = msg.get("type")
         if kind == "hello" and self.state == "idle" and len(self.messages) == 1:
+            self.drill_text = None
             self._set_feedback(msg.get("feedback"))
             self.task = asyncio.create_task(self._run(self._begin(msg.get("topic_id"), msg.get("scenario"))))
         elif kind == "settings":
             self._set_feedback(msg.get("feedback"))
         elif kind == "start":
             await self._start()
+        elif kind == "drill" and self.scorer:
+            if text := str(msg.get("text", "")).strip()[:MAX_TEXT]:
+                self.drill_text = text
+                await self._start()
         elif kind == "stop" and self.state == "listening":
             await self._close("tecla")
         elif kind == "end":
@@ -108,9 +126,9 @@ class Session:
         """Conexión cerrada. Si no pulsaste «Terminar sesión», se cierra igual: su evaluación no se pierde."""
         async def nobody(_) -> None:  # ya no hay a quién enviarle nada
             pass
-        self.send_json = nobody
+        self.deliver = nobody
         if self.session_id:
-            await self._finish()
+            self.log.event("closed_without_end", await self._finish())
         await self._cancel()
         for t in self.tutor_tasks:
             t.cancel()
@@ -263,7 +281,10 @@ class Session:
         await self._set_state("listening")
 
     async def _close(self, reason: str) -> None:
+        self.log.event("turn_closed", {"reason": reason, "voice_frames": self.voice_frames,
+                                       "seconds": round(len(self.pcm) / 32000, 2), "drill": self.drill_text})
         if self.voice_frames < MIN_VOICE_FRAMES:
+            self.drill_text = None
             self._reset_turn()
             await self.send_json({"type": "turn_discarded"})
             await self._set_state("idle")
@@ -271,7 +292,8 @@ class Session:
         self.close_reason, self.closed_at = reason, self.clock()
         self.turn_index, self.resume_run = len(self.messages), 0
         await self._set_state("thinking", reason=reason)
-        self.task = asyncio.create_task(self._run(self._reply(bytes(self.pcm))))
+        answer = self._drill if self.drill_text else self._reply
+        self.task = asyncio.create_task(self._run(answer(bytes(self.pcm))))
 
     async def _resume(self) -> None:
         await self._cancel()
@@ -310,6 +332,7 @@ class Session:
             await self._set_state("idle")
 
     async def _reply(self, pcm: bytes) -> None:
+        self.log.audio(f"turn{self.user_turns + 1}", pcm)
         marks: dict = {"reason": self.close_reason}
         text = await self.stt.transcribe(pcm)
         marks["stt"] = self._ms()
@@ -328,8 +351,49 @@ class Session:
             self.tutor_tasks.add(self.turn_tutor)
             self.turn_tutor.add_done_callback(self.tutor_tasks.discard)
         self.messages.append({"role": "user", "content": text})
-        await self._speak(self.llm.stream(self.messages), marks)
+        turn = self.user_turns
+        try:
+            await self._speak(self.llm.stream(self.messages), marks)
+        finally:  # también con barge-in. Si no llegó a sonar nada, el turno aún puede reabrirse
+            if self.scorer and self.audio_started:
+                task = asyncio.create_task(self._pronounce(turn, pcm))
+                self.tutor_tasks.add(task)
+                task.add_done_callback(self.tutor_tasks.discard)
         await self.send_json({"type": "metrics", **marks})
+
+    async def _pronounce(self, turn: int, pcm: bytes) -> None:
+        entry = self.turns.get(turn)
+        if not entry:
+            return
+        try:
+            result = await asyncio.to_thread(self.scorer.analyze, pcm, entry["text"])
+        except asyncio.CancelledError:
+            raise
+        except Exception:
+            log.exception("Fallo al analizar la pronunciación")
+            return
+        self.log.event("pronunciation_analysis", {"turn": turn, "text": entry["text"], **result})
+        if self.turns.get(turn) is not entry:
+            return
+        if self.store and entry["row"]:
+            self.store.add_sound_issues(entry["text"], result["words"], self.session_id, entry["row"])
+        issues = [{"word": w["word"], **i} for w in result["words"] for i in w["issues"]]
+        if issues and self.feedback != "silencioso":
+            issues.sort(key=lambda i: -i["margin"])
+            await self.send_json({"type": "pronunciation", "turn": turn, "issues": issues[:MAX_SOUNDS]})
+
+    async def _drill(self, pcm: bytes) -> None:
+        text = self.drill_text
+        self.log.audio("drill", pcm, text=text)
+        result = await asyncio.to_thread(self.scorer.analyze, pcm, text)
+        self.drill_text = None
+        passed = result["score"] >= MIN_CLEAR and not any(w["issues"] or w["unclear"] for w in result["words"])
+        if self.store:
+            self.store.add_sound_issues(text, result["words"])
+            if passed:
+                self.store.resolve_phrase(text)
+        await self.send_json({"type": "drill_result", "text": text, "passed": passed, **result})
+        await self._set_state("idle")
 
     async def _after_turn(self, turn: int, text: str, partner_said: str, row: int | None) -> None:
         """Tutor y luego objetivos, uno tras otro: así no hay más de dos peticiones a la vez al LLM."""
@@ -351,6 +415,7 @@ class Session:
             except Exception:
                 log.exception("Fallo al revisar los objetivos")
                 return
+            self.log.event("goals_check", result)
             if sc is not self.scenario:  # la sesión terminó mientras tanto
                 return
             met = [a or b for a, b in zip(self.goals_met, result["met"], strict=True)]  # lo logrado no se pierde
@@ -388,6 +453,7 @@ class Session:
         except Exception:
             log.exception("Fallo del tutor")
             return
+        self.log.event("tutor", {"turn": turn, "text": text, **result})
         # El turno se reabrió: su fila ya no existe. No basta con cancelar: httpx a veces se la traga
         if self.turns.get(turn) is not entry:
             return

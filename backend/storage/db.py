@@ -51,6 +51,19 @@ CREATE TABLE IF NOT EXISTS turns (
     seconds REAL,                 -- duración de tu audio, para palabras por minuto
     created_at REAL NOT NULL
 );
+CREATE TABLE IF NOT EXISTS sound_issues (
+    id INTEGER PRIMARY KEY,
+    session_id INTEGER REFERENCES sessions(id),  -- NULL = práctica de pronunciación
+    turn_id INTEGER REFERENCES turns(id) ON DELETE CASCADE,
+    text TEXT NOT NULL,           -- la frase que se analizó
+    word TEXT NOT NULL,
+    phone TEXT NOT NULL,          -- el sonido correcto
+    heard TEXT NOT NULL,          -- lo que sonó en su lugar
+    tip TEXT NOT NULL,            -- en español
+    margin REAL NOT NULL,
+    resolved INTEGER NOT NULL DEFAULT 0,  -- ya la dijiste bien en la práctica
+    created_at REAL NOT NULL
+);
 CREATE TABLE IF NOT EXISTS corrections (
     id INTEGER PRIMARY KEY,
     turn_id INTEGER NOT NULL REFERENCES turns(id) ON DELETE CASCADE,
@@ -221,6 +234,36 @@ class Store:
             [(turn_id, i["type"], i["original"], i["fix"], i["explanation_es"], i["severity"]) for i in issues])
         self.db.commit()
 
+    # ── Pronunciación ──
+    def add_sound_issues(self, text: str, words: list[dict], session_id: int | None = None,
+                         turn_id: int | None = None) -> None:
+        self.db.executemany(
+            "INSERT INTO sound_issues (session_id, turn_id, text, word, phone, heard, tip, margin, created_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [(session_id, turn_id, text, w["word"], i["phone"], i["heard"], i["tip"], i["margin"], time.time())
+             for w in words for i in w["issues"]])
+        self.db.commit()
+
+    def failed_phrases(self, limit: int = 10) -> list[dict]:
+        """Tus frases con sonidos pendientes, ya corregidas si el tutor las corrigió, para repetirlas."""
+        rows = self.db.execute(
+            "SELECT coalesce(t.corrected, s.text) AS phrase, group_concat(DISTINCT s.word) AS words "
+            "FROM sound_issues s LEFT JOIN turns t ON t.id = s.turn_id WHERE NOT s.resolved "
+            "GROUP BY phrase ORDER BY max(s.id) DESC").fetchall()
+        # Una frase muy larga no se puede repetir de memoria ni leyendo con calma
+        return [{"text": r["phrase"], "words": r["words"].split(",")} for r in rows
+                if len(r["phrase"].split()) <= 20][:limit]
+
+    def resolve_phrase(self, phrase: str) -> None:
+        self._write("UPDATE sound_issues SET resolved = 1 WHERE id IN (SELECT s.id FROM sound_issues s "
+                    "LEFT JOIN turns t ON t.id = s.turn_id WHERE coalesce(t.corrected, s.text) = ?)", (phrase,))
+
+    def _session_sounds(self, session_id: int) -> list[dict]:
+        rows = self.db.execute(
+            "SELECT phone, heard, tip, count(*) AS count, group_concat(DISTINCT word) AS words FROM sound_issues "
+            "WHERE session_id = ? GROUP BY phone, heard ORDER BY count DESC LIMIT 5", (session_id,)).fetchall()
+        return [{**dict(r), "words": r["words"].split(",")} for r in rows]
+
     def finish_session(self, session_id: int) -> dict:
         """Cierra la sesión y devuelve su resumen."""
         now = time.time()
@@ -250,6 +293,7 @@ class Store:
             "wpm": round(words / (speaking / 60)) if speaking >= 1 else 0,
             "clean_turns": len(turns) - len(with_errors),
             "by_type": dict(Counter(f["type"] for f in fixes)),
+            "sounds": self._session_sounds(session_id),
             "recurring": recurring,
             "review": [{"text": t["text"], "corrected": t["corrected"]} for t in turns
                        if t["id"] in with_errors and t["corrected"] and not t["intent"]],

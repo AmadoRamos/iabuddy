@@ -18,7 +18,7 @@ Compañero local de conversación en inglés (B1–B2) con correcciones de gram�
 uv sync
 ```
 
-Los modelos no van en el repo. Se descargan en `C:\Models` (o en la ruta de `IABUDDY_MODELS_DIR`). Qué modelo usa cada etapa y por qué está en [docs/SPIKES.md](docs/SPIKES.md).
+Los modelos no van en el repo. Se descargan en `C:\Models` (o en la ruta de `IABUDDY_MODELS_DIR`). Qué modelo usa cada etapa y por qué está en [docs/SPIKES.md](docs/SPIKES.md). El de pronunciación se genera con `uv run --group spikes --with onnx --with onnxscript python spikes/export_wav2vec2_onnx.py`; sin él, todo funciona menos la pronunciación.
 
 ### Usar la app
 
@@ -59,3 +59,7 @@ docs/
 ## Licencia
 
 MIT. Cada modelo conserva su propia licencia.
+
+## Registros
+
+Todo queda en `data/logs`, fuera de git: `iabuddy.log` con los errores del backend, y en `sessions/` un `.jsonl` por conexión con cada evento y los análisis, además del audio de tus turnos en WAV (`IABUDDY_LOG_AUDIO=0` lo desactiva). Nada se borra solo.

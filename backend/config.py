@@ -27,9 +27,13 @@ class Settings:
     voice: str = _env("VOICE", "af_heart")
     speed: float = float(_env("SPEED", "0.9"))
     vad_model: Path = MODELS / "silero" / "silero_vad.onnx"
+    # Modelo de fonemas (S5), exportado con spikes/export_wav2vec2_onnx.py. Sin él, todo funciona menos la pronunciación
+    phoneme_model: Path = MODELS / "wav2vec2-phonemes"
     # S4: en habla libre hay pausas de hasta 2,5 s. Con la fusión de turno un corte es
     # inofensivo (si sigues hablando se une al turno), así que se puede esperar menos.
     silence_ms: int = int(_env("SILENCE_MS", "900"))
+    log_dir: Path = Path(_env("LOG_DIR", str(Path(__file__).resolve().parents[1] / "data" / "logs")))
+    log_audio: bool = _env("LOG_AUDIO", "1") != "0"  # guarda el audio de tus turnos para analizarlo después
     db_path: Path = Path(_env("DB_PATH", str(Path(__file__).resolve().parents[1] / "data" / "iabuddy.db")))
 
 

@@ -6,7 +6,8 @@ import { Player } from './audio/player.js';
 // El micrófono envía siempre; el backend decide qué audio pertenece a tu turno.
 //
 // ui: 'off' (sin empezar) · 'connecting' · 'idle' · 'listening' · 'thinking' · 'speaking'
-// session: null (eligiendo) · { topic } o { scenario, met } en curso · summary: resumen al terminar
+// session: null (eligiendo) · { topic } o { scenario, met } en curso · { drill: true } practicando
+// pronunciación · summary: resumen al terminar
 export function useConversation() {
   const [ui, setUi] = useState('off');
   const [messages, setMessages] = useState([]);
@@ -20,6 +21,9 @@ export function useConversation() {
   const [summary, setSummary] = useState(null);
   const [feedbacks, setFeedbacks] = useState([]); // análisis del tutor, uno por turno tuyo
   const [mode, setMode] = useState('voz'); // corrección: 'silencioso' | 'panel' | 'voz' (TODO §1.3)
+  const [sounds, setSounds] = useState({}); // turno → sonidos con error claro
+  const [drills, setDrills] = useState(null); // frases de práctica: { sounds, failed }
+  const [drillResult, setDrillResult] = useState(null);
   const [intents, setIntents] = useState({}); // turno → 'pending' | 'failed' mientras el tutor analiza lo que escribiste
 
   const ws = useRef(null);
@@ -69,6 +73,12 @@ export function useConversation() {
         setFeedbacks((fs) => [m, ...fs.filter((f) => f.turn !== m.turn)]);
         if (m.intent) setIntents(({ [m.turn]: _, ...rest }) => rest);
         break;
+      case 'pronunciation':
+        setSounds((s) => ({ ...s, [m.turn]: m.issues }));
+        break;
+      case 'drill_result':
+        setDrillResult(m);
+        break;
       case 'intent_failed':
         setIntents((it) => ({ ...it, [m.turn]: 'failed' }));
         break;
@@ -102,7 +112,9 @@ export function useConversation() {
         break;
       case 'metrics': {
         const t = turn.current;
-        setMetrics({ ...m, client: t.closedAt && t.playAt ? Math.round(t.playAt - t.closedAt) : null });
+        const client = t.closedAt && t.playAt ? Math.round(t.playAt - t.closedAt) : null;
+        setMetrics({ ...m, client });
+        send({ type: 'client_metrics', heard_ms: client }); // solo para los registros
         turn.current = {};
         break;
       }
@@ -113,7 +125,7 @@ export function useConversation() {
     }
   }, [refreshUi]);
 
-  // Empieza una sesión: choice = { topic_id } (null = libre) o { scenario }. La primera vez abre WebSocket y micrófono.
+  // Empieza una sesión: choice = { topic_id } (null = libre), { scenario } o { drill: true }. La primera vez abre WebSocket y micrófono.
   const start = useCallback(async (choice = {}) => {
     setError(null);
     setMessages([]);
@@ -121,10 +133,19 @@ export function useConversation() {
     setIntents({});
     setSummary(null);
     setMetrics(null);
-    const hello = { type: 'hello', ...choice, feedback: mode };
-    if (ws.current?.readyState === WebSocket.OPEN) {
+    setSounds({});
+    setDrillResult(null);
+    if (choice.drill) fetch('/api/drills').then((r) => r.json()).then(setDrills).catch(() => setDrills({ sounds: [], failed: [] }));
+    const begin = () => {
+      if (choice.drill) {
+        setSession({ drill: true }); // sin sesión en el backend: cada frase se analiza por separado
+        return;
+      }
       setSession({ topic: null });
-      send(hello);
+      send({ type: 'hello', ...choice, feedback: mode });
+    };
+    if (ws.current?.readyState === WebSocket.OPEN) {
+      begin();
       return;
     }
     setUi('connecting');
@@ -150,8 +171,7 @@ export function useConversation() {
     }
     server.current = 'idle';
     refreshUi();
-    setSession({ topic: null });
-    send(hello);
+    begin();
   }, [onEvent, refreshUi, checkHealth, mode]);
 
   const end = useCallback(() => {
@@ -176,6 +196,22 @@ export function useConversation() {
     send({ type: 'settings', feedback: m });
   }, []);
 
+  // Práctica: abre o cierra tu lectura de `text`. Lo demás funciona como en un turno normal
+  const drillToggle = useCallback((text) => {
+    if (server.current === 'listening') send({ type: 'stop' });
+    else if (server.current === 'thinking') send({ type: 'start' });
+    else {
+      if (playing.current) player.current.stop();
+      setDrillResult(null);
+      send({ type: 'drill', text });
+    }
+  }, []);
+
+  const leaveDrill = useCallback(() => {
+    if (server.current === 'listening') send({ type: 'stop' });
+    setSession(null);
+  }, []);
+
   // Espacio / botón Onda: abre o cierra tu turno; si Buddy habla, lo interrumpe.
   const toggle = useCallback(() => {
     if (server.current === 'listening') {
@@ -189,8 +225,16 @@ export function useConversation() {
     send({ type: 'start' });
   }, []);
 
+  // Los errores de la pantalla también van a los registros del backend
+  useEffect(() => {
+    const report = (e) => send({ type: 'client_error', message: String(e.reason ?? e.message).slice(0, 500), where: e.filename });
+    window.addEventListener('error', report);
+    window.addEventListener('unhandledrejection', report);
+    return () => { window.removeEventListener('error', report); window.removeEventListener('unhandledrejection', report); };
+  }, []);
+
   useEffect(() => () => { ws.current?.close(); mic.current?.stop(); }, []);
 
-  return { ui, messages, metrics, error, health, topics, scenarios, session, summary, feedbacks, mode, intents, ending,
+  return { ui, messages, metrics, error, health, topics, scenarios, session, summary, feedbacks, mode, intents, ending, sounds, drills, drillResult, drillToggle, leaveDrill,
     start, toggle, end, changeMode, sendIntent, listen, closeSummary: () => setSummary(null) };
 }

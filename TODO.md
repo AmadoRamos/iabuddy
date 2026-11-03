@@ -150,8 +150,16 @@
 - [x] Probar la Fase 3 con micrófono real. Probado por Amado el 2026-11-03 con el daily standup: sesión cerrada con «Terminar sesión» y 3 de 4 objetivos guardados.
 
 ### Fase 4 — Pronunciación
-- [ ] Puntuación por palabra/fonema (modo pasivo en conversación).
-- [ ] Modo drill con frases propuestas y repetición de las falladas.
+- [x] Exportar el modelo de fonemas de S5 a ONNX (`spikes/export_wav2vec2_onnx.py`, en `C:\Models\wav2vec2-phonemes`). Da lo mismo que PyTorch (diferencia máxima 0,0003): 0,17 s por segundo de audio con 4 núcleos, 1,26 GB.
+- [x] Puntuación por palabra/fonema (modo pasivo en conversación). Se analiza al terminar de hablar Buddy, para no quitarle CPU a Kokoro. Bajo tu burbuja salen como mucho 2 sonidos, con su explicación en español; el resumen trae «Sonidos para practicar». En modo silencioso solo se guarda.
+- [x] Modo drill con frases propuestas y repetición de las falladas: «Practicar pronunciación» tiene 11 grupos por sonido y «Tus frases», con las que fallaste (ya corregidas). Una frase se supera sin errores claros y con claridad de al menos 25/100.
+- Calibración (margen mínimo 3 nats, sin buscar errores de vocal, /z/ ni /j/ en palabras funcionales):
+  - Reproduce S5: *ship* 3,5 · *three* 8,0 · *yet* 6,2 · *chair* 5,7.
+  - Kokoro como voz nativa: 2 de 320 palabras marcadas (0,6 %). Kokoro diciendo la palabra del par: detecta 9 de 10 (falla *espeak/speak*). Tu voz: 36 de 296 palabras, sobre todo *the → /də/*.
+  - La referencia sale de la frase entera (formas reducidas, *I live*), y para las palabras que se escriben igual y suenan distinto (*live*, *read*, *close*…) vale la que mejor encaje con el audio. Una frase no se supera si una palabra con contenido queda por debajo de 10/100: en Kokoro ninguna baja de 20; en tu voz, el 8 % baja de 10.
+  - **Límites:** la «e-» de *speak/start* ya se detecta en tu voz, pero tuvo 1 falso en 33 palabras de Kokoro (*school*). Si una frase de 4 o más palabras saca menos de 15/100 no se muestra ningún aviso, porque casi seguro Whisper transcribió otra cosa: también puede ocultar errores reales. La referencia del modo pasivo es lo que entendió Whisper, así que si transcribe mal una palabra, ahí no hay nada fiable. La nota de claridad es orientativa: Kokoro da 81 de media y tú, 40-70 en frases bien dichas.
+- [x] Registros para analizar las sesiones, en `data/logs` (fuera de git): `iabuddy.log` (errores del backend) y `sessions/<fecha>.jsonl` con cada evento, análisis completos, intentos correctos y errores del navegador, más el audio de cada turno en WAV (unos 32 KB por segundo; `IABUDDY_LOG_AUDIO=0` lo desactiva).
+- [x] Probar la Fase 4 con micrófono real. Probado por Amado el 2026-11-03: práctica (12 lecturas) y conversación (3 turnos con resumen). Los avisos encajan con lo que oye el modelo.
 
 ### Fase 5 — Progreso
 - [ ] Historial de sesiones y métricas en el tiempo.

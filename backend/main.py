@@ -14,6 +14,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 import httpx
+import yaml
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 
@@ -25,16 +26,29 @@ from .pipeline.stt import WhisperSTT
 from .pipeline.tts import KokoroTTS
 from .pipeline.turn_manager import Session
 from .pipeline.vad import StreamingVad
+from .pronunciation.scorer import Scorer
+from .session_log import SessionLog, setup_file_logging
 from .storage.db import Store
 from .tutor.tutor import Tutor
 
 log = logging.getLogger("iabuddy")
 DIST = Path(__file__).resolve().parents[1] / "frontend" / "dist"
+DRILLS = yaml.safe_load((Path(__file__).parent / "pronunciation" / "drills.yaml").read_text(encoding="utf-8"))
 SCENARIOS = scenarios.load()  # un YAML mal escrito falla al arrancar, no a mitad de sesión
+
+
+def load_scorer() -> Scorer | None:
+    if not (settings.phoneme_model / "model.onnx").exists():
+        log.warning("Sin modelo de fonemas en %s: no habrá pronunciación", settings.phoneme_model)
+        return None
+    scorer = Scorer(settings.phoneme_model)
+    scorer.log_probs(bytes(32000))  # calienta: el primer análisis no tarda de más
+    return scorer
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    setup_file_logging(settings.log_dir)
     app.state.http = httpx.AsyncClient(timeout=120)
     app.state.stt = WhisperSTT(settings.whisper_url, app.state.http)
     app.state.llm = OllamaLLM(settings.ollama_url, settings.llm_model, app.state.http)
@@ -42,6 +56,7 @@ async def lifespan(app: FastAPI):
     app.state.store = Store(settings.db_path)
     app.state.tts = KokoroTTS(settings.kokoro_model, settings.kokoro_voices, settings.voice, settings.speed)
     await asyncio.to_thread(app.state.tts.synth, "Warm up.")
+    app.state.scorer = await asyncio.to_thread(load_scorer)
     try:
         await app.state.llm.warm()
     except httpx.HTTPError as e:  # /api/health lo reporta; la UI muestra el aviso
@@ -64,6 +79,7 @@ async def health() -> dict:
     whisper_base = settings.whisper_url.rsplit("/", 1)[0] + "/"
     whisper, ollama = await asyncio.gather(up(whisper_base), up(f"{settings.ollama_url}/api/version"))
     return {"whisper": whisper, "ollama": ollama, "model": settings.llm_model,
+            "pronunciation": app.state.scorer is not None,
             "silence_ms": settings.silence_ms}
 
 
@@ -77,13 +93,19 @@ async def scenario_list() -> list[dict]:
     return [scenarios.public(sc) for sc in SCENARIOS.values()]
 
 
+@app.get("/api/drills")
+async def drills() -> dict:
+    return {"sounds": DRILLS, "failed": app.state.store.failed_phrases()}
+
+
 @app.websocket("/ws")
 async def ws_endpoint(ws: WebSocket) -> None:
     await ws.accept()
+    session_log = SessionLog(settings.log_dir / "sessions", settings.log_audio)
     session = Session(
         send_json=ws.send_json, send_bytes=ws.send_bytes,
         vad=StreamingVad(settings.vad_model), stt=app.state.stt, llm=app.state.llm, tts=app.state.tts,
-        tutor=app.state.tutor, store=app.state.store, scenarios=SCENARIOS,
+        tutor=app.state.tutor, store=app.state.store, scenarios=SCENARIOS, scorer=app.state.scorer, log=session_log,
         silence_ms=settings.silence_ms, systems=SYSTEMS, greeting=GREETING,
     )
     try:
@@ -99,6 +121,7 @@ async def ws_endpoint(ws: WebSocket) -> None:
         pass
     finally:
         await session.close()
+        session_log.close()
 
 
 if DIST.exists():  # al final: las rutas de arriba tienen prioridad

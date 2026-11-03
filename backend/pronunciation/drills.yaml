@@ -1,0 +1,79 @@
+# Frases de práctica por sonido. Título en español (UI); frases en inglés, pensadas para que el sonido
+# aparezca en palabras con contenido: en las funcionales (to, have, and…) no se buscan errores de vocal.
+- title: "«the, this, mother» /ð/"
+  sentences:
+    - The weather is better than yesterday.
+    - My mother and my brother live together.
+    - They think these clothes are too small.
+    - I'd rather breathe the air over there.
+    - This feature is smoother than the other one.
+- title: "«think, three» /θ/"
+  sentences:
+    - I think three months is enough.
+    - Thank you for the thirty things you brought.
+    - Both of my teeth hurt on Thursday.
+    - The author thought about something else.
+    - We have a healthy math teacher.
+- title: "«ship / sheep» /ɪ/ e /iː/"
+  sentences:
+    - The ship is full of sheep.
+    - Please sit in this seat.
+    - I live here, but I will leave next week.
+    - This feature needs a quick fix.
+    - We fill the team with people who feel the same.
+- title: "«very, have» /v/"
+  sentences:
+    - I have a very heavy bag.
+    - We visited a village in November.
+    - Every developer loves a good review.
+    - My favorite movie is on the television.
+    - The server never receives a valid value.
+- title: "«cat, map» /æ/"
+  sentences:
+    - The black cat sat on my laptop.
+    - My manager has a happy family.
+    - I had a bad app crash last Saturday.
+    - Thanks for the map and the plan.
+    - Add the backend class to the master branch.
+- title: "«cut, money» /ʌ/"
+  sentences:
+    - My brother must come on Sunday.
+    - Young people love money and fun.
+    - The bug was fixed once, but it comes up again.
+    - I run some tests every Monday.
+    - One button does not trust the other function.
+- title: "«chair / share» /tʃ/ y /ʃ/"
+  sentences:
+    - Please share the chair with the teacher.
+    - She chose a cheap fresh fish.
+    - Watch the shop near the church.
+    - I wish I could change my machine.
+    - We should check each push to the branch.
+- title: "«yet / jet» /j/ y /dʒ/"
+  sentences:
+    - Yes, the young manager is not ready yet.
+    - You can use my yellow jacket.
+    - The new job starts in January.
+    - I enjoy using Java every year.
+    - Your jet is huge, and just a few years old.
+- title: "«zoo, logs» /z/"
+  sentences:
+    - The zoo was crazy on Tuesday.
+    - These logs show the errors in the queries.
+    - My cousin uses easy passwords.
+    - Lazy dogs always choose the sofa.
+    - He loves his days at the music museum.
+- title: "«walked, worked» -ed"
+  sentences:
+    - I worked and walked a lot yesterday.
+    - We fixed the bug and pushed the code.
+    - She asked me and I answered quickly.
+    - They called me and I stopped working.
+    - The team watched the demo and laughed.
+- title: "«school, speak» s- inicial"
+  sentences:
+    - I study Spanish at school in Spain.
+    - Please speak slowly when you start.
+    - The small startup has a strong staff.
+    - A student stayed at the station.
+    - Stop the script and start the server.

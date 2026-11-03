@@ -17,6 +17,7 @@ const MODES = [['silencioso', 'Silencioso'], ['panel', 'Panel'], ['voz', 'En voz
 export default function App() {
   const c = useConversation();
   const { ui, session, summary } = c;
+  const [drillText, setDrillText] = useState('');
   const [choice, setChoice] = useState({ topic_id: null }); // { topic_id } (null = libre) o { scenario }
 
   // Espacio: empezar la sesión o alternar el turno. No en campos de texto ni en el resumen.
@@ -24,11 +25,12 @@ export default function App() {
     const onKey = (e) => {
       if (e.code !== 'Space' || e.repeat || e.target.closest?.('input, textarea, select')) return;
       e.preventDefault();
-      if (session) { if (ui !== 'connecting') c.toggle(); } else if (!summary && ui !== 'connecting') c.start(choice);
+      if (session?.drill) { if (ui !== 'connecting' && drillText) c.drillToggle(drillText); }
+      else if (session) { if (ui !== 'connecting') c.toggle(); } else if (!summary && ui !== 'connecting') c.start(choice);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [ui, session, summary, choice, c]);
+  }, [ui, session, summary, choice, drillText, c]);
 
   const h = c.health;
   const down = h && (h.backend === false || !h.whisper || !h.ollama);
@@ -39,9 +41,10 @@ export default function App() {
         <span className="brand"><svg aria-hidden="true" width="44" height="44"><use href="#onda-logo" /></svg>
           <span className="brand-name">iabuddy</span></span>
         <div className="cluster">
-          <span className="tag tag-info">{session?.scenario ? `Escenario · ${session.scenario.title}`
+          <span className="tag tag-info">{session?.drill ? 'Pronunciación' : session?.scenario ? `Escenario · ${session.scenario.title}`
             : `Conversación libre${session?.topic ? ` · ${session.topic}` : ''}`}</span>
-          {session && (
+          {session?.drill && <button className="btn btn-secondary btn-s" onClick={c.leaveDrill}>Salir</button>}
+          {session && !session.drill && (
             <button className="btn btn-secondary btn-s" onClick={c.end} disabled={c.ending}>
               {c.ending ? (session.scenario ? 'Evaluando…' : 'Terminando…') : 'Terminar sesión'}
             </button>
@@ -56,26 +59,28 @@ export default function App() {
         <div className="session-grid">
           <section className="card conversation" aria-label="Conversación">
             {summary ? <Summary s={summary} onClose={c.closeSummary} onListen={c.listen} />
-              : session ? <><ChatLog messages={c.messages} feedbacks={c.feedbacks} intents={c.intents}
+              : session?.drill ? <Drill c={c} text={drillText} setText={setDrillText} />
+              : session ? <><ChatLog messages={c.messages} feedbacks={c.feedbacks} intents={c.intents} sounds={c.sounds}
                   onIntent={c.sendIntent} onListen={c.listen} /><Dock ui={ui} onToggle={c.toggle} /></>
                 : <StartCard topics={c.topics} scenarios={c.scenarios} choice={choice} setChoice={setChoice}
-                    onStart={() => c.start(choice)} disabled={down || ui === 'connecting'} />}
+                    onStart={() => c.start(choice)} disabled={down || ui === 'connecting'}
+                    onDrill={h?.pronunciation ? () => c.start({ drill: true }) : null} />}
           </section>
-          <aside className="session-side">
+          {!session?.drill && <aside className="session-side">
             {session?.scenario && <GoalsCard scenario={session.scenario} met={session.met} onListen={c.listen} />}
             <TutorPanel mode={c.mode} onMode={c.changeMode} feedbacks={c.feedbacks} onListen={c.listen} />
             <MetricsCard metrics={c.metrics} silenceMs={h?.silence_ms} />
-          </aside>
+          </aside>}
         </div>
       </main>
     </div>
   );
 }
 
-function ChatLog({ messages, feedbacks, intents, onIntent, onListen }) {
+function ChatLog({ messages, feedbacks, intents, sounds, onIntent, onListen }) {
   const end = useRef(null);
   // Con llaves: scrollIntoView devuelve una promesa en Chrome reciente y React la tomaría por la limpieza
-  useEffect(() => { end.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }); }, [messages, feedbacks]);
+  useEffect(() => { end.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }); }, [messages, feedbacks, sounds]);
   return (
     <div className="chat" aria-live="polite">
       {messages.map((m, i) => (m.who === 'buddy' ? (
@@ -86,7 +91,7 @@ function ChatLog({ messages, feedbacks, intents, onIntent, onListen }) {
       ) : m.live ? (
         <span key={i} className="bubble bubble-live" lang="en">{m.text || '…'}</span>
       ) : (
-        <YourTurn key={i} m={m} fb={feedbacks.find((f) => f.turn === m.turn)} state={intents[m.turn]}
+        <YourTurn key={i} m={m} fb={feedbacks.find((f) => f.turn === m.turn)} state={intents[m.turn]} sounds={sounds[m.turn]}
           onIntent={onIntent} onListen={onListen} />
       )))}
       <div ref={end} />
@@ -96,7 +101,7 @@ function ChatLog({ messages, feedbacks, intents, onIntent, onListen }) {
 
 // Tu burbuja: al pulsarla, opciones («¿Qué querías decir?», escuchar). Escribes tu intención y
 // aparece cómo decirlo en inglés.
-function YourTurn({ m, fb, state, onIntent, onListen }) {
+function YourTurn({ m, fb, state, sounds, onIntent, onListen }) {
   const [menu, setMenu] = useState(false);
   const [up, setUp] = useState(false);
   const [open, setOpen] = useState(false);
@@ -142,6 +147,12 @@ function YourTurn({ m, fb, state, onIntent, onListen }) {
         </div>
       )}
       </div>
+      {sounds?.map((s) => (
+        <div className="pron-note" key={`${s.word}${s.phone}`}>
+          <span><strong lang="en">{s.word}</strong>: {s.tip}</span>
+          <ListenButton text={s.word} onListen={onListen} />
+        </div>
+      ))}
       {state === 'failed' && !open && <span className="small muted">No pude analizar lo que escribiste. Inténtalo otra vez.</span>}
       {fb?.intent && !open ? (
         <div className="said-as">
@@ -179,8 +190,8 @@ function ListenButton({ text, onListen }) {
   );
 }
 
-function Dock({ ui, onToggle }) {
-  const [title, text, keyHint, label] = STATUS[ui] ?? STATUS.idle;
+function Dock({ ui, onToggle, status = STATUS }) {
+  const [title, text, keyHint, label] = status[ui] ?? status.idle;
   return (
     <div className="dock" style={{ background: DOCK_BG[ui] }}>
       <div className="dock-status">
@@ -198,7 +209,7 @@ function Dock({ ui, onToggle }) {
   );
 }
 
-function StartCard({ topics, scenarios, choice, setChoice, onStart, disabled }) {
+function StartCard({ topics, scenarios, choice, setChoice, onStart, onDrill, disabled }) {
   return (
     <div className="start">
       <svg aria-hidden="true" width="120" height="120"><use href="#onda-idle" /></svg>
@@ -227,7 +238,72 @@ function StartCard({ topics, scenarios, choice, setChoice, onStart, disabled }) 
       <button className="btn btn-primary btn-l" onClick={onStart} disabled={disabled}>
         Empezar <span className="kbd-inline">Espacio</span>
       </button>
+      {onDrill && <button className="btn btn-secondary" onClick={onDrill} disabled={disabled}>Practicar pronunciación</button>}
     </div>
+  );
+}
+
+const DRILL_STATUS = {
+  ...STATUS,
+  idle: ['Te toca leer', 'Escúchala si quieres y léela en voz alta.', 'para empezar a leer', 'Leer la frase'],
+  thinking: ['Analizando…', 'Comparo tu voz con los sonidos de la frase. Si no habías terminado, sigue leyendo.', 'para seguir leyendo', 'Seguir leyendo'],
+  speaking: ['Escucha', 'Buddy lee la frase.', 'para empezar a leer', 'Leer la frase'],
+};
+
+// Práctica de pronunciación: tus frases falladas y frases por sonido. Lees, y ves qué sonidos revisar.
+function Drill({ c, text, setText }) {
+  const failed = c.drills?.failed ?? [];
+  const groups = [...(failed.length ? [{ title: `Tus frases (${failed.length})`, sentences: failed.map((f) => f.text) }] : []),
+    ...(c.drills?.sounds ?? [])];
+  const [group, setGroup] = useState(0);
+  const [index, setIndex] = useState(0);
+  const sentences = groups[group]?.sentences ?? [];
+  const current = sentences[index % (sentences.length || 1)] ?? '';
+  useEffect(() => { setText(current); }, [current, setText]);
+  const result = c.drillResult?.text === current ? c.drillResult : null;
+  const issues = result?.words.filter((w) => w.issues.length) ?? [];
+  const unclear = result?.words.filter((w) => w.unclear && !w.issues.length) ?? [];
+  if (!c.drills) return <div className="start"><span className="muted" aria-busy="true">Preparando las frases…</span></div>;
+  return (
+    <>
+      <div className="drill stack">
+        <div className="cluster" role="group" aria-label="Sonido que quieres practicar">
+          {groups.map((g, i) => (
+            <button key={g.title} className="chip" aria-pressed={group === i} onClick={() => { setGroup(i); setIndex(0); }}>{g.title}</button>
+          ))}
+        </div>
+        <div className="drill-phrase">
+          <p lang="en" aria-live="polite">
+            {result ? result.words.map((w, i) => (
+              <span key={i} className={w.issues.length || w.unclear ? 'drill-word-bad' : undefined}>{w.word} </span>
+            )) : current}
+          </p>
+          <ListenButton text={current} onListen={c.listen} />
+        </div>
+        {result && (
+          <section className="stack" aria-live="polite">
+            <div className="cluster" style={{ justifyContent: 'space-between' }}>
+              <strong>{issues.length || unclear.length ? 'Revisa estas palabras' : result.passed ? '¡Sin errores claros!' : 'No te entendí bien esta frase. ¿La repites?'}</strong>
+              <span className="caption">claridad {result.score}/100</span>
+            </div>
+            {issues.flatMap((w) => w.issues.map((s) => (
+              <div className="pron-note" key={`${w.word}${s.phone}`}>
+                <span><strong lang="en">{w.word}</strong>: {s.tip}</span>
+                <ListenButton text={w.word} onListen={c.listen} />
+              </div>
+            )))}
+            {unclear.map((w) => (
+              <div className="pron-note" key={w.word}>
+                <span><strong lang="en">{w.word}</strong>: no se oyó con claridad. Escúchala y repite la frase.</span>
+                <ListenButton text={w.word} onListen={c.listen} />
+              </div>
+            ))}
+          </section>
+        )}
+        <button className="btn btn-secondary btn-s" style={{ alignSelf: 'flex-start' }} onClick={() => setIndex((n) => n + 1)}>Otra frase</button>
+      </div>
+      <Dock ui={c.ui} status={DRILL_STATUS} onToggle={() => c.drillToggle(current)} />
+    </>
   );
 }
 
@@ -388,6 +464,13 @@ function Summary({ s, onClose, onListen }) {
           <ul className="issues">{s.recurring.map((r, i) => (
             <li key={i}><span className="tag tag-new">×{r.count}</span>
               <span><strong lang="en">{r.original} → {r.fix}</strong>: {r.explanation}</span></li>))}</ul>
+        </section>
+      )}
+      {s.sounds?.length > 0 && (
+        <section className="stack"><h2 className="h2">Sonidos para practicar</h2>
+          <ul className="issues">{s.sounds.map((r, i) => (
+            <li key={i}><span className="tag tag-new">×{r.count}</span>
+              <span><strong lang="en">{r.words.join(', ')}</strong>: {r.tip}</span></li>))}</ul>
         </section>
       )}
       {s.phrases?.length > 0 && (

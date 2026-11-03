@@ -6,11 +6,13 @@ readme = "README.md"
 license = "MIT"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "espeakng-loader>=0.2.4",
     "fastapi>=0.162.0",
     "httpx>=0.28.1",
     "kokoro-onnx>=0.6.1",
     "numpy>=2.5.4",
     "onnxruntime>=1.31.1",
+    "phonemizer>=3.4.0",
     "pyyaml>=6.0.3",
     "uvicorn[standard]>=0.54.0",
 ]

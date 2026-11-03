@@ -91,3 +91,13 @@ details > .phrases { margin-top: 8px; }
 .scenario-result { padding: 16px; border-radius: 20px; background: var(--info-bg); }
 .stars { font-size: 1.6rem; letter-spacing: 2px; color: color-mix(in srgb, var(--text-2) 30%, transparent); }
 .stars .on { color: var(--coral); }
+
+/* Pronunciación (Fase 4) */
+.pron-note {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 8px 8px 14px;
+  border-radius: 16px; background: var(--warning-bg, var(--bg)); font-size: .875rem; line-height: 1.45; text-align: left;
+}
+.drill { flex: 1; padding: 28px clamp(16px, 3vw, 32px); }
+.drill-phrase { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 24px; border-radius: 20px; background: var(--bg); }
+.drill-phrase p { font-size: clamp(1.25rem, 3vw, 1.75rem); font-weight: 800; line-height: 1.35; }
+.drill-word-bad { color: var(--error-text, var(--coral)); text-decoration: underline wavy; text-underline-offset: 4px; }
