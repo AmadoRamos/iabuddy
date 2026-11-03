@@ -1,6 +1,7 @@
 """Fase 2: tutor, base de datos y su integración con el Turn Manager (con dobles, sin modelos)."""
 
 import asyncio
+import contextlib
 
 from test_turn_manager import VOICE, first, make, types
 
@@ -23,6 +24,27 @@ class FakeTutor:
     async def analyze_intent(self, said, intent):
         self.calls.append((said, intent))
         return {"issues": [ISSUE], "corrected": "I went to the gym after work.", "better": "I hit the gym after work."}
+
+
+class StubbornTutor(FakeTutor):
+    """Como httpx a veces: la cancelación no llega y la llamada termina con su resultado."""
+
+    def __init__(self):
+        super().__init__()
+        self.release = asyncio.Event()
+
+    async def _wait(self):
+        while not self.release.is_set():
+            with contextlib.suppress(asyncio.CancelledError):
+                await self.release.wait()
+
+    async def analyze(self, text, partner_said=""):
+        await self._wait()
+        return await super().analyze(text, partner_said)
+
+    async def analyze_intent(self, said, intent):
+        await self._wait()
+        return await super().analyze_intent(said, intent)
 
 
 def test_clean_drops_no_op_fixes():
@@ -164,3 +186,25 @@ async def test_resuming_a_turn_drops_its_analysis_and_stored_row():
     await s.on_control({"type": "start"})  # tecla antes de que suene: mismo turno
     assert first(events, "turn_resumed")["turn"] == 1 and s.user_turns == 0
     assert s.store.db.execute("SELECT COUNT(*) FROM turns WHERE speaker = 'user'").fetchone()[0] == 0
+
+
+async def test_analyses_that_outlive_a_resumed_turn_are_dropped():
+    s, events, _ = make(llm_pieces=("Oh", " you went? Nice!"))
+    s.tutor, s.store = StubbornTutor(), Store(":memory:")
+    s.llm.gate.clear()
+    await s.on_control({"type": "hello"})
+    await s.task
+    await s.on_control({"type": "start"})
+    await s.on_audio(VOICE * 10)
+    await s.on_control({"type": "stop"})
+    for _ in range(10):
+        await asyncio.sleep(0)
+    await s.on_control({"type": "intent", "turn": 1, "text": "Fui al gimnasio"})
+    await asyncio.sleep(0)
+    pending = list(s.tutor_tasks)
+    assert len(pending) == 2
+    await s.on_control({"type": "start"})  # borra la fila; ninguno de los dos análisis se entera
+    s.tutor.release.set()
+    await asyncio.gather(*pending)  # sin la comprobación: IntegrityError (FOREIGN KEY)
+    assert "feedback" not in types(events)
+    assert s.store.db.execute("SELECT COUNT(*) FROM corrections").fetchone()[0] == 0

@@ -137,7 +137,8 @@ class Session:
         task.add_done_callback(self.tutor_tasks.discard)
 
     async def _analyze_intent(self, turn: int, intent: str) -> None:
-        said, row = self.turns[turn]["text"], self.turns[turn]["row"]
+        entry = self.turns[turn]
+        said, row = entry["text"], entry["row"]
         try:
             result = await self.tutor.analyze_intent(said, intent)
         except asyncio.CancelledError:
@@ -145,6 +146,8 @@ class Session:
         except Exception:
             log.exception("Fallo del tutor (intención)")
             await self.send_json({"type": "intent_failed", "turn": turn})
+            return
+        if self.turns.get(turn) is not entry:  # el turno se reabrió: su fila ya no existe
             return
         if self.store and row:
             self.store.add_feedback(row, result["corrected"], result["issues"], intent=intent)
@@ -377,12 +380,16 @@ class Session:
 
     async def _analyze(self, turn: int, text: str, partner_said: str, row: int | None) -> None:
         """Tarea aparte: un barge-in no la cancela (el análisis sigue valiendo)."""
+        entry = self.turns.get(turn)
         try:
             result = await self.tutor.analyze(text, partner_said)
         except asyncio.CancelledError:
             raise
         except Exception:
             log.exception("Fallo del tutor")
+            return
+        # El turno se reabrió: su fila ya no existe. No basta con cancelar: httpx a veces se la traga
+        if self.turns.get(turn) is not entry:
             return
         if turn in self.intent_turns:  # ya escribiste lo que querías decir: manda ese análisis
             return

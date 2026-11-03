@@ -147,7 +147,7 @@
   - Probado de punta a punta con voz (grabaciones del dataset por `/ws`): transcripción, papel, objetivos, resumen (7,6 s al cerrar) y base de datos.
   - Tips en modo «voz», medidos con 8 frases con error y 8 correctas en 2 escenarios: 16/16 errores con tip y 2/16 tips inventados, ambos en frases que no encajaban en la escena. Muestra pequeña: vigilarlo al usar la app.
   - Si se cierra la pestaña sin «Terminar sesión», la sesión se cierra y se evalúa igual (antes quedaba sin cerrar y sin evaluación).
-- [ ] Probar la Fase 3 con micrófono real.
+- [x] Probar la Fase 3 con micrófono real. Probado por Amado el 2026-11-03 con el daily standup: sesión cerrada con «Terminar sesión» y 3 de 4 objetivos guardados.
 
 ### Fase 4 — Pronunciación
 - [ ] Puntuación por palabra/fonema (modo pasivo en conversación).
