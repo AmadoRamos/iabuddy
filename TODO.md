@@ -110,7 +110,7 @@
 - [x] Prompt de persona para conversación libre B1–B2 con *recasting* (reforzado con un ejemplo, `partner/prompts.py`).
 - [x] Instrumentación de latencia por etapa desde el día 1: panel «Tiempos» en la UI, con el tiempo del servidor y el que mide el navegador.
 - [x] Script de arranque único (levanta/verifica Ollama, whisper-server y el backend) → `iabuddy.bat`.
-- [ ] **Probar con micrófono real** (Chrome/Edge) y ajustar. Probado en el navegador con una grabación del dataset como micrófono: un turno completo con 1,67 s hasta el primer audio, con el prompt en frío.
+- [x] **Probar con micrófono real** (Chrome/Edge) y ajustar. Probado en el navegador con una grabación del dataset como micrófono (1,67 s hasta el primer audio, con el prompt en frío) y por Amado con su micrófono el 2026-11-03: todo funciona.
 
 ### Fase 2 — Feedback
 - [ ] Tutor asíncrono con salida JSON con esquema + cola de prioridad compañero > tutor.
