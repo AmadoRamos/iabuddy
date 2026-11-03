@@ -26,11 +26,14 @@
 - [x] **Velocidad de habla por defecto** del compañero (normal o 0,9× para B1–B2). → **0,9×** (elegida de oído en S3).
 
 ### 1.3 Comportamiento pedagógico 🟡 (Fase 2)
-- [ ] **Modo de corrección por defecto:** silencioso (solo resumen al final) / panel lateral en vivo / el compañero corrige en voz.
-- [ ] **Idioma de las explicaciones:** español, inglés, o según el nivel.
-- [ ] **Qué corregir:** ¿solo errores que impiden entender, o también naturalidad/estilo? (Corregir todo abruma en B1–B2.)
-- [ ] **Persona:** un único compañero fijo o varias personalidades seleccionables.
-- [ ] **Temas de conversación libre:** totalmente libre, lista de temas sugeridos, o temas ligados a tus intereses (tecnología, entrevistas, etc.).
+- [x] **Modo de corrección por defecto:** silencioso (solo resumen al final) / panel lateral en vivo / el compañero corrige en voz. → **El compañero corrige en voz.**
+- [x] **Idioma de las explicaciones:** español, inglés, o según el nivel. → **Español.**
+- [x] **Qué corregir:** ¿solo errores que impiden entender, o también naturalidad/estilo? (Corregir todo abruma en B1–B2.) → **Todo** (gramática, vocabulario, naturalidad y estilo).
+- [x] **Persona:** un único compañero fijo o varias personalidades seleccionables. → **Fijo: Buddy.**
+- [x] **Temas de conversación libre:** totalmente libre, lista de temas sugeridos, o temas ligados a tus intereses (tecnología, entrevistas, etc.). → **Lista de temas sugeridos, configurable en la base de datos.**
+- **Cómo encajan «en voz» y «en español»** (propuesta para la Fase 2): la voz de Buddy (Kokoro `af_heart`) es inglesa y pronuncia mal el español.
+  - **En voz:** al final de su respuesta, Buddy da un *tip* corto en inglés con **el error más importante** del turno (*"Quick tip: with yesterday, say I went, not I go."*).
+  - **En texto:** el tutor registra **todos** los errores con su explicación en español (panel o historial y resumen de sesión). Así se corrige todo sin cortar la conversación con cinco correcciones por turno.
 
 ### 1.4 Modelos 🟡 (se cierran con los spikes de la Fase 0)
 - [x] **STT:** whisper.cpp `large-v3-turbo` (Vulkan) vs. Parakeet TDT 0.6B (ONNX, CPU). Criterio principal: **transcripción literal de tus errores**, luego latencia. → **whisper.cpp `large-v3-q5_0` (v3 cuantizado, sin turbo), GPU por Vulkan, greedy y sin prompt** ([S1](docs/SPIKES.md#s1--stt-literal-2026-10-28)). Tiene la misma precisión que v3 con 1,8 GB de VRAM.
