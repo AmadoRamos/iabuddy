@@ -5,10 +5,12 @@ import json
 import logging
 import wave
 
+import httpx
 from test_feedback import FakeTutor, run_turn
 from test_pronunciation import FakeScorer, drill
 from test_turn_manager import make
 
+from backend.pipeline.llm import OllamaLLM
 from backend.session_log import SessionLog, setup_file_logging
 from backend.storage.db import Store
 
@@ -99,3 +101,16 @@ def test_backend_errors_go_to_the_log_file(tmp_path):
                 h.close()
     text = (tmp_path / "iabuddy.log").read_text(encoding="utf-8")
     assert "Algo falló" in text and "ValueError: fallo de prueba" in text
+
+
+async def test_ollama_timings_of_each_answer_are_logged(caplog):
+    def answer(_):
+        lines = [{"message": {"content": "Hi"}}, {"done": True, "prompt_eval_count": 900, "prompt_eval_duration": 1_200_000_000,
+                                                  "eval_count": 30, "eval_duration": 600_000_000, "load_duration": 0}]
+        return httpx.Response(200, text="\n".join(json.dumps(x) for x in lines))
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(answer)) as client:
+        llm = OllamaLLM("http://x", "m", client)
+        with caplog.at_level(logging.INFO, logger="iabuddy"):
+            assert [p async for p in llm.stream([])] == ["Hi"]
+    assert "prompt 900 tokens en 1200 ms" in caplog.text

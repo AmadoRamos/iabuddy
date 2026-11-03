@@ -164,6 +164,67 @@ async def test_written_intent_gets_analyzed_spoken_by_buddy_and_summarized():
                                                     "english": "I went to the gym after work."}]
 
 
+async def test_written_intent_without_final_stop_still_sounds_like_two_sentences():
+    class NoStop(FakeTutor):
+        async def analyze_intent(self, said, intent):
+            return {"issues": [], "corrected": "for myself", "better": "for myself"}
+
+    s, _, _ = make()
+    s.tutor = NoStop()
+    await s.on_control({"type": "hello"})
+    await s.task
+    await run_turn(s)
+    await s.on_control({"type": "intent", "turn": 1, "text": "para mí"})
+    await asyncio.gather(*s.tutor_tasks)
+    await s.task
+    assert "You can say: for myself. Want to try saying it?" in s.messages[-1]["content"]
+
+
+class HeldLLM:
+    """Retiene el primer token hasta que el test lo suelte."""
+
+    def __init__(self):
+        self.release = asyncio.Event()
+
+    async def stream(self, messages):
+        await self.release.wait()
+        yield "Oh, you went to the gym? Nice!"
+
+
+async def test_tutor_waits_for_buddys_first_audio():
+    s, events, _ = make()
+    s.tutor, s.llm = FakeTutor(), HeldLLM()
+    await s.on_control({"type": "start"})
+    await s.on_audio(VOICE * 10)
+    await s.on_control({"type": "stop"})
+    for _ in range(10):
+        await asyncio.sleep(0)
+    assert first(events, "user_text") and s.tutor.calls == []  # ya hay texto, pero Buddy aún no empezó
+    s.llm.release.set()
+    await s.task
+    await asyncio.gather(*s.tutor_tasks)
+    assert len(s.tutor.calls) == 1 and first(events, "feedback")["turn"] == 1
+
+
+async def test_resuming_before_the_first_token_gives_back_the_turn_number():
+    s, events, _ = make()
+    s.tutor, s.llm, s.store = FakeTutor(), HeldLLM(), Store(":memory:")
+    await s.on_control({"type": "hello"})
+    s.llm.release.set()  # el saludo no usa el LLM, pero por si acaso
+    await s.task
+    s.llm.release.clear()
+    await s.on_control({"type": "start"})
+    await s.on_audio(VOICE * 10)
+    await s.on_control({"type": "stop"})
+    for _ in range(10):
+        await asyncio.sleep(0)
+    assert s.user_turns == 1
+    await s.on_control({"type": "start"})  # sigues hablando antes de que Buddy empiece
+    assert s.user_turns == 0 and first(events, "turn_resumed")["turn"] == 1 and s.turns == {}
+    assert s.tutor.calls == []  # ese análisis ya no hacía falta
+    assert s.store.db.execute("SELECT COUNT(*) FROM turns WHERE speaker = 'user'").fetchone()[0] == 0
+
+
 async def test_listen_button_speaks_without_touching_history():
     s, events, _ = make()
     await s.on_control({"type": "say", "text": "I went to the gym."})
@@ -202,8 +263,8 @@ async def test_analyses_that_outlive_a_resumed_turn_are_dropped():
     await s.on_control({"type": "intent", "turn": 1, "text": "Fui al gimnasio"})
     await asyncio.sleep(0)
     pending = list(s.tutor_tasks)
-    assert len(pending) == 2
-    await s.on_control({"type": "start"})  # borra la fila; ninguno de los dos análisis se entera
+    assert len(pending) == 1  # solo la intención: el análisis automático espera al primer audio, que no llegó
+    await s.on_control({"type": "start"})  # borra la fila; el análisis no se entera
     s.tutor.release.set()
     await asyncio.gather(*pending)  # sin la comprobación: IntegrityError (FOREIGN KEY)
     assert "feedback" not in types(events)

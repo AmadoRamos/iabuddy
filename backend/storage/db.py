@@ -247,7 +247,7 @@ class Store:
     def failed_phrases(self, limit: int = 10) -> list[dict]:
         """Tus frases con sonidos pendientes, ya corregidas si el tutor las corrigió, para repetirlas."""
         rows = self.db.execute(
-            "SELECT coalesce(t.corrected, s.text) AS phrase, group_concat(DISTINCT s.word) AS words "
+            "SELECT coalesce(t.corrected, s.text) AS phrase, group_concat(DISTINCT lower(s.word)) AS words "
             "FROM sound_issues s LEFT JOIN turns t ON t.id = s.turn_id WHERE NOT s.resolved "
             "GROUP BY phrase ORDER BY max(s.id) DESC").fetchall()
         # Una frase muy larga no se puede repetir de memoria ni leyendo con calma
@@ -260,7 +260,7 @@ class Store:
 
     def _session_sounds(self, session_id: int) -> list[dict]:
         rows = self.db.execute(
-            "SELECT phone, heard, tip, count(*) AS count, group_concat(DISTINCT word) AS words FROM sound_issues "
+            "SELECT phone, heard, tip, count(*) AS count, group_concat(DISTINCT lower(word)) AS words FROM sound_issues "
             "WHERE session_id = ? GROUP BY phone, heard ORDER BY count DESC LIMIT 5", (session_id,)).fetchall()
         return [{**dict(r), "words": r["words"].split(",")} for r in rows]
 

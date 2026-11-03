@@ -81,6 +81,26 @@ async def test_passive_analysis_runs_after_buddy_speaks_and_reaches_the_summary(
     assert s.store.failed_phrases()[0]["words"] == ["three"]
 
 
+async def test_each_sound_gets_one_notice_so_a_repeated_word_does_not_hide_another_error():
+    def word(name, phone, margin):
+        return {"word": name, "score": 30, "phones": [], "unclear": False,
+                "issues": [{"phone": phone, "heard": "x", "tip": "t", "margin": margin}]}
+
+    s, events, _ = make()
+    s.store = Store(":memory:")
+    s.scorer = FakeScorer()
+    s.scorer.analyze = lambda pcm, text: {"score": 40, "words": [word("Natural", "æ", 7.8), word("natural", "æ", 7.7),
+                                                                 word("very", "v", 4.0)]}
+    await s.on_control({"type": "hello"})
+    await s.task
+    await run_turn(s)
+    await asyncio.gather(*s.tutor_tasks)
+    assert [(i["word"], i["phone"]) for i in first(events, "pronunciation")["issues"]] == [("Natural", "æ"), ("very", "v")]
+    await s.on_control({"type": "end"})
+    assert first(events, "summary")["sounds"][0]["words"] == ["natural"]  # sin repetir por las mayúsculas
+    assert first(events, "summary")["sounds"][0]["count"] == 2
+
+
 async def test_silent_mode_records_sounds_without_showing_them():
     s, events, _ = make()
     s.scorer, s.store = FakeScorer(), Store(":memory:")

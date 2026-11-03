@@ -286,14 +286,14 @@ function Drill({ c, text, setText }) {
               <strong>{issues.length || unclear.length ? 'Revisa estas palabras' : result.passed ? '¡Sin errores claros!' : 'No te entendí bien esta frase. ¿La repites?'}</strong>
               <span className="caption">claridad {result.score}/100</span>
             </div>
-            {issues.flatMap((w) => w.issues.map((s) => (
-              <div className="pron-note" key={`${w.word}${s.phone}`}>
+            {issues.flatMap((w, n) => w.issues.map((s) => (
+              <div className="pron-note" key={`${n}${s.phone}`}>
                 <span><strong lang="en">{w.word}</strong>: {s.tip}</span>
                 <ListenButton text={w.word} onListen={c.listen} />
               </div>
             )))}
-            {unclear.map((w) => (
-              <div className="pron-note" key={w.word}>
+            {unclear.map((w, n) => (
+              <div className="pron-note" key={n}>
                 <span><strong lang="en">{w.word}</strong>: no se oyó con claridad. Escúchala y repite la frase.</span>
                 <ListenButton text={w.word} onListen={c.listen} />
               </div>

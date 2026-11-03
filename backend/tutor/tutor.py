@@ -3,7 +3,7 @@
 - Corrige todo: gramática, vocabulario y naturalidad/estilo.
 - Explicaciones en español, para el panel y el resumen. En voz corrige Buddy dentro de su respuesta
   (partner/prompts.py); el tutor no espera a nadie ni retrasa la conversación.
-- Mismo LLM que el compañero (S2), en paralelo con su respuesta.
+- Mismo LLM que el compañero (S2), desde que suena su respuesta: si arranca antes, la retrasa.
 """
 
 SYSTEM = """You are an English tutor for a Spanish-speaking learner at B1-B2 level. You get one \

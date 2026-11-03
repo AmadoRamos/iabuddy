@@ -11,7 +11,7 @@ Estados: idle → listening → thinking → speaking → idle.
 - Un turno sin voz no llega al STT (S6: whisper alucina "Thank you." con silencio).
 - Modo de corrección: el prompt de Buddy cambia con él (partner/prompts.py). En «voz» Buddy
   corrige dentro de su respuesta, como instructor; en «panel»/«silencioso» solo hace recasting.
-- Tutor (Fase 2): analiza tu turno en paralelo con la respuesta. Sus correcciones, todas y
+- Tutor (Fase 2): analiza tu turno desde que suena el primer audio de la respuesta. Sus correcciones, todas y
   explicadas en español, van al panel (`feedback`) y a la base de datos.
 - `intent`: escribes lo que querías decir en un turno ya dicho. El tutor lo compara con lo que
   dijiste y, en modo «voz», Buddy te dice cómo decirlo y te invita a repetirlo.
@@ -176,7 +176,7 @@ class Session:
             return
         # Buddy, como instructor, te dice cómo decirlo y te invita a repetirlo
         note = f'(I could not say it well. What I meant: "{intent}". How do I say it?)'
-        line = f"Oh, I see what you mean! You can say: {english} Want to try saying it?"
+        line = f"Oh, I see what you mean! You can say: {english.rstrip(' .!?')}. Want to try saying it?"
         if self.state == "idle" and not self._busy():
             self.task = asyncio.create_task(self._run(self._speak_line(note, line)))
         else:
@@ -262,6 +262,8 @@ class Session:
         self.turn_index = len(self.messages)
         self.turn_row: int | None = None  # fila del turno en la base de datos
         self.turn_tutor: asyncio.Task | None = None
+        self.turn_counted = False  # ya tiene n.º de turno: si se reabre, hay que devolverlo
+        self.tutor_args: tuple | None = None  # lo que analizará el tutor cuando suene el primer audio
         self.vad.reset()
 
     async def _set_state(self, state: str, **extra) -> None:
@@ -300,11 +302,13 @@ class Session:
         del self.messages[self.turn_index:]  # quita tu mensaje si ya se había añadido
         if self.turn_tutor:  # el texto va a cambiar: ese análisis ya no vale
             self.turn_tutor.cancel()
+        if self.turn_counted:
             self.turns.pop(self.user_turns, None)
             self.user_turns -= 1
+            self.turn_counted = False
         if self.turn_row and self.store:
             self.store.delete_turn(self.turn_row)
-        self.turn_row = self.turn_tutor = None
+        self.turn_row = self.turn_tutor = self.tutor_args = None
         self.close_reason, self.last_voice, self.resume_run = None, self.clock(), 0
         await self.send_json({"type": "turn_resumed", "turn": self.user_turns + 1})
         await self._set_state("listening")
@@ -341,17 +345,15 @@ class Session:
             await self._set_state("idle")
             return
         self.user_turns += 1
+        self.turn_counted = True
         await self.send_json({"type": "user_text", "text": text, "turn": self.user_turns})
         if self.store and self.session_id:
             self.turn_row = self.store.add_turn(self.session_id, "user", text, seconds=len(pcm) / 32000)
         self.turns[self.user_turns] = {"text": text, "row": self.turn_row}
-        if self.tutor:
-            partner_said = next((m["content"] for m in reversed(self.messages) if m["role"] == "assistant"), "")
-            self.turn_tutor = asyncio.create_task(self._after_turn(self.user_turns, text, partner_said, self.turn_row))
-            self.tutor_tasks.add(self.turn_tutor)
-            self.turn_tutor.add_done_callback(self.tutor_tasks.discard)
+        partner_said = next((m["content"] for m in reversed(self.messages) if m["role"] == "assistant"), "")
         self.messages.append({"role": "user", "content": text})
         turn = self.user_turns
+        self.tutor_args = (turn, text, partner_said, self.turn_row) if self.tutor else None
         try:
             await self._speak(self.llm.stream(self.messages), marks)
         finally:  # también con barge-in. Si no llegó a sonar nada, el turno aún puede reabrirse
@@ -379,8 +381,10 @@ class Session:
             self.store.add_sound_issues(entry["text"], result["words"], self.session_id, entry["row"])
         issues = [{"word": w["word"], **i} for w in result["words"] for i in w["issues"]]
         if issues and self.feedback != "silencioso":
-            issues.sort(key=lambda i: -i["margin"])
-            await self.send_json({"type": "pronunciation", "turn": turn, "issues": issues[:MAX_SOUNDS]})
+            best: dict[tuple, dict] = {}  # un aviso por sonido: el mismo error dos veces no enseña nada nuevo
+            for i in sorted(issues, key=lambda i: -i["margin"]):
+                best.setdefault((i["phone"], i["heard"]), i)
+            await self.send_json({"type": "pronunciation", "turn": turn, "issues": list(best.values())[:MAX_SOUNDS]})
 
     async def _drill(self, pcm: bytes) -> None:
         text = self.drill_text
@@ -495,6 +499,11 @@ class Session:
             self.audio_started = True
             marks["first_audio"] = self._ms()
             await self._set_state("speaking")
+            if self.tutor_args:  # no antes: compite por la GPU y retrasa el primer token (1,2 s frente a 0,3 s)
+                self.turn_tutor = asyncio.create_task(self._after_turn(*self.tutor_args))
+                self.tutor_args = None
+                self.tutor_tasks.add(self.turn_tutor)
+                self.turn_tutor.add_done_callback(self.tutor_tasks.discard)
         self.spoken.append(chunk)
         await self.send_json({"type": "partner_text", "text": chunk})
         await self.send_bytes(audio)
