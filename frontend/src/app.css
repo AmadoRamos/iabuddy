@@ -17,6 +17,26 @@
 .start { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 48px 24px; text-align: center; }
 .start p { max-width: 46ch; }
 
+.topics { justify-content: center; max-width: 560px; }
+
+.bubble-tip { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; background: var(--success-bg); }
+
+.feedback p { margin-top: 4px; line-height: 1.5; }
+.feedback-ok { display: flex; flex-direction: column; gap: 4px; background: var(--success-bg); color: var(--success-text); }
+.issues { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.issues li { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 16px; background: var(--info-bg); font-size: .875rem; line-height: 1.45; }
+.issues .tag { flex: none; }
+.better { padding: 10px 12px; border-radius: 16px; background: var(--bg); font-weight: 700; }
+
+.summary { padding: 28px clamp(16px, 3vw, 32px); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
+.review-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.review-list li { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 16px; background: var(--bg); }
+
+details.card > summary { list-style: none; cursor: pointer; }
+details.card > summary::-webkit-details-marker { display: none; }
+details[open].card > summary { margin-bottom: 12px; }
+
 .metrics { margin: 0; display: flex; flex-direction: column; gap: 6px; }
 .metrics div { display: flex; justify-content: space-between; gap: 12px; padding-block: 4px; border-bottom: 1.5px solid var(--sunken); }
 .metrics dt { color: var(--text-2); }

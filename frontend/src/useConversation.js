@@ -6,12 +6,18 @@ import { Player } from './audio/player.js';
 // El micrófono envía siempre; el backend decide qué audio pertenece a tu turno.
 //
 // ui: 'off' (sin empezar) · 'connecting' · 'idle' · 'listening' · 'thinking' · 'speaking'
+// session: null (eligiendo tema) · { topic } en curso · summary: resumen al terminar
 export function useConversation() {
   const [ui, setUi] = useState('off');
   const [messages, setMessages] = useState([]);
   const [metrics, setMetrics] = useState(null);
   const [error, setError] = useState(null);
   const [health, setHealth] = useState(null);
+  const [topics, setTopics] = useState([]);
+  const [session, setSession] = useState(null);
+  const [summary, setSummary] = useState(null);
+  const [feedbacks, setFeedbacks] = useState([]); // análisis del tutor, uno por turno tuyo
+  const [mode, setMode] = useState('voz'); // corrección: 'silencioso' | 'panel' | 'voz' (TODO §1.3)
 
   const ws = useRef(null);
   const mic = useRef(null);
@@ -32,7 +38,10 @@ export function useConversation() {
       setHealth({ backend: false });
     }
   }, []);
-  useEffect(() => { checkHealth(); }, [checkHealth]);
+  useEffect(() => {
+    checkHealth();
+    fetch('/api/topics').then((r) => r.json()).then(setTopics).catch(() => {});
+  }, [checkHealth]);
 
   const send = (msg) => ws.current?.readyState === WebSocket.OPEN && ws.current.send(JSON.stringify(msg));
 
@@ -43,8 +52,21 @@ export function useConversation() {
         if (m.state === 'thinking') turn.current.closedAt ??= performance.now();
         refreshUi();
         break;
+      case 'session':
+        setSession({ topic: m.topic });
+        break;
       case 'user_text':
-        setMessages((ms) => [...ms.filter((x) => !x.live), { who: 'you', text: m.text }]);
+        setMessages((ms) => [...ms.filter((x) => !x.live), { who: 'you', text: m.text, turn: m.turn }]);
+        break;
+      case 'tip':
+        setMessages((ms) => [...ms, { who: 'buddy', tip: true, text: m.text }]);
+        break;
+      case 'feedback':
+        setFeedbacks((fs) => [m, ...fs.filter((f) => f.turn !== m.turn)]);
+        break;
+      case 'summary':
+        setSummary(m);
+        setSession(null);
         break;
       case 'partner_text':
         setMessages((ms) => {
@@ -62,6 +84,7 @@ export function useConversation() {
         break;
       case 'turn_resumed': // sigues hablando: tu frase anterior vuelve a ser parte del turno
         setMessages((ms) => [...ms.filter((x) => x.who !== 'you' || x !== ms.at(-1)), { who: 'you', live: true, text: '' }]);
+        setFeedbacks((fs) => fs.filter((f) => f.turn !== m.turn));
         turn.current = {};
         break;
       case 'turn_discarded':
@@ -81,8 +104,19 @@ export function useConversation() {
     }
   }, [refreshUi]);
 
-  const start = useCallback(async () => {
+  // Empieza una sesión con el tema elegido (null = libre). La primera vez abre WebSocket y micrófono.
+  const start = useCallback(async (topicId = null) => {
     setError(null);
+    setMessages([]);
+    setFeedbacks([]);
+    setSummary(null);
+    setMetrics(null);
+    const hello = { type: 'hello', topic_id: topicId, feedback: mode };
+    if (ws.current?.readyState === WebSocket.OPEN) {
+      setSession({ topic: null });
+      send(hello);
+      return;
+    }
     setUi('connecting');
     player.current = new Player({
       onPlaying: (at) => { playing.current = true; turn.current.playAt ??= at; refreshUi(); },
@@ -93,7 +127,7 @@ export function useConversation() {
     const sock = new WebSocket(`${proto}://${location.host}/ws`);
     sock.binaryType = 'arraybuffer';
     sock.onmessage = (e) => (typeof e.data === 'string' ? onEvent(JSON.parse(e.data)) : player.current.enqueue(e.data));
-    sock.onclose = () => { setUi('off'); mic.current?.stop(); checkHealth(); };
+    sock.onclose = () => { setUi('off'); setSession(null); mic.current?.stop(); checkHealth(); };
     ws.current = sock;
     try {
       await new Promise((ok, fail) => { sock.onopen = ok; sock.onerror = () => fail(new Error('No se pudo conectar con el backend.')); });
@@ -106,8 +140,19 @@ export function useConversation() {
     }
     server.current = 'idle';
     refreshUi();
-    send({ type: 'hello' });
-  }, [onEvent, refreshUi, checkHealth]);
+    setSession({ topic: null });
+    send(hello);
+  }, [onEvent, refreshUi, checkHealth, mode]);
+
+  const end = useCallback(() => {
+    if (playing.current) player.current.stop();
+    send({ type: 'end' });
+  }, []);
+
+  const changeMode = useCallback((m) => {
+    setMode(m);
+    send({ type: 'settings', feedback: m });
+  }, []);
 
   // Espacio / botón Onda: abre o cierra tu turno; si Buddy habla, lo interrumpe.
   const toggle = useCallback(() => {
@@ -124,5 +169,6 @@ export function useConversation() {
 
   useEffect(() => () => { ws.current?.close(); mic.current?.stop(); }, []);
 
-  return { ui, messages, metrics, error, health, start, toggle };
+  return { ui, messages, metrics, error, health, topics, session, summary, feedbacks, mode,
+    start, toggle, end, changeMode, closeSummary: () => setSummary(null) };
 }

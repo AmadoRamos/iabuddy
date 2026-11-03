@@ -27,6 +27,14 @@ class OllamaLLM:
                 if piece := obj.get("message", {}).get("content"):
                     yield piece
 
+    async def chat_json(self, messages: list[dict], schema: dict) -> dict:
+        """Respuesta completa forzada a un esquema JSON (lo usa el tutor)."""
+        payload = self._payload(messages, False) | {"format": schema}
+        payload["options"] = payload["options"] | {"temperature": 0}
+        r = await self.client.post(f"{self.url}/api/chat", json=payload)
+        r.raise_for_status()
+        return json.loads(r.json()["message"]["content"])
+
     async def warm(self) -> None:
         """Carga el modelo en VRAM para que el primer turno no pague la carga."""
         r = await self.client.post(f"{self.url}/api/chat", json=self._payload([], False))

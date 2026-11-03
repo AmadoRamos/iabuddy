@@ -17,4 +17,6 @@ mention, explain or point out the mistake.
 What did you work on?"
 - If the user speaks Spanish, reply in simple English and encourage them to try in English."""
 
-GREETING = "Hey! Good to see you. How has your day been so far?"
+# Sin tema elegido se añade una pregunta abierta; con tema, la pregunta del tema (tabla topics).
+GREETING = "Hey! Good to see you."
+FREE_OPENER = "How has your day been so far?"

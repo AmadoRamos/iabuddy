@@ -18,7 +18,9 @@ MODELS = Path(_env("MODELS_DIR", "C:/Models"))
 @dataclass(frozen=True)
 class Settings:
     whisper_url: str = _env("WHISPER_URL", "http://127.0.0.1:8182/inference")
-    ollama_url: str = _env("OLLAMA_URL", "http://127.0.0.1:11434")
+    # Ollama propio de la app (iabuddy.bat) con OLLAMA_NUM_PARALLEL=2: el tutor corre a la vez
+    # que el compañero (S2). Puerto aparte para no tocar la configuración del Ollama de la bandeja.
+    ollama_url: str = _env("OLLAMA_URL", "http://127.0.0.1:11435")
     llm_model: str = _env("LLM_MODEL", "gemma4:12b-it-qat")
     kokoro_model: Path = MODELS / "kokoro" / "kokoro-v1.0.onnx"
     kokoro_voices: Path = MODELS / "kokoro" / "voices-v1.0.bin"
@@ -28,6 +30,7 @@ class Settings:
     # S4: en habla libre hay pausas de hasta 2,5 s. Con la fusión de turno un corte es
     # inofensivo (si sigues hablando se une al turno), así que se puede esperar menos.
     silence_ms: int = int(_env("SILENCE_MS", "900"))
+    db_path: Path = Path(_env("DB_PATH", str(Path(__file__).resolve().parents[1] / "data" / "iabuddy.db")))
 
 
 settings = Settings()

@@ -18,12 +18,14 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 
 from .config import settings
-from .partner.prompts import GREETING, SYSTEM
+from .partner.prompts import FREE_OPENER, GREETING, SYSTEM
 from .pipeline.llm import OllamaLLM
 from .pipeline.stt import WhisperSTT
 from .pipeline.tts import KokoroTTS
 from .pipeline.turn_manager import Session
 from .pipeline.vad import StreamingVad
+from .storage.db import Store
+from .tutor.tutor import Tutor
 
 log = logging.getLogger("iabuddy")
 DIST = Path(__file__).resolve().parents[1] / "frontend" / "dist"
@@ -34,6 +36,8 @@ async def lifespan(app: FastAPI):
     app.state.http = httpx.AsyncClient(timeout=120)
     app.state.stt = WhisperSTT(settings.whisper_url, app.state.http)
     app.state.llm = OllamaLLM(settings.ollama_url, settings.llm_model, app.state.http)
+    app.state.tutor = Tutor(app.state.llm)
+    app.state.store = Store(settings.db_path)
     app.state.tts = KokoroTTS(settings.kokoro_model, settings.kokoro_voices, settings.voice, settings.speed)
     await asyncio.to_thread(app.state.tts.synth, "Warm up.")
     try:
@@ -61,13 +65,19 @@ async def health() -> dict:
             "silence_ms": settings.silence_ms}
 
 
+@app.get("/api/topics")
+async def topics() -> list[dict]:
+    return app.state.store.topics()
+
+
 @app.websocket("/ws")
 async def ws_endpoint(ws: WebSocket) -> None:
     await ws.accept()
     session = Session(
         send_json=ws.send_json, send_bytes=ws.send_bytes,
         vad=StreamingVad(settings.vad_model), stt=app.state.stt, llm=app.state.llm, tts=app.state.tts,
-        silence_ms=settings.silence_ms, system=SYSTEM, greeting=GREETING,
+        tutor=app.state.tutor, store=app.state.store,
+        silence_ms=settings.silence_ms, system=SYSTEM, greeting=GREETING, free_opener=FREE_OPENER,
     )
     try:
         while True:

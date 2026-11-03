@@ -8,12 +8,16 @@ tasklist /fi "imagename eq whisper-server.exe" | find /i "whisper-server" >nul |
   start "whisper-server" /min C:\Tools\whisper.cpp\build\bin\Release\whisper-server.exe -m C:\Models\whisper\ggml-large-v3-q5_0.bin -l en --port 8182
 )
 
-ollama list >nul 2>&1 && goto ollama_listo
-echo Arrancando Ollama...
-start "" "%LOCALAPPDATA%\Programs\Ollama\ollama app.exe"
+rem Ollama propio en el puerto 11435 con 2 peticiones en paralelo (compañero + tutor a la vez).
+rem El de la bandeja (11434) se cierra: si los dos cargan gemma, no cabe en la VRAM (Fase 2).
+rem No se toca su configuración; vuelve a abrirse con el equipo o desde el menú Inicio.
+powershell -NoProfile -Command "Get-Process 'ollama app' -ErrorAction SilentlyContinue | Stop-Process -Force; Get-NetTCPConnection -LocalPort 11434 -State Listen -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force }"
+call :ollama_vivo && goto ollama_listo
+echo Arrancando Ollama (puerto 11435, 2 en paralelo)...
+start "ollama-iabuddy" /min cmd /c "set "OLLAMA_HOST=127.0.0.1:11435"&& set "OLLAMA_NUM_PARALLEL=2"&& ollama serve"
 :esperar_ollama
 timeout /t 2 >nul
-ollama list >nul 2>&1 || goto esperar_ollama
+call :ollama_vivo || goto esperar_ollama
 :ollama_listo
 
 if not exist frontend\dist\index.html (
@@ -35,3 +39,8 @@ goto :eof
 popd
 echo No se pudo compilar el frontend.
 pause
+goto :eof
+
+:ollama_vivo
+powershell -NoProfile -Command "try { Invoke-WebRequest http://127.0.0.1:11435/api/version -UseBasicParsing -TimeoutSec 1 | Out-Null; exit 0 } catch { exit 1 }"
+exit /b %errorlevel%

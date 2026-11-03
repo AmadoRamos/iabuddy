@@ -116,10 +116,17 @@
 - [x] **Probar con micrófono real** (Chrome/Edge) y ajustar. Probado en el navegador con una grabación del dataset como micrófono (1,67 s hasta el primer audio, con el prompt en frío) y por Amado con su micrófono el 2026-11-03: todo funciona.
 
 ### Fase 2 — Feedback
-- [ ] Tutor asíncrono con salida JSON con esquema + cola de prioridad compañero > tutor.
-- [ ] Panel de correcciones en la UI.
-- [ ] Resumen de sesión.
-- [ ] SQLite: `sessions`, `turns`, `corrections`.
+- [x] Tutor asíncrono con salida JSON con esquema + cola de prioridad compañero > tutor → `backend/tutor/tutor.py`.
+  - Corre **en paralelo** con la respuesta (no después), porque el *tip* en voz tiene que estar listo antes de que Buddy termine. Necesita `OLLAMA_NUM_PARALLEL=2`.
+  - Medido: compañero con el primer token a ~400–600 ms y tutor en ~3 s.
+- [x] Panel de correcciones en la UI, con los modos silencioso / panel / en voz y el *tip* hablado al final de la respuesta.
+- [x] Resumen de sesión: duración, turnos, palabras por minuto, turnos sin errores, errores que se repiten y frases para repasar.
+- [x] SQLite: `sessions`, `turns`, `corrections` y `topics` (temas sugeridos, editables en la tabla) → `data/iabuddy.db`.
+- [x] **Un solo servidor Ollama.** Con el de la bandeja (11434) y el de la app (11435) cargando gemma a la vez, la VRAM llega a 16,8 GB y todo se ralentiza (el tutor pasó de 3 s a 18 s).
+  - → Se queda **solo el de la app** (11435, `OLLAMA_NUM_PARALLEL=2`). `iabuddy.bat` cierra el de la bandeja al arrancar, sin tocar su configuración.
+  - Con todo cargado, la VRAM total queda en 13,8 GB.
+  - Ojo: `hablar_s6.bat` (spike) usaba el de la bandeja.
+- [ ] Probar la Fase 2 con micrófono real.
 
 ### Fase 3 — Escenarios
 - [ ] Formato YAML y cargador de escenarios.
