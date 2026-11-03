@@ -134,7 +134,7 @@
   - 🔊 *Escuchar* lee cualquier frase con la voz de Buddy.
   - El resumen incluye **«Frases que querías decir»** (columna `turns.intent`).
   - Solo se puede escribir **después** de hablar, para que no se convierta en traducir en vez de practicar.
-- [ ] Probar la Fase 2 con micrófono real.
+- [x] Probar la Fase 2 con micrófono real. Probado por Amado el 2026-11-03: funciona bien.
 
 ### Fase 3 — Escenarios
 - [ ] Formato YAML y cargador de escenarios.
