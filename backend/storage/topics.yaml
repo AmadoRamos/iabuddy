@@ -1,0 +1,42 @@
+# Temas extra de conversación: preguntas típicas de entrevistas (backend, Python, programación).
+# Título en español (UI); cada inicio en inglés es la pregunta con la que Buddy abre la sesión.
+# Al arrancar se añade a la base de datos cualquier tema cuyo título aún no exista.
+# Fuentes: guías de hackajob, SecondTalent, ResumeGeni, Jaro Education, Glassdoor, CoderPad, TestGorilla, Coursera.
+
+Entrevista · Python:
+  - "Hi! Let's warm up with some Python. Can you explain what a decorator is and when you've used one?"
+  - "Hey! Quick Python question: what's the difference between a list and a tuple, and when would you pick each one?"
+  - "Hi there! Can you tell me what a generator is and why it can save memory?"
+  - "Hey! What is the GIL in Python, and how does it affect threading versus multiprocessing?"
+  - "Hi! How do context managers work? Tell me about the 'with' statement and a time it was useful."
+  - "Hey! How would you explain the difference between a shallow copy and a deep copy?"
+  - "Hi there! What's your experience with async and await in Python? When does asyncio really help?"
+  - "Hey! What are *args and **kwargs, and how do you use them in your functions?"
+  - "Hi! How do you manage dependencies and virtual environments in your Python projects?"
+  - "Hey! Have you used type hints or Pydantic? How do they help you in a real project?"
+
+Entrevista · Backend y APIs:
+  - "Hi! Let's talk backend. How would you design a REST API that has to handle millions of requests?"
+  - "Hey! What does idempotency mean for an API, and why does it matter for payments or retries?"
+  - "Hi there! How would you add rate limiting to a public API?"
+  - "Hey! When would you choose a SQL database, and when a NoSQL one?"
+  - "Hi! A query is suddenly very slow in production. How do you investigate and fix it?"
+  - "Hey! Can you explain what a database index is and the trade-offs of adding one?"
+  - "Hi there! What are the ACID properties, and why do they matter?"
+  - "Hey! How would you use caching in a backend service? What can go wrong with it?"
+  - "Hi! How do you handle authentication and authorization in an API?"
+  - "Hey! Let's do a small system design: how would you build a URL shortener?"
+  - "Hi there! What's the difference between strong consistency and eventual consistency?"
+  - "Hey! Have you worked with Django, Flask or FastAPI? Which one do you prefer and why?"
+
+Entrevista · Programación y experiencia:
+  - "Hi! Tell me about a significant technical challenge you faced and how you solved it."
+  - "Hey! Describe a time you received critical feedback on your code. How did you handle it?"
+  - "Hi there! Give me an example of a time you had to balance several priorities at once."
+  - "Hey! Tell me about a disagreement you had with a teammate about a technical decision."
+  - "Hi! What's your strategy for testing? How do you decide between unit and integration tests?"
+  - "Hey! Tell me about a bug in production that you had to fix. What did you learn from it?"
+  - "Hi there! How do you keep your code clean and easy to maintain?"
+  - "Hey! Describe a complex system you designed or helped build."
+  - "Hi! Tell me about a time you made a mistake at work. What happened next?"
+  - "Hey! How do you explain a technical topic to someone who isn't technical?"

@@ -32,7 +32,7 @@ def test_clean_drops_no_op_fixes():
 
 def test_store_summary_counts_words_errors_and_recurring():
     s = Store(":memory:")
-    assert len(s.topics()) == len(SEED_TOPICS)
+    assert len(s.topics()) == len(SEED_TOPICS) + 3  # + los de topics.yaml
     sid = s.start_session(s.topics()[0]["id"])
     for text in ["Yesterday I go to the gym.", "Today I go to work.", "I like it."]:
         row = s.add_turn(sid, "user", text, seconds=3.0)
@@ -69,9 +69,19 @@ def test_old_database_is_migrated_to_several_openers(tmp_path):
     old.commit()
     old.close()
     s = Store(db)
-    assert s.topics() == [{"id": 1, "title": "Viajes"}]
+    assert s.topics()[0] == {"id": 1, "title": "Viajes"}
     texts = {r[0] for r in s.db.execute("SELECT text FROM openers WHERE topic_id = 1")}
     assert texts == set(dict(SEED_TOPICS)["Viajes"])
+    assert any(t["title"] == "Entrevista · Python" for t in s.topics())  # topics.yaml llega a bases viejas
+
+
+def test_file_topics_are_added_once_with_their_openers(tmp_path):
+    Store(tmp_path / "a.db")
+    s = Store(tmp_path / "a.db")  # segundo arranque: no duplica
+    titles = [t["title"] for t in s.topics()]
+    assert titles.count("Entrevista · Backend y APIs") == 1
+    tid = next(t["id"] for t in s.topics() if t["title"] == "Entrevista · Backend y APIs")
+    assert len(s.db.execute("SELECT 1 FROM openers WHERE topic_id = ?", (tid,)).fetchall()) == 12
 
 
 async def run_turn(s):

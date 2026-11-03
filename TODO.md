@@ -137,9 +137,17 @@
 - [x] Probar la Fase 2 con micrófono real. Probado por Amado el 2026-11-03: funciona bien.
 
 ### Fase 3 — Escenarios
-- [ ] Formato YAML y cargador de escenarios.
-- [ ] 5 escenarios iniciales (entrevista backend Python, daily standup, restaurante, hotel, small talk).
-- [ ] Seguimiento de objetivos y evaluación final.
+- [x] Formato YAML y cargador de escenarios: un archivo por escenario en `backend/scenarios/` (título y objetivos en español; papel, contexto, inicios y frases útiles en inglés). Se cargan al arrancar.
+- [x] 5 escenarios iniciales (entrevista backend Python, daily standup, restaurante, hotel, small talk).
+- [x] Seguimiento de objetivos y evaluación final.
+  - Buddy interpreta el papel. En modo «voz» empieza con un *"Quick tip:"* corto cuando cometes un error y vuelve a la escena; en «panel» y «silencioso» hace *recasting* sin salir del papel.
+  - Tras cada turno tuyo, el tutor revisa los objetivos (2–4 s, encadenado tras el análisis para no pasar de 2 peticiones al LLM). Lo cumplido se marca en vivo y ya no se pierde.
+  - Al terminar: objetivos con la cita que lo demuestra, 1–3 estrellas (terminarlo / la mitad / todos), un comentario en español y las frases útiles que no usaste. Se guardan los objetivos cumplidos en `sessions` para la Fase 5.
+  - Probado con gemma con un guion escrito de restaurante: 4 de 4 objetivos detectados en su turno.
+  - Probado de punta a punta con voz (grabaciones del dataset por `/ws`): transcripción, papel, objetivos, resumen (7,6 s al cerrar) y base de datos.
+  - Tips en modo «voz», medidos con 8 frases con error y 8 correctas en 2 escenarios: 16/16 errores con tip y 2/16 tips inventados, ambos en frases que no encajaban en la escena. Muestra pequeña: vigilarlo al usar la app.
+  - Si se cierra la pestaña sin «Terminar sesión», la sesión se cierra y se evalúa igual (antes quedaba sin cerrar y sin evaluación).
+- [ ] Probar la Fase 3 con micrófono real.
 
 ### Fase 4 — Pronunciación
 - [ ] Puntuación por palabra/fonema (modo pasivo en conversación).

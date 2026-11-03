@@ -11,6 +11,7 @@ dependencies = [
     "kokoro-onnx>=0.6.1",
     "numpy>=2.5.4",
     "onnxruntime>=1.31.1",
+    "pyyaml>=6.0.3",
     "uvicorn[standard]>=0.54.0",
 ]
 

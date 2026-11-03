@@ -6,7 +6,7 @@ import { Player } from './audio/player.js';
 // El micrófono envía siempre; el backend decide qué audio pertenece a tu turno.
 //
 // ui: 'off' (sin empezar) · 'connecting' · 'idle' · 'listening' · 'thinking' · 'speaking'
-// session: null (eligiendo tema) · { topic } en curso · summary: resumen al terminar
+// session: null (eligiendo) · { topic } o { scenario, met } en curso · summary: resumen al terminar
 export function useConversation() {
   const [ui, setUi] = useState('off');
   const [messages, setMessages] = useState([]);
@@ -14,6 +14,8 @@ export function useConversation() {
   const [error, setError] = useState(null);
   const [health, setHealth] = useState(null);
   const [topics, setTopics] = useState([]);
+  const [scenarios, setScenarios] = useState([]);
+  const [ending, setEnding] = useState(false); // esperando el resumen (y la evaluación del escenario)
   const [session, setSession] = useState(null);
   const [summary, setSummary] = useState(null);
   const [feedbacks, setFeedbacks] = useState([]); // análisis del tutor, uno por turno tuyo
@@ -42,6 +44,7 @@ export function useConversation() {
   useEffect(() => {
     checkHealth();
     fetch('/api/topics').then((r) => r.json()).then(setTopics).catch(() => {});
+    fetch('/api/scenarios').then((r) => r.json()).then(setScenarios).catch(() => {});
   }, [checkHealth]);
 
   const send = (msg) => ws.current?.readyState === WebSocket.OPEN && ws.current.send(JSON.stringify(msg));
@@ -54,7 +57,10 @@ export function useConversation() {
         refreshUi();
         break;
       case 'session':
-        setSession({ topic: m.topic });
+        setSession({ topic: m.topic, scenario: m.scenario, met: m.scenario?.goals.map(() => false) });
+        break;
+      case 'goals': // objetivos del escenario cumplidos hasta ahora
+        setSession((s) => s && { ...s, met: m.met });
         break;
       case 'user_text':
         setMessages((ms) => [...ms.filter((x) => !x.live), { who: 'you', text: m.text, turn: m.turn }]);
@@ -69,6 +75,7 @@ export function useConversation() {
       case 'summary':
         setSummary(m);
         setSession(null);
+        setEnding(false);
         break;
       case 'partner_text':
         setMessages((ms) => {
@@ -106,15 +113,15 @@ export function useConversation() {
     }
   }, [refreshUi]);
 
-  // Empieza una sesión con el tema elegido (null = libre). La primera vez abre WebSocket y micrófono.
-  const start = useCallback(async (topicId = null) => {
+  // Empieza una sesión: choice = { topic_id } (null = libre) o { scenario }. La primera vez abre WebSocket y micrófono.
+  const start = useCallback(async (choice = {}) => {
     setError(null);
     setMessages([]);
     setFeedbacks([]);
     setIntents({});
     setSummary(null);
     setMetrics(null);
-    const hello = { type: 'hello', topic_id: topicId, feedback: mode };
+    const hello = { type: 'hello', ...choice, feedback: mode };
     if (ws.current?.readyState === WebSocket.OPEN) {
       setSession({ topic: null });
       send(hello);
@@ -130,7 +137,7 @@ export function useConversation() {
     const sock = new WebSocket(`${proto}://${location.host}/ws`);
     sock.binaryType = 'arraybuffer';
     sock.onmessage = (e) => (typeof e.data === 'string' ? onEvent(JSON.parse(e.data)) : player.current.enqueue(e.data));
-    sock.onclose = () => { setUi('off'); setSession(null); mic.current?.stop(); checkHealth(); };
+    sock.onclose = () => { setUi('off'); setSession(null); setEnding(false); mic.current?.stop(); checkHealth(); };
     ws.current = sock;
     try {
       await new Promise((ok, fail) => { sock.onopen = ok; sock.onerror = () => fail(new Error('No se pudo conectar con el backend.')); });
@@ -149,6 +156,7 @@ export function useConversation() {
 
   const end = useCallback(() => {
     if (playing.current) player.current.stop();
+    setEnding(true);
     send({ type: 'end' });
   }, []);
 
@@ -183,6 +191,6 @@ export function useConversation() {
 
   useEffect(() => () => { ws.current?.close(); mic.current?.stop(); }, []);
 
-  return { ui, messages, metrics, error, health, topics, session, summary, feedbacks, mode, intents,
+  return { ui, messages, metrics, error, health, topics, scenarios, session, summary, feedbacks, mode, intents, ending,
     start, toggle, end, changeMode, sendIntent, listen, closeSummary: () => setSummary(null) };
 }

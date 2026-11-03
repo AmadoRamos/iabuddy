@@ -1,0 +1,21 @@
+title: En un restaurante
+description: Cenas en un restaurante de Nueva York y el camarero viene a tomarte la orden.
+partner_role: Jamie, a cheerful waiter at a casual restaurant in New York
+user_role: a customer having dinner
+context: A busy but friendly restaurant in New York, in the evening. The customer has just sat down.
+openers:
+  - "Hi there, welcome! My name's Jamie, I'll be taking care of you tonight. Can I get you something to drink to start?"
+  - "Good evening! Welcome in. Have you had a chance to look at the menu, or do you need a few more minutes?"
+  - "Hey, how are you doing tonight? Can I start you off with something to drink?"
+goals:
+  - Pide una bebida
+  - Pregunta por un plato o pide una recomendación
+  - Haz tu pedido con algún cambio (sin cebolla, salsa aparte…)
+  - Pide la cuenta
+key_phrases:
+  - "I'd like"
+  - "Could I get"
+  - "What do you recommend?"
+  - on the side
+  - "Can I have the check, please?"
+  - allergic to

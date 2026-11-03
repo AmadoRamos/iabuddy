@@ -375,6 +375,7 @@ dependencies = [
     { name = "kokoro-onnx" },
     { name = "numpy" },
     { name = "onnxruntime" },
+    { name = "pyyaml" },
     { name = "uvicorn", extra = ["standard"] },
 ]
 
@@ -399,6 +400,7 @@ requires-dist = [
     { name = "kokoro-onnx", specifier = ">=0.6.1" },
     { name = "numpy", specifier = ">=2.5.4" },
     { name = "onnxruntime", specifier = ">=1.31.1" },
+    { name = "pyyaml", specifier = ">=6.0.3" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.54.0" },
 ]
 

@@ -68,3 +68,26 @@ details[open].card > summary { margin-bottom: 12px; }
 .metrics div { display: flex; justify-content: space-between; gap: 12px; padding-block: 4px; border-bottom: 1.5px solid var(--sunken); }
 .metrics dt { color: var(--text-2); }
 .metrics dd { margin: 0; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+/* Escenarios (Fase 3) */
+.scenarios { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; width: min(640px, 100%); }
+.scenario-card {
+  display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border-radius: 18px; text-align: left;
+  border: 2px solid var(--sunken); background: var(--surface); color: var(--text); font: inherit; cursor: pointer;
+  transition: border-color var(--dur-fast), transform var(--dur-fast);
+}
+.scenario-card:hover { transform: translateY(-2px); }
+.scenario-card[aria-pressed="true"] { border-color: var(--coral); background: var(--bg); }
+.scenario-card:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.goals, .phrases { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.goals li { display: flex; gap: 10px; align-items: flex-start; line-height: 1.45; }
+.goal-check {
+  flex: none; width: 22px; height: 22px; border-radius: 50%; border: 2px solid color-mix(in srgb, var(--text-2) 45%, transparent);
+  display: grid; place-items: center; font-size: .75rem; font-weight: 800;
+}
+.goals li.met .goal-check { border-color: var(--success-text); background: var(--success-bg); color: var(--success-text); animation: popin .3s ease-out both; }
+.phrases li { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 4px 4px 4px 12px; border-radius: 14px; background: var(--bg); font-weight: 700; }
+details > .phrases { margin-top: 8px; }
+.scenario-result { padding: 16px; border-radius: 20px; background: var(--info-bg); }
+.stars { font-size: 1.6rem; letter-spacing: 2px; color: color-mix(in srgb, var(--text-2) 30%, transparent); }
+.stars .on { color: var(--coral); }

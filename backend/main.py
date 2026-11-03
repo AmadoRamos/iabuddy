@@ -18,6 +18,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 
 from .config import settings
+from .partner import scenarios
 from .partner.prompts import GREETING, SYSTEMS
 from .pipeline.llm import OllamaLLM
 from .pipeline.stt import WhisperSTT
@@ -29,6 +30,7 @@ from .tutor.tutor import Tutor
 
 log = logging.getLogger("iabuddy")
 DIST = Path(__file__).resolve().parents[1] / "frontend" / "dist"
+SCENARIOS = scenarios.load()  # un YAML mal escrito falla al arrancar, no a mitad de sesión
 
 
 @asynccontextmanager
@@ -70,13 +72,18 @@ async def topics() -> list[dict]:
     return app.state.store.topics()
 
 
+@app.get("/api/scenarios")
+async def scenario_list() -> list[dict]:
+    return [scenarios.public(sc) for sc in SCENARIOS.values()]
+
+
 @app.websocket("/ws")
 async def ws_endpoint(ws: WebSocket) -> None:
     await ws.accept()
     session = Session(
         send_json=ws.send_json, send_bytes=ws.send_bytes,
         vad=StreamingVad(settings.vad_model), stt=app.state.stt, llm=app.state.llm, tts=app.state.tts,
-        tutor=app.state.tutor, store=app.state.store,
+        tutor=app.state.tutor, store=app.state.store, scenarios=SCENARIOS,
         silence_ms=settings.silence_ms, systems=SYSTEMS, greeting=GREETING,
     )
     try:

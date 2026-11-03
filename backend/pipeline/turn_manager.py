@@ -16,6 +16,9 @@ Estados: idle → listening → thinking → speaking → idle.
 - `intent`: escribes lo que querías decir en un turno ya dicho. El tutor lo compara con lo que
   dijiste y, en modo «voz», Buddy te dice cómo decirlo y te invita a repetirlo.
 - `say`: 🔊 escuchar una frase con la voz de Buddy (no entra en la conversación).
+- Escenarios (Fase 3): `hello` con `scenario` → Buddy interpreta un papel (partner/scenarios.py).
+  Tras cada turno tuyo se revisan los objetivos (`goals`, en orden y sin solaparse con otra
+  revisión); al terminar, una evaluación final con comentario va en el resumen.
 
 Al navegador: JSON {"type": ...} para estado y texto; binario = PCM int16 a 24 kHz.
 """
@@ -23,6 +26,7 @@ Al navegador: JSON {"type": ...} para estado y texto; binario = PCM int16 a 24 k
 import asyncio
 import contextlib
 import logging
+import random
 import time
 from collections.abc import AsyncIterator, Awaitable, Callable
 
@@ -38,13 +42,17 @@ MAX_TEXT = 500  # límite para el texto que llega del navegador (intención, «e
 class Session:
     def __init__(self, *, send_json: Callable[[dict], Awaitable], send_bytes: Callable[[bytes], Awaitable],
                  vad, stt, llm, tts, silence_ms: int, systems: dict[str, str], greeting: str,
-                 tutor=None, store=None, clock: Callable[[], float] = time.perf_counter):
+                 tutor=None, store=None, scenarios: dict | None = None,
+                 clock: Callable[[], float] = time.perf_counter):
         self.send_json, self.send_bytes = send_json, send_bytes
         self.vad, self.stt, self.llm, self.tts = vad, stt, llm, tts
         self.tutor, self.store = tutor, store
         self.silence_s, self.systems, self.clock = silence_ms / 1000, systems, clock
         self.greeting = greeting  # solo si no hay base de datos (los inicios viven en la tabla openers)
         self.feedback, self.topic_line = "voz", ""
+        self.scenarios, self.scenario = scenarios or {}, None
+        self.goals_met: list[bool] = []
+        self.goals_lock = asyncio.Lock()
         self.messages: list[dict] = [{"role": "system", "content": self._system()}]
         self.state = "idle"
         self.task: asyncio.Task | None = None
@@ -64,7 +72,7 @@ class Session:
         kind = msg.get("type")
         if kind == "hello" and self.state == "idle" and len(self.messages) == 1:
             self._set_feedback(msg.get("feedback"))
-            self.task = asyncio.create_task(self._run(self._begin(msg.get("topic_id"))))
+            self.task = asyncio.create_task(self._run(self._begin(msg.get("topic_id"), msg.get("scenario"))))
         elif kind == "settings":
             self._set_feedback(msg.get("feedback"))
         elif kind == "start":
@@ -97,12 +105,18 @@ class Session:
                     return
 
     async def close(self) -> None:
+        """Conexión cerrada. Si no pulsaste «Terminar sesión», se cierra igual: su evaluación no se pierde."""
+        async def nobody(_) -> None:  # ya no hay a quién enviarle nada
+            pass
+        self.send_json = nobody
+        if self.session_id:
+            await self._finish()
         await self._cancel()
         for t in self.tutor_tasks:
             t.cancel()
 
     def _system(self) -> str:
-        return self.systems[self.feedback] + self.topic_line
+        return (self.scenario["systems"] if self.scenario else self.systems)[self.feedback] + self.topic_line
 
     def _set_feedback(self, mode: str | None) -> None:
         if mode in self.systems:  # también a mitad de sesión: cambia cómo corrige Buddy desde ya
@@ -165,7 +179,10 @@ class Session:
 
     # ── Sesión ───────────────────────────────────────────────────────────────────
 
-    async def _begin(self, topic_id: int | None) -> None:
+    async def _begin(self, topic_id: int | None, scenario_id: str | None = None) -> None:
+        if sc := self.scenarios.get(scenario_id):
+            await self._begin_scenario(sc)
+            return
         topic = self.store.topic(topic_id) if self.store and topic_id else None
         # Primer mensaje: uno de los varios de la tabla openers, para que no se repita siempre igual
         opener = self.store.pick_opener(topic and topic["id"]) if self.store else None
@@ -177,19 +194,37 @@ class Session:
         if self.store:
             self.session_id = self.store.start_session(topic and topic["id"], opener and opener["id"])
         await self.send_json({"type": "session", "id": self.session_id, "topic": topic and topic["title"]})
+        await self._open_with(greeting)
 
+    async def _begin_scenario(self, sc: dict) -> None:
+        self.scenario, self.goals_met = sc, [False] * len(sc["goals"])
+        self.messages[0]["content"] = self._system()
+        n = len(sc["openers"])
+        index = self.store.pick_scenario_opener(sc["id"], n) if self.store else random.randrange(n)
+        if self.store:
+            self.session_id = self.store.start_session(None, scenario=sc["id"], scenario_opener=index)
+        public = {k: sc[k] for k in ("id", "title", "description", "goals", "key_phrases")}
+        await self.send_json({"type": "session", "id": self.session_id, "topic": None, "scenario": public})
+        await self._open_with(sc["openers"][index])
+
+    async def _open_with(self, greeting: str) -> None:
         async def once() -> AsyncIterator[str]:
             yield greeting
         self.closed_at = self.clock()
         await self._speak(once(), {})
 
-    async def _end(self) -> None:
+    async def _finish(self) -> dict:
         await self._cancel()
         if self.tutor_tasks:  # que terminen los análisis pendientes para que salgan en el resumen
             await asyncio.wait(self.tutor_tasks, timeout=15)
         summary = self.store.finish_session(self.session_id) if self.store and self.session_id else {}
-        await self.send_json({"type": "summary", **summary})
-        self.topic_line = ""
+        if self.scenario:
+            summary["scenario"] = await self._evaluate()
+        return summary
+
+    async def _end(self) -> None:
+        await self.send_json({"type": "summary", **await self._finish()})
+        self.topic_line, self.scenario, self.goals_met = "", None, []
         self.messages = [{"role": "system", "content": self._system()}]
         self.session_id, self.user_turns, self.pending_line = None, 0, None
         self.turns, self.intent_turns = {}, set()
@@ -286,12 +321,59 @@ class Session:
         self.turns[self.user_turns] = {"text": text, "row": self.turn_row}
         if self.tutor:
             partner_said = next((m["content"] for m in reversed(self.messages) if m["role"] == "assistant"), "")
-            self.turn_tutor = asyncio.create_task(self._analyze(self.user_turns, text, partner_said, self.turn_row))
+            self.turn_tutor = asyncio.create_task(self._after_turn(self.user_turns, text, partner_said, self.turn_row))
             self.tutor_tasks.add(self.turn_tutor)
             self.turn_tutor.add_done_callback(self.tutor_tasks.discard)
         self.messages.append({"role": "user", "content": text})
         await self._speak(self.llm.stream(self.messages), marks)
         await self.send_json({"type": "metrics", **marks})
+
+    async def _after_turn(self, turn: int, text: str, partner_said: str, row: int | None) -> None:
+        """Tutor y luego objetivos, uno tras otro: así no hay más de dos peticiones a la vez al LLM."""
+        await self._analyze(turn, text, partner_said, row)
+        if self.scenario and not all(self.goals_met):
+            await self._check_goals()
+
+    def _transcript(self) -> str:
+        who = {"user": "Learner", "assistant": "Partner"}
+        return "\n".join(f"{who[m['role']]}: {m['content']}" for m in self.messages[1:])
+
+    async def _check_goals(self) -> None:
+        async with self.goals_lock:  # en orden: cada revisión ve la conversación entera hasta ahora
+            sc = self.scenario
+            try:
+                result = await self.tutor.check_goals(sc, self._transcript())
+            except asyncio.CancelledError:
+                raise
+            except Exception:
+                log.exception("Fallo al revisar los objetivos")
+                return
+            if sc is not self.scenario:  # la sesión terminó mientras tanto
+                return
+            met = [a or b for a, b in zip(self.goals_met, result["met"], strict=True)]  # lo logrado no se pierde
+            if met != self.goals_met:
+                self.goals_met = met
+                await self.send_json({"type": "goals", "met": met})
+
+    async def _evaluate(self) -> dict:
+        """Evaluación final del escenario: objetivos, estrellas, comentario y frases útiles sin usar."""
+        sc, said = self.scenario, " ".join(t["text"] for t in self.turns.values()).lower()
+        met, evidence, comment = list(self.goals_met), [""] * len(self.goals_met), ""
+        if self.tutor and self.turns:
+            try:
+                r = await self.tutor.check_goals(sc, self._transcript())
+                met = [a or b for a, b in zip(met, r["met"], strict=True)]
+                evidence, comment = r["evidence"], r["comment_es"]
+            except Exception:
+                log.exception("Fallo en la evaluación final del escenario")
+        done, total = sum(met), len(met)
+        if self.store and self.session_id:
+            self.store.set_goals(self.session_id, done, total)
+        # 1–3 estrellas: terminarlo / la mitad de los objetivos / todos (DISENO §7.5)
+        stars = 0 if not self.turns else 3 if done == total else 2 if done * 2 >= total else 1
+        goals = [{"text": g, "met": m, "evidence": e} for g, m, e in zip(sc["goals"], met, evidence, strict=True)]
+        return {"id": sc["id"], "title": sc["title"], "stars": stars, "comment": comment, "goals": goals,
+                "unused_phrases": [p for p in sc["key_phrases"] if p.lower().strip(" ?") not in said]}
 
     async def _analyze(self, turn: int, text: str, partner_said: str, row: int | None) -> None:
         """Tarea aparte: un barge-in no la cancela (el análisis sigue valiendo)."""

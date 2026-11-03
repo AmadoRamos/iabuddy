@@ -64,6 +64,26 @@ INTENT_SCHEMA = {
 }
 
 
+GOALS_SYSTEM = """You evaluate a role-play where a Spanish-speaking learner at B1-B2 level practices \
+spoken English with a partner. You get the scene, the learner's goals (written in Spanish) and the \
+transcript (automatic speech transcription: ignore punctuation and filler words).
+
+For EACH goal, in the same order: "met" is true only if the LEARNER clearly did it somewhere in the \
+transcript (trying counts, even with grammar mistakes; the partner doing it does not count). \
+"evidence": a short quote of the learner's own words that shows it, or "" if not met.
+"comment_es": two short sentences in Spanish for the learner: what went well in this scene and one \
+concrete thing to improve."""
+
+
+def _goals_schema(n: int) -> dict:
+    goal = {"type": "object", "properties": {"met": {"type": "boolean"}, "evidence": {"type": "string"}},
+            "required": ["met", "evidence"]}
+    return {"type": "object",
+            "properties": {"goals": {"type": "array", "items": goal, "minItems": n, "maxItems": n},
+                           "comment_es": {"type": "string"}},
+            "required": ["goals", "comment_es"]}
+
+
 def _same(a: str, b: str) -> bool:
     return a.strip(" .,!?").lower() == b.strip(" .,!?").lower()
 
@@ -93,3 +113,19 @@ class Tutor:
         msgs = [{"role": "system", "content": INTENT_SYSTEM}, {"role": "user", "content": user}]
         r = await self.llm.chat_json(msgs, INTENT_SCHEMA)
         return clean({"issues": r.get("issues", []), "corrected": r.get("english", ""), "better": r.get("better", "")})
+
+    async def check_goals(self, scenario: dict, transcript: str) -> dict:
+        """Objetivos del escenario cumplidos en la conversación → {"met", "evidence", "comment_es"}."""
+        goals = scenario["goals"]
+        user = (f"Scene: {scenario['context']}\nLearner plays: {scenario['user_role']}\n"
+                f"Partner plays: {scenario['partner_role']}\n\nGoals:\n"
+                + "\n".join(f"{i + 1}. {g}" for i, g in enumerate(goals))
+                + f"\n\nTranscript:\n{transcript}")
+        msgs = [{"role": "system", "content": GOALS_SYSTEM}, {"role": "user", "content": user}]
+        r = await self.llm.chat_json(msgs, _goals_schema(len(goals)))
+        got = (r.get("goals") or [])[:len(goals)]
+        got += [{"met": False, "evidence": ""}] * (len(goals) - len(got))  # por si el modelo devuelve menos
+        met = [bool(g.get("met")) for g in got]
+        # El modelo a veces cita algo aunque el objetivo no se haya cumplido: esa cita no demuestra nada
+        evidence = [str(g.get("evidence", "")) if m else "" for g, m in zip(got, met, strict=True)]
+        return {"met": met, "evidence": evidence, "comment_es": r.get("comment_es", "")}

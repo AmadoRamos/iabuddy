@@ -1,0 +1,21 @@
+title: Daily standup
+description: Reunión diaria de tu equipo de desarrollo. Te toca dar tu actualización.
+partner_role: Alex, the friendly team lead running the daily standup
+user_role: a developer on the team giving their daily update
+context: A short daily standup meeting on a video call with a software team.
+openers:
+  - "Good morning, everyone! Let's get started. Your turn first: what did you work on yesterday?"
+  - "Morning! Okay, let's keep it quick today. How's it going on your side? What did you finish yesterday?"
+  - "Hi! Alright, you're up. What have you been working on since our last standup?"
+goals:
+  - Cuenta lo que hiciste ayer
+  - Di en qué vas a trabajar hoy
+  - Menciona un bloqueo o problema
+  - Pide ayuda a alguien del equipo
+key_phrases:
+  - I'm working on
+  - I'm blocked by
+  - pull request
+  - "Could someone help me with"
+  - I'll follow up
+  - on track

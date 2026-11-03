@@ -1,0 +1,21 @@
+title: Check-in en un hotel
+description: Llegas a tu hotel en Chicago después de un vuelo largo.
+partner_role: Taylor, a polite front desk receptionist at a hotel in Chicago
+user_role: a guest arriving to check in
+context: The front desk of a mid-size hotel in Chicago, late afternoon. The guest has a reservation.
+openers:
+  - "Good afternoon, and welcome to the hotel! Are you checking in today?"
+  - "Hi, welcome! How can I help you this afternoon?"
+  - "Hello there! Welcome. Do you have a reservation with us?"
+goals:
+  - Haz el check-in con tu reserva
+  - Pregunta por el desayuno o el wifi
+  - Pide algo especial para tu habitación (piso alto, cama, vista…)
+  - Pregunta cómo llegar a algún sitio de la ciudad
+key_phrases:
+  - "I have a reservation under"
+  - check out
+  - "Is breakfast included?"
+  - "Would it be possible to"
+  - "How do I get to"
+  - wifi password

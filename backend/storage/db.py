@@ -4,7 +4,8 @@ Configurable editando la base de datos (data/iabuddy.db):
 - `topics`: temas sugeridos. `active = 0` oculta uno; `position` los ordena.
 - `openers`: primer mensaje de Buddy. Varios por tema (`topic_id`) y para la conversación libre
   (`topic_id` NULL). Se elige uno al azar sin repetir el de la última sesión de ese tema.
-La primera vez se siembran SEED_TOPICS y SEED_FREE_OPENERS.
+La primera vez se siembran SEED_TOPICS y SEED_FREE_OPENERS; los temas de topics.yaml se añaden
+en cada arranque si su título no existe.
 """
 
 import random
@@ -12,6 +13,10 @@ import sqlite3
 import time
 from collections import Counter
 from pathlib import Path
+
+import yaml
+
+TOPICS_FILE = Path(__file__).with_name("topics.yaml")
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS topics (
@@ -29,6 +34,10 @@ CREATE TABLE IF NOT EXISTS sessions (
     id INTEGER PRIMARY KEY,
     topic_id INTEGER REFERENCES topics(id),
     opener_id INTEGER REFERENCES openers(id),
+    scenario TEXT,                -- id del escenario de roleplay (nombre del .yaml), si lo hay
+    scenario_opener INTEGER,      -- índice del inicio del escenario que se usó
+    goals_met INTEGER,            -- objetivos del escenario cumplidos / totales
+    goals_total INTEGER,
     started_at REAL NOT NULL,
     ended_at REAL
 );
@@ -128,7 +137,19 @@ class Store:
             rows = [(ids[t], o) for t, ops in SEED_TOPICS if t in ids for o in ops]
             rows += [(None, o) for o in SEED_FREE_OPENERS]
             self.db.executemany("INSERT INTO openers (topic_id, text) VALUES (?, ?)", rows)
+        self._add_file_topics()
         self.db.commit()
+
+    def _add_file_topics(self) -> None:
+        """Temas de topics.yaml cuyo título aún no está en la base (también en bases ya creadas)."""
+        known = {r["title"] for r in self.db.execute("SELECT title FROM topics")}
+        pos = self.db.execute("SELECT coalesce(max(position), -1) FROM topics").fetchone()[0]
+        for title, ops in (yaml.safe_load(TOPICS_FILE.read_text(encoding="utf-8")) or {}).items():
+            if title in known:
+                continue
+            pos += 1
+            tid = self.db.execute("INSERT INTO topics (title, position) VALUES (?, ?)", (title, pos)).lastrowid
+            self.db.executemany("INSERT INTO openers (topic_id, text) VALUES (?, ?)", [(tid, o) for o in ops])
 
     def _migrate(self) -> None:
         """Bases creadas con versiones anteriores del esquema."""
@@ -136,8 +157,13 @@ class Store:
             return {r["name"] for r in self.db.execute(f"PRAGMA table_info({table})")}
         if "intent" not in cols("turns"):
             self.db.execute("ALTER TABLE turns ADD COLUMN intent TEXT")
-        if "opener_id" not in cols("sessions"):
+        sessions = cols("sessions")
+        if "opener_id" not in sessions:
             self.db.execute("ALTER TABLE sessions ADD COLUMN opener_id INTEGER REFERENCES openers(id)")
+        for col, kind in (("scenario", "TEXT"), ("scenario_opener", "INTEGER"), ("goals_met", "INTEGER"),
+                          ("goals_total", "INTEGER")):
+            if col not in sessions:
+                self.db.execute(f"ALTER TABLE sessions ADD COLUMN {col} {kind}")
         if "opener" in cols("topics"):  # un solo inicio por tema → tabla openers
             self.db.execute("ALTER TABLE topics DROP COLUMN opener")
 
@@ -163,10 +189,20 @@ class Store:
         fresh = [r for r in rows if not last or r["id"] != last[0]] or rows
         return dict(random.choice(fresh)) if fresh else None
 
+    def pick_scenario_opener(self, scenario: str, count: int) -> int:
+        """Índice de uno de los `count` inicios del escenario, sin repetir el de su última sesión."""
+        last = self.db.execute("SELECT scenario_opener FROM sessions WHERE scenario = ? "
+                               "ORDER BY id DESC LIMIT 1", (scenario,)).fetchone()
+        return random.choice([i for i in range(count) if not last or i != last[0]] or [0])
+
     # ── Sesiones y turnos ──
-    def start_session(self, topic_id: int | None, opener_id: int | None = None) -> int:
-        return self._write("INSERT INTO sessions (topic_id, opener_id, started_at) VALUES (?, ?, ?)",
-                           (topic_id, opener_id, time.time()))
+    def start_session(self, topic_id: int | None, opener_id: int | None = None,
+                      scenario: str | None = None, scenario_opener: int | None = None) -> int:
+        return self._write("INSERT INTO sessions (topic_id, opener_id, scenario, scenario_opener, started_at) "
+                           "VALUES (?, ?, ?, ?, ?)", (topic_id, opener_id, scenario, scenario_opener, time.time()))
+
+    def set_goals(self, session_id: int, met: int, total: int) -> None:
+        self._write("UPDATE sessions SET goals_met = ?, goals_total = ? WHERE id = ?", (met, total, session_id))
 
     def add_turn(self, session_id: int, speaker: str, text: str, seconds: float | None = None) -> int:
         return self._write("INSERT INTO turns (session_id, speaker, text, seconds, created_at) VALUES (?, ?, ?, ?, ?)",

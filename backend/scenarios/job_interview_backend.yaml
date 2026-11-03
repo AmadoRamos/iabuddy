@@ -1,0 +1,22 @@
+# Escenario de roleplay. Textos para la UI en español; lo que dice Buddy, en inglés.
+title: Entrevista técnica · Backend Python
+description: Te entrevistan para un puesto remoto de backend senior en una startup de EE. UU.
+partner_role: Sam, a friendly but probing hiring manager at a US startup
+user_role: a candidate for a remote senior backend (Python) role
+context: A video call job interview. It has just started.
+openers:
+  - "Hi, thanks for joining the call! I'm Sam, the engineering manager. To start, could you tell me a little about yourself?"
+  - "Hello, nice to meet you! I'm Sam. Before we get technical, can you give me a quick introduction?"
+  - "Hey, great to finally meet you! I'm Sam, I lead the backend team. So, tell me about yourself."
+goals:
+  - Preséntate en menos de un minuto
+  - Describe un proyecto del que estés orgulloso
+  - Explica una decisión técnica y su trade-off
+  - Haz dos preguntas al entrevistador
+key_phrases:
+  - scalability
+  - trade-off
+  - I was responsible for
+  - stakeholders
+  - meet the deadline
+  - "What does a typical day look like?"

@@ -17,18 +17,18 @@ const MODES = [['silencioso', 'Silencioso'], ['panel', 'Panel'], ['voz', 'En voz
 export default function App() {
   const c = useConversation();
   const { ui, session, summary } = c;
-  const [topicId, setTopicId] = useState(null);
+  const [choice, setChoice] = useState({ topic_id: null }); // { topic_id } (null = libre) o { scenario }
 
   // Espacio: empezar la sesión o alternar el turno. No en campos de texto ni en el resumen.
   useEffect(() => {
     const onKey = (e) => {
       if (e.code !== 'Space' || e.repeat || e.target.closest?.('input, textarea, select')) return;
       e.preventDefault();
-      if (session) { if (ui !== 'connecting') c.toggle(); } else if (!summary && ui !== 'connecting') c.start(topicId);
+      if (session) { if (ui !== 'connecting') c.toggle(); } else if (!summary && ui !== 'connecting') c.start(choice);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [ui, session, summary, topicId, c]);
+  }, [ui, session, summary, choice, c]);
 
   const h = c.health;
   const down = h && (h.backend === false || !h.whisper || !h.ollama);
@@ -39,8 +39,13 @@ export default function App() {
         <span className="brand"><svg aria-hidden="true" width="44" height="44"><use href="#onda-logo" /></svg>
           <span className="brand-name">iabuddy</span></span>
         <div className="cluster">
-          <span className="tag tag-info">Conversación libre{session?.topic && ` · ${session.topic}`}</span>
-          {session && <button className="btn btn-secondary btn-s" onClick={c.end}>Terminar sesión</button>}
+          <span className="tag tag-info">{session?.scenario ? `Escenario · ${session.scenario.title}`
+            : `Conversación libre${session?.topic ? ` · ${session.topic}` : ''}`}</span>
+          {session && (
+            <button className="btn btn-secondary btn-s" onClick={c.end} disabled={c.ending}>
+              {c.ending ? (session.scenario ? 'Evaluando…' : 'Terminando…') : 'Terminar sesión'}
+            </button>
+          )}
         </div>
       </header>
 
@@ -53,10 +58,11 @@ export default function App() {
             {summary ? <Summary s={summary} onClose={c.closeSummary} onListen={c.listen} />
               : session ? <><ChatLog messages={c.messages} feedbacks={c.feedbacks} intents={c.intents}
                   onIntent={c.sendIntent} onListen={c.listen} /><Dock ui={ui} onToggle={c.toggle} /></>
-                : <StartCard topics={c.topics} topicId={topicId} setTopicId={setTopicId}
-                    onStart={() => c.start(topicId)} disabled={down || ui === 'connecting'} />}
+                : <StartCard topics={c.topics} scenarios={c.scenarios} choice={choice} setChoice={setChoice}
+                    onStart={() => c.start(choice)} disabled={down || ui === 'connecting'} />}
           </section>
           <aside className="session-side">
+            {session?.scenario && <GoalsCard scenario={session.scenario} met={session.met} onListen={c.listen} />}
             <TutorPanel mode={c.mode} onMode={c.changeMode} feedbacks={c.feedbacks} onListen={c.listen} />
             <MetricsCard metrics={c.metrics} silenceMs={h?.silence_ms} />
           </aside>
@@ -192,7 +198,7 @@ function Dock({ ui, onToggle }) {
   );
 }
 
-function StartCard({ topics, topicId, setTopicId, onStart, disabled }) {
+function StartCard({ topics, scenarios, choice, setChoice, onStart, disabled }) {
   return (
     <div className="start">
       <svg aria-hidden="true" width="120" height="120"><use href="#onda-idle" /></svg>
@@ -201,9 +207,23 @@ function StartCard({ topics, topicId, setTopicId, onStart, disabled }) {
         para cerrarlo. Usa audífonos.</p>
       <div className="cluster topics" role="group" aria-label="Tema">
         {[{ id: null, title: 'Libre' }, ...topics].map((t) => (
-          <button key={t.id ?? 'libre'} className="chip" aria-pressed={topicId === t.id} onClick={() => setTopicId(t.id)}>{t.title}</button>
+          <button key={t.id ?? 'libre'} className="chip" aria-pressed={!choice.scenario && choice.topic_id === t.id}
+            onClick={() => setChoice({ topic_id: t.id })}>{t.title}</button>
         ))}
       </div>
+      {scenarios.length > 0 && (
+        <>
+          <h2 className="h2">O practica una situación</h2>
+          <div className="scenarios" role="group" aria-label="Escenario">
+            {scenarios.map((sc) => (
+              <button key={sc.id} className="scenario-card" aria-pressed={choice.scenario === sc.id}
+                onClick={() => setChoice({ scenario: sc.id })}>
+                <strong>{sc.title}</strong><span className="small muted">{sc.description}</span>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
       <button className="btn btn-primary btn-l" onClick={onStart} disabled={disabled}>
         Empezar <span className="kbd-inline">Espacio</span>
       </button>
@@ -217,6 +237,50 @@ function highlight(text, fragments, Tag, className) {
   if (!parts.length) return text;
   return text.split(new RegExp(`(${parts.join('|')})`, 'gi')).map((p, i) =>
     (i % 2 ? <Tag key={i} className={className}>{p}</Tag> : p));
+}
+
+// Objetivos del escenario: se marcan cuando los cumples. Debajo, frases útiles para la escena.
+function GoalsCard({ scenario, met = [], onListen }) {
+  const done = met.filter(Boolean).length;
+  return (
+    <div className="card card-tight stack">
+      <div className="cluster" style={{ justifyContent: 'space-between' }}>
+        <h2 className="h2">Tus objetivos</h2><span className="caption">{done}/{scenario.goals.length}</span>
+      </div>
+      <p className="small muted">{scenario.description}</p>
+      <GoalList goals={scenario.goals.map((text, i) => ({ text, met: met[i] }))} />
+      {scenario.key_phrases.length > 0 && (
+        <details>
+          <summary className="small"><strong>Frases útiles</strong></summary>
+          <PhraseList phrases={scenario.key_phrases} onListen={onListen} />
+        </details>
+      )}
+    </div>
+  );
+}
+
+function GoalList({ goals }) {
+  return (
+    <ul className="goals">
+      {goals.map((g, i) => (
+        <li key={i} className={g.met ? 'met' : undefined}>
+          <span className="goal-check" aria-hidden="true">{g.met ? '✓' : ''}</span>
+          <span><span className="visually-hidden">{g.met ? 'Cumplido: ' : 'Pendiente: '}</span>{g.text}
+            {g.evidence && <span className="small muted" lang="en"> · “{g.evidence}”</span>}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function PhraseList({ phrases, onListen }) {
+  return (
+    <ul className="phrases">
+      {phrases.map((p) => (
+        <li key={p}><span lang="en">{p}</span><ListenButton text={p} onListen={onListen} /></li>
+      ))}
+    </ul>
+  );
 }
 
 function TutorPanel({ mode, onMode, feedbacks, onListen }) {
@@ -287,12 +351,29 @@ function FeedbackCard({ f, onListen }) {
 function Summary({ s, onClose, onListen }) {
   const min = (sec) => `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`;
   const errors = Object.values(s.by_type ?? {}).reduce((a, b) => a + b, 0);
+  const sc = s.scenario;
   return (
     <div className="summary stack">
       <div className="cluster" style={{ gap: 16 }}>
         <svg aria-hidden="true" width="72" height="72"><use href="#onda-celebrate" /></svg>
         <div><h1>¡Buena sesión!</h1><p className="muted">{s.turns ? 'Esto es lo que hablaste hoy.' : 'No llegaste a hablar en esta sesión.'}</p></div>
       </div>
+      {sc && (
+        <section className="stack scenario-result">
+          <div className="cluster" style={{ justifyContent: 'space-between' }}>
+            <h2 className="h2">{sc.title}</h2>
+            <span className="stars" role="img" aria-label={`${sc.stars} de 3 estrellas`}>
+              {[1, 2, 3].map((n) => <span key={n} className={n <= sc.stars ? 'on' : undefined} aria-hidden="true">★</span>)}
+            </span>
+          </div>
+          <GoalList goals={sc.goals} />
+          {sc.comment && <p>{sc.comment}</p>}
+          {sc.unused_phrases.length > 0 && (
+            <div className="stack"><span className="overline">Frases útiles que no usaste</span>
+              <PhraseList phrases={sc.unused_phrases} onListen={onListen} /></div>
+          )}
+        </section>
+      )}
       <div className="tiles">
         <div className="metric-tile tint-info"><span className="overline">Duración</span><span className="metric">{min(s.duration_s ?? 0)}</span></div>
         <div className="metric-tile tint-error"><span className="overline">Tus turnos</span><span className="metric">{s.turns ?? 0}</span></div>
