@@ -6,6 +6,12 @@
       "runtimeExecutable": "uv",
       "runtimeArgs": ["run", "python", "-c", "import mimetypes,functools,http.server as h; mimetypes.add_type('text/javascript','.js'); h.ThreadingHTTPServer(('127.0.0.1',8765),functools.partial(h.SimpleHTTPRequestHandler,directory='frontend')).serve_forever()"],
       "port": 8765
+    },
+    {
+      "name": "iabuddy",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "uvicorn", "backend.main:app", "--host", "127.0.0.1", "--port", "8000"],
+      "port": 8000
     }
   ]
 }

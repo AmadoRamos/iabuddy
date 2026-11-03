@@ -18,6 +18,10 @@ data/
 *.pt
 *.safetensors
 
+# Frontend
+node_modules/
+frontend/dist/
+
 # Entorno local
 .env
 .claude/settings.local.json

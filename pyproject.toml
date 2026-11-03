@@ -5,10 +5,21 @@ description = "Compañero local de conversación en inglés con feedback de gram
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.12,<3.13"
-dependencies = []
+dependencies = [
+    "fastapi>=0.162.0",
+    "httpx>=0.28.1",
+    "kokoro-onnx>=0.6.1",
+    "numpy>=2.5.4",
+    "onnxruntime>=1.31.1",
+    "uvicorn[standard]>=0.54.0",
+]
 
 [dependency-groups]
-dev = ["pytest", "ruff"]
+dev = [
+    "pytest",
+    "pytest-asyncio>=1.4.1.post1",
+    "ruff",
+]
 spikes = [
     "kokoro-onnx>=0.6.1",
     "onnx-asr[cpu,hub]>=0.12.0",
@@ -21,4 +32,9 @@ spikes = [
 package = false
 
 [tool.ruff]
-line-length = 100
+line-length = 110
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+pythonpath = ["."]

@@ -21,7 +21,7 @@
 - [x] **Estrategia de turno** → **tecla para empezar a hablar + fin de turno por silencio configurable**.
   - Pulsar la tecla abre tu turno; el turno se cierra tras N ms de silencio (configurable en la UI) o al volver a pulsar la tecla.
   - Pulsar la tecla mientras habla el compañero = **interrupción** (barge-in explícito, sin falsos positivos).
-  - Valor por defecto del silencio: **1.500 ms** (S4). Como tecla se propone **Espacio**.
+  - Valor por defecto del silencio: **900 ms** con fusión de turno (S4 proponía 1.500 ms sin fusión; se configura con `IABUDDY_SILENCE_MS`). Tecla: **Espacio**.
 - [x] **Acento del compañero** → **US**. Voces Kokoro en inglés americano y fonemas de referencia `en-us` para pronunciación.
 - [x] **Velocidad de habla por defecto** del compañero (normal o 0,9× para B1–B2). → **0,9×** (elegida de oído en S3).
 
@@ -45,8 +45,9 @@
 - [ ] **Duración típica de una sesión** (10, 20, 30 min). Define cómo resumir el historial para no llenar el contexto del LLM.
 
 ### 1.6 Frontend 🟢
-- [ ] **Tecnología:** HTML + JS vanilla (propuesta para el MVP) vs. htmx vs. un framework ligero (Svelte/Preact) cuando la UI crezca.
-- [ ] **Exposición de red:** solo `127.0.0.1` (propuesta) o también accesible desde otros equipos de la red local (p. ej. practicar desde el portátil o el móvil; requiere HTTPS para que el navegador permita el micrófono).
+- [x] **Tecnología:** HTML + JS vanilla (propuesta para el MVP) vs. htmx vs. un framework ligero (Svelte/Preact) cuando la UI crezca. → **React + Vite.** Reutiliza el CSS del sistema de diseño (`theme.css`, `components.css`). En producción, FastAPI sirve el build (`frontend/dist`); en desarrollo, Vite hace de proxy al backend.
+- [x] **Exposición de red:** solo `127.0.0.1` (propuesta) o también accesible desde otros equipos de la red local (p. ej. practicar desde el portátil o el móvil; requiere HTTPS para que el navegador permita el micrófono). → **Solo `127.0.0.1`.**
+- **Backend:** Python 3.12 + **FastAPI/Uvicorn**, un **WebSocket** para el audio y los eventos, y `httpx` para Ollama y whisper-server.
 
 ---
 
@@ -99,13 +100,17 @@
 ## 4. Fases de implementación (después de la Fase 0)
 
 ### Fase 1 — Loop de voz (MVP)
-- [ ] Interfaces `VAD`, `STT`, `LLM`, `TTS` + implementaciones elegidas.
-- [ ] Turn Manager: máquina de estados (escuchando → procesando → hablando), barge-in, cancelación.
-- [ ] WebSocket de audio bidireccional + AudioWorklet en el navegador.
-- [ ] Streaming LLM → corte por frases → TTS → reproducción encadenada.
-- [ ] Prompt de persona para conversación libre B1–B2 con *recasting*.
-- [ ] Instrumentación de latencia por etapa desde el día 1 (logs + panel de depuración en la UI).
-- [ ] Script de arranque único (levanta/verifica Ollama, whisper-server y el backend).
+- [x] Interfaces `VAD`, `STT`, `LLM`, `TTS` + implementaciones elegidas → `backend/pipeline/` (una clase por etapa, intercambiables).
+- [x] Turn Manager: máquina de estados (escuchando → procesando → hablando), barge-in, cancelación → `turn_manager.py`. Incluye las mejoras de S4/S6:
+  - **fusión de turno**: si sigues hablando antes de que suene la respuesta, se reabre tu turno;
+  - **silencio de 900 ms** gracias a la fusión;
+  - **descarte de turnos sin voz**.
+- [x] WebSocket de audio bidireccional + AudioWorklet en el navegador.
+- [x] Streaming LLM → corte por frases → TTS → reproducción encadenada. El primer trozo se corta en la 1.ª puntuación o tras 6 palabras (`chunker.py`).
+- [x] Prompt de persona para conversación libre B1–B2 con *recasting* (reforzado con un ejemplo, `partner/prompts.py`).
+- [x] Instrumentación de latencia por etapa desde el día 1: panel «Tiempos» en la UI, con el tiempo del servidor y el que mide el navegador.
+- [x] Script de arranque único (levanta/verifica Ollama, whisper-server y el backend) → `iabuddy.bat`.
+- [ ] **Probar con micrófono real** (Chrome/Edge) y ajustar. Probado en el navegador con una grabación del dataset como micrófono: un turno completo con 1,67 s hasta el primer audio, con el prompt en frío.
 
 ### Fase 2 — Feedback
 - [ ] Tutor asíncrono con salida JSON con esquema + cola de prioridad compañero > tutor.
