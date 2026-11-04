@@ -1,6 +1,7 @@
-# Frases de práctica por sonido. Título en español (UI); frases en inglés, pensadas para que el sonido
+# Frases de práctica por sonido. Título en español (UI); `phones`, los sonidos de rules.py que entrena; frases en inglés, pensadas para que el sonido
 # aparezca en palabras con contenido: en las funcionales (to, have, and…) no se buscan errores de vocal.
 - title: "«the, this, mother» /ð/"
+  phones: [ð]
   sentences:
     - The weather is better than yesterday.
     - My mother and my brother live together.
@@ -8,6 +9,7 @@
     - I'd rather breathe the air over there.
     - This feature is smoother than the other one.
 - title: "«think, three» /θ/"
+  phones: [θ]
   sentences:
     - I think three months is enough.
     - Thank you for the thirty things you brought.
@@ -15,6 +17,7 @@
     - The author thought about something else.
     - We have a healthy math teacher.
 - title: "«ship / sheep» /ɪ/ e /iː/"
+  phones: [ɪ, iː]
   sentences:
     - The ship is full of sheep.
     - Please sit in this seat.
@@ -22,6 +25,7 @@
     - This feature needs a quick fix.
     - We fill the team with people who feel the same.
 - title: "«very, have» /v/"
+  phones: [v]
   sentences:
     - I have a very heavy bag.
     - We visited a village in November.
@@ -29,6 +33,7 @@
     - My favorite movie is on the television.
     - The server never receives a valid value.
 - title: "«cat, map» /æ/"
+  phones: [æ]
   sentences:
     - The black cat sat on my laptop.
     - My manager has a happy family.
@@ -36,6 +41,7 @@
     - Thanks for the map and the plan.
     - Add the backend class to the master branch.
 - title: "«cut, money» /ʌ/"
+  phones: [ʌ]
   sentences:
     - My brother must come on Sunday.
     - Young people love money and fun.
@@ -43,6 +49,7 @@
     - I run some tests every Monday.
     - One button does not trust the other function.
 - title: "«chair / share» /tʃ/ y /ʃ/"
+  phones: [tʃ, ʃ]
   sentences:
     - Please share the chair with the teacher.
     - She chose a cheap fresh fish.
@@ -50,6 +57,7 @@
     - I wish I could change my machine.
     - We should check each push to the branch.
 - title: "«yet / jet» /j/ y /dʒ/"
+  phones: [j, dʒ]
   sentences:
     - Yes, the young manager is not ready yet.
     - You can use my yellow jacket.
@@ -57,6 +65,7 @@
     - I enjoy using Java every year.
     - Your jet is huge, and just a few years old.
 - title: "«zoo, logs» /z/"
+  phones: [z]
   sentences:
     - The zoo was crazy on Tuesday.
     - These logs show the errors in the queries.
@@ -64,6 +73,7 @@
     - Lazy dogs always choose the sofa.
     - He loves his days at the music museum.
 - title: "«walked, worked» -ed"
+  phones: ["-ed"]
   sentences:
     - I worked and walked a lot yesterday.
     - We fixed the bug and pushed the code.
@@ -71,9 +81,18 @@
     - They called me and I stopped working.
     - The team watched the demo and laughed.
 - title: "«school, speak» s- inicial"
+  phones: ["s-"]
   sentences:
     - I study Spanish at school in Spain.
     - Please speak slowly when you start.
     - The small startup has a strong staff.
     - A student stayed at the station.
     - Stop the script and start the server.
+- title: "«thing, long» /ŋ/"
+  phones: [ŋ]
+  sentences:
+    - The morning meeting was long.
+    - Nothing is wrong with this song.
+    - My young sister is learning to sing.
+    - I bring something strong to drink.
+    - We are building a long string of things.

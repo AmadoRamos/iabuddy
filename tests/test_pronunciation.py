@@ -51,6 +51,7 @@ def test_every_swap_has_a_tip_and_drills_are_well_formed():
     assert all(tip for options in SWAPS.values() for _, tip in options)
     drills = yaml.safe_load((Path("backend/pronunciation/drills.yaml")).read_text(encoding="utf-8"))
     assert len(drills) >= 10 and all(d["title"] and len(d["sentences"]) >= 3 for d in drills)
+    assert all(d["phones"] and set(d["phones"]) <= {*SWAPS, "s-", "-ed"} for d in drills)
 
 
 ISSUE = {"phone": "θ", "heard": "t", "tip": "Lengua entre los dientes.", "margin": 6.0}

@@ -20,6 +20,7 @@ export function useConversation() {
   const [session, setSession] = useState(null);
   const [summary, setSummary] = useState(null);
   const [feedbacks, setFeedbacks] = useState([]); // análisis del tutor, uno por turno tuyo
+  const [settings, setSettings] = useState(null); // { silence_ms, speed, feedback }
   const [mode, setMode] = useState('voz'); // corrección: 'silencioso' | 'panel' | 'voz' (TODO §1.3)
   const [sounds, setSounds] = useState({}); // turno → sonidos con error claro
   const [drills, setDrills] = useState(null); // frases de práctica: { sounds, failed }
@@ -48,6 +49,7 @@ export function useConversation() {
   useEffect(() => {
     checkHealth();
     fetch('/api/topics').then((r) => r.json()).then(setTopics).catch(() => {});
+    fetch('/api/settings').then((r) => r.json()).then((v) => { setSettings(v); setMode(v.feedback); }).catch(() => {});
     fetch('/api/scenarios').then((r) => r.json()).then(setScenarios).catch(() => {});
   }, [checkHealth]);
 
@@ -61,13 +63,13 @@ export function useConversation() {
         refreshUi();
         break;
       case 'session':
-        setSession({ topic: m.topic, scenario: m.scenario, met: m.scenario?.goals.map(() => false) });
+        setSession({ topic: m.topic, scenario: m.scenario, met: m.scenario?.goals.map(() => false), startedAt: Date.now() });
         break;
       case 'goals': // objetivos del escenario cumplidos hasta ahora
         setSession((s) => s && { ...s, met: m.met });
         break;
       case 'user_text':
-        setMessages((ms) => [...ms.filter((x) => !x.live), { who: 'you', text: m.text, turn: m.turn }]);
+        setMessages((ms) => [...ms.filter((x) => !x.live), { who: 'you', text: m.text, turn: m.turn, seconds: m.seconds }]);
         break;
       case 'feedback':
         setFeedbacks((fs) => [m, ...fs.filter((f) => f.turn !== m.turn)]);
@@ -102,7 +104,8 @@ export function useConversation() {
         setMessages((ms) => ms.map((x) => (x.open ? { ...x, open: false, cut: true } : x)));
         break;
       case 'turn_resumed': // sigues hablando: tu frase anterior vuelve a ser parte del turno
-        setMessages((ms) => [...ms.filter((x) => x.who !== 'you' || x !== ms.at(-1)), { who: 'you', live: true, text: '' }]);
+        // Por su n.º de turno, no por ser la última: con la tecla, la burbuja en vivo ya está detrás
+        setMessages((ms) => [...ms.filter((x) => !x.live && x.turn !== m.turn), { who: 'you', live: true, text: '' }]);
         setFeedbacks((fs) => fs.filter((f) => f.turn !== m.turn));
         turn.current = {};
         break;
@@ -135,10 +138,11 @@ export function useConversation() {
     setMetrics(null);
     setSounds({});
     setDrillResult(null);
-    if (choice.drill) fetch('/api/drills').then((r) => r.json()).then(setDrills).catch(() => setDrills({ sounds: [], failed: [] }));
+    if (choice.drill) setDrills(null);
+    if (choice.drill) fetch('/api/drills').then((r) => r.json()).then(setDrills).catch(() => setDrills({ sounds: [], failed: [], review: [] }));
     const begin = () => {
       if (choice.drill) {
-        setSession({ drill: true }); // sin sesión en el backend: cada frase se analiza por separado
+        setSession({ drill: choice.drill }); // sin sesión en el backend: cada frase se analiza por separado
         return;
       }
       setSession({ topic: null });
@@ -191,10 +195,19 @@ export function useConversation() {
     if (!playing.current) send({ type: 'say', text });
   }, []);
 
+  // Ajustes: se aplican a la sesión abierta, si la hay, y quedan guardados
+  const saveSettings = useCallback((patch) => {
+    setSettings((v) => ({ ...v, ...patch }));
+    send({ type: 'settings', ...patch });
+    fetch('/api/settings', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(patch) })
+      .then((r) => { if (!r.ok) throw new Error(); })
+      .catch(() => setError('No se pudo guardar el ajuste.'));
+  }, []);
+
   const changeMode = useCallback((m) => {
     setMode(m);
-    send({ type: 'settings', feedback: m });
-  }, []);
+    saveSettings({ feedback: m });
+  }, [saveSettings]);
 
   // Práctica: abre o cierra tu lectura de `text`. Lo demás funciona como en un turno normal
   const drillToggle = useCallback((text) => {
@@ -205,6 +218,14 @@ export function useConversation() {
       setDrillResult(null);
       send({ type: 'drill', text });
     }
+  }, []);
+
+  // Repaso: guarda tu respuesta y devuelve cuántas quedan y cuándo vuelve la siguiente
+  const answerReview = useCallback((key, known) => {
+    setDrillResult(null); // si la frase vuelve en esta tanda, no debe aparecer ya resuelta
+    return fetch('/api/review', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key, known }) })
+      .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
+      .catch(() => setError('No se pudo guardar el repaso.'));
   }, []);
 
   const leaveDrill = useCallback(() => {
@@ -233,8 +254,13 @@ export function useConversation() {
     return () => { window.removeEventListener('error', report); window.removeEventListener('unhandledrejection', report); };
   }, []);
 
+  // Las estrellas de los escenarios cambian al terminar uno
+  useEffect(() => {
+    if (summary?.scenario) fetch('/api/scenarios').then((r) => r.json()).then(setScenarios).catch(() => {});
+  }, [summary]);
+
   useEffect(() => () => { ws.current?.close(); mic.current?.stop(); }, []);
 
-  return { ui, messages, metrics, error, health, topics, scenarios, session, summary, feedbacks, mode, intents, ending, sounds, drills, drillResult, drillToggle, leaveDrill,
-    start, toggle, end, changeMode, sendIntent, listen, closeSummary: () => setSummary(null) };
+  return { ui, messages, metrics, error, health, topics, scenarios, session, summary, feedbacks, mode, intents, ending, sounds, drills, drillResult, drillToggle, leaveDrill, answerReview,
+    settings, saveSettings, checkHealth, start, toggle, end, changeMode, sendIntent, listen, closeSummary: () => setSummary(null) };
 }

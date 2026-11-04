@@ -35,6 +35,7 @@ from collections.abc import AsyncIterator, Awaitable, Callable
 
 from ..pronunciation.scorer import MIN_CLEAR
 from ..session_log import NoLog
+from ..storage.db import goal_stars
 from .chunker import Chunker
 
 log = logging.getLogger("iabuddy")
@@ -89,6 +90,8 @@ class Session:
             self.task = asyncio.create_task(self._run(self._begin(msg.get("topic_id"), msg.get("scenario"))))
         elif kind == "settings":
             self._set_feedback(msg.get("feedback"))
+            if isinstance(ms := msg.get("silence_ms"), int) and ms > 0:  # desde el próximo silencio
+                self.silence_s = ms / 1000
         elif kind == "start":
             await self._start()
         elif kind == "drill" and self.scorer:
@@ -346,7 +349,8 @@ class Session:
             return
         self.user_turns += 1
         self.turn_counted = True
-        await self.send_json({"type": "user_text", "text": text, "turn": self.user_turns})
+        await self.send_json({"type": "user_text", "text": text, "turn": self.user_turns,
+                              "seconds": round(len(pcm) / 32000, 1)})
         if self.store and self.session_id:
             self.turn_row = self.store.add_turn(self.session_id, "user", text, seconds=len(pcm) / 32000)
         self.turns[self.user_turns] = {"text": text, "row": self.turn_row}
@@ -441,8 +445,7 @@ class Session:
         done, total = sum(met), len(met)
         if self.store and self.session_id:
             self.store.set_goals(self.session_id, done, total)
-        # 1–3 estrellas: terminarlo / la mitad de los objetivos / todos (DISENO §7.5)
-        stars = 0 if not self.turns else 3 if done == total else 2 if done * 2 >= total else 1
+        stars = goal_stars(done, total) if self.turns else 0
         goals = [{"text": g, "met": m, "evidence": e} for g, m, e in zip(sc["goals"], met, evidence, strict=True)]
         return {"id": sc["id"], "title": sc["title"], "stars": stars, "comment": comment, "goals": goals,
                 "unused_phrases": [p for p in sc["key_phrases"] if p.lower().strip(" ?") not in said]}

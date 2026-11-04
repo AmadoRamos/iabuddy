@@ -30,4 +30,4 @@ def load(directory: Path = DIR) -> dict[str, dict]:
 
 def public(sc: dict) -> dict:
     """Lo que ve la UI."""
-    return {k: sc[k] for k in ("id", "title", "description", "goals", "key_phrases")}
+    return {k: sc[k] for k in ("id", "title", "description", "partner_role", "user_role", "goals", "key_phrases")}

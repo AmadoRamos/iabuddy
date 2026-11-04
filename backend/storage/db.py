@@ -8,10 +8,13 @@ La primera vez se siembran SEED_TOPICS y SEED_FREE_OPENERS; los temas de topics.
 en cada arranque si su título no existe.
 """
 
+import json
 import random
 import sqlite3
 import time
 from collections import Counter
+from datetime import date, datetime, timedelta
+from itertools import groupby
 from pathlib import Path
 
 import yaml
@@ -64,6 +67,15 @@ CREATE TABLE IF NOT EXISTS sound_issues (
     resolved INTEGER NOT NULL DEFAULT 0,  -- ya la dijiste bien en la práctica
     created_at REAL NOT NULL
 );
+CREATE TABLE IF NOT EXISTS settings (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL           -- en JSON
+);
+CREATE TABLE IF NOT EXISTS reviews (
+    key TEXT PRIMARY KEY,         -- la frase correcta, en minúsculas
+    box INTEGER NOT NULL DEFAULT 0,  -- caja de Leitner: cuanto más alta, más tarda en volver
+    due REAL NOT NULL
+);
 CREATE TABLE IF NOT EXISTS corrections (
     id INTEGER PRIMARY KEY,
     turn_id INTEGER NOT NULL REFERENCES turns(id) ON DELETE CASCADE,
@@ -74,6 +86,14 @@ CREATE TABLE IF NOT EXISTS corrections (
     severity INTEGER NOT NULL
 );
 """
+
+def goal_stars(done: int, total: int) -> int:
+    """1–3 estrellas de un escenario: terminarlo / la mitad de los objetivos / todos (DISENO §7.5)."""
+    return 3 if done == total else 2 if done * 2 >= total else 1
+
+
+REVIEW_DAYS = (1, 3, 7, 21, 60)  # cuándo vuelve una frase que sabías, según su caja
+REVIEW_AGAIN_S = 600  # la que no sabías vuelve enseguida
 
 SEED_TOPICS = [
     ("Tu fin de semana", [
@@ -186,6 +206,16 @@ class Store:
         return cur.lastrowid
 
     # ── Temas ──
+    def settings(self) -> dict:
+        """Solo lo que cambiaste en Ajustes; lo demás usa los valores por defecto de config.py."""
+        return {r["key"]: json.loads(r["value"]) for r in self.db.execute("SELECT key, value FROM settings")}
+
+    def save_settings(self, values: dict) -> None:
+        self.db.executemany("INSERT INTO settings (key, value) VALUES (?, ?) "
+                            "ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+                            [(k, json.dumps(v)) for k, v in values.items()])
+        self.db.commit()
+
     def topics(self) -> list[dict]:
         rows = self.db.execute("SELECT id, title FROM topics WHERE active ORDER BY position, id")
         return [dict(r) for r in rows]
@@ -217,6 +247,15 @@ class Store:
     def set_goals(self, session_id: int, met: int, total: int) -> None:
         self._write("UPDATE sessions SET goals_met = ?, goals_total = ? WHERE id = ?", (met, total, session_id))
 
+    def scenario_stars(self) -> dict[str, int]:
+        """Tu mejor resultado en cada escenario. Una sesión en la que no hablaste no cuenta."""
+        best: dict[str, int] = {}
+        for r in self.db.execute("SELECT scenario, goals_met, goals_total FROM sessions s WHERE scenario IS NOT NULL "
+                                 "AND goals_total IS NOT NULL AND EXISTS (SELECT 1 FROM turns t "
+                                 "WHERE t.session_id = s.id AND t.speaker = 'user')"):
+            best[r["scenario"]] = max(best.get(r["scenario"], 0), goal_stars(r["goals_met"], r["goals_total"]))
+        return best
+
     def add_turn(self, session_id: int, speaker: str, text: str, seconds: float | None = None) -> int:
         return self._write("INSERT INTO turns (session_id, speaker, text, seconds, created_at) VALUES (?, ?, ?, ?, ?)",
                            (session_id, speaker, text, seconds, time.time()))
@@ -244,6 +283,10 @@ class Store:
              for w in words for i in w["issues"]])
         self.db.commit()
 
+    def sound_counts(self) -> dict[str, int]:
+        """Cuántas veces se oyó cada error de sonido, en conversación y en práctica."""
+        return dict(self.db.execute("SELECT phone, count(*) FROM sound_issues GROUP BY phone").fetchall())
+
     def failed_phrases(self, limit: int = 10) -> list[dict]:
         """Tus frases con sonidos pendientes, ya corregidas si el tutor las corrigió, para repetirlas."""
         rows = self.db.execute(
@@ -264,11 +307,105 @@ class Store:
             "WHERE session_id = ? GROUP BY phone, heard ORDER BY count DESC LIMIT 5", (session_id,)).fetchall()
         return [{**dict(r), "words": r["words"].split(",")} for r in rows]
 
+    # ── Progreso ──
+    def progress(self, days: int = 14) -> dict:
+        """Historial y métricas, calculados de lo guardado. Una sesión sin turnos tuyos no cuenta."""
+        rows = self.db.execute(
+            "SELECT s.id, s.started_at, s.scenario, s.goals_met, s.goals_total, tp.title AS topic, t.text, t.seconds, "
+            "(SELECT count(*) FROM corrections c WHERE c.turn_id = t.id) AS errors FROM sessions s "
+            "JOIN turns t ON t.session_id = s.id AND t.speaker = 'user' "
+            "LEFT JOIN topics tp ON tp.id = s.topic_id ORDER BY s.id, t.id").fetchall()
+        sessions = []
+        for _, group in groupby(rows, key=lambda r: r["id"]):
+            turns = list(group)
+            first = turns[0]
+            words = sum(len(t["text"].split()) for t in turns)
+            speaking = sum(t["seconds"] or 0 for t in turns)
+            sessions.append({
+                "id": first["id"], "date": datetime.fromtimestamp(first["started_at"]).isoformat(timespec="minutes"),
+                "topic": first["topic"], "scenario": first["scenario"], "goals_met": first["goals_met"],
+                "goals_total": first["goals_total"], "turns": len(turns), "words": words,
+                "minutes": round(speaking / 60, 1), "wpm": round(words / (speaking / 60)) if speaking >= 1 else 0,
+                "errors": sum(t["errors"] for t in turns),
+                "clean_pct": round(100 * sum(not t["errors"] for t in turns) / len(turns)),
+            })
+        today = date.today()
+        minutes = Counter()
+        for s in sessions:
+            minutes[s["date"][:10]] += s["minutes"]
+        return {
+            "totals": {"sessions": len(sessions), "minutes": round(sum(s["minutes"] for s in sessions), 1),
+                       "turns": sum(s["turns"] for s in sessions), "words": sum(s["words"] for s in sessions)},
+            "days": [{"date": d, "minutes": round(minutes[d], 1)} for d in
+                     ((today - timedelta(days=n)).isoformat() for n in range(days - 1, -1, -1))],
+            "minutes_by_day": {d: round(m, 1) for d, m in minutes.items()},  # toda la historia, para el calendario
+            "sessions": sessions[::-1][:50],
+            "recurring": self._recurring_errors(),
+            "sounds": self._recurring_sounds(),
+            "review_due": len(self.review_items(limit=None)),
+        }
+
+    def _recurring_errors(self) -> list[dict]:
+        rows = self.db.execute(
+            "SELECT c.type, min(c.original) AS original, min(c.fix) AS fix, min(c.explanation) AS explanation, "
+            "count(*) AS count, count(DISTINCT t.session_id) AS sessions, max(t.created_at) AS last "
+            "FROM corrections c JOIN turns t ON t.id = c.turn_id WHERE trim(c.original) <> '' "
+            "GROUP BY c.type, lower(trim(c.original)), lower(trim(c.fix)) HAVING count(*) >= 2 "
+            "ORDER BY count(*) DESC, last DESC LIMIT 10").fetchall()
+        return [dict(r) for r in rows]
+
+    def _recurring_sounds(self) -> list[dict]:
+        rows = self.db.execute(
+            "SELECT phone, heard, min(tip) AS tip, count(*) AS count, group_concat(DISTINCT lower(word)) AS words "
+            "FROM sound_issues GROUP BY phone, heard ORDER BY count(*) DESC LIMIT 8").fetchall()
+        return [{**dict(r), "words": r["words"].split(",")[:6]} for r in rows]
+
+    # ── Repaso de vocabulario (cajas de Leitner) ──
+    def review_items(self, limit: int | None = 10, now: float | None = None) -> list[dict]:
+        """Lo que toca repasar hoy: palabras corregidas por el tutor y frases que escribiste que querías decir."""
+        now = time.time() if now is None else now
+        due = {r["key"]: r["due"] for r in self.db.execute("SELECT key, due FROM reviews")}
+        fixes = self.db.execute(
+            "SELECT c.original, c.fix, c.explanation, t.corrected FROM corrections c JOIN turns t ON t.id = c.turn_id "
+            "WHERE c.type IN ('vocabulary', 'naturalness') AND trim(c.original) <> '' AND trim(c.fix) <> '' "
+            "AND t.intent IS NULL ORDER BY c.id DESC").fetchall()
+        phrases = self.db.execute("SELECT text, corrected, intent FROM turns WHERE intent IS NOT NULL "
+                                  "AND trim(coalesce(corrected, '')) <> '' ORDER BY id DESC").fetchall()
+        items: dict[str, dict] = {}
+        for r in phrases:
+            items.setdefault(r["corrected"].strip().lower(), {"said": r["text"], "intent": r["intent"], "explanation": "",
+                                                              "text": r["corrected"].rstrip(" .…") + "."})
+        for r in fixes:
+            # Se lee la frase entera si contiene la corrección y se puede leer de un tirón; si no, solo la corrección
+            whole = r["corrected"] or ""
+            usable = (r["fix"].lower() in whole.lower() and len(whole.split()) <= 20
+                      and not whole.rstrip().endswith(("...", "…")))  # una frase a medias no se puede repetir
+            items.setdefault(r["fix"].strip().lower(), {"said": r["original"], "intent": None, "explanation": r["explanation"],
+                                                        "text": whole if usable else r["fix"]})
+        pending = [{"key": k, **v} for k, v in items.items() if due.get(k, 0) <= now]
+        pending.sort(key=lambda i: (i["key"] not in due, due.get(i["key"], 0)))  # primero lo atrasado, luego lo nuevo
+        return pending[:limit]
+
+    def answer_review(self, key: str, known: bool, now: float | None = None) -> None:
+        now = time.time() if now is None else now
+        row = self.db.execute("SELECT box FROM reviews WHERE key = ?", (key,)).fetchone()
+        box = (row["box"] + 1 if row else 1) if known else 0
+        wait = REVIEW_DAYS[min(box, len(REVIEW_DAYS)) - 1] * 86400 if known else REVIEW_AGAIN_S
+        self._write("INSERT INTO reviews (key, box, due) VALUES (?, ?, ?) "
+                    "ON CONFLICT(key) DO UPDATE SET box = excluded.box, due = excluded.due", (key, box, now + wait))
+
+    def review_status(self, now: float | None = None) -> dict:
+        """Cuántas frases quedan por repasar hoy y cuándo vuelve la siguiente que ya respondiste."""
+        now = time.time() if now is None else now
+        next_due = self.db.execute("SELECT MIN(due) FROM reviews WHERE due > ?", (now,)).fetchone()[0]
+        return {"pending": len(self.review_items(limit=None, now=now)), "next_due": next_due}
+
     def finish_session(self, session_id: int) -> dict:
         """Cierra la sesión y devuelve su resumen."""
         now = time.time()
         self._write("UPDATE sessions SET ended_at = ? WHERE id = ?", (now, session_id))
-        started = self.db.execute("SELECT started_at FROM sessions WHERE id = ?", (session_id,)).fetchone()[0]
+        session = self.db.execute("SELECT s.started_at, s.topic_id, t.title AS topic FROM sessions s "
+                                  "LEFT JOIN topics t ON t.id = s.topic_id WHERE s.id = ?", (session_id,)).fetchone()
         turns = self.db.execute(
             "SELECT id, text, corrected, intent, seconds FROM turns WHERE session_id = ? AND speaker = 'user' ORDER BY id",
             (session_id,)).fetchall()
@@ -286,7 +423,9 @@ class Store:
                       "explanation": first[k]["explanation"], "count": n}
                      for k, n in counts.most_common(3) if n >= 2]
         return {
-            "duration_s": round(now - started),
+            "topic": session["topic"],
+            "topic_id": session["topic_id"],
+            "duration_s": round(now - session["started_at"]),
             "turns": len(turns),
             "words": words,
             "speaking_s": round(speaking),

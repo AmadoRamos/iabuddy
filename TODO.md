@@ -162,6 +162,7 @@
 - [x] Probar la Fase 4 con micrófono real. Probado por Amado el 2026-11-03: práctica (12 lecturas) y conversación (3 turnos con resumen). Los avisos encajan con lo que oye el modelo.
 
 ### Mejoras tras las fases
+- [x] Conversación en 3 columnas (Sesión · Conversación · Tutor), según `O2Conversacion.dc.html`. La maqueta incluye XP, que la app aún no tiene.
 - [x] Correcciones inventadas de Buddy en conversación libre (modo voz). En 15 sesiones reales corregía en 19 de 38 turnos, y en 5 de esos el tutor no veía error. Medido con 10 frases con error, 12 correctas y 4 garabateadas por Whisper, repetidas por la variación del modelo: errores corregidos 50/50; correcciones sobre frases correctas, de 5/36 a 4/60, las 4 en *call back API*, que el tutor también marca; errores de Whisper corregidos como tuyos, de 5/12 a 1/20.
   - Una plantilla fija (*"Quick tip: we say X, not Y"*) lo empeoró a 12/36: el modelo la rellena aunque no haya error. Los escenarios la siguen usando (3/16 falsos, frente a 2/16 antes: muestra pequeña).
   - Queda sin resolver: a veces cita algo que no dijiste (*viewing* por *view*), 1 de 20.
@@ -169,8 +170,16 @@
 - [x] El tiempo de respuesta crecía durante la sesión (1.er token del LLM de 720 a 1730 ms en 9 turnos). Causa: el tutor arrancaba a la vez que Buddy y competían por la GPU. Ahora arranca cuando suena el primer audio. App completa, 14 turnos con grabaciones: 1.er token de ~1,2 s a ~0,33 s; 1.er audio, mediana de 1311 ms y estable. Con micrófono real (sesión 19, 4 turnos): 1.er audio de 0,9 a 1,7 s y 1.er token de ~0,3 s desde el 2.º turno. Una sesión larga con voz aún no se ha medido. El análisis del tutor llega algo más tarde.
 
 ### Fase 5 — Progreso
-- [ ] Historial de sesiones y métricas en el tiempo.
-- [ ] Errores recurrentes y repaso de vocabulario.
+- [x] Historial de sesiones y métricas en el tiempo: pantalla «Ver mi progreso», calculada de lo que ya se guarda (minutos por día, palabras por minuto y turnos sin errores por sesión, tabla de sesiones).
+- [x] Errores recurrentes y repaso de vocabulario: errores y sonidos que se repiten entre sesiones, y «Repaso» con cajas de Leitner (1, 3, 7, 21 y 60 días) con las palabras que corrigió el tutor y las frases que escribiste que querías decir.
+- [x] «Repaso» con flujo propio: pista, intento, frase con su porqué y «La sabía» / «Repasarla otra vez». Las que no sabías vuelven al final de la tanda, y al terminar ves el resultado y cuándo vuelve la siguiente. Comparte el estilo de `O2Pronunciacion`, sin su puntuación por fonema.
+- [x] «Practicar pronunciación» según `O2Pronunciacion`: lista de sonidos (primero los que más fallas), progreso, palabras seleccionables, fonemas esperados y «Cómo mejorarlo». Sin notas por palabra o fonema, porque la confianza del modelo no es una calificación (bien dicha, una frase da 40-70), y sin niveles ni XP.
+- [x] Navegación con 5 secciones (Hoy, Conversar, Escenarios, Sonidos, Progreso). «Hoy» y «Escenarios» siguen `InicioO2` y `O2Escenarios` con datos reales; sin XP, racha, filtros ni duración, que aún no existen.
+- [x] Resumen según `O2Resumen`: cabecera con estrellas, cifras de la sesión, objetivos, errores por tipo, pronunciación y botones para repetir o practicar. Sin XP ni notas por sonido; sin vocabulario «usaste / para la próxima», porque ese dato no existe.
+- [x] Ajustes (versión corta de `O2Ajustes`): silencio, velocidad con voz de prueba, modo de corrección y estado de los modelos. Se guardan en la base de datos y mandan sobre `IABUDDY_SILENCE_MS` e `IABUDDY_SPEED`. Sin metas ni XP, idioma de las explicaciones (decidido: español) ni umbral de confianza (la app no decide con él).
+- [x] Progreso: calendario del mes con los días practicados y gráfica de esta semana, que sustituye a la de 14 días. El calendario solo muestra si hablaste, porque aún no hay meta diaria.
+- [ ] Probar la Fase 5 con tus datos reales.
+- Sin hacer, porque no está en esta fase: XP, niveles, racha, retos y logros (DISENO §7.5, pantalla `AppProgreso`). Requieren decidir la meta diaria y si se quieren.
 
 ---
 

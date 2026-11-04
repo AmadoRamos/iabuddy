@@ -75,6 +75,7 @@ async def test_key_turn_replies_and_records_history():
     await s.on_control({"type": "stop"})
     await s.task
     assert first(events, "user_text")["text"] == "Yesterday I go to the gym."
+    assert first(events, "user_text")["seconds"] == 0  # 10 bytes de prueba: la app suma estos segundos
     assert types(events).count("audio") == 3  # "Oh, you went to the gym?" · "Nice!" · "What did you do?"
     assert s.state == "idle"
     assert [m["role"] for m in s.messages] == ["system", "user", "assistant"]
@@ -124,3 +125,11 @@ async def test_barge_in_cancels_reply_and_keeps_what_was_said():
     await s.on_control({"type": "start"})
     assert "barge_in" in types(events) and s.state == "listening"
     assert s.messages[-1] == {"role": "assistant", "content": "Oh, you went to the gym?"}
+
+
+async def test_changing_the_silence_setting_applies_to_the_open_session():
+    s, _, _ = make()
+    await s.on_control({"type": "settings", "silence_ms": 1500})
+    assert s.silence_s == 1.5
+    await s.on_control({"type": "settings", "silence_ms": "mucho"})
+    assert s.silence_s == 1.5
