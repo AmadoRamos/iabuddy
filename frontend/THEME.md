@@ -8,7 +8,7 @@ Solo hay **tema claro**: el diseño lo decide así («Tema claro, nunca oscuro»
 | Archivo | Qué contiene |
 |---|---|
 | [css/tokens.css](css/tokens.css) | Variables CSS generadas desde el sistema de diseño. Se edita solo para cambiar un valor del sistema. |
-| [docs/ui/tokens.json](../docs/ui/tokens.json) | Todos los tokens en formato W3C (`$value`, `$type`): los 92 de `tokens.css`, los 14 de componente de `theme.css` y los 4 breakpoints. Si cambias un valor en el CSS, cámbialo también aquí. Revisado el 2026-11-01: los valores coinciden. |
+| [docs/ui/tokens.json](../docs/ui/tokens.json) | Todos los tokens en formato W3C (`$value`, `$type`): los 91 de `tokens.css`, los 14 de componente de `theme.css` y los 4 breakpoints. Si cambias un valor en el CSS, cámbialo también aquí. Revisado el 2026-11-01: los valores coinciden. |
 | [css/theme.css](css/theme.css) | Importa fuentes y tokens, añade los tintes de componente que faltan en `tokens.css`, estilos base, tipografía, layout y animaciones. |
 
 Una página solo necesita esto:
@@ -107,7 +107,10 @@ El inglés que se practica se marca con `lang="en"`. La interfaz y las explicaci
 
 ## Layout
 
-- Contenedor: `.container` (`--container-max` 1320 px, margen `--margin` `clamp(16px, 4vw, 40px)`).
+- **Regla: siempre se usa el 100 % de la pantalla, a lo ancho y a lo alto.** Ningún contenedor limita el ancho de la página ni se centra con un máximo: nada de `max-width`, `width: min(…px, …)` ni anchos fijos en maquetación. Las rejillas y columnas se reparten el espacio disponible (`flex`, `auto-fit`). Solo se limitan los elementos flotantes o sueltos que no son maquetación, como burbujas de chat, menús, avisos y modales.
+- A lo alto, la app mide al menos `100dvh` y las zonas principales crecen con `flex: 1`, sin `max-height` en `vh`. Desde 1024 × 600 px mide justo la pantalla y cada columna hace su propio scroll; por debajo, la conversación llena la pantalla y el resto de la página se desplaza.
+- Esta regla manda sobre el lienzo: las láminas y pantallas de `docs/ui/canvas/` aún dibujan un contenedor de 1320 px.
+- Contenedor: `.container` solo pone el margen lateral `--margin` `clamp(16px, 4vw, 40px)`.
 - Medianil entre columnas: `--gutter` `clamp(16px, 2vw, 24px)`.
 - Breakpoints: xs < 600 · sm 600–899 · md 900–1199 · lg ≥ 1200. Están en `tokens.json` pero no en `tokens.css`: las variables CSS no funcionan dentro de `@media`, así que se escriben los números.
 - Utilidades: `.stack` (columna) y `.cluster` (fila que envuelve). El hueco se ajusta con `--gap`.

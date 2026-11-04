@@ -64,7 +64,7 @@ Navegación: barra superior con cápsula de 5 destinos (Hoy, Conversar, Escenari
   - lima `#9BE22D`: logros y aciertos.
 - **Tipografía:** Bricolage Grotesque (títulos y cifras), Figtree (interfaz), Noto Sans Mono (IPA).
 - **Tono:** el feedback nunca regaña. Sin rojo ni alarmas: los errores del alumno usan coral suave.
-- **Tokens:** [tokens.json](tokens.json) (formato W3C), equivalente a [frontend/css/tokens.css](../../frontend/css/tokens.css): 92 tokens con los mismos valores. El JSON tiene además los 14 tokens de componente de `theme.css` y los breakpoints. Si cambias uno, cambia el otro. El detalle de cada token está en [THEME.md](../../frontend/THEME.md).
+- **Tokens:** [tokens.json](tokens.json) (formato W3C), equivalente a [frontend/css/tokens.css](../../frontend/css/tokens.css): 91 tokens con los mismos valores. El JSON tiene además los 14 tokens de componente de `theme.css` y los breakpoints. Si cambias uno, cambia el otro. El detalle de cada token está en [THEME.md](../../frontend/THEME.md).
 
 ## Diseño v0 (retirado)
 

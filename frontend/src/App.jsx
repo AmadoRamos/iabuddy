@@ -36,7 +36,7 @@ export default function App() {
   const down = h && (h.backend === false || !h.whisper || !h.ollama);
 
   return (
-    <div className="container">
+    <div className="container app">
       <header className="topbar">
         <span className="brand"><svg aria-hidden="true" width="44" height="44"><use href="#onda-logo" /></svg>
           <span className="brand-name">iabuddy</span></span>
