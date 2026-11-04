@@ -1,8 +1,10 @@
 # IABuddy — Diseño de UI
 
-Diseño vigente: **estilo O2 «Estudio con Onda»**, tema claro, con la mascota Onda. Lienzo: https://claude.ai/artifact/Bn2LdwneukJmkQPxm6No3a (privado). Copia descargada el 2026-11-01 en [canvas/project/](canvas/project/).
+Diseño vigente: **estilo O2 «Estudio con Onda»**, tema claro, con la mascota Onda. Lienzo: https://claude.ai/artifact/Bn2LdwneukJmkQPxm6No3a (privado). Copia descargada el 2026-11-01 repartida entre [canvas/project/](canvas/project/), [App/](App/) y [Sistema de Diseño/](Sistema%20de%20Diseño/).
 
 El código que implementa este diseño está en [frontend/](../../frontend/): consulta [THEME.md](../../frontend/THEME.md), [COMPONENTS.md](../../frontend/COMPONENTS.md) y el catálogo [design-system.html](../../frontend/design-system.html).
+
+Qué diseño corresponde a cada pantalla y endpoint de la app, y qué falta por construir: [PANTALLAS.md](PANTALLAS.md).
 
 ## Lienzo (`canvas/project/`)
 
@@ -10,10 +12,12 @@ El código que implementa este diseño está en [frontend/](../../frontend/): co
 
 ### App · O2: pantallas de la app
 
+**Los diseños `O2*` e `InicioO2`, en [App/](App/), son la referencia.** Los `App*` que lista esta tabla, en `canvas/project/`, son copias idénticas salvo los enlaces entre pantallas. Un cambio se hace primero en el `O2`.
+
 | Archivo | Pantalla |
 |---|---|
 | `AppInicio.dc.html` | Inicio (Hoy): meta diaria, racha, retos, modos de práctica |
-| `AppConversacion.dc.html` | Conversación en vivo: chat, botón Onda con sus estados, panel del tutor |
+| `AppConversacion.dc.html` | Conversación en vivo, en 3 columnas: sesión (tema, tiempo, objetivos), chat con el botón Onda y sus estados, panel del tutor |
 | `AppEscenarios.dc.html` | Escenarios: lista, detalle, objetivos y recompensas |
 | `AppPronunciacion.dc.html` | Drill de pronunciación: puntuación por palabra y fonema, niveles por sonido |
 | `AppResumen.dc.html` | Resumen de sesión |
@@ -22,7 +26,7 @@ El código que implementa este diseño está en [frontend/](../../frontend/): co
 
 Navegación: barra superior con cápsula de 5 destinos (Hoy, Conversar, Escenarios, Sonidos, Progreso) + racha, XP y Ajustes.
 
-### Sistema de diseño (`DS*.dc.html`)
+### Sistema de diseño (`DS*.dc.html`, en [Sistema de Diseño/](Sistema%20de%20Diseño/))
 
 | # | Archivo | Tema | En código |
 |---|---|---|---|
@@ -50,8 +54,8 @@ Navegación: barra superior con cápsula de 5 destinos (Hoy, Conversar, Escenari
 
 - `Main`, `InicioB`–`InicioE`, `Conversacion` y `InicioC2`: 5 direcciones visuales para Inicio.
 - `Buddy01`–`Buddy06`: 6 conceptos de mascota. **Elegida: Onda** (`OndaHoja`, `OndaContexto`).
-- `InicioO1`–`InicioO4`: Inicio reimaginado con Onda. **Elegido: O2**. O3 (ecualizador) queda reservado para el futuro.
-- `O2*.dc.html`: primera versión de las pantallas en estilo O2. Las sustituyen las `App*`.
+- `InicioO1`, `InicioO3`, `InicioO4` e `InicioO2` (en [App/](App/)): Inicio reimaginado con Onda. **Elegido: O2**. O3 (ecualizador) queda reservado para el futuro.
+- `O2*.dc.html` e `InicioO2`: se movieron a [App/](App/) y son la referencia de la app (ver arriba). `canvas.json` los referencia con su ruta relativa, igual que a los `DS*`.
 
 ## Sistema visual (resumen)
 

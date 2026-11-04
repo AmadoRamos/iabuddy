@@ -1,6 +1,6 @@
 # Tema de IABuddy
 
-Fuente: página «Sistema de diseño» del lienzo ([docs/ui/canvas/project/](../docs/ui/canvas/project/), láminas `DSTema`, `DSTokens`, `DSA11y` y `DSReticula`).
+Fuente: página «Sistema de diseño» del lienzo ([docs/ui/Sistema de Diseño/](../docs/ui/Sistema%20de%20Diseño/), láminas `DSTema`, `DSTokens`, `DSA11y` y `DSReticula`).
 Solo hay **tema claro**: el diseño lo decide así («Tema claro, nunca oscuro»).
 
 ## Archivos
@@ -111,6 +111,7 @@ El inglés que se practica se marca con `lang="en"`. La interfaz y las explicaci
 - A lo alto, la app mide al menos `100dvh` y las zonas principales crecen con `flex: 1`, sin `max-height` en `vh`. Desde 1024 × 600 px mide justo la pantalla y cada columna hace su propio scroll; por debajo, la conversación llena la pantalla y el resto de la página se desplaza.
 - Esta regla manda sobre el lienzo: las láminas y pantallas de `docs/ui/canvas/` aún dibujan un contenedor de 1320 px.
 - Contenedor: `.container` solo pone el margen lateral `--margin` `clamp(16px, 4vw, 40px)`.
+- Conversación en curso: tres columnas desde lg (Sesión · Conversación · Tutor); en md, la conversación a la izquierda y las otras dos apiladas; por debajo, la conversación primero. Las laterales se ajustan con `clamp()`, porque `minmax(…, máx)` las llevaría a su máximo antes de dar nada a la central.
 - Medianil entre columnas: `--gutter` `clamp(16px, 2vw, 24px)`.
 - Breakpoints: xs < 600 · sm 600–899 · md 900–1199 · lg ≥ 1200. Están en `tokens.json` pero no en `tokens.css`: las variables CSS no funcionan dentro de `@media`, así que se escriben los números.
 - Utilidades: `.stack` (columna) y `.cluster` (fila que envuelve). El hueco se ajusta con `--gap`.
