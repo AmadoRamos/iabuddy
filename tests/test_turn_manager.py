@@ -121,7 +121,7 @@ async def test_barge_in_cancels_reply_and_keeps_what_was_said():
         await asyncio.sleep(0)
         if s.state == "speaking":
             break
-    assert s.state == "speaking"
+    assert s.state == "speaking" and "barge_in" not in types(events)  # abrir tu turno no es interrumpir
     await s.on_control({"type": "start"})
     assert "barge_in" in types(events) and s.state == "listening"
     assert s.messages[-1] == {"role": "assistant", "content": "Oh, you went to the gym?"}

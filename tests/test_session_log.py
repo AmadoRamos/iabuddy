@@ -47,11 +47,14 @@ async def test_records_controls_events_and_full_analyses_even_in_silent_mode(tmp
 async def test_saves_the_audio_of_each_turn_and_drill_as_wav(tmp_path):
     s, _, _ = make()
     s.scorer, s.log = FakeScorer(issues=()), SessionLog(tmp_path)
+    await run_turn(s)
     await drill(s, "Three days.")
     rows = lines(s.log)
     assert kinds(rows, "out")[-2]["type"] == "drill_result"  # los aciertos también quedan
-    info = kinds(rows, "audio")[0]
-    assert info["text"] == "Three days."
+    turn, info = kinds(rows, "audio")
+    assert turn["label"] == "turn1" and info["text"] == "Three days."
+    with wave.open(str(tmp_path / turn["file"])) as w:
+        assert w.getnframes() > 0
     with wave.open(str(tmp_path / info["file"])) as w:
         assert w.getframerate() == 16000 and w.getnframes() == 5  # 10 bytes de prueba
 

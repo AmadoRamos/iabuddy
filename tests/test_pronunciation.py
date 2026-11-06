@@ -198,7 +198,7 @@ def test_phonemes_use_the_whole_sentence_and_keep_words_apart():
 
 
 def test_homographs_accept_both_pronunciations():
-    assert set(pronunciations("live", ("l", "aɪ", "v"))) == {("l", "aɪ", "v"), ("l", "ɪ", "v")}
+    assert pronunciations("live", ("l", "aɪ", "v")) == [("l", "aɪ", "v"), ("l", "ɪ", "v")]
     assert pronunciations("ship", ("ʃ", "ɪ", "p")) == [("ʃ", "ɪ", "p")]
 
 
