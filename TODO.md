@@ -31,16 +31,11 @@ Revisado el 2026-11-06 con los registros de la sesión de Amado del 2026-11-05 (
 
 ### Errores
 - [ ] **El tutor no marcó un error claro:** *I don't speaking about…* (sesión 21, turno 6) salió sin errores. Buddy tampoco lo señala con el historial real, ni sin la misión (1 de 6); sin historial, sí (6 de 6).
-- [ ] En «Tus frases» entran palabras mal transcritas (*Wispeth*).
-- [ ] El aviso de micrófono denegado sigue visible al cambiar de sección.
-- [ ] Los minutos totales suman redondeos: 7,7 frente a 7,54 reales.
-- [ ] «Esto no lo dije» saca la corrección del repaso y del banco, pero sigue contando en los errores repetidos de «Progreso».
 
 ### Por revisar
 - [ ] **Guiada: *years* sacó 0-2 de claridad en los 3 intentos**, y *Sure* 2-3 en 2 de ellos. Son la última y la primera palabra de la frase: escuchar los WAV para ver si se corta el audio o es la pronunciación.
 - [ ] **Guiada: Whisper oyó *I am* en los 3 intentos** y *I'm* quedó como no dicha. Escuchar si dijiste *I am* o si Whisper la expande; en ese caso habría que aceptar las contracciones.
 - [ ] **1.er token del LLM más lento con micrófono:** 0,55-0,85 s en la sesión 21, frente a ~0,3 s en la sesión 19. Sigue cumpliendo el total salvo en 2 de 12 turnos (más de 1,5 s). Volver a medirlo: ese prompt ya no lleva la misión.
-- [ ] La línea del tema elegido también va al final del prompt, como iba la misión: falta medir si reduce las correcciones.
 - [ ] Buddy a veces cita algo que no dijiste (*viewing* por *view*, 1 de 20).
 - [ ] Buddy adivina: Buddy puede nombrar la palabra sin querer en una pregunta y contaría como acierto.
 
@@ -52,6 +47,9 @@ Revisión red/green del 2026-11-06: ya tienen test `Tutor`, `Session` (incluido 
 
 ### Límites aceptados
 Sin acción prevista; se revisan solo si molestan.
+- Con un tema elegido, Buddy parece señalar algo menos los errores reales (5-6 de 18 frente a 9 de 18), pero no inventa correcciones ([S7](docs/SPIKES.md)). Moverla no ayudó, y el tema es lo que pediste, así que se queda.
+- «Tus frases» no tiene diccionario: se dejan fuera las palabras con mayúscula a mitad de frase, lo que también quita *Python* o *Monday*. Una palabra inventada en minúscula o al empezar la frase sigue entrando.
+- «Esto no lo dije» saca la corrección de los errores repetidos, pero la sesión sigue contándola en sus errores y en su % de turnos sin errores.
 - Una sesión vieja con algún turno sin analizar se queda para siempre, porque nada vuelve a analizarla: si el tutor falló, si Buddy no llegó a sonar o si faltaba el modelo de fonemas. Hoy son 0 de 23.
 - Si escribes en inglés lo que querías decir, la pista del repaso ya trae la respuesta. Decisión de Amado.
 - Una forma irregular que falte en `forms` no se detecta en la misión.

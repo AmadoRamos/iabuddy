@@ -244,3 +244,23 @@ def test_progress_gives_minutes_for_every_day_with_practice_even_old_ones():
     session(s, started=old.timestamp() + 60, seconds=30)
     session(s, seconds=120)
     assert s.progress()["minutes_by_day"] == {old.date().isoformat(): 1.5, date.today().isoformat(): 2.0}
+
+
+def test_total_minutes_add_the_real_seconds_not_rounded_sessions():
+    s = Store(":memory:")
+    for _ in range(3):
+        session(s, seconds=14)  # 0,23 min: redondeadas darían 0,2 + 0,2 + 0,2 = 0,6
+    data = s.progress()
+    assert data["totals"]["minutes"] == 0.7
+    assert data["days"][-1]["minutes"] == 0.7
+    assert data["minutes_by_day"][date.today().isoformat()] == 0.7
+    assert data["sessions"][0]["minutes"] == 0.2
+
+
+def test_a_correction_you_did_not_say_leaves_the_repeated_errors():
+    s = Store(":memory:")
+    session(s, issues=[ISSUE])
+    session(s, issues=[ISSUE])
+    assert [e["fix"] for e in s.progress()["recurring"]] == ["prompt"]
+    s.discard_review("prompt")
+    assert s.progress()["recurring"] == []

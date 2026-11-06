@@ -10,6 +10,7 @@ en cada arranque si su título no existe.
 
 import json
 import random
+import re
 import sqlite3
 import time
 from collections import Counter
@@ -19,6 +20,7 @@ from pathlib import Path
 
 import yaml
 
+from ..pronunciation.rules import is_function_word
 from ..vocabulary.words import find_use
 
 TOPICS_FILE = Path(__file__).with_name("topics.yaml")
@@ -108,6 +110,13 @@ CREATE TABLE IF NOT EXISTS corrections (
 def goal_stars(done: int, total: int) -> int:
     """1–3 estrellas de un escenario: terminarlo / la mitad de los objetivos / todos (DISENO §7.5)."""
     return 3 if done == total else 2 if done * 2 >= total else 1
+
+
+def _is_name(word: str, text: str) -> bool:
+    """Mayúscula a mitad de frase. Whisper escribe así lo que no entiende (*Wispeth*), y no vale la pena repetirlo."""
+    # ponytail: sin diccionario; también caen Python o Monday, y una palabra inventada en minúscula o al empezar la frase pasa
+    return (word[:1].isupper() and not is_function_word(word)
+            and re.search(rf"(?<=[^.!?\s])\s+{re.escape(word)}\b", text) is not None)
 
 
 REVIEW_DAYS = (1, 3, 7, 21, 60)  # cuándo vuelve una frase que sabías, según su caja
@@ -323,12 +332,16 @@ class Store:
     def failed_phrases(self, limit: int = 10) -> list[dict]:
         """Tus frases con sonidos pendientes, ya corregidas si el tutor las corrigió, para repetirlas."""
         rows = self.db.execute(
-            "SELECT coalesce(t.corrected, s.text) AS phrase, group_concat(DISTINCT lower(s.word)) AS words "
-            "FROM sound_issues s LEFT JOIN turns t ON t.id = s.turn_id WHERE NOT s.resolved "
-            "GROUP BY phrase ORDER BY max(s.id) DESC").fetchall()
+            "SELECT coalesce(t.corrected, s.text) AS phrase, s.text, s.word "
+            "FROM sound_issues s LEFT JOIN turns t ON t.id = s.turn_id WHERE NOT s.resolved ORDER BY s.id DESC").fetchall()
+        phrases: dict[str, list[str]] = {}
+        for r in rows:
+            word = r["word"].lower()
+            if not _is_name(r["word"], r["text"]) and word not in phrases.setdefault(r["phrase"], []):
+                phrases[r["phrase"]].append(word)
         # Una frase muy larga no se puede repetir de memoria ni leyendo con calma
-        return [{"text": r["phrase"], "words": r["words"].split(",")} for r in rows
-                if len(r["phrase"].split()) <= 20][:limit]
+        return [{"text": text, "words": words} for text, words in phrases.items()
+                if len(text.split()) <= 20][:limit]
 
     def resolve_phrase(self, phrase: str) -> None:
         self._write("UPDATE sound_issues SET resolved = 1 WHERE id IN (SELECT s.id FROM sound_issues s "
@@ -349,6 +362,7 @@ class Store:
             "JOIN turns t ON t.session_id = s.id AND t.speaker = 'user' "
             "LEFT JOIN topics tp ON tp.id = s.topic_id ORDER BY s.id, t.id").fetchall()
         sessions = []
+        seconds = Counter()  # los segundos reales: sumar minutos ya redondeados acumula el error
         for _, group in groupby(rows, key=lambda r: r["id"]):
             turns = list(group)
             first = turns[0]
@@ -362,16 +376,14 @@ class Store:
                 "errors": sum(t["errors"] for t in turns),
                 "clean_pct": round(100 * sum(not t["errors"] for t in turns) / len(turns)),
             })
+            seconds[sessions[-1]["date"][:10]] += speaking
         today = date.today()
-        minutes = Counter()
-        for s in sessions:
-            minutes[s["date"][:10]] += s["minutes"]
         return {
-            "totals": {"sessions": len(sessions), "minutes": round(sum(s["minutes"] for s in sessions), 1),
+            "totals": {"sessions": len(sessions), "minutes": round(sum(seconds.values()) / 60, 1),
                        "turns": sum(s["turns"] for s in sessions), "words": sum(s["words"] for s in sessions)},
-            "days": [{"date": d, "minutes": round(minutes[d], 1)} for d in
+            "days": [{"date": d, "minutes": round(seconds[d] / 60, 1)} for d in
                      ((today - timedelta(days=n)).isoformat() for n in range(days - 1, -1, -1))],
-            "minutes_by_day": {d: round(m, 1) for d, m in minutes.items()},  # toda la historia, para el calendario
+            "minutes_by_day": {d: round(s / 60, 1) for d, s in seconds.items()},  # toda la historia, para el calendario
             "sessions": sessions[::-1][:50],
             "recurring": self._recurring_errors(),
             "sounds": self._recurring_sounds(),
@@ -383,6 +395,7 @@ class Store:
             "SELECT c.type, min(c.original) AS original, min(c.fix) AS fix, min(c.explanation) AS explanation, "
             "count(*) AS count, count(DISTINCT t.session_id) AS sessions, max(t.created_at) AS last "
             "FROM corrections c JOIN turns t ON t.id = c.turn_id WHERE trim(c.original) <> '' "
+            "AND lower(trim(c.fix)) NOT IN (SELECT key FROM reviews WHERE hidden) "  # «Esto no lo dije»
             "GROUP BY c.type, lower(trim(c.original)), lower(trim(c.fix)) HAVING count(*) >= 2 "
             "ORDER BY count(*) DESC, last DESC LIMIT 10").fetchall()
         return [dict(r) for r in rows]

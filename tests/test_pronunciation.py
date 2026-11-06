@@ -232,3 +232,22 @@ async def test_deleting_a_turn_removes_its_sounds():
     s.add_sound_issues("Three days.", [{"word": "three", "issues": [ISSUE]}], turn_id=row)
     s.delete_turn(row)
     assert s.failed_phrases() == []
+
+
+def test_your_phrases_leave_out_names_because_whisper_writes_that_way_what_it_did_not_understand():
+    s = Store(":memory:")
+
+    def said(text, word):
+        s.add_sound_issues(text, [{"word": word, "issues": [ISSUE]}])
+
+    said("I am using Wispeth.", "Wispeth")  # solo un nombre: la frase no entra
+    said("I talked to Michael and three friends.", "Michael")
+    said("I talked to Michael and three friends.", "three")  # el nombre no cuenta, pero la frase sigue por lo demás
+    said("Very good. Thanks.", "Thanks")  # mayúscula por empezar la frase: no es un nombre
+    said("Three days.", "Three")
+    said("Three days.", "three")  # la misma palabra, una vez
+    said("Yes, I've been there.", "I've")
+    assert s.failed_phrases() == [{"text": "Yes, I've been there.", "words": ["i've"]},
+                                  {"text": "Three days.", "words": ["three"]},
+                                  {"text": "Very good. Thanks.", "words": ["thanks"]},
+                                  {"text": "I talked to Michael and three friends.", "words": ["three"]}]

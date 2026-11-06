@@ -332,3 +332,14 @@ En la sesión 21, en modo voz, Buddy inventó una corrección y no señaló ning
 
 ### Límites
 Es una sola sesión, con 4 palabras concretas. Con semilla fija, solo 14 de 66 respuestas salieron idénticas al repetirlas, así que las cifras son orientativas. No se midió si las preguntas de Buddy ayudaban a usar las palabras. *I don't speaking about…* sigue pasando con el historial real (1 de 6), aunque sin historial se señala 6 de 6.
+
+### La línea del tema (misma prueba)
+
+| Prompt | Errores reales señalados | Frases correctas «corregidas» | Errores claros señalados |
+|---|---|---|---|
+| Sin tema | 9 de 18 | 0 de 30 | 18 de 18 |
+| Con tema (*Entrevista · Backend y APIs*) | 5 de 18 | 0 de 30 | 18 de 18 |
+| Con tema (*Viajes*) | 6 de 18 | 1 de 30 | 18 de 18 |
+| Con tema, antes de las reglas de corrección | 5 de 18 | 0 de 30 | 18 de 18 |
+
+**Se queda.** Puede reducir algo los errores señalados, pero no inventa correcciones como la misión, y moverla no ayudó. Son pocos turnos y el ruido es alto: sin tema, el mismo prompt dio 9 y 10 de 18 en otras pasadas, y un turno varió entre 2 y 4 de 6. La conversación probada no tenía tema de verdad: se le añadió la línea.

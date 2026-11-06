@@ -318,6 +318,6 @@ export function useConversation() {
 
   useEffect(() => () => { ws.current?.close(); mic.current?.stop(); }, []);
 
-  return { ui, messages, metrics, error, health, topics, scenarios, session, summary, feedbacks, mode, intents, ending, sounds, drills, drillResult, drillToggle, recallResult, usageResult, recallToggle, leaveDrill, answerReview, discardWord, saveWord, skipGameWord, saveGuided,
+  return { ui, messages, metrics, error, clearError: () => setError(null), health, topics, scenarios, session, summary, feedbacks, mode, intents, ending, sounds, drills, drillResult, drillToggle, recallResult, usageResult, recallToggle, leaveDrill, answerReview, discardWord, saveWord, skipGameWord, saveGuided,
     settings, saveSettings, checkHealth, start, toggle, end, changeMode, sendIntent, listen, closeSummary: () => setSummary(null) };
 }

@@ -38,6 +38,7 @@ export default function App() {
     if (next === view && session?.drill === true && !summary) return;
     if (session?.drill) c.leaveDrill();
     if (summary) c.closeSummary();
+    c.clearError(); // un aviso de la sección que dejas no vale para la siguiente
     setView(next);
     if (next === 'sonidos' && canPractice) c.start({ drill: true });
   };
