@@ -5,12 +5,15 @@
   lo que recibe, y los análisis completos (también lo que la pantalla no muestra).
 - `sessions/<fecha>/*.wav`: el audio de cada turno y de cada lectura. IABUDDY_LOG_AUDIO=0 lo desactiva.
 
+Al arrancar se borran el .jsonl y los WAV de las sesiones de más de 30 días ya analizadas.
+
 Un fallo al escribir nunca debe cortar la conversación: se avisa una vez y se sigue.
 """
 
 import json
 import logging
 import logging.handlers
+import shutil
 import time
 import wave
 from datetime import datetime
@@ -89,3 +92,29 @@ class SessionLog(NoLog):
         if self.file:
             self.file.close()
             self.file = None
+
+
+def analyzed(path: Path) -> bool:
+    """Cada turno oído tiene su tutor y su pronunciación, y cada lectura su nota. Un turno reabierto sale dos veces."""
+    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+    data = {kind: [r["data"] for r in rows if r["kind"] == kind] for kind in ("out", "audio", "tutor", "pronunciation_analysis")}
+    turns = {m["turn"] for m in data["out"] if m["type"] == "user_text"}
+    readings = sum(a["label"] in ("drill", "recall") for a in data["audio"])
+    grades = sum(m["type"] in ("drill_result", "recall_result") for m in data["out"])
+    return (turns <= {e["turn"] for e in data["tutor"]} and turns <= {e["turn"] for e in data["pronunciation_analysis"]}
+            and readings <= grades)
+
+
+def prune_sessions(directory: Path, days: int = 30) -> None:
+    """Borra el .jsonl y los WAV de las sesiones viejas ya analizadas. No toca la base de datos: de ella leen
+    Progreso, Repaso y Palabras. Lo que no se pudo analizar se queda, y limpiar nunca impide arrancar."""
+    cutoff = time.time() - days * 86400
+    for path in directory.glob("*.jsonl"):
+        try:
+            if path.stat().st_mtime < cutoff and analyzed(path):
+                audio = path.with_suffix("")
+                if audio.exists():
+                    shutil.rmtree(audio)
+                path.unlink()  # al final: si falló el audio, se reintenta en el próximo arranque
+        except Exception:
+            log.exception("No se pudo limpiar %s", path.name)

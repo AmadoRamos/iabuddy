@@ -432,9 +432,10 @@ def test_api_saves_a_word_with_its_meaning_and_can_remove_it(monkeypatch, tmp_pa
     assert data["items"] == [] and data["review_due"] == 0
 
 
-def test_api_says_so_when_the_model_cannot_define_a_word(monkeypatch, tmp_path):
+def test_api_says_so_when_the_model_cannot_define_a_word(monkeypatch, tmp_path, caplog):
     c, store = client(monkeypatch, tmp_path, FakeTutor())
     assert c.post("/api/words", json={"term": "went"}).status_code == 502
+    assert "Fallo al definir una palabra" in caplog.text
     assert c.post("/api/words", json={"term": ""}).status_code == 422
     assert store.word_bank()["items"] == []
 

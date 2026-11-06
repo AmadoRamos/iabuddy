@@ -280,3 +280,81 @@ async def test_what_buddy_said_is_stored():
     rows = s.store.db.execute("SELECT speaker, text FROM turns ORDER BY id").fetchall()
     assert tuple(rows[-1]) == ("buddy", "Oh, you went to the gym? Nice! What did you do?")
     assert tuple(rows[-2]) == ("user", "Yesterday I go to the gym.")
+
+
+async def test_a_failed_written_intent_is_reported(caplog):
+    class BrokenIntent(FakeTutor):
+        async def analyze_intent(self, said, intent):
+            raise RuntimeError("sin modelo")
+
+    s, events, _ = make()
+    s.tutor = BrokenIntent()
+    await run_turn(s)
+    await s.on_control({"type": "intent", "turn": 1, "text": "Fui al gimnasio"})
+    await asyncio.gather(*s.tutor_tasks)
+    assert first(events, "intent_failed") == {"type": "intent_failed", "turn": 1}
+    assert "Fallo del tutor (intención)" in caplog.text
+
+
+class SlowIntent(FakeTutor):
+    def __init__(self, auto: float, intent: float, fails: bool = True):
+        super().__init__(delay=auto)
+        self.intent_delay, self.fails = intent, fails
+
+    async def analyze_intent(self, said, intent):
+        await asyncio.sleep(self.intent_delay)
+        if self.fails:
+            raise RuntimeError("sin modelo")
+        return await super().analyze_intent(said, intent)
+
+
+async def with_intent(tutor):
+    s, events, _ = make()
+    s.tutor, s.store = tutor, Store(":memory:")
+    await s.on_control({"type": "hello"})
+    await s.task
+    await run_turn(s)
+    await s.on_control({"type": "intent", "turn": 1, "text": "Fui al gimnasio"})
+    await asyncio.gather(*s.tutor_tasks)
+    return s, [e for e in events if isinstance(e, dict) and e["type"] == "feedback"], events
+
+
+def saved(s):
+    return s.store.db.execute("SELECT corrected FROM turns WHERE corrected IS NOT NULL").fetchall()[0]["corrected"]
+
+
+async def test_if_the_written_intent_fails_the_automatic_analysis_is_kept_whichever_ends_first():
+    for auto, intent in ((0.04, 0), (0.01, 0.04)):
+        s, fb, events = await with_intent(SlowIntent(auto, intent))
+        assert first(events, "intent_failed")["turn"] == 1, (auto, intent)
+        assert [f.get("intent") for f in fb] == [None], (auto, intent)
+        assert saved(s) == "Yesterday I went to the gym.", (auto, intent)
+        assert s.store.db.execute("SELECT count(*) FROM corrections").fetchone()[0] == 1, (auto, intent)
+
+
+async def test_a_written_intent_that_works_replaces_the_automatic_analysis_that_arrived_first():
+    s, fb, _ = await with_intent(SlowIntent(0.01, 0.04, fails=False))
+    assert fb[-1]["intent"] == "Fui al gimnasio" and saved(s) == "I went to the gym after work."
+
+
+async def test_a_reopened_turn_gets_its_analysis_even_if_the_old_one_had_a_written_intent():
+    s, events, _ = make(llm_pieces=("Oh", " you went? Nice!"))  # "Oh" aún no es un trozo: no suena nada
+    s.tutor, s.store = FakeTutor(), Store(":memory:")
+    s.llm.gate.clear()
+    await s.on_control({"type": "hello"})
+    await s.task
+    await s.on_control({"type": "start"})
+    await s.on_audio(VOICE * 10)
+    await s.on_control({"type": "stop"})
+    for _ in range(10):
+        await asyncio.sleep(0)
+    await s.on_control({"type": "intent", "turn": 1, "text": "Fui al gimnasio"})
+    await s.on_control({"type": "start"})  # sigues hablando: el mismo turno, con otro texto
+    await s.on_audio(VOICE * 10)
+    await s.on_control({"type": "stop"})
+    s.llm.gate.set()
+    await s.task
+    await asyncio.gather(*s.tutor_tasks)
+    feedback = [e for e in events if isinstance(e, dict) and e["type"] == "feedback"]
+    assert "intent" not in feedback[-1]  # la del texto anterior ya no vale para este
+    assert saved(s) == "Yesterday I went to the gym."

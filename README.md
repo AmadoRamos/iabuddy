@@ -62,4 +62,4 @@ MIT. Cada modelo conserva su propia licencia.
 
 ## Registros
 
-Todo queda en `data/logs`, fuera de git: `iabuddy.log` con los errores del backend, y en `sessions/` un `.jsonl` por conexión con cada evento y los análisis, además del audio de tus turnos en WAV (`IABUDDY_LOG_AUDIO=0` lo desactiva). Nada se borra solo.
+Todo queda en `data/logs`, fuera de git: `iabuddy.log` con los errores del backend, y en `sessions/` un `.jsonl` por conexión con cada evento y los análisis, además del audio de tus turnos en WAV (`IABUDDY_LOG_AUDIO=0` lo desactiva). Al arrancar se borran el `.jsonl` y el WAV de las sesiones de más de 30 días ya analizadas; lo que hay en la base de datos no se borra.

@@ -1,5 +1,7 @@
 """Fase 5: historial, métricas, errores recurrentes y repaso de vocabulario."""
 
+import io
+import wave
 from datetime import date, datetime, timedelta
 
 from fastapi.testclient import TestClient
@@ -230,7 +232,9 @@ def test_api_settings_are_validated_saved_and_applied_to_the_voice():
     for bad in ({"silence_ms": 100}, {"speed": 5}, {"feedback": "gritando"}):
         assert client.put("/api/settings", json=bad).status_code == 422
     sample = client.get("/api/voice-sample")
-    assert sample.headers["content-type"] == "audio/wav" and sample.content[:4] == b"RIFF"
+    assert sample.headers["content-type"] == "audio/wav"
+    with wave.open(io.BytesIO(sample.content)) as w:
+        assert (w.getnchannels(), w.getsampwidth(), w.getframerate(), w.getnframes()) == (1, 2, 24000, 2400)
 
 
 def test_progress_gives_minutes_for_every_day_with_practice_even_old_ones():
