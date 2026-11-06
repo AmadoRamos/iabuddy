@@ -178,8 +178,51 @@
 - [x] Resumen según `O2Resumen`: cabecera con estrellas, cifras de la sesión, objetivos, errores por tipo, pronunciación y botones para repetir o practicar. Sin XP ni notas por sonido; sin vocabulario «usaste / para la próxima», porque ese dato no existe.
 - [x] Ajustes (versión corta de `O2Ajustes`): silencio, velocidad con voz de prueba, modo de corrección y estado de los modelos. Se guardan en la base de datos y mandan sobre `IABUDDY_SILENCE_MS` e `IABUDDY_SPEED`. Sin metas ni XP, idioma de las explicaciones (decidido: español) ni umbral de confianza (la app no decide con él).
 - [x] Progreso: calendario del mes con los días practicados y gráfica de esta semana, que sustituye a la de 14 días. El calendario solo muestra si hablaste, porque aún no hay meta diaria.
-- [ ] Probar la Fase 5 con tus datos reales.
+- [ ] Probar la Fase 5 con tus datos reales. Falta solo el micrófono en vivo.
+  - Probado el 2026-11-05 sobre una copia de tu base, con tus grabaciones del dataset como micrófono: Hoy, Progreso, Repaso, Sonidos, Escenarios, Resumen y Ajustes funcionan y las cifras cuadran.
+  - Sesión larga por `/ws` (14 turnos, 4,5 min, esperando lo que dura cada respuesta): 1.er audio con mediana de 1,2 s y máximo de 1,67 s; no crece como antes (mediana de 1,19 s en los 7 primeros turnos y 1,31 s en los 7 últimos). Una sesión de 20 min sigue sin medirse.
+  - Corregido: las frases del repaso salían con `?.`, y los números se juzgaban en pronunciación (eSpeak lee 2019 como *two thousand nineteen*, lo que daba un aviso falso de /θ/).
+  - Sin resolver:
+    - Si escribes en inglés lo que querías decir, la pista del repaso ya trae la respuesta (7 de las 8 frases de ese tipo en la primera tanda). Se queda así: decisión de Amado.
+    - El error más repetido, *Did you went* (×5), venía de grabaciones de prueba: Amado lo confirmó y se borraron las sesiones 1, 6, 8 y 10 (copia en `data/iabuddy.antes-de-borrar-sesiones.db`).
+    - En «Tus frases» entran palabras mal transcritas (*Wispeth*).
+    - El aviso de micrófono denegado sigue visible al cambiar de sección.
+    - Los minutos totales suman redondeos: 7,7 frente a 7,54 reales.
 - Sin hacer, porque no está en esta fase: XP, niveles, racha, retos y logros (DISENO §7.5, pantalla `AppProgreso`). Requieren decidir la meta diaria y si se quieren.
+
+### Fase 6 — Vocabulario
+Practicar vocabulario hablando y usar las palabras nuevas en una conversación real (decidido con Amado el 2026-11-05).
+- [x] **Banco de palabras** (sección «Palabras», tabla `words`): se llena con tus frases de «¿Qué querías decir?», las correcciones del tutor (con «Esto no lo dije» para descartar fallos de Whisper), las palabras que pulses en una burbuja de Buddy y los paquetes de `backend/vocabulary/packs.yaml` (17 paquetes, uno por tema y escenario, más «General»). «Repaso» pasa de «Sonidos» a «Palabras».
+- [x] **Misión de palabras:** 4 palabras por sesión (2 de tu banco que toquen hoy y el resto nuevas del tema). Buddy te da ocasiones de usarlas, se marcan en vivo al decirlas y cuentan como acierto en el repaso. El resumen trae «Usaste» y «Para la próxima». No usarlas no castiga: vuelven otro día.
+  - Una corrección solo entra en una misión si ya la respondiste en el repaso: la mitad de las que había eran fallos de Whisper.
+  - Probado el 2026-11-05 sobre una copia de tu base, con Whisper y gemma reales y la voz de Kokoro como micrófono (2 turnos): detectó *deadline*, *in charge of* y *fell behind*, y Buddy sacó *workload* por su cuenta. Guardar una palabra del chat tardó 1 s.
+  - **Falta:** probarlo con tu micrófono, y medir si la línea de la misión en el prompt cambia cuánto corrige Buddy.
+  - **Límites:** una forma irregular que falte en `forms` no se detecta. «Esto no lo dije» saca la corrección del repaso y del banco, pero sigue contando en los errores repetidos de «Progreso». En la lista de «Palabras» no hay botón de escuchar, porque la voz necesita una sesión abierta.
+- [x] **Dilo en inglés** (dentro de «Repaso»): ves el significado o lo que dijiste mal y dices una frase con la palabra, de memoria. Si Whisper la encuentra, sale «¡La usaste!» y cuenta como acierto; si no, ves lo que oyó y puedes reintentar o mirar la frase. Vale para lo de 4 palabras o menos, y hace falta una frase de al menos 3 palabras. Lo más largo, o si Whisper no responde, sigue con «La sabía».
+  - Probado el 2026-11-05 sobre una copia de tu base, con Whisper real y la voz de Kokoro como micrófono: acierta con *deadline* y *ran out of*, rechaza una palabra suelta y una frase sin la palabra.
+  - **Falta:** probarlo con tu micrófono. Si Whisper no oye bien la palabra, «La sabía» sigue disponible tras ver la frase.
+  - **Límites:** comprueba que la palabra aparece, no que esté bien usada (eso es «Tu propia frase»). Si escribiste en inglés lo que querías decir, la pista sigue dando la respuesta, como ya pasaba en el repaso.
+- [x] **Tu propia frase** (botón en «Palabras»): tandas de 5 palabras al azar con la palabra a la vista. Inventas una frase, Whisper comprueba que la dijiste y el tutor dice si la usaste bien, por qué y cómo queda corregida. No mueve las cajas del repaso: con la palabra delante no demuestra que la recuerdes. Las frases no se guardan.
+  - Medido el 2026-11-05 con gemma, con frases que escribí yo, 3 veces cada una: 30/30 bien usadas aceptadas (incluidas 2 con errores fuera de la palabra) y 24/24 mal usadas detectadas. Mediana de 1,3 s. Muestra pequeña y sin habla real: vigilarlo con tus frases.
+  - Probado en la app sobre una copia de tu base, con Whisper y gemma reales y la voz de Kokoro como micrófono.
+  - **Falta:** probarlo con tu micrófono.
+  - **Límites:** a veces el comentario o la corrección suenan raros cuando la frase no tiene arreglo (*My brother is very stale* → *My brother's information is very stale*). Whisper puede haber oído mal: por eso se muestra «Te oí».
+- [x] **Buddy adivina** (botón en «Palabras»): partidas de 5 palabras de tu banco, de 3 palabras como mucho. Las describes por voz sin decirlas y Buddy, que no las conoce, intenta adivinarlas: acierta si su respuesta contiene la palabra. Si la dices tú, no vale y Buddy no llega a oírla. Se puede pasar de palabra, o dar por buena una respuesta que casi acierta («Casi: ¡la adivinó!»). El tutor sigue revisando tus turnos en el panel y la sesión cuenta en «Progreso», pero no mueve las cajas del repaso.
+  - Medido el 2026-11-05 con gemma, con descripciones que escribí yo, 3 veces cada una: adivinó las 30 de 30 (27 a la primera), y gemma tarda unos 0,4 s en escribir cada respuesta, sin contar Whisper ni la voz. Son descripciones claras: con las tuyas costará más.
+  - Probado en la app sobre una copia de tu base, con Whisper y gemma reales y la voz de Kokoro como micrófono: palabra dicha rechazada, *deadline* adivinada, palabra pasada, resumen y título en «Progreso».
+  - **Falta:** probarlo con tu micrófono.
+  - **Límites:** Buddy puede nombrar la palabra sin querer en una pregunta y contaría como acierto; no se ha medido cuánto pasa. Una respuesta casi correcta (*run out* por *run out of*) no cuenta sola: para eso está el botón.
+- [x] **Conversación guiada** (sección «Guiada» del menú; idea de Amado, 2026-11-05): un diálogo escrito en el YAML del escenario. Buddy dice su parte, ves la frase que te toca con su traducción, la dices y lleva nota. Se puede repetir y vale la mejor. Al final: nota total, 1–3 estrellas (90 y 75 %), la nota de cada frase y «Ahora sin guion» para pasar al escenario libre. No usa Ollama.
+  - **La nota** es el % de palabras bien dichas: 0 si Whisper no la oyó, la mitad si tiene un error claro de sonido o no se oyó con claridad. No usa la confianza del modelo, porque bien dicha una frase da 40-70. Se compara cómo suena cada palabra, porque Whisper no distingue *by* de *buy*.
+  - Medido el 2026-11-05: Kokoro leyendo los 29 turnos de los diálogos saca 96-100. Tus 28 grabaciones del dataset, contra lo que dijiste: mediana de 86 (11 con 90 o más, 12 entre 70 y 89, 5 por debajo). Contra la frase correcta, tus errores restan: *go* por *went* da 88.
+  - Probado en la app sobre una copia de tu base, con Whisper real y la voz de Kokoro como micrófono: el diálogo del restaurante entero, con una frase equivocada (71 %) y su repetición (100 %).
+  - **Falta:** probarlo con tu micrófono, y ver si las notas se sienten justas.
+  - **Límites:** Whisper a veces arregla lo que dijiste, o entiende otra cosa aunque se te entienda (*He explained me* → *Please play meet*: 30 %). La nota mide leer en voz alta, no improvisar. Los errores de sonido de estas frases también entran en «Sonidos».
+- [x] **Mismo subrayado en toda la app** (pedido de Amado, 2026-11-05): verde lo que está bien, ondulado lo que hay que revisar, punteado lo que no se oyó con claridad. Se usa en tus burbujas, el panel del tutor, el historial y el final de la conversación guiada, el repaso, «Palabras», «Hoy», «Progreso» y el resumen. Sustituye al tachado y al resaltado de `O2Conversacion` y `O2Resumen`.
+- [x] **Lo que hay que practicar se ve de un vistazo** (pedido de Amado, 2026-11-05): fondo lima en la palabra dentro de la frase (repaso, «Tu propia frase» y las palabras que fallaste en «Tus frases», también tras leer), la palabra sola en grande y la pista más grande. En las frases por sonido de «Sonidos» se destacan las palabras donde se buscan esos errores, calculadas con eSpeak.
+- [x] **Práctica centrada** (pedido de Amado, 2026-11-05): en Repaso, «Tu propia frase», «Sonidos» y Guiada, las palabras y frases van centradas a lo ancho; en las tres primeras, también a lo alto. En Guiada, el panel tiene el alto justo y la conversación se ve encima. Todos esos textos, y los de Hoy, Escenarios, el panel de la sesión y el del tutor, salen de un solo componente, `LabeledText`.
+- Siempre con frases completas: Whisper falla mucho con palabras sueltas. Un acierto significa «la usaste», no que la hayas dicho perfecta.
+- Sin hacer por ahora: XP y rachas, listas de frecuencia descargadas y las palabras que repites demasiado (con 69 turnos hay pocos datos).
 
 ---
 

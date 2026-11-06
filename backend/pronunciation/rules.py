@@ -60,11 +60,19 @@ def pronunciations(word: str, phones: tuple[str, ...]) -> list[tuple[str, ...]]:
 
 
 def is_function_word(word: str) -> bool:
-    return word.lower().replace("’", "'") in FUNCTION_WORDS
+    # Tampoco cuentan los números: eSpeak lee 2019 como «two thousand nineteen», y tú puedes decir «twenty nineteen»
+    return word.lower().replace("’", "'") in FUNCTION_WORDS or any(c.isdigit() for c in word)
+
+
+def words_with_sound(words: tuple[tuple[str, tuple[str, ...]], ...], sounds: list[str]) -> list[str]:
+    """De (palabra, fonemas), las que entrenan estos sonidos: justo aquellas donde se buscarían esos errores."""
+    return [w for w, phones in words if any(v["phone"] in sounds for v in variants(w, phones))]
 
 
 def variants(word: str, phones: tuple[str, ...]) -> list[dict]:
     """Cada forma de decir mal la palabra: {"phones", "phone" (correcto), "heard" (lo que suena), "tip"}."""
+    if any(c.isdigit() for c in word):
+        return []
     out = []
     weak = is_function_word(word)
     for i, phone in enumerate(phones):

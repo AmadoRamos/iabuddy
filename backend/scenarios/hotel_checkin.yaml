@@ -19,3 +19,25 @@ key_phrases:
   - "Would it be possible to"
   - "How do I get to"
   - wifi password
+
+guided:
+  turns:
+    - buddy: "Good afternoon, welcome to the hotel! How can I help you?"
+      you: "Hi, good afternoon. I have a reservation for three nights."
+      es: "Hola, buenas tardes. Tengo una reserva para tres noches."
+    - buddy: "Perfect. May I see your passport, please?"
+      you: "Of course, here you go. Is breakfast included?"
+      es: "Claro, aquí tiene. ¿El desayuno está incluido?"
+    - buddy: "Yes, breakfast is served from seven to ten on the second floor."
+      you: "Great, thank you. What's the internet password?"
+      es: "Genial, gracias. ¿Cuál es la contraseña de internet?"
+    - buddy: "It's on this card, along with your room number."
+      you: "Would it be possible to get a room on a high floor?"
+      es: "¿Sería posible tener una habitación en un piso alto?"
+    - buddy: "Let me check. Yes, I can give you a quiet room on the twelfth floor."
+      you: "That would be perfect. How do I get to the train station from here?"
+      es: "Sería perfecto. ¿Cómo llego a la estación de tren desde aquí?"
+    - buddy: "It's a ten minute walk. Just turn left when you leave the hotel."
+      you: "Thanks a lot. What time do I have to check out?"
+      es: "Muchas gracias. ¿A qué hora tengo que dejar la habitación?"
+  closing: "Check out is at eleven. Enjoy your stay!"

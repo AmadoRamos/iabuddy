@@ -1,0 +1,178 @@
+# Paquetes de palabras de la Misión: uno por título de tema (tabla topics) o id de escenario (backend/scenarios).
+# term: la palabra o expresión · es: qué significa · ex: una frase de ejemplo que la usa
+# forms: formas irregulares, para detectarla al hablar (las regulares -s, -ed, -ing no hace falta ponerlas).
+# Se ofrecen en este orden y las que ya pasaron por tu banco no se repiten.
+
+General:
+  - {term: figure out, es: "averiguar, resolver", ex: "I need to figure out how this works.", forms: [figure it out, figure that out]}
+  - {term: to be honest, es: "la verdad, siendo sincero", ex: "To be honest, I didn't like the movie."}
+  - {term: struggle with, es: "tener dificultades con", ex: "I still struggle with phrasal verbs."}
+  - {term: look forward to, es: "tener ganas de, esperar con ilusión", ex: "I'm looking forward to the weekend."}
+  - {term: it depends on, es: "depende de", ex: "It depends on the weather."}
+  - {term: get used to, es: "acostumbrarse a", ex: "I'm getting used to working from home.", forms: [getting used to, got used to, gotten used to]}
+  - {term: end up, es: "acabar, terminar (sin planearlo)", ex: "We ended up staying until midnight."}
+  - {term: run out of, es: "quedarse sin", ex: "We ran out of time.", forms: [ran out of]}
+  - {term: make sense, es: "tener sentido", ex: "That doesn't make sense to me.", forms: [made sense]}
+  - {term: worth it, es: "valer la pena", ex: "The trip was long, but it was worth it."}
+  - {term: on the other hand, es: "por otro lado", ex: "On the other hand, it's very expensive."}
+  - {term: come up with, es: "idear, ocurrírsele a uno", ex: "She came up with a great idea.", forms: [came up with]}
+
+Tu fin de semana:
+  - {term: sleep in, es: "quedarse en la cama hasta tarde", ex: "On Saturday I slept in until ten.", forms: [slept in]}
+  - {term: run errands, es: "hacer recados", ex: "I spent the morning running errands.", forms: [ran errands]}
+  - {term: hang out, es: "pasar el rato", ex: "I hung out with some friends.", forms: [hung out]}
+  - {term: take it easy, es: "tomárselo con calma", ex: "I just took it easy on Sunday.", forms: [took it easy]}
+  - {term: catch up with, es: "ponerse al día con alguien", ex: "I caught up with my sister over coffee.", forms: [caught up with]}
+  - {term: get together, es: "reunirse", ex: "We got together for a barbecue.", forms: [got together]}
+  - {term: chores, es: "tareas de la casa", ex: "I did all my chores on Saturday."}
+  - {term: exhausted, es: "agotado", ex: "I was exhausted after the hike."}
+
+Trabajo y proyectos:
+  - {term: deadline, es: "fecha límite", ex: "We have a tight deadline this month."}
+  - {term: workload, es: "carga de trabajo", ex: "My workload is heavy this week."}
+  - {term: be in charge of, es: "estar a cargo de", ex: "I'm in charge of the payments module.", forms: [in charge of]}
+  - {term: fall behind, es: "retrasarse, quedarse atrás", ex: "We fell behind because of a bug.", forms: [fell behind, fallen behind]}
+  - {term: follow up, es: "dar seguimiento", ex: "I'll follow up with the client tomorrow."}
+  - {term: stakeholder, es: "parte interesada", ex: "The stakeholders want a demo on Friday."}
+  - {term: tackle, es: "abordar, enfrentar", ex: "We tackled the hardest problem first."}
+  - {term: take on, es: "asumir (una tarea)", ex: "I took on a new project last month.", forms: [took on, taken on]}
+
+Viajes:
+  - {term: get away, es: "escaparse unos días", ex: "We got away for a few days in June.", forms: [got away, getting away]}
+  - {term: sightseeing, es: "hacer turismo", ex: "We went sightseeing in the old town."}
+  - {term: off the beaten path, es: "lejos de lo turístico", ex: "I like places off the beaten path."}
+  - {term: book, es: "reservar", ex: "I booked the flight two months ago."}
+  - {term: layover, es: "escala", ex: "We had a six-hour layover in Madrid."}
+  - {term: jet lag, es: "desfase horario", ex: "I had terrible jet lag for three days."}
+  - {term: breathtaking, es: "impresionante, que quita el aliento", ex: "The view from the top was breathtaking."}
+  - {term: stay overnight, es: "pasar la noche", ex: "We stayed overnight in a small village."}
+
+Comida:
+  - {term: craving, es: "antojo", ex: "I have a craving for something sweet."}
+  - {term: leftovers, es: "las sobras", ex: "I had leftovers for lunch."}
+  - {term: homemade, es: "hecho en casa", ex: "Nothing beats homemade bread."}
+  - {term: spicy, es: "picante", ex: "This sauce is too spicy for me."}
+  - {term: eat out, es: "comer fuera", ex: "We usually eat out on Fridays.", forms: [ate out]}
+  - {term: recipe, es: "receta", ex: "My grandmother gave me this recipe."}
+  - {term: overcooked, es: "demasiado cocido", ex: "The rice was a bit overcooked."}
+  - {term: a bite to eat, es: "algo de comer", ex: "Let's grab a bite to eat."}
+
+Series y libros:
+  - {term: binge-watch, es: "ver muchos capítulos seguidos", ex: "I binge-watched the whole series in a weekend."}
+  - {term: plot, es: "la trama", ex: "The plot gets confusing near the end."}
+  - {term: spoiler, es: "destripe, spoiler", ex: "Don't worry, no spoilers."}
+  - {term: gripping, es: "que atrapa", ex: "It's a gripping story from start to finish."}
+  - {term: main character, es: "protagonista", ex: "The main character is a retired detective."}
+  - {term: be set in, es: "estar ambientado en", ex: "The book is set in Colombia in the fifties.", forms: [set in]}
+  - {term: ending, es: "el final", ex: "I hated the ending of that show."}
+  - {term: put down, es: "dejar de leer", ex: "I couldn't put it down.", forms: [put it down]}
+
+Tecnología:
+  - {term: rely on, es: "depender de, confiar en", ex: "I rely on my phone for everything."}
+  - {term: user-friendly, es: "fácil de usar", ex: "The new app is very user-friendly."}
+  - {term: outdated, es: "anticuado, desactualizado", ex: "My laptop is pretty outdated."}
+  - {term: upgrade, es: "actualizar, mejorar", ex: "I upgraded my computer last year."}
+  - {term: drawback, es: "desventaja", ex: "The main drawback is the battery life."}
+  - {term: keep up with, es: "mantenerse al día con", ex: "It's hard to keep up with new tools.", forms: [kept up with]}
+  - {term: privacy, es: "privacidad", ex: "I worry about my privacy online."}
+  - {term: time-consuming, es: "que lleva mucho tiempo", ex: "Setting it up was really time-consuming."}
+
+Planes y metas:
+  - {term: achieve, es: "lograr", ex: "I want to achieve fluency in two years."}
+  - {term: stick to, es: "mantenerse firme en", ex: "It's hard to stick to a routine.", forms: [stuck to]}
+  - {term: give up, es: "rendirse, dejar", ex: "I won't give up on my English.", forms: [gave up, given up]}
+  - {term: be willing to, es: "estar dispuesto a", ex: "I'm willing to move abroad for a good job.", forms: [willing to]}
+  - {term: in the long run, es: "a largo plazo", ex: "It will pay off in the long run."}
+  - {term: pay off, es: "dar frutos, valer la pena", ex: "All that practice finally paid off.", forms: [paid off]}
+  - {term: set a goal, es: "ponerse una meta", ex: "I set a goal of speaking every day.", forms: [set goals, setting a goal]}
+  - {term: step by step, es: "paso a paso", ex: "I'm improving step by step."}
+
+Tu ciudad:
+  - {term: neighborhood, es: "barrio", ex: "My neighborhood is quiet and green."}
+  - {term: downtown, es: "el centro", ex: "I work downtown."}
+  - {term: rush hour, es: "hora pico", ex: "Traffic is terrible during rush hour."}
+  - {term: crowded, es: "lleno de gente", ex: "The buses are always crowded."}
+  - {term: public transportation, es: "transporte público", ex: "Public transportation is cheap here."}
+  - {term: get around, es: "moverse por un sitio", ex: "It's easy to get around by bike.", forms: [got around, getting around]}
+  - {term: nearby, es: "cerca", ex: "There's a great bakery nearby."}
+  - {term: cost of living, es: "costo de vida", ex: "The cost of living keeps going up."}
+
+Entrevista · Python:
+  - {term: under the hood, es: "por dentro, internamente", ex: "Under the hood, a generator keeps its state."}
+  - {term: memory footprint, es: "consumo de memoria", ex: "Generators reduce the memory footprint."}
+  - {term: lazily, es: "de forma perezosa, bajo demanda", ex: "A generator produces values lazily."}
+  - {term: overhead, es: "costo adicional", ex: "Threads add some overhead."}
+  - {term: wrap, es: "envolver", ex: "A decorator wraps another function."}
+  - {term: readable, es: "legible", ex: "Type hints make the code more readable."}
+  - {term: thread-safe, es: "seguro entre hilos", ex: "This queue is thread-safe."}
+  - {term: boilerplate, es: "código repetitivo", ex: "Dataclasses remove a lot of boilerplate."}
+
+Entrevista · Backend y APIs:
+  - {term: bottleneck, es: "cuello de botella", ex: "The database was the bottleneck."}
+  - {term: trade-off, es: "compromiso, concesión", ex: "An index is a trade-off between reads and writes."}
+  - {term: scale, es: "escalar", ex: "This design doesn't scale well."}
+  - {term: throughput, es: "rendimiento, volumen procesado", ex: "Caching improved our throughput."}
+  - {term: downtime, es: "tiempo fuera de servicio", ex: "We migrated it without any downtime."}
+  - {term: retry, es: "reintentar", ex: "The client retries after a timeout."}
+  - {term: fall back to, es: "recurrir a (como alternativa)", ex: "If the cache fails, we fall back to the database.", forms: [fell back to]}
+  - {term: stale, es: "desactualizado (datos)", ex: "The cache can return stale data."}
+
+Entrevista · Programación y experiencia:
+  - {term: ownership, es: "responsabilidad, hacerse cargo", ex: "I took ownership of the migration."}
+  - {term: root cause, es: "causa raíz", ex: "We found the root cause in the logs."}
+  - {term: roll back, es: "revertir un cambio", ex: "We rolled back the release in five minutes."}
+  - {term: push back, es: "oponerse con argumentos", ex: "I pushed back on the deadline."}
+  - {term: lesson learned, es: "lección aprendida", ex: "The main lesson learned was to test earlier."}
+  - {term: prioritize, es: "priorizar", ex: "I prioritized the bug that blocked our clients."}
+  - {term: maintainable, es: "fácil de mantener", ex: "I try to keep the code maintainable."}
+  - {term: walk through, es: "explicar paso a paso", ex: "Let me walk you through the design.", forms: [walk you through, walked you through]}
+
+daily_standup:
+  - {term: wrap up, es: "terminar, rematar", ex: "I wrapped up the login feature yesterday."}
+  - {term: heads-up, es: "aviso", ex: "Just a heads-up, the staging server is down."}
+  - {term: roadblock, es: "obstáculo", ex: "I hit a roadblock with the tests."}
+  - {term: merge, es: "fusionar", ex: "I merged the fix this morning."}
+  - {term: pair with, es: "trabajar en pareja con", ex: "I'll pair with Ana on this today."}
+  - {term: ship, es: "lanzar, entregar", ex: "We shipped the new version yesterday."}
+  - {term: sync up, es: "coordinarse", ex: "Let's sync up after the meeting."}
+  - {term: flaky, es: "inestable (un test)", ex: "That test is flaky."}
+
+hotel_checkin:
+  - {term: reservation, es: "reserva", ex: "I have a reservation under my name."}
+  - {term: check out, es: "dejar el hotel", ex: "What time do I have to check out?"}
+  - {term: room upgrade, es: "mejora de habitación", ex: "Could I get a room upgrade?"}
+  - {term: complimentary, es: "de cortesía, gratis", ex: "Is breakfast complimentary?"}
+  - {term: amenities, es: "servicios del hotel", ex: "What amenities do you have?"}
+  - {term: non-smoking, es: "para no fumadores", ex: "I'd prefer a non-smoking room."}
+  - {term: front desk, es: "recepción", ex: "I called the front desk about the noise."}
+  - {term: late checkout, es: "salida tardía", ex: "Could I have a late checkout?"}
+
+job_interview_backend:
+  - {term: background, es: "experiencia, trayectoria", ex: "My background is in backend development."}
+  - {term: scalable, es: "escalable", ex: "I built a scalable payment service."}
+  - {term: track record, es: "historial demostrado", ex: "She has a good track record with APIs."}
+  - {term: hands-on, es: "práctico, directo", ex: "I have hands-on experience with FastAPI."}
+  - {term: collaborate, es: "colaborar", ex: "I collaborate closely with the data team."}
+  - {term: challenging, es: "difícil, retador", ex: "The most challenging part was the migration."}
+  - {term: be responsible for, es: "ser responsable de", ex: "I'm responsible for the public API.", forms: [responsible for]}
+  - {term: strength, es: "punto fuerte", ex: "My main strength is debugging."}
+
+restaurant:
+  - {term: recommend, es: "recomendar", ex: "What do you recommend?"}
+  - {term: allergic to, es: "alérgico a", ex: "I'm allergic to peanuts."}
+  - {term: split the bill, es: "dividir la cuenta", ex: "Can we split the bill?"}
+  - {term: appetizer, es: "entrada", ex: "We'll share an appetizer."}
+  - {term: well done, es: "bien cocido", ex: "I'd like my steak well done."}
+  - {term: to go, es: "para llevar", ex: "Can I get this to go?"}
+  - {term: side dish, es: "guarnición", ex: "Which side dish comes with the fish?"}
+  - {term: still water, es: "agua sin gas", ex: "Just still water, please."}
+
+small_talk_colleague:
+  - {term: how's it going, es: "¿qué tal?", ex: "Hey, how's it going?"}
+  - {term: busy week, es: "semana ocupada", ex: "It's been a busy week."}
+  - {term: by the way, es: "por cierto", ex: "By the way, did you see the game?"}
+  - {term: time flies, es: "el tiempo vuela", ex: "Time flies, it's already Friday!"}
+  - {term: any plans, es: "¿algún plan?", ex: "Any plans for the weekend?"}
+  - {term: grab a coffee, es: "tomar un café", ex: "Do you want to grab a coffee?", forms: [grabbed a coffee]}
+  - {term: long time no see, es: "cuánto tiempo sin verte", ex: "Long time no see! How are you?"}
+  - {term: I'd better get back, es: "será mejor que vuelva", ex: "Well, I'd better get back to work."}

@@ -19,6 +19,8 @@ from pathlib import Path
 
 import yaml
 
+from ..vocabulary.words import find_use
+
 TOPICS_FILE = Path(__file__).with_name("topics.yaml")
 
 SCHEMA = """
@@ -74,7 +76,23 @@ CREATE TABLE IF NOT EXISTS settings (
 CREATE TABLE IF NOT EXISTS reviews (
     key TEXT PRIMARY KEY,         -- la frase correcta, en minúsculas
     box INTEGER NOT NULL DEFAULT 0,  -- caja de Leitner: cuanto más alta, más tarda en volver
-    due REAL NOT NULL
+    due REAL NOT NULL,
+    hidden INTEGER NOT NULL DEFAULT 0  -- descartada: «Esto no lo dije» (fallo de Whisper) o quitada del banco
+);
+CREATE TABLE IF NOT EXISTS words (
+    key TEXT PRIMARY KEY,         -- la palabra, en minúsculas
+    term TEXT NOT NULL,
+    meaning TEXT NOT NULL,        -- en español
+    example TEXT NOT NULL,        -- en inglés
+    forms TEXT NOT NULL DEFAULT '[]',  -- JSON: formas irregulares, para detectarla al hablar
+    source TEXT NOT NULL,         -- pack (paquete de la misión) | buddy (la guardaste del chat)
+    created_at REAL NOT NULL
+);
+CREATE TABLE IF NOT EXISTS guided_results (
+    id INTEGER PRIMARY KEY,
+    scenario TEXT NOT NULL,       -- id del escenario
+    grade INTEGER NOT NULL,       -- 0-100, la media de sus frases
+    created_at REAL NOT NULL
 );
 CREATE TABLE IF NOT EXISTS corrections (
     id INTEGER PRIMARY KEY,
@@ -94,6 +112,11 @@ def goal_stars(done: int, total: int) -> int:
 
 REVIEW_DAYS = (1, 3, 7, 21, 60)  # cuándo vuelve una frase que sabías, según su caja
 REVIEW_AGAIN_S = 600  # la que no sabías vuelve enseguida
+MISSION_SIZE = 4  # palabras por sesión
+MISSION_FROM_BANK = 2  # el resto son nuevas del paquete del tema, para no quedarse siempre en lo mismo
+OWN_SENTENCE_ROUND = 5  # palabras por tanda de «Tu propia frase» y de «Buddy adivina»
+GAME_TERM_WORDS = 3  # más larga, describirla y adivinarla deja de ser un juego
+MISSION_TERM_WORDS = 4  # más larga ya es una frase: no se puede meter de forma natural en la conversación
 
 SEED_TOPICS = [
     ("Tu fin de semana", [
@@ -197,6 +220,8 @@ class Store:
                           ("goals_total", "INTEGER")):
             if col not in sessions:
                 self.db.execute(f"ALTER TABLE sessions ADD COLUMN {col} {kind}")
+        if "hidden" not in cols("reviews"):
+            self.db.execute("ALTER TABLE reviews ADD COLUMN hidden INTEGER NOT NULL DEFAULT 0")
         if "opener" in cols("topics"):  # un solo inicio por tema → tabla openers
             self.db.execute("ALTER TABLE topics DROP COLUMN opener")
 
@@ -255,6 +280,14 @@ class Store:
                                  "WHERE t.session_id = s.id AND t.speaker = 'user')"):
             best[r["scenario"]] = max(best.get(r["scenario"], 0), goal_stars(r["goals_met"], r["goals_total"]))
         return best
+
+    def add_guided_result(self, scenario: str, grade: int) -> None:
+        self._write("INSERT INTO guided_results (scenario, grade, created_at) VALUES (?, ?, ?)",
+                    (scenario, grade, time.time()))
+
+    def guided_best(self) -> dict[str, int]:
+        """Tu mejor nota en la conversación guiada de cada escenario."""
+        return dict(self.db.execute("SELECT scenario, max(grade) FROM guided_results GROUP BY scenario").fetchall())
 
     def add_turn(self, session_id: int, speaker: str, text: str, seconds: float | None = None) -> int:
         return self._write("INSERT INTO turns (session_id, speaker, text, seconds, created_at) VALUES (?, ?, ?, ?, ?)",
@@ -360,11 +393,21 @@ class Store:
             "FROM sound_issues GROUP BY phone, heard ORDER BY count(*) DESC LIMIT 8").fetchall()
         return [{**dict(r), "words": r["words"].split(",")[:6]} for r in rows]
 
-    # ── Repaso de vocabulario (cajas de Leitner) ──
-    def review_items(self, limit: int | None = 10, now: float | None = None) -> list[dict]:
-        """Lo que toca repasar hoy: palabras corregidas por el tutor y frases que escribiste que querías decir."""
-        now = time.time() if now is None else now
-        due = {r["key"]: r["due"] for r in self.db.execute("SELECT key, due FROM reviews")}
+    # ── Banco de palabras y repaso (cajas de Leitner) ──
+    def add_word(self, term: str, meaning: str, example: str, forms: list[str], source: str) -> str:
+        """Guarda una palabra. Si la habías quitado del banco y la guardas otra vez, vuelve."""
+        key = term.strip().lower()
+        self.db.execute("INSERT OR IGNORE INTO words (key, term, meaning, example, forms, source, created_at) "
+                        "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                        (key, term.strip(), meaning, example, json.dumps(forms), source, time.time()))
+        self.db.execute("UPDATE reviews SET hidden = 0 WHERE key = ?", (key,))
+        self.db.commit()
+        return key
+
+    def _bank(self) -> dict[str, dict]:
+        """Tu banco: palabras guardadas, frases que escribiste que querías decir y palabras que corrigió el tutor."""
+        words = self.db.execute("SELECT key, term, meaning, example, forms FROM words "
+                                "ORDER BY created_at DESC, key").fetchall()
         fixes = self.db.execute(
             "SELECT c.original, c.fix, c.explanation, t.corrected FROM corrections c JOIN turns t ON t.id = c.turn_id "
             "WHERE c.type IN ('vocabulary', 'naturalness') AND trim(c.original) <> '' AND trim(c.fix) <> '' "
@@ -372,19 +415,100 @@ class Store:
         phrases = self.db.execute("SELECT text, corrected, intent FROM turns WHERE intent IS NOT NULL "
                                   "AND trim(coalesce(corrected, '')) <> '' ORDER BY id DESC").fetchall()
         items: dict[str, dict] = {}
+        for r in words:
+            items[r["key"]] = {"kind": "word", "term": r["term"], "meaning": r["meaning"], "said": None, "intent": None,
+                               "explanation": "", "text": r["example"], "forms": json.loads(r["forms"])}
         for r in phrases:
-            items.setdefault(r["corrected"].strip().lower(), {"said": r["text"], "intent": r["intent"], "explanation": "",
-                                                              "text": r["corrected"].rstrip(" .…") + "."})
+            t = r["corrected"].rstrip(" .…")
+            items.setdefault(r["corrected"].strip().lower(), {
+                "kind": "phrase", "term": t, "meaning": r["intent"], "said": r["text"], "intent": r["intent"],
+                "explanation": "", "text": t + ("" if t.endswith(("?", "!")) else "."), "forms": []})
         for r in fixes:
             # Se lee la frase entera si contiene la corrección y se puede leer de un tirón; si no, solo la corrección
             whole = r["corrected"] or ""
             usable = (r["fix"].lower() in whole.lower() and len(whole.split()) <= 20
                       and not whole.rstrip().endswith(("...", "…")))  # una frase a medias no se puede repetir
-            items.setdefault(r["fix"].strip().lower(), {"said": r["original"], "intent": None, "explanation": r["explanation"],
-                                                        "text": whole if usable else r["fix"]})
-        pending = [{"key": k, **v} for k, v in items.items() if due.get(k, 0) <= now]
-        pending.sort(key=lambda i: (i["key"] not in due, due.get(i["key"], 0)))  # primero lo atrasado, luego lo nuevo
+            items.setdefault(r["fix"].strip().lower(), {
+                "kind": "fix", "term": r["fix"].strip(), "meaning": r["explanation"], "said": r["original"], "intent": None,
+                "explanation": r["explanation"], "text": whole if usable else r["fix"], "forms": []})
+        hidden = {r["key"] for r in self.db.execute("SELECT key FROM reviews WHERE hidden")}
+        return {k: {**v, "target": find_use(v["text"], v["term"], v["forms"])}  # cómo aparece en su frase, para destacarla
+                for k, v in items.items() if k not in hidden}
+
+    def review_items(self, limit: int | None = 10, now: float | None = None) -> list[dict]:
+        """Lo que toca repasar hoy: primero lo atrasado, luego lo nuevo."""
+        now = time.time() if now is None else now
+        due = {r["key"]: r["due"] for r in self.db.execute("SELECT key, due FROM reviews")}
+        pending = [{"key": k, **v, "speakable": len(v["term"].split()) <= MISSION_TERM_WORDS}
+                   for k, v in self._bank().items() if due.get(k, 0) <= now]
+        pending.sort(key=lambda i: (i["key"] not in due, due.get(i["key"], 0)))
         return pending[:limit]
+
+    def _practicable(self, bank: dict[str, dict], reviews: dict) -> list[dict]:
+        """Lo del banco con lo que se puede hablar. Una corrección o frase solo entra si ya la respondiste
+        en el repaso: sin eso podría ser un fallo de Whisper (*Wispit → Whisper*)."""
+        return [{"key": k, **v} for k, v in bank.items() if len(v["term"].split()) <= MISSION_TERM_WORDS
+                and (v["kind"] == "word" or (k in reviews and reviews[k]["box"] >= 1))]
+
+    def own_sentence_items(self, limit: int = OWN_SENTENCE_ROUND) -> list[dict]:
+        """Una tanda de «Tu propia frase», al azar. No toca las cajas: con la palabra a la vista no demuestra que la recuerdes."""
+        reviews = {r["key"]: r for r in self.db.execute("SELECT key, box FROM reviews")}
+        pool = self._practicable(self._bank(), reviews)
+        return random.sample(pool, min(limit, len(pool)))
+
+    def _guessable(self, bank: dict[str, dict]) -> list[dict]:
+        """Lo que se puede describir: palabras con significado propio, no correcciones ni frases tuyas."""
+        return [{"key": k, **v} for k, v in bank.items() if v["kind"] == "word" and len(v["term"].split()) <= GAME_TERM_WORDS]
+
+    def game_items(self, limit: int = OWN_SENTENCE_ROUND) -> list[dict]:
+        """Una partida de «Buddy adivina», al azar. Como en «Tu propia frase», las cajas no se tocan."""
+        pool = self._guessable(self._bank())
+        return random.sample(pool, min(limit, len(pool)))
+
+    def bank_item(self, key: str) -> dict | None:
+        return self._bank().get(key)
+
+    def word_bank(self, now: float | None = None) -> dict:
+        """Todo el banco, con cuándo vuelve cada cosa, para la sección «Palabras»."""
+        now = time.time() if now is None else now
+        due = {r["key"]: r["due"] for r in self.db.execute("SELECT key, due FROM reviews")}
+        items = [{"key": k, **v, "due": due.get(k, 0)} for k, v in self._bank().items()]
+        reviews = {r["key"]: r for r in self.db.execute("SELECT key, box FROM reviews")}
+        return {"items": items, "review_due": sum(i["due"] <= now for i in items), "now": now,
+                "practicable": len(self._practicable(self._bank(), reviews)), "guessable": len(self._guessable(self._bank()))}
+
+    def discard_review(self, key: str) -> None:
+        self._write("INSERT INTO reviews (key, due, hidden) VALUES (?, 0, 1) "
+                    "ON CONFLICT(key) DO UPDATE SET hidden = 1", (key,))
+
+    def pick_mission(self, pack: list[dict], now: float | None = None) -> list[dict]:
+        """Las palabras de una sesión: algunas de tu banco que tocan hoy y otras nuevas del paquete.
+
+        Si no usas una palabra no pasa nada: vuelve la próxima vez.
+        """
+        now = time.time() if now is None else now
+        reviews = {r["key"]: r for r in self.db.execute("SELECT key, box, due FROM reviews")}
+        bank = self._bank()
+
+        def when(key: str) -> float:
+            return reviews[key]["due"] if key in reviews else 0
+
+        due = sorted((i for i in self._practicable(bank, reviews) if when(i["key"]) <= now), key=lambda i: when(i["key"]))
+        # También fuera lo descartado (está en reviews) y lo repetido entre el paquete del tema y el general
+        fresh = list({w["key"]: w for w in pack if w["key"] not in bank and w["key"] not in reviews}.values())
+        picked = due[:MISSION_FROM_BANK]
+        picked += fresh[:MISSION_SIZE - len(picked)]
+        picked += due[MISSION_FROM_BANK:][:MISSION_SIZE - len(picked)]
+        return [{"key": w["key"], "term": w["term"], "meaning": w["meaning"], "example": w.get("example") or w["text"],
+                 "forms": w["forms"], "source": w.get("source", "bank")} for w in picked]
+
+    def finish_mission(self, mission: list[dict], used: set[str]) -> None:
+        """Hablaste en la sesión: sus palabras entran en tu banco y las que usaste cuentan como acierto."""
+        for w in mission:
+            if w["source"] == "pack":
+                self.add_word(w["term"], w["meaning"], w["example"], w["forms"], "pack")
+        for key in used:
+            self.answer_review(key, True)
 
     def answer_review(self, key: str, known: bool, now: float | None = None) -> None:
         now = time.time() if now is None else now
@@ -434,7 +558,9 @@ class Store:
             "by_type": dict(Counter(f["type"] for f in fixes)),
             "sounds": self._session_sounds(session_id),
             "recurring": recurring,
-            "review": [{"text": t["text"], "corrected": t["corrected"]} for t in turns
+            "review": [{"text": t["text"], "corrected": t["corrected"],
+                        "wrong": [f["original"] for f in fixes if f["turn_id"] == t["id"]],
+                        "fixes": [f["fix"] for f in fixes if f["turn_id"] == t["id"]]} for t in turns
                        if t["id"] in with_errors and t["corrected"] and not t["intent"]],
             # Cuaderno de frases: lo que querías decir y cómo se dice
             "phrases": [{"said": t["text"], "intent": t["intent"], "english": t["corrected"]}

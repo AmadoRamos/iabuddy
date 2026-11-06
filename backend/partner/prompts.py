@@ -102,5 +102,25 @@ def scenario_systems(sc: dict) -> dict[str, str]:
     systems["silencioso"] = systems["panel"]
     return systems
 
+
+# ── «Buddy adivina» (Fase 6): Buddy NO conoce la palabra; si la dijera el prompt, acertaría siempre ──
+GAME_ID = "buddy_adivina"  # se guarda en sessions.scenario
+GAME_TITLE = "Buddy adivina"
+GAME_SYSTEM = """You are Buddy, playing a word-guessing game with a Spanish speaker who practices spoken \
+English at B1-B2 level, by voice. They have a secret English word or short expression and they are describing \
+it without saying it. You do NOT know it: guess it from their description. You only see an automatic transcript \
+of their speech: ignore punctuation, capitalization and filler words like "um".
+
+In every reply make ONE specific guess, saying the exact word or expression you think it is, like "Is it a \
+lighthouse?". If you are not sure, guess anyway and add one short question that would help you. Never repeat a \
+guess they already rejected. Never correct their English and never give language tips.
+One or two short sentences. No lists, no emojis, no markdown: your words are read aloud.
+If they speak Spanish, ask them in simple English to try in English."""
+GAME_INTRO = "Let's play! Describe your word in English without saying it, and I'll try to guess it."
+GAME_SOLVED = "Yes, I got it! Great description. Now tell me about your next word."
+GAME_SKIPPED = "No problem, let's go to the next word. Tell me about it."
+GAME_TABOO = "Oops, you said the word! Try again, describe it without saying it."
+GAME_END = "That was the last word. Well played! You can end the session now, or we can just chat."
+
 # El primer mensaje sale de la tabla `openers` (varios por tema). Este solo se usa sin base de datos.
 GREETING = "Hey! Good to see you. How has your day been so far?"

@@ -8,7 +8,7 @@ import yaml
 from test_feedback import run_turn
 from test_turn_manager import VOICE, first, make, types
 
-from backend.pronunciation.rules import SWAPS, pronunciations, variants
+from backend.pronunciation.rules import SWAPS, is_function_word, pronunciations, variants, words_with_sound
 from backend.pronunciation.scorer import Phonemes, align, trust
 from backend.storage.db import Store
 
@@ -45,6 +45,20 @@ def test_variants_add_e_before_s_cluster_and_ed_syllable():
     walked = next(v for v in variants("walked", ("w", "ɔː", "k", "t")) if v["phone"] == "-ed")
     assert walked["phones"] == ("w", "ɔː", "k", "ɪ", "d")
     assert not [v for v in variants("wanted", ("w", "ɔ", "n", "t", "ᵻ", "d")) if v["phone"] == "-ed"]
+
+
+def test_numbers_have_no_reliable_reference_so_they_are_not_judged():
+    assert variants("2019", ("t", "uː", "θ", "aʊ", "z")) == []
+    assert is_function_word("2019")
+
+
+def test_the_words_with_a_sound_are_those_where_its_errors_are_looked_for():
+    words = (("think", ("θ", "ɪ", "ŋ", "k")), ("about", ("ə", "b", "aʊ", "t")), ("walked", ("w", "ɔː", "k", "t")),
+             ("school", ("s", "k", "uː", "l")), ("2019", ("t", "uː", "θ")))
+    assert words_with_sound(words, ["θ"]) == ["think"]  # un número no se juzga
+    assert words_with_sound(words, ["-ed"]) == ["walked"]
+    assert words_with_sound(words, ["s-"]) == ["school"]
+    assert words_with_sound(words, ["v"]) == []
 
 
 def test_every_swap_has_a_tip_and_drills_are_well_formed():

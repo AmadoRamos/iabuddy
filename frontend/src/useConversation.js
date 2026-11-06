@@ -25,6 +25,8 @@ export function useConversation() {
   const [sounds, setSounds] = useState({}); // turno → sonidos con error claro
   const [drills, setDrills] = useState(null); // frases de práctica: { sounds, failed }
   const [drillResult, setDrillResult] = useState(null);
+  const [recallResult, setRecallResult] = useState(null); // «Dilo en inglés»: lo que se oyó y si estaba la palabra
+  const [usageResult, setUsageResult] = useState(null); // «Tu propia frase»: lo que dice el tutor de cómo la usaste
   const [intents, setIntents] = useState({}); // turno → 'pending' | 'failed' mientras el tutor analiza lo que escribiste
 
   const ws = useRef(null);
@@ -63,10 +65,16 @@ export function useConversation() {
         refreshUi();
         break;
       case 'session':
-        setSession({ topic: m.topic, scenario: m.scenario, met: m.scenario?.goals.map(() => false), startedAt: Date.now() });
+        setSession({ topic: m.topic, scenario: m.scenario, met: m.scenario?.goals.map(() => false), mission: m.mission ?? [], used: [], game: m.game, gameState: { index: 0, solved: [], skipped: [] }, startedAt: Date.now() });
         break;
       case 'goals': // objetivos del escenario cumplidos hasta ahora
         setSession((s) => s && { ...s, met: m.met });
+        break;
+      case 'game': // «Buddy adivina»: por qué palabra vas
+        setSession((s) => s && { ...s, gameState: m });
+        break;
+      case 'mission': // palabras de la misión que ya usaste
+        setSession((s) => s && { ...s, used: m.used });
         break;
       case 'user_text':
         setMessages((ms) => [...ms.filter((x) => !x.live), { who: 'you', text: m.text, turn: m.turn, seconds: m.seconds }]);
@@ -80,6 +88,12 @@ export function useConversation() {
         break;
       case 'drill_result':
         setDrillResult(m);
+        break;
+      case 'recall_result':
+        setRecallResult(m);
+        break;
+      case 'usage_result':
+        setUsageResult(m);
         break;
       case 'intent_failed':
         setIntents((it) => ({ ...it, [m.turn]: 'failed' }));
@@ -104,6 +118,8 @@ export function useConversation() {
         setMessages((ms) => ms.map((x) => (x.open ? { ...x, open: false, cut: true } : x)));
         break;
       case 'turn_resumed': // sigues hablando: tu frase anterior vuelve a ser parte del turno
+        setRecallResult(null);
+        setUsageResult(null);
         // Por su n.º de turno, no por ser la última: con la tecla, la burbuja en vivo ya está detrás
         setMessages((ms) => [...ms.filter((x) => !x.live && x.turn !== m.turn), { who: 'you', live: true, text: '' }]);
         setFeedbacks((fs) => fs.filter((f) => f.turn !== m.turn));
@@ -138,11 +154,14 @@ export function useConversation() {
     setMetrics(null);
     setSounds({});
     setDrillResult(null);
+    setRecallResult(null);
+    setUsageResult(null);
     if (choice.drill) setDrills(null);
-    if (choice.drill) fetch('/api/drills').then((r) => r.json()).then(setDrills).catch(() => setDrills({ sounds: [], failed: [], review: [] }));
+    if (choice.drill) fetch('/api/drills').then((r) => r.json()).then(setDrills).catch(() => setDrills({ sounds: [], failed: [], review: [], own: [] }));
     const begin = () => {
       if (choice.drill) {
-        setSession({ drill: choice.drill }); // sin sesión en el backend: cada frase se analiza por separado
+        // Sin sesión en el backend: cada frase se analiza por separado
+        setSession({ drill: choice.drill, guided: choice.guided, startedAt: Date.now() });
         return;
       }
       setSession({ topic: null });
@@ -209,24 +228,62 @@ export function useConversation() {
     saveSettings({ feedback: m });
   }, [saveSettings]);
 
-  // Práctica: abre o cierra tu lectura de `text`. Lo demás funciona como en un turno normal
-  const drillToggle = useCallback((text) => {
+  // Práctica: abre o cierra tu lectura de `text` (grade: se califica). Lo demás funciona como en un turno normal
+  const drillToggle = useCallback((text, grade = false) => {
     if (server.current === 'listening') send({ type: 'stop' });
     else if (server.current === 'thinking') send({ type: 'start' });
     else {
       if (playing.current) player.current.stop();
       setDrillResult(null);
-      send({ type: 'drill', text });
+      send({ type: 'drill', text, grade });
+    }
+  }, []);
+
+  // «Dilo en inglés» y «Tu propia frase» (check: el tutor la revisa): abre o cierra tu frase con la palabra `key`
+  const recallToggle = useCallback((key, check = false) => {
+    if (server.current === 'listening') send({ type: 'stop' });
+    else if (server.current === 'thinking') send({ type: 'start' });
+    else {
+      if (playing.current) player.current.stop();
+      setRecallResult(null);
+      setUsageResult(null);
+      send({ type: 'recall', key, check });
     }
   }, []);
 
   // Repaso: guarda tu respuesta y devuelve cuántas quedan y cuándo vuelve la siguiente
   const answerReview = useCallback((key, known) => {
     setDrillResult(null); // si la frase vuelve en esta tanda, no debe aparecer ya resuelta
+    setRecallResult(null);
     return fetch('/api/review', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key, known }) })
       .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
       .catch(() => setError('No se pudo guardar el repaso.'));
   }, []);
+
+  // «Esto no lo dije» o quitarla del banco
+  const discardWord = useCallback((key) => {
+    setDrillResult(null);
+    setRecallResult(null);
+    return fetch('/api/review/discard', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key }) })
+      .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
+      .catch(() => { setError('No se pudo quitar.'); return null; });
+  }, []);
+
+  // Guarda una palabra del chat. El tutor busca su significado: devuelve si se pudo
+  const saveWord = useCallback((term, context) => (
+    fetch('/api/words', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ term, context }) })
+      .then((r) => r.ok).catch(() => false)
+  ), []);
+
+  // Conversación guiada: guarda la nota; el escenario enseña tu mejor resultado
+  const saveGuided = useCallback((scenario, grade) => {
+    fetch('/api/guided', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scenario, grade }) })
+      .then((r) => { if (!r.ok) throw new Error(); return fetch('/api/scenarios'); })
+      .then((r) => r.json()).then(setScenarios)
+      .catch(() => setError('No se pudo guardar la nota.'));
+  }, []);
+
+  const skipGameWord = useCallback((solved = false) => send({ type: 'game_skip', solved }), []);
 
   const leaveDrill = useCallback(() => {
     if (server.current === 'listening') send({ type: 'stop' });
@@ -261,6 +318,6 @@ export function useConversation() {
 
   useEffect(() => () => { ws.current?.close(); mic.current?.stop(); }, []);
 
-  return { ui, messages, metrics, error, health, topics, scenarios, session, summary, feedbacks, mode, intents, ending, sounds, drills, drillResult, drillToggle, leaveDrill, answerReview,
+  return { ui, messages, metrics, error, health, topics, scenarios, session, summary, feedbacks, mode, intents, ending, sounds, drills, drillResult, drillToggle, recallResult, usageResult, recallToggle, leaveDrill, answerReview, discardWord, saveWord, skipGameWord, saveGuided,
     settings, saveSettings, checkHealth, start, toggle, end, changeMode, sendIntent, listen, closeSummary: () => setSummary(null) };
 }

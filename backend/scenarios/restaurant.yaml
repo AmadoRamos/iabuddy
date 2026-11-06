@@ -19,3 +19,25 @@ key_phrases:
   - on the side
   - "Can I have the check, please?"
   - allergic to
+
+guided:
+  turns:
+    - buddy: "Hi there, welcome! Can I get you something to drink?"
+      you: "Yes, could I get a lemonade, please?"
+      es: "Sí, ¿me trae una limonada, por favor?"
+    - buddy: "Of course. Are you ready to order, or do you need a minute?"
+      you: "I think I'm ready. What do you recommend?"
+      es: "Creo que estoy listo. ¿Qué me recomienda?"
+    - buddy: "The grilled chicken is really popular, and so is the pasta."
+      you: "I'd like the grilled chicken, with the sauce on the side."
+      es: "Quisiera el pollo a la plancha, con la salsa aparte."
+    - buddy: "Great choice. Any allergies I should know about?"
+      you: "Yes, I'm allergic to peanuts. Is that a problem?"
+      es: "Sí, soy alérgico al maní. ¿Es un problema?"
+    - buddy: "No problem at all, I'll tell the kitchen. And here's your food. How was everything?"
+      you: "Everything was delicious, thank you. Can I have the check, please?"
+      es: "Todo estuvo delicioso, gracias. ¿Me trae la cuenta, por favor?"
+    - buddy: "Sure, I'll bring it right away. Will you pay by card or with cash?"
+      you: "By card, please. Thanks for your help."
+      es: "Con tarjeta, por favor. Gracias por su ayuda."
+  closing: "You're welcome. Have a great night!"

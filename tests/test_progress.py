@@ -88,6 +88,12 @@ def test_unfinished_sentences_are_not_practiced_whole():
     assert items["prompt"] == "prompt" and items["a week, so.."] == "a week, so."
 
 
+def test_a_written_question_keeps_its_own_punctuation():
+    s = Store(":memory:")
+    session(s, "Did you went?", corrected="Did you go?", intent="¿Fuiste?")
+    assert s.review_items()[0]["text"] == "Did you go?"
+
+
 def test_known_items_come_back_later_and_later_and_unknown_ones_soon():
     s = Store(":memory:")
     session(s, issues=[ISSUE])
@@ -159,8 +165,15 @@ def test_review_status_says_how_many_remain_and_when_the_next_one_returns():
 def test_api_drills_put_the_sounds_you_fail_most_first():
     from backend.main import app
 
+    class Phonemes:  # lo mínimo de eSpeak: cada palabra con /æ/, para ver qué se destaca
+        def sentence(self, text):
+            return (("cat", ("k", "æ", "t")),)
+
+    class FakeScorer:
+        phonemes = Phonemes()
+
     store = Store(":memory:")
-    app.state.store = store
+    app.state.store, app.state.scorer = store, FakeScorer()
     words = [{"word": "cat", "issues": [{"phone": "æ", "heard": "a", "tip": "t", "margin": 5.0}]},
              {"word": "ship", "issues": [{"phone": "ɪ", "heard": "iː", "tip": "t", "margin": 5.0}]},
              {"word": "sheep", "issues": [{"phone": "iː", "heard": "ɪ", "tip": "t", "margin": 5.0}]}]
@@ -168,6 +181,11 @@ def test_api_drills_put_the_sounds_you_fail_most_first():
     sounds = TestClient(app).get("/api/drills").json()["sounds"]
     assert [(s["phones"], s["errors"]) for s in sounds[:2]] == [(["ɪ", "iː"], 2), (["æ"], 1)]
     assert sounds[2]["errors"] == 0
+    cat = next(s for s in sounds if s["phones"] == ["æ"])
+    sentence = cat["sentences"][0]
+    assert cat["targets"][sentence] == ["cat"]
+    app.state.scorer = None  # sin el modelo de fonemas, las frases salen igual, sin destacar nada
+    assert TestClient(app).get("/api/drills").json()["sounds"][0]["targets"] == {}
 
 
 def test_api_scenarios_show_your_best_stars_and_ignore_sessions_where_you_did_not_speak():

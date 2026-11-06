@@ -64,6 +64,38 @@ INTENT_SCHEMA = {
 }
 
 
+DEFINE_SYSTEM = """You help a Spanish speaker at B1-B2 level learn an English word they heard in a sentence.
+
+"term": its dictionary form (base verb, singular noun); keep it as it is if it is already one.
+"meaning_es": what it means in that sentence, in Spanish, in at most 8 words.
+"example": a new, short, natural spoken English sentence (at most 12 words) that uses "term".
+"forms": only its irregular forms, like "went" and "gone" for "go". Usually an empty list."""
+
+DEFINE_SCHEMA = {
+    "type": "object",
+    "properties": {"term": {"type": "string"}, "meaning_es": {"type": "string"}, "example": {"type": "string"},
+                   "forms": {"type": "array", "items": {"type": "string"}}},
+    "required": ["term", "meaning_es", "example", "forms"],
+}
+
+
+USAGE_SYSTEM = """A Spanish-speaking learner at B1-B2 level made up a sentence to practice an English word \
+or expression. You get the word, what it means, and the sentence (speech transcribed automatically: ignore \
+punctuation, capitalization and filler words like "um").
+
+"used_well": true if the word is used with THAT meaning and fits the sentence, even if the sentence is simple. \
+Mistakes elsewhere in the sentence do not count: only how this word is used. False if it has another meaning \
+there, makes no sense there, or its own grammar is wrong (for example "get used to wake" instead of "get used to waking").
+"comment_es": ONE short sentence in Spanish for the learner: why the word works there, or what is wrong with it.
+"corrected": the whole sentence with every real error fixed, keeping their ideas and words. If it is fine, copy it."""
+
+USAGE_SCHEMA = {
+    "type": "object",
+    "properties": {"used_well": {"type": "boolean"}, "comment_es": {"type": "string"}, "corrected": {"type": "string"}},
+    "required": ["used_well", "comment_es", "corrected"],
+}
+
+
 GOALS_SYSTEM = """You evaluate a role-play where a Spanish-speaking learner at B1-B2 level practices \
 spoken English with a partner. You get the scene, the learner's goals (written in Spanish) and the \
 transcript (automatic speech transcription: ignore punctuation and filler words).
@@ -113,6 +145,23 @@ class Tutor:
         msgs = [{"role": "system", "content": INTENT_SYSTEM}, {"role": "user", "content": user}]
         r = await self.llm.chat_json(msgs, INTENT_SCHEMA)
         return clean({"issues": r.get("issues", []), "corrected": r.get("english", ""), "better": r.get("better", "")})
+
+    async def define(self, word: str, context: str) -> dict:
+        """Una palabra que pulsaste en el chat → su forma base, qué significa y un ejemplo."""
+        msgs = [{"role": "system", "content": DEFINE_SYSTEM},
+                {"role": "user", "content": f'Word: "{word}"\nSentence: "{context}"'}]
+        r = await self.llm.chat_json(msgs, DEFINE_SCHEMA)
+        return {"term": r["term"].strip() or word, "meaning": r["meaning_es"].strip(), "example": r["example"].strip(),
+                "forms": [f.strip() for f in r["forms"] if f.strip()]}
+
+    async def check_usage(self, term: str, meaning: str, text: str) -> dict:
+        """Tu frase con una palabra del banco → si la usaste bien, por qué y cómo queda corregida."""
+        user = f'Word: "{term}"\nMeaning (in Spanish): {meaning}\nSentence: "{text}"'
+        msgs = [{"role": "system", "content": USAGE_SYSTEM}, {"role": "user", "content": user}]
+        r = await self.llm.chat_json(msgs, USAGE_SCHEMA)
+        corrected = r["corrected"].strip()
+        return {"ok": bool(r["used_well"]), "comment": r["comment_es"].strip(),
+                "corrected": "" if _same(corrected, text) else corrected}
 
     async def check_goals(self, scenario: dict, transcript: str) -> dict:
         """Objetivos del escenario cumplidos en la conversación → {"met", "evidence", "comment_es"}."""

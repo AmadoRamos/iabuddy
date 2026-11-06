@@ -75,12 +75,22 @@ Cualquier contenedor con `data-single` actúa como grupo de una sola opción. Po
 - **Palabra del drill:** `button.drill-word.score-*[aria-pressed]` › `.drill-word-text` + `.drill-word-bar` + `.drill-word-score`, dentro de un grupo `data-single` con `lang="en"`.
 - **Fonema:** `.phoneme` › `.phoneme-expected` (espeak-ng) + `.phoneme-match` o `.phoneme-miss` (wav2vec2) + `.phoneme-score`.
 
+## Textos
+
+`LabeledText` (`src/App.jsx`) es el texto de la app: etiqueta, texto y nota. No escribas a mano `overline` + `<p>`.
+
+- `size`: `body` (por defecto), `m` (título de tarjeta o pista), `l` (la frase que hay que decir), `xl` (la palabra sola).
+- `box`: sin caja, `plain`, `info` o `ok`. `note`: texto o botón debajo. `action`: un botón a la derecha, como escuchar.
+- La alineación la da el sitio: centrado dentro de `.drill` (pantallas de práctica), a la izquierda en paneles y tarjetas.
+
 ## Conversación
 
 - Burbujas: `.bubble.bubble-buddy` (dentro de `.buddy-row` con el avatar), `.bubble.bubble-you` y `.bubble.bubble-live` (turno en curso, con borde punteado y cursor).
 - Recast: `<mark class="recast">went</mark>` (resaltado lima).
 - Palabra a revisar: `<span class="review">` (subrayado punteado rosa).
 - Corrección: `<s class="wrong">go</s> → <mark class="recast">went</mark>`.
+- Lo que hay que practicar: `<span class="word-mark target">deadline</span>` (fondo lima) dentro de una frase, y `.review-target` para la palabra sola.
+- En la app, frases con errores: `<span class="word-mark bad">go</span> → <span class="word-mark ok">went</span>` (`src/app.css`). Es el subrayado de `.word-score` dentro de un texto normal; sustituye a `s.wrong` y `mark.recast`.
 
 ## Onda · botón de hablar
 

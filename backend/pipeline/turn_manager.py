@@ -17,11 +17,21 @@ Estados: idle → listening → thinking → speaking → idle.
   dijiste y, en modo «voz», Buddy te dice cómo decirlo y te invita a repetirlo.
 - Pronunciación (Fase 4): cuando Buddy termina de hablar se analiza el audio de tu turno, sin quitarle
   CPU a Kokoro, y los sonidos con error claro van a `pronunciation`. `drill`: lees una frase conocida
-  (sin STT ni LLM) y `drill_result` trae la nota y los errores.
+  (sin STT ni LLM) y `drill_result` trae la nota y los errores. Con `grade` (conversación guiada) también pasa por
+  el STT: `drill_result` añade lo que se oyó, las palabras que faltaron y la nota de la frase.
 - `say`: 🔊 escuchar una frase con la voz de Buddy (no entra en la conversación).
 - Escenarios (Fase 3): `hello` con `scenario` → Buddy interpreta un papel (partner/scenarios.py).
   Tras cada turno tuyo se revisan los objetivos (`goals`, en orden y sin solaparse con otra
   revisión); al terminar, una evaluación final con comentario va en el resumen.
+- Misión (Fase 6): cada sesión trae unas palabras para usar. Buddy te da ocasiones de usarlas, las que dices
+  se marcan al momento (`mission`) y, al terminar, las usadas cuentan como acierto en el repaso.
+- `recall` (repaso, «Dilo en inglés»): dices una frase con una palabra del banco, de memoria. Solo pasa por el
+  STT (sin LLM): `recall_result` dice si la palabra estaba en lo que se transcribió. Con `check` («Tu propia
+  frase»), si estaba, el tutor revisa si la usaste bien (`usage_result`).
+- Buddy adivina (Fase 6): `hello` con `game` → describes palabras de tu banco y Buddy, que no las conoce, intenta
+  adivinarlas. Si su respuesta contiene la palabra, acierta; si la dices tú, no vale y Buddy no llega a oírla.
+  `game_skip` pasa a la siguiente; con `solved` la da por adivinada (*run out* por *run out of*). El tutor sigue
+  revisando tus turnos, pero Buddy no corrige.
 
 Al navegador: JSON {"type": ...} para estado y texto; binario = PCM int16 a 24 kHz.
 """
@@ -33,9 +43,20 @@ import random
 import time
 from collections.abc import AsyncIterator, Awaitable, Callable
 
-from ..pronunciation.scorer import MIN_CLEAR
+from ..partner.prompts import (
+    GAME_END,
+    GAME_ID,
+    GAME_INTRO,
+    GAME_SKIPPED,
+    GAME_SOLVED,
+    GAME_SYSTEM,
+    GAME_TABOO,
+    GAME_TITLE,
+)
+from ..pronunciation.scorer import MIN_CLEAR, grade_reading
 from ..session_log import NoLog
 from ..storage.db import goal_stars
+from ..vocabulary.words import find_use, pack_for, uses
 from .chunker import Chunker
 
 log = logging.getLogger("iabuddy")
@@ -43,7 +64,12 @@ log = logging.getLogger("iabuddy")
 MIN_VOICE_FRAMES = 8  # ~250 ms de voz para que el turno cuente
 RESUME_FRAMES = 3  # ~100 ms de voz seguida reabren un turno que aún no ha respondido
 MAX_SOUNDS = 2  # sonidos por turno en la conversación: más abruma (el resumen y la práctica los tienen todos)
+MIN_RECALL_WORDS = 3  # Whisper falla mucho con palabras sueltas (Fase 0): se pide una frase
 MAX_TEXT = 500  # límite para el texto que llega del navegador (intención, «escuchar»)
+
+
+async def _once(line: str) -> AsyncIterator[str]:
+    yield line
 
 
 class Session:
@@ -56,12 +82,18 @@ class Session:
         self.vad, self.stt, self.llm, self.tts = vad, stt, llm, tts
         self.tutor, self.store, self.scorer = tutor, store, scorer
         self.drill_text: str | None = None  # la frase que estás practicando en este turno
+        self.drill_grade = False  # esa frase se califica (conversación guiada)
+        self.recall_item: dict | None = None  # la palabra del banco que estás recordando en este turno
         self.silence_s, self.systems, self.clock = silence_ms / 1000, systems, clock
         self.greeting = greeting  # solo si no hay base de datos (los inicios viven en la tabla openers)
         self.feedback, self.topic_line = "voz", ""
         self.scenarios, self.scenario = scenarios or {}, None
         self.goals_met: list[bool] = []
         self.goals_lock = asyncio.Lock()
+        self.game: dict | None = None  # partida de «Buddy adivina»: words, index, solved, skipped
+        self.mission: list[dict] = []
+        self.mission_used: set[str] = set()
+        self.mission_line = ""
         self.messages: list[dict] = [{"role": "system", "content": self._system()}]
         self.state = "idle"
         self.task: asyncio.Task | None = None
@@ -85,9 +117,9 @@ class Session:
         self.log.event("in", msg)
         kind = msg.get("type")
         if kind == "hello" and self.state == "idle" and len(self.messages) == 1:
-            self.drill_text = None
+            self.drill_text = self.recall_item = None
             self._set_feedback(msg.get("feedback"))
-            self.task = asyncio.create_task(self._run(self._begin(msg.get("topic_id"), msg.get("scenario"))))
+            self.task = asyncio.create_task(self._run(self._begin(msg.get("topic_id"), msg.get("scenario"), bool(msg.get("game")))))
         elif kind == "settings":
             self._set_feedback(msg.get("feedback"))
             if isinstance(ms := msg.get("silence_ms"), int) and ms > 0:  # desde el próximo silencio
@@ -96,8 +128,15 @@ class Session:
             await self._start()
         elif kind == "drill" and self.scorer:
             if text := str(msg.get("text", "")).strip()[:MAX_TEXT]:
-                self.drill_text = text
+                self.drill_text, self.drill_grade, self.recall_item = text, bool(msg.get("grade")), None
                 await self._start()
+        elif kind == "recall" and self.store:
+            if item := self.store.bank_item(str(msg.get("key", ""))):
+                self.drill_text, self.recall_item = None, {"key": msg["key"], "check": bool(msg.get("check")), **item}
+                await self._start()
+        elif kind == "game_skip" and self._game_word() and self.state == "idle" and not self._busy():
+            outcome, line = ("solved", GAME_SOLVED) if msg.get("solved") else ("skipped", GAME_SKIPPED)
+            self.task = asyncio.create_task(self._run(self._next_word(outcome, line)))
         elif kind == "stop" and self.state == "listening":
             await self._close("tecla")
         elif kind == "end":
@@ -137,7 +176,9 @@ class Session:
             t.cancel()
 
     def _system(self) -> str:
-        return (self.scenario["systems"] if self.scenario else self.systems)[self.feedback] + self.topic_line
+        if self._game_word():
+            return GAME_SYSTEM
+        return (self.scenario["systems"] if self.scenario else self.systems)[self.feedback] + self.topic_line + self.mission_line
 
     def _set_feedback(self, mode: str | None) -> None:
         if mode in self.systems:  # también a mitad de sesión: cambia cómo corrige Buddy desde ya
@@ -203,7 +244,10 @@ class Session:
 
     # ── Sesión ───────────────────────────────────────────────────────────────────
 
-    async def _begin(self, topic_id: int | None, scenario_id: str | None = None) -> None:
+    async def _begin(self, topic_id: int | None, scenario_id: str | None = None, game: bool = False) -> None:
+        if game and self.store and (words := self.store.game_items()):
+            await self._begin_game(words)
+            return
         if sc := self.scenarios.get(scenario_id):
             await self._begin_scenario(sc)
             return
@@ -214,22 +258,92 @@ class Session:
         if topic:
             self.topic_line = (f"\n\nToday's topic, chosen by the user (title in Spanish): {topic['title']}. "
                                "Start there, but follow the user if they change topic.")
-            self.messages[0]["content"] = self._system()
         if self.store:
             self.session_id = self.store.start_session(topic and topic["id"], opener and opener["id"])
-        await self.send_json({"type": "session", "id": self.session_id, "topic": topic and topic["title"]})
+        self._start_mission(topic and topic["title"])
+        await self.send_json({"type": "session", "id": self.session_id, "topic": topic and topic["title"],
+                              "mission": self._public_mission()})
         await self._open_with(greeting)
 
     async def _begin_scenario(self, sc: dict) -> None:
         self.scenario, self.goals_met = sc, [False] * len(sc["goals"])
-        self.messages[0]["content"] = self._system()
+        self._start_mission(sc["id"])
         n = len(sc["openers"])
         index = self.store.pick_scenario_opener(sc["id"], n) if self.store else random.randrange(n)
         if self.store:
             self.session_id = self.store.start_session(None, scenario=sc["id"], scenario_opener=index)
         public = {k: sc[k] for k in ("id", "title", "description", "goals", "key_phrases")}
-        await self.send_json({"type": "session", "id": self.session_id, "topic": None, "scenario": public})
+        await self.send_json({"type": "session", "id": self.session_id, "topic": None, "scenario": public,
+                              "mission": self._public_mission()})
         await self._open_with(sc["openers"][index])
+
+    # ── Buddy adivina ────────────────────────────────────────────────────────────
+
+    def _game_word(self) -> dict | None:
+        g = self.game
+        return g["words"][g["index"]] if g and g["index"] < len(g["words"]) else None
+
+    async def _begin_game(self, words: list[dict]) -> None:
+        self.game = {"words": words, "index": 0, "solved": [], "skipped": []}
+        self.messages[0]["content"] = self._system()
+        self.session_id = self.store.start_session(None, scenario=GAME_ID)
+        public = [{k: w[k] for k in ("key", "term", "meaning", "text")} for w in words]
+        await self.send_json({"type": "session", "id": self.session_id, "topic": None, "mission": [], "game": public})
+        await self._open_with(GAME_INTRO)
+        del self.messages[1:]  # cada palabra empieza de cero: Buddy no arrastra intentos anteriores
+
+    async def _send_game(self, **extra) -> None:
+        g = self.game
+        await self.send_json({"type": "game", "index": g["index"], "solved": g["solved"], "skipped": g["skipped"], **extra})
+
+    async def _next_word(self, outcome: str, line: str) -> None:
+        g = self.game
+        g[outcome].append(g["words"][g["index"]]["key"])
+        g["index"] += 1
+        await self._send_game()
+        del self.messages[1:]
+        if not self._game_word():  # se acabó: si sigues hablando, es una charla normal
+            line = GAME_END
+            self.messages[0]["content"] = self._system()
+        self.closed_at, self.audio_started = self.clock(), False
+        await self._speak(_once(line), {})
+        del self.messages[1:]
+
+    def _finish_game(self, summary: dict) -> None:
+        g = self.game
+        if g:
+            words = [{k: w[k] for k in ("key", "term", "meaning")} for w in g["words"]]
+            summary["topic"] = GAME_TITLE
+            summary["game"] = {"solved": [w for w in words if w["key"] in g["solved"]],
+                               "skipped": [w for w in words if w["key"] not in g["solved"]]}
+
+    # ── Misión ───────────────────────────────────────────────────────────────────
+
+    def _start_mission(self, pack: str | None) -> None:
+        self.mission = self.store.pick_mission(pack_for(pack)) if self.store else []
+        if self.mission:
+            terms = ", ".join(f'"{w["term"]}"' for w in self.mission)
+            self.mission_line = (f"\n\nToday the user wants to practice using: {terms}. Never list them, quiz the user "
+                                 "or ask them to use these words; just steer the conversation so they get natural chances to.")
+        self.messages[0]["content"] = self._system()
+
+    def _public_mission(self) -> list[dict]:
+        return [{k: w[k] for k in ("key", "term", "meaning", "example")} for w in self.mission]
+
+    async def _check_mission(self, text: str) -> None:
+        new = {w["key"] for w in self.mission if w["key"] not in self.mission_used and uses(text, w["term"], w["forms"])}
+        if new:
+            self.mission_used |= new
+            await self.send_json({"type": "mission", "used": sorted(self.mission_used)})
+
+    def _finish_mission(self, summary: dict) -> None:
+        if not self.mission:
+            return
+        if self.store and self.turns:  # sin hablar no gastas las palabras: la próxima vez salen las mismas
+            self.store.finish_mission(self.mission, self.mission_used)
+        words = self._public_mission()
+        summary["mission"] = {"used": [w for w in words if w["key"] in self.mission_used],
+                              "unused": [w for w in words if w["key"] not in self.mission_used]}
 
     async def _open_with(self, greeting: str) -> None:
         async def once() -> AsyncIterator[str]:
@@ -242,6 +356,8 @@ class Session:
         if self.tutor_tasks:  # que terminen los análisis pendientes para que salgan en el resumen
             await asyncio.wait(self.tutor_tasks, timeout=15)
         summary = self.store.finish_session(self.session_id) if self.store and self.session_id else {}
+        self._finish_mission(summary)
+        self._finish_game(summary)
         if self.scenario:
             summary["scenario"] = await self._evaluate()
         return summary
@@ -249,6 +365,7 @@ class Session:
     async def _end(self) -> None:
         await self.send_json({"type": "summary", **await self._finish()})
         self.topic_line, self.scenario, self.goals_met = "", None, []
+        self.mission, self.mission_used, self.mission_line, self.game = [], set(), "", None
         self.messages = [{"role": "system", "content": self._system()}]
         self.session_id, self.user_turns, self.pending_line = None, 0, None
         self.turns, self.intent_turns = {}, set()
@@ -289,7 +406,7 @@ class Session:
         self.log.event("turn_closed", {"reason": reason, "voice_frames": self.voice_frames,
                                        "seconds": round(len(self.pcm) / 32000, 2), "drill": self.drill_text})
         if self.voice_frames < MIN_VOICE_FRAMES:
-            self.drill_text = None
+            self.drill_text = self.recall_item = None
             self._reset_turn()
             await self.send_json({"type": "turn_discarded"})
             await self._set_state("idle")
@@ -297,7 +414,7 @@ class Session:
         self.close_reason, self.closed_at = reason, self.clock()
         self.turn_index, self.resume_run = len(self.messages), 0
         await self._set_state("thinking", reason=reason)
-        answer = self._drill if self.drill_text else self._reply
+        answer = self._drill if self.drill_text else self._recall if self.recall_item else self._reply
         self.task = asyncio.create_task(self._run(answer(bytes(self.pcm))))
 
     async def _resume(self) -> None:
@@ -351,21 +468,31 @@ class Session:
         self.turn_counted = True
         await self.send_json({"type": "user_text", "text": text, "turn": self.user_turns,
                               "seconds": round(len(pcm) / 32000, 1)})
+        await self._check_mission(text)
         if self.store and self.session_id:
             self.turn_row = self.store.add_turn(self.session_id, "user", text, seconds=len(pcm) / 32000)
         self.turns[self.user_turns] = {"text": text, "row": self.turn_row}
         partner_said = next((m["content"] for m in reversed(self.messages) if m["role"] == "assistant"), "")
-        self.messages.append({"role": "user", "content": text})
+        word = self._game_word()
+        taboo = bool(word) and uses(text, word["term"], word["forms"])
+        if taboo:  # Buddy no debe oírla: acertaría sin que la hayas descrito
+            await self._send_game(taboo=True)
+        else:
+            self.messages.append({"role": "user", "content": text})
         turn = self.user_turns
         self.tutor_args = (turn, text, partner_said, self.turn_row) if self.tutor else None
         try:
-            await self._speak(self.llm.stream(self.messages), marks)
+            await self._speak(_once(GAME_TABOO) if taboo else self.llm.stream(self.messages), marks)
         finally:  # también con barge-in. Si no llegó a sonar nada, el turno aún puede reabrirse
             if self.scorer and self.audio_started:
                 task = asyncio.create_task(self._pronounce(turn, pcm))
                 self.tutor_tasks.add(task)
                 task.add_done_callback(self.tutor_tasks.discard)
         await self.send_json({"type": "metrics", **marks})
+        if taboo:
+            del self.messages[1:]
+        elif word and uses(self.messages[-1]["content"], word["term"], word["forms"]):
+            await self._next_word("solved", GAME_SOLVED)
 
     async def _pronounce(self, turn: int, pcm: bytes) -> None:
         entry = self.turns.get(turn)
@@ -393,15 +520,51 @@ class Session:
     async def _drill(self, pcm: bytes) -> None:
         text = self.drill_text
         self.log.audio("drill", pcm, text=text)
-        result = await asyncio.to_thread(self.scorer.analyze, pcm, text)
+        analysis = asyncio.to_thread(self.scorer.analyze, pcm, text)
+        if self.drill_grade:
+            heard, result = await asyncio.gather(self.stt.transcribe(pcm), analysis)
+            result = {**result, "heard": heard, **grade_reading(result, heard, self.scorer.sound_of)}
+        else:
+            result = await analysis
         self.drill_text = None
-        passed = result["score"] >= MIN_CLEAR and not any(w["issues"] or w["unclear"] for w in result["words"])
+        # Si Whisper oyó todas las palabras, la frase se entendió aunque la confianza del modelo sea baja
+        passed = ((self.drill_grade or result["score"] >= MIN_CLEAR)
+                  and not any(w["issues"] or w["unclear"] or w.get("missing") for w in result["words"]))
         if self.store:
             self.store.add_sound_issues(text, result["words"])
             if passed:
                 self.store.resolve_phrase(text)
         await self.send_json({"type": "drill_result", "text": text, "passed": passed, **result})
         await self._set_state("idle")
+
+    async def _recall(self, pcm: bytes) -> None:
+        item = self.recall_item
+        self.log.audio("recall", pcm, text=item["term"])
+        text = await self.stt.transcribe(pcm)
+        if not text:
+            await self.send_json({"type": "turn_discarded"})
+        else:
+            too_short = len(text.split()) < MIN_RECALL_WORDS
+            match = "" if too_short else find_use(text, item["term"], item["forms"])
+            used = bool(match)
+            checking = bool(used and item["check"] and self.tutor)
+            await self.send_json({"type": "recall_result", "key": item["key"], "text": text, "too_short": too_short,
+                                  "used": used, "match": match, "checking": checking})
+            if checking:
+                await self.send_json({"type": "usage_result", "key": item["key"], **await self._check_usage(item, text)})
+        self.recall_item = None  # no antes: si sigues hablando se cancela y el turno se reabre
+        await self._set_state("idle")
+
+    async def _check_usage(self, item: dict, text: str) -> dict:
+        try:
+            result = await self.tutor.check_usage(item["term"], item["meaning"], text)
+        except asyncio.CancelledError:
+            raise
+        except Exception:
+            log.exception("Fallo al revisar tu frase")
+            return {"failed": True}
+        self.log.event("usage", {"term": item["term"], "text": text, **result})
+        return result
 
     async def _after_turn(self, turn: int, text: str, partner_said: str, row: int | None) -> None:
         """Tutor y luego objetivos, uno tras otro: así no hay más de dos peticiones a la vez al LLM."""
