@@ -101,7 +101,6 @@ class Session:
         self.session_id: int | None = None
         self.user_turns = 0
         self.turns: dict[int, dict] = {}  # n.º de turno tuyo → {"text", "row"}, para la intención escrita
-        self.intent_turns: set[int] = set()
         self.pending_line: tuple[str, str] | None = None  # reacción a una intención, si Buddy estaba ocupado
         self.spoken: list[str] = []
         self.closed_at = clock()
@@ -193,7 +192,6 @@ class Session:
     def _intent(self, turn, text: str) -> None:
         if not (self.tutor and text and turn in self.turns):
             return
-        self.intent_turns.add(turn)  # a partir de aquí manda este análisis, no el automático
         task = asyncio.create_task(self._analyze_intent(turn, text))
         self.tutor_tasks.add(task)
         task.add_done_callback(self.tutor_tasks.discard)
@@ -211,6 +209,7 @@ class Session:
             return
         if self.turns.get(turn) is not entry:  # el turno se reabrió: su fila ya no existe
             return
+        entry["intent"] = intent  # a partir de aquí manda este análisis. No antes: si falla, vale el automático
         if self.store and row:
             self.store.add_feedback(row, result["corrected"], result["issues"], intent=intent)
         # Lo pediste tú: se muestra también en modo silencioso
@@ -368,7 +367,7 @@ class Session:
         self.mission, self.mission_used, self.mission_line, self.game = [], set(), "", None
         self.messages = [{"role": "system", "content": self._system()}]
         self.session_id, self.user_turns, self.pending_line = None, 0, None
-        self.turns, self.intent_turns = {}, set()
+        self.turns = {}
         self._reset_turn()
         await self._set_state("idle")
 
@@ -627,7 +626,7 @@ class Session:
         # El turno se reabrió: su fila ya no existe. No basta con cancelar: httpx a veces se la traga
         if self.turns.get(turn) is not entry:
             return
-        if turn in self.intent_turns:  # ya escribiste lo que querías decir: manda ese análisis
+        if entry and "intent" in entry:  # ya escribiste lo que querías decir: manda ese análisis
             return
         if self.store and row:
             self.store.add_feedback(row, result["corrected"], result["issues"])

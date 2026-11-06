@@ -3,6 +3,8 @@
 import asyncio
 import json
 import logging
+import os
+import time
 import wave
 
 import httpx
@@ -11,7 +13,7 @@ from test_pronunciation import FakeScorer, drill
 from test_turn_manager import make
 
 from backend.pipeline.llm import OllamaLLM
-from backend.session_log import SessionLog, setup_file_logging
+from backend.session_log import SessionLog, prune_sessions, setup_file_logging
 from backend.storage.db import Store
 
 
@@ -117,3 +119,74 @@ async def test_ollama_timings_of_each_answer_are_logged(caplog):
         with caplog.at_level(logging.INFO, logger="iabuddy"):
             assert [p async for p in llm.stream([])] == ["Hi"]
     assert "prompt 900 tokens en 1200 ms" in caplog.text
+
+
+def aged(log, days: float):
+    log.close()
+    then = time.time() - days * 86400
+    os.utime(log.path, (then, then))
+    return log.path
+
+
+async def spoken_session(tmp_path, tutor=True, scorer=True) -> SessionLog:
+    s, _, _ = make()
+    s.store, s.log = Store(":memory:"), SessionLog(tmp_path)
+    s.tutor, s.scorer = FakeTutor() if tutor else None, FakeScorer() if scorer else None
+    await s.on_control({"type": "hello"})
+    await s.task
+    await run_turn(s)
+    await asyncio.gather(*s.tutor_tasks)
+    return s.log
+
+
+async def test_an_analyzed_session_keeps_its_files_for_30_days_and_then_loses_them(tmp_path):
+    log = await spoken_session(tmp_path)
+    assert list(log.audio_dir.glob("*.wav"))
+    aged(log, 29)
+    prune_sessions(tmp_path)
+    assert log.path.exists() and log.audio_dir.exists()
+    aged(log, 31)
+    prune_sessions(tmp_path)
+    assert list(tmp_path.iterdir()) == []
+
+
+async def test_an_old_session_is_kept_while_a_turn_lacks_its_tutor_or_its_pronunciation(tmp_path):
+    without_tutor = await spoken_session(tmp_path, tutor=False)
+    without_sounds = await spoken_session(tmp_path, scorer=False)
+    aged(without_tutor, 31), aged(without_sounds, 31)
+    prune_sessions(tmp_path)
+    assert without_tutor.path.exists() and without_tutor.audio_dir.exists()
+    assert without_sounds.path.exists() and without_sounds.audio_dir.exists()
+
+
+async def test_an_old_reading_is_deleted_only_if_it_got_its_grade(tmp_path):
+    s, _, _ = make()
+    s.scorer, s.log = FakeScorer(issues=()), SessionLog(tmp_path)
+    await drill(s, "Three days.")
+    pending = SessionLog(tmp_path)
+    pending.audio("drill", b"\0\0", text="Three days.")  # se cortó antes de la nota
+    aged(s.log, 31), aged(pending, 31)
+    prune_sessions(tmp_path)
+    assert not s.log.path.exists() and not s.log.audio_dir.exists()
+    assert pending.path.exists() and pending.audio_dir.exists()
+
+
+def test_a_resumed_turn_is_said_twice_and_analyzed_once(tmp_path):
+    log = SessionLog(tmp_path)
+    for _ in range(2):
+        log.event("out", {"type": "user_text", "turn": 1})
+    log.event("tutor", {"turn": 1})
+    log.event("pronunciation_analysis", {"turn": 1})
+    aged(log, 31)
+    prune_sessions(tmp_path)
+    assert not log.path.exists()
+
+
+def test_a_session_without_audio_goes_too_and_a_damaged_one_does_not_stop_the_rest(tmp_path):
+    empty = SessionLog(tmp_path)
+    aged(empty, 31)
+    damaged = tmp_path / "0000.jsonl"  # glob lo encuentra antes que a la otra
+    damaged.write_text("{no es json")
+    os.utime(damaged, (0, 0))
+    prune_sessions(tmp_path)
+    assert not empty.path.exists() and damaged.exists()

@@ -34,7 +34,7 @@ from .pipeline.turn_manager import Session
 from .pipeline.vad import StreamingVad
 from .pronunciation.rules import words_with_sound
 from .pronunciation.scorer import Scorer
-from .session_log import SessionLog, setup_file_logging
+from .session_log import SessionLog, prune_sessions, setup_file_logging
 from .storage.db import Store
 from .tutor.tutor import Tutor
 
@@ -68,6 +68,7 @@ def current_settings() -> dict:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     setup_file_logging(settings.log_dir)
+    prune_sessions(settings.log_dir / "sessions")
     app.state.http = httpx.AsyncClient(timeout=120)
     app.state.stt = WhisperSTT(settings.whisper_url, app.state.http)
     app.state.llm = OllamaLLM(settings.ollama_url, settings.llm_model, app.state.http)

@@ -59,6 +59,7 @@ def test_missing_words_count_zero_and_sound_errors_half():
 def test_a_different_sentence_or_nothing_heard_scores_low():
     assert grade_reading(result(word("good"), word("morning")), "the cat sleeps")["grade"] == 0
     assert grade_reading(result(word("good"), word("morning")), "")["grade"] == 0
+    assert grade_reading(result(), "good morning")["grade"] == 0
 
 
 def test_case_does_not_matter():

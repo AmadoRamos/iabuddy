@@ -26,6 +26,7 @@ def test_align_finds_where_each_token_starts_and_prefers_what_was_said():
     logp = frames(BLANK, A, A, BLANK, BLANK, B, BLANK)
     score, starts = align(logp, [A, B], BLANK)
     assert starts == [1, 5]
+    assert align(frames(A, B), [A, B], BLANK)[1] == [0, 1]  # hasta el último frame
     assert score > align(logp, [B, A], BLANK)[0] + 3  # el orden contrario lo explica mucho peor
 
 
@@ -210,6 +211,7 @@ def test_a_very_low_score_on_a_sentence_means_the_text_is_not_what_was_said():
     assert sentence["mismatch"] and not any(w["issues"] or w["unclear"] for w in sentence["words"])
     single = trust({"score": 0, "words": [word("chair")]})  # una palabra suelta sí puede ser un error real
     assert "mismatch" not in single and single["words"][0]["issues"]
+    assert "mismatch" not in trust({"score": 15, "words": [word(w) for w in ("view", "videos", "on", "youtube")]})
     good = trust({"score": 40, "words": [word(w) for w in ("view", "videos", "on", "youtube")]})
     assert "mismatch" not in good and good["words"][0]["issues"]
 

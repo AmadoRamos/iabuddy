@@ -26,19 +26,7 @@ Revisado el 2026-11-06 con los registros de la sesión de Amado del 2026-11-05 (
 
 ---
 
-## 2. Retención del audio
-
-Decidido por Amado el 2026-11-06: se guarda el audio y las sesiones viejas se borran cuando su audio ya esté analizado.
-
-Hoy el audio ya se guarda (`data/logs/sessions/<fecha>/*.wav`, 18 MB en total), pero nunca se borra nada.
-
-- [ ] Decidir desde cuántos días una sesión es «vieja».
-- [ ] Decidir qué se borra. Propuesta: solo el `.wav` y el `.jsonl`, porque «Progreso», «Repaso» y «Palabras» leen de `data/iabuddy.db`, y borrar esas filas los dejaría sin historial.
-- [ ] Implementarlo. «Analizado» puede comprobarse en el `.jsonl`: cada turno deja `pronunciation_analysis` y `tutor`.
-
----
-
-## 3. Deuda
+## 2. Deuda
 
 ### Errores
 - [ ] **Guiada: una palabra con guion cuenta como no dicha.** Whisper oyó *back-end*, y *backend* quedó con 0 puntos. `grade_reading` en `backend/pronunciation/scorer.py` separa por el guion: comprobado, la misma frase da 80 con guion y 100 sin él.
@@ -57,15 +45,14 @@ Hoy el audio ya se guarda (`data/logs/sessions/<fecha>/*.wav`, 18 MB en total), 
 - [ ] Buddy adivina: Buddy puede nombrar la palabra sin querer en una pregunta y contaría como acierto.
 
 ### Código sin test que lo detecte
-Revisión red/green del 2026-11-06: los 113 tests se vieron en rojo por una razón válida y en verde, y se corrigieron 3 que probaban menos de lo que decían. De 1170 roturas automáticas del backend, 400 no las detectó ningún test (algunas no cambian el comportamiento) y 49 colgaron la ejecución. `Tutor` y los caminos principales de `Session` ya tienen test, verificado con red/green. Queda, por orden de riesgo:
+Revisión red/green del 2026-11-06: ya tienen test `Tutor`, `Session` (incluido `intent_failed`), `Scorer`, `backend/main.py` (`/ws`, arranque, `/api/health`), `stt.py`, `tts.py`, `vad.py` y `llm.py`. `tests/test_models.py` usa Kokoro, Silero y wav2vec2 reales (se salta sin `C:\Models`, y son ~6 s de los ~10 s de la suite). De 309 roturas automáticas de los 6 módulos más `intent_failed`, 29 no las detecta ningún test. Casi todas no cambian el comportamiento, son valores exactos en el límite o son tiempos de espera. Queda:
 
-- [ ] `Scorer` en `backend/pronunciation/scorer.py`: el análisis real de pronunciación. Los tests usan `FakeScorer`.
-- [ ] `backend/main.py`: el bucle de `/ws`, el arranque y `/api/health`.
-- [ ] `Session`: el aviso `intent_failed` cuando el tutor falla con «¿Qué querías decir?».
-- [ ] `stt.py`, `tts.py`, `vad.py` y las peticiones reales de `llm.py` en `backend/pipeline/`.
+- [ ] Las peticiones reales a whisper-server y Ollama solo se prueban contra servidores simulados: si cambia su API, los tests no lo verán. Solo lo prueba el micrófono.
+- [ ] `Scorer`, `ends[j - 1]` en `analyze`: si el final de la palabra se calcula mal, ningún test lo nota, salvo con un último sonido muy largo.
 
 ### Límites aceptados
 Sin acción prevista; se revisan solo si molestan.
+- Una sesión vieja con algún turno sin analizar se queda para siempre, porque nada vuelve a analizarla: si el tutor falló, si Buddy no llegó a sonar o si faltaba el modelo de fonemas. Hoy son 0 de 23.
 - Si escribes en inglés lo que querías decir, la pista del repaso ya trae la respuesta. Decisión de Amado.
 - Una forma irregular que falte en `forms` no se detecta en la misión.
 - En la lista de «Palabras» no hay botón de escuchar: la voz necesita una sesión abierta.
@@ -76,7 +63,7 @@ Sin acción prevista; se revisan solo si molestan.
 
 ---
 
-## 4. Fase 7 — Gamificación y ampliaciones
+## 3. Fase 7 — Gamificación y ampliaciones
 
 Aplazado a propósito hasta ahora.
 
@@ -88,7 +75,7 @@ Aplazado a propósito hasta ahora.
 
 ---
 
-## 5. Decisiones tomadas
+## 4. Decisiones tomadas
 
 - **Entorno:** Windows 11 nativo, Python 3.12 con `uv`. Repositorio público con licencia MIT. Modelos en `C:\Models` (`IABUDDY_MODELS_DIR`), fuera del repo. whisper.cpp v1.9.5 compilado con Vulkan en `C:\Tools\whisper.cpp`, porque no hay binario oficial para Windows.
 - **Voz:** audífonos. Espacio abre y cierra tu turno e interrumpe a Buddy. Silencio de 900 ms con fusión de turno. Acento US, Kokoro `af_heart` a 0,9×.
@@ -98,11 +85,11 @@ Aplazado a propósito hasta ahora.
 - **Temas:** lista sugerida, editable en la base de datos.
 - **Frontend:** React + Vite, solo en `127.0.0.1`. FastAPI sirve el build.
 - **Sesión típica: 10 min** (Amado, 2026-11-06). No hace falta resumir el historial: se estiman ~850 tokens de conversación más el prompt, dentro de `num_ctx` 4096.
-- **Audio:** ver sección 2.
+- **Retención del audio** (Amado, 2026-11-06): se guarda. Al arrancar se borran el `.wav` y el `.jsonl` de las sesiones de más de 30 días ya analizadas (`prune_sessions` en `backend/session_log.py`). Las filas de `data/iabuddy.db` se quedan, porque de ellas leen «Progreso», «Repaso» y «Palabras».
 
 ---
 
-## 6. Hecho
+## 5. Hecho
 
 - **Fase 0:** dataset propio de 56 grabaciones (`data/dataset/`) y spikes S1-S6.
 - **Fase 1, loop de voz:** VAD, STT, LLM y TTS con barge-in, fusión de turno, descarte de turnos sin voz y panel de tiempos. `iabuddy.bat` lo arranca todo.
