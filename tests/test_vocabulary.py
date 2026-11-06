@@ -437,3 +437,17 @@ def test_api_says_so_when_the_model_cannot_define_a_word(monkeypatch, tmp_path):
     assert c.post("/api/words", json={"term": "went"}).status_code == 502
     assert c.post("/api/words", json={"term": ""}).status_code == 422
     assert store.word_bank()["items"] == []
+
+
+def test_when_you_spoke_the_mission_enters_your_bank_and_the_word_you_used_counts_as_a_hit():
+    async def run():
+        store = Store(":memory:")
+        s, _, _ = session(store, "I need to figure it out")
+        await s.on_control({"type": "hello"})
+        await s.task
+        terms = {w["term"] for w in s.mission}
+        await talk(s)
+        await s.on_control({"type": "end"})
+        assert {r["term"] for r in store.db.execute("SELECT term FROM words")} == terms
+        assert [tuple(r) for r in store.db.execute("SELECT key, box FROM reviews")] == [("figure out", 1)]
+    asyncio.run(run())

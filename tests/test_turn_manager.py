@@ -133,3 +133,44 @@ async def test_changing_the_silence_setting_applies_to_the_open_session():
     assert s.silence_s == 1.5
     await s.on_control({"type": "settings", "silence_ms": "mucho"})
     assert s.silence_s == 1.5
+
+
+async def test_a_short_noise_does_not_resume_a_turn_that_is_waiting_for_the_reply():
+    stt = FakeSTT()
+    stt.gate.clear()
+    s, events, now = make(stt=stt)
+    await s.on_control({"type": "start"})
+    await s.on_audio(VOICE * 10)
+    now[0] = 1.0
+    await s.on_audio(SILENCE)
+    await asyncio.sleep(0)
+    noise = VOICE * (RESUME_FRAMES - 1)
+    await s.on_audio(noise + SILENCE + noise)  # el silencio corta la racha
+    assert s.state == "thinking" and "turn_resumed" not in types(events)
+    await s.on_audio(VOICE)  # esta completa RESUME_FRAMES seguidas
+    assert s.state == "listening" and "turn_resumed" in types(events)
+
+
+async def test_when_whisper_hears_nothing_the_turn_is_discarded_without_asking_the_llm():
+    s, events, _ = make(stt=FakeSTT(""))
+    await s.on_control({"type": "start"})
+    await s.on_audio(VOICE * 10)
+    await s.on_control({"type": "stop"})
+    await s.task
+    assert "turn_discarded" in types(events) and s.state == "idle"
+    assert s.user_turns == 0 and len(s.messages) == 1 and "partner_text" not in types(events)
+
+
+async def test_a_failing_reply_says_so_and_leaves_the_session_ready_for_another_turn():
+    class BrokenLLM(FakeLLM):
+        async def stream(self, messages):
+            raise RuntimeError("sin modelo")
+            yield
+
+    s, events, _ = make()
+    s.llm = BrokenLLM([])
+    await s.on_control({"type": "start"})
+    await s.on_audio(VOICE * 10)
+    await s.on_control({"type": "stop"})
+    await s.task
+    assert first(events, "error")["message"] == "RuntimeError: sin modelo" and s.state == "idle"

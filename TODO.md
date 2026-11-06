@@ -57,17 +57,11 @@ Hoy el audio ya se guarda (`data/logs/sessions/<fecha>/*.wav`, 18 MB en total), 
 - [ ] Buddy adivina: Buddy puede nombrar la palabra sin querer en una pregunta y contaría como acierto.
 
 ### Código sin test que lo detecte
-Revisión red/green del 2026-11-06: los 113 tests se vieron en rojo por una razón válida y en verde, y se corrigieron 3 que probaban menos de lo que decían. De 1170 roturas automáticas del backend, 400 no las detectó ningún test (algunas no cambian el comportamiento) y 49 colgaron la ejecución. Por orden de riesgo:
+Revisión red/green del 2026-11-06: los 113 tests se vieron en rojo por una razón válida y en verde, y se corrigieron 3 que probaban menos de lo que decían. De 1170 roturas automáticas del backend, 400 no las detectó ningún test (algunas no cambian el comportamiento) y 49 colgaron la ejecución. `Tutor` y los caminos principales de `Session` ya tienen test, verificado con red/green. Queda, por orden de riesgo:
 
 - [ ] `Scorer` en `backend/pronunciation/scorer.py`: el análisis real de pronunciación. Los tests usan `FakeScorer`.
-- [ ] `Tutor` en `backend/tutor/tutor.py`: `analyze`, `define_word` y `check_usage`, que decide el veredicto de «Tu propia frase».
-- [ ] `Session` en `backend/pipeline/turn_manager.py`:
-  - que `finish_mission` se llame al terminar: sin él, las palabras usadas no cuentan en el repaso;
-  - que se guarde el turno de Buddy;
-  - el aviso `error` cuando falla la respuesta;
-  - el descarte cuando Whisper no devuelve texto;
-  - que un ruido corto no reabra el turno (`RESUME_FRAMES`).
 - [ ] `backend/main.py`: el bucle de `/ws`, el arranque y `/api/health`.
+- [ ] `Session`: el aviso `intent_failed` cuando el tutor falla con «¿Qué querías decir?».
 - [ ] `stt.py`, `tts.py`, `vad.py` y las peticiones reales de `llm.py` en `backend/pipeline/`.
 
 ### Límites aceptados

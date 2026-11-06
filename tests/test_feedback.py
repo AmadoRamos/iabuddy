@@ -269,3 +269,14 @@ async def test_analyses_that_outlive_a_resumed_turn_are_dropped():
     await asyncio.gather(*pending)  # sin la comprobación: IntegrityError (FOREIGN KEY)
     assert "feedback" not in types(events)
     assert s.store.db.execute("SELECT COUNT(*) FROM corrections").fetchone()[0] == 0
+
+
+async def test_what_buddy_said_is_stored():
+    s, _, _ = make()
+    s.store = Store(":memory:")
+    await s.on_control({"type": "hello"})
+    await s.task
+    await run_turn(s)
+    rows = s.store.db.execute("SELECT speaker, text FROM turns ORDER BY id").fetchall()
+    assert tuple(rows[-1]) == ("buddy", "Oh, you went to the gym? Nice! What did you do?")
+    assert tuple(rows[-2]) == ("user", "Yesterday I go to the gym.")
