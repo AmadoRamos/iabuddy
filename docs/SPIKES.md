@@ -1,6 +1,6 @@
 # Spikes — Fase 0
 
-Resultados de los spikes de validación ([TODO §3.2](../TODO.md)). Equipo: Windows 11, RX 9070 (16 GB) y driver 26.10.1.
+Resultados de los spikes de validación (Fase 0). Equipo: Windows 11, RX 9070 (16 GB) y driver 26.10.1.
 
 ---
 
