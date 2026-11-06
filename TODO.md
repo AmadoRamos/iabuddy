@@ -23,14 +23,14 @@ Revisado el 2026-11-06 con los registros de la sesión de Amado del 2026-11-05 (
 - [ ] Probar «Tu propia frase» con unas cuantas palabras.
 - [ ] Jugar una partida de «Buddy adivina» y anotar si Buddy nombra la palabra sin querer.
 - [ ] Medir una sesión completa de 10 min. Lo más largo medido con micrófono son 6,7 min.
+- [ ] Comprobar en una sesión de voz que Buddy señala más errores reales ahora que no conoce la misión, y que sigues usando las palabras sin que te lleve hacia ellas ([S7](docs/SPIKES.md)).
 
 ---
 
 ## 2. Deuda
 
 ### Errores
-- [ ] **Buddy inventó una corrección y dejó pasar las reales** (sesión 21, modo voz). Corrigió una sola vez en 12 turnos, y fue para decirte que dijeras justo lo que habías dicho (*I struggled with that theme*). El tutor marcó 5 errores en los turnos 2 y 11, y Buddy no corrigió ninguno. En la sesión 16, sin misión, corrigió en 5 de 9 turnos. Puede ser la línea de la misión en el prompt: falta medirlo.
-- [ ] **El tutor no marcó un error claro:** *I don't speaking about…* (sesión 21, turno 6) salió sin errores.
+- [ ] **El tutor no marcó un error claro:** *I don't speaking about…* (sesión 21, turno 6) salió sin errores. Buddy tampoco lo señala con el historial real, ni sin la misión (1 de 6); sin historial, sí (6 de 6).
 - [ ] En «Tus frases» entran palabras mal transcritas (*Wispeth*).
 - [ ] El aviso de micrófono denegado sigue visible al cambiar de sección.
 - [ ] Los minutos totales suman redondeos: 7,7 frente a 7,54 reales.
@@ -39,7 +39,8 @@ Revisado el 2026-11-06 con los registros de la sesión de Amado del 2026-11-05 (
 ### Por revisar
 - [ ] **Guiada: *years* sacó 0-2 de claridad en los 3 intentos**, y *Sure* 2-3 en 2 de ellos. Son la última y la primera palabra de la frase: escuchar los WAV para ver si se corta el audio o es la pronunciación.
 - [ ] **Guiada: Whisper oyó *I am* en los 3 intentos** y *I'm* quedó como no dicha. Escuchar si dijiste *I am* o si Whisper la expande; en ese caso habría que aceptar las contracciones.
-- [ ] **1.er token del LLM más lento con micrófono:** 0,55-0,85 s en la sesión 21, frente a ~0,3 s en la sesión 19. Sigue cumpliendo el total salvo en 2 de 12 turnos (más de 1,5 s). Comprobar si es por el prompt con la misión.
+- [ ] **1.er token del LLM más lento con micrófono:** 0,55-0,85 s en la sesión 21, frente a ~0,3 s en la sesión 19. Sigue cumpliendo el total salvo en 2 de 12 turnos (más de 1,5 s). Volver a medirlo: ese prompt ya no lleva la misión.
+- [ ] La línea del tema elegido también va al final del prompt, como iba la misión: falta medir si reduce las correcciones.
 - [ ] Buddy a veces cita algo que no dijiste (*viewing* por *view*, 1 de 20).
 - [ ] Buddy adivina: Buddy puede nombrar la palabra sin querer en una pregunta y contaría como acierto.
 
@@ -84,6 +85,7 @@ Aplazado a propósito hasta ahora.
 - **Temas:** lista sugerida, editable en la base de datos.
 - **Frontend:** React + Vite, solo en `127.0.0.1`. FastAPI sirve el build.
 - **Sesión típica: 10 min** (Amado, 2026-11-06). No hace falta resumir el historial: se estiman ~850 tokens de conversación más el prompt, dentro de `num_ctx` 4096.
+- **Misión:** Buddy no conoce sus palabras (Amado, 2026-11-06). Con ellas en el prompt dejaba pasar tus errores e inventaba correcciones ([S7](docs/SPIKES.md)).
 - **Retención del audio** (Amado, 2026-11-06): se guarda. Al arrancar se borran el `.wav` y el `.jsonl` de las sesiones de más de 30 días ya analizadas (`prune_sessions` en `backend/session_log.py`). Las filas de `data/iabuddy.db` se quedan, porque de ellas leen «Progreso», «Repaso» y «Palabras».
 
 ---

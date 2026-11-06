@@ -93,7 +93,6 @@ class Session:
         self.game: dict | None = None  # partida de «Buddy adivina»: words, index, solved, skipped
         self.mission: list[dict] = []
         self.mission_used: set[str] = set()
-        self.mission_line = ""
         self.messages: list[dict] = [{"role": "system", "content": self._system()}]
         self.state = "idle"
         self.task: asyncio.Task | None = None
@@ -177,7 +176,7 @@ class Session:
     def _system(self) -> str:
         if self._game_word():
             return GAME_SYSTEM
-        return (self.scenario["systems"] if self.scenario else self.systems)[self.feedback] + self.topic_line + self.mission_line
+        return (self.scenario["systems"] if self.scenario else self.systems)[self.feedback] + self.topic_line
 
     def _set_feedback(self, mode: str | None) -> None:
         if mode in self.systems:  # también a mitad de sesión: cambia cómo corrige Buddy desde ya
@@ -319,11 +318,8 @@ class Session:
     # ── Misión ───────────────────────────────────────────────────────────────────
 
     def _start_mission(self, pack: str | None) -> None:
+        # Buddy no la conoce: con ella en el prompt dejaba pasar tus errores e inventaba correcciones (docs/SPIKES.md, S7)
         self.mission = self.store.pick_mission(pack_for(pack)) if self.store else []
-        if self.mission:
-            terms = ", ".join(f'"{w["term"]}"' for w in self.mission)
-            self.mission_line = (f"\n\nToday the user wants to practice using: {terms}. Never list them, quiz the user "
-                                 "or ask them to use these words; just steer the conversation so they get natural chances to.")
         self.messages[0]["content"] = self._system()
 
     def _public_mission(self) -> list[dict]:
@@ -364,7 +360,7 @@ class Session:
     async def _end(self) -> None:
         await self.send_json({"type": "summary", **await self._finish()})
         self.topic_line, self.scenario, self.goals_met = "", None, []
-        self.mission, self.mission_used, self.mission_line, self.game = [], set(), "", None
+        self.mission, self.mission_used, self.game = [], set(), None
         self.messages = [{"role": "system", "content": self._system()}]
         self.session_id, self.user_turns, self.pending_line = None, 0, None
         self.turns = {}
