@@ -20,3 +20,25 @@ key_phrases:
   - stakeholders
   - meet the deadline
   - "What does a typical day look like?"
+
+guided:
+  turns:
+    - buddy: "Thanks for joining us today. Could you tell me a little about yourself?"
+      you: "Sure. I'm a backend developer, and I've been working with Python for several years."
+      es: "Claro. Soy desarrollador backend y llevo varios años trabajando con Python."
+    - buddy: "Great. Tell me about a project you're proud of."
+      you: "I built a payment service that handles thousands of requests per minute. I was responsible for the design."
+      es: "Construí un servicio de pagos que maneja miles de peticiones por minuto. Fui el responsable del diseño."
+    - buddy: "Impressive. What was a technical trade-off you had to make?"
+      you: "We chose a simple queue instead of a complex system. We lost some scalability, but we could meet the deadline."
+      es: "Elegimos una cola sencilla en vez de un sistema complejo. Perdimos algo de escalabilidad, pero pudimos cumplir la fecha."
+    - buddy: "That makes sense. How did you work with stakeholders during the project?"
+      you: "I talked to them every week, so they always knew what to expect."
+      es: "Hablaba con ellos cada semana, así que siempre sabían qué esperar."
+    - buddy: "Good. Do you have any questions for me?"
+      you: "Yes. What does a typical day look like for this team?"
+      es: "Sí. ¿Cómo es un día típico en este equipo?"
+    - buddy: "We start with a short standup, and then people focus on their work. Anything else?"
+      you: "How do you measure success in this role?"
+      es: "¿Cómo miden el éxito en este puesto?"
+  closing: "Good question. We look at impact more than hours. Thanks for your time, we'll be in touch soon."

@@ -15,12 +15,16 @@ Qué diseño de [App/](App/), [Sistema de Diseño/](Sistema%20de%20Diseño/) y [
 | Diseño | Copia | Pantalla | Cuándo se muestra en `/` | Componente | Endpoints | Estado |
 |---|---|---|---|---|---|---|
 | [InicioO2](App/InicioO2.dc.html) | [AppInicio](canvas/project/AppInicio.dc.html) | Hoy (y Conversar, para elegir tema) | Sección «Hoy» o «Conversar» del menú | `Home`, `StartCard` | `GET /api/health`, `GET /api/topics`, `GET /api/progress` | **Parcial.** Hablar ya, tema de hoy, repaso, sonido que más fallas y tus cifras. Falta: meta diaria, racha, nivel, prompt del día y calentamiento |
-| [O2Conversacion](App/O2Conversacion.dc.html) | [AppConversacion](canvas/project/AppConversacion.dc.html) | Conversación en vivo | Sesión en curso (el menú se oculta) | `SessionPanel`, `ChatLog`, `Dock`, `TutorPanel` | `WS /ws` | **Parcial.** Las 3 columnas están hechas. Falta: XP |
+| [O2Conversacion](App/O2Conversacion.dc.html) | [AppConversacion](canvas/project/AppConversacion.dc.html) | Conversación en vivo | Sesión en curso (el menú se oculta) | `SessionPanel`, `MissionList`, `GameCard`, `ChatLog`, `BuddyTurn`, `Dock`, `TutorPanel` | `WS /ws`, `POST /api/words` | **Parcial.** Las 3 columnas están hechas. «Tu misión», «Buddy adivina» y guardar palabras de una burbuja de Buddy no están en el diseño. Falta: XP |
 | [O2Escenarios](App/O2Escenarios.dc.html) | [AppEscenarios](canvas/project/AppEscenarios.dc.html) | Escenarios | Sección «Escenarios» del menú | `Scenarios` | `GET /api/scenarios`, `WS /ws` | **Parcial.** Lista, detalle con papeles, objetivos y frases, y mejores estrellas. Falta: filtros y duración (no existen esos datos), criterio de fin y recompensas de XP |
-| [O2Pronunciacion](App/O2Pronunciacion.dc.html) | [AppPronunciacion](canvas/project/AppPronunciacion.dc.html) | Sonidos: práctica de pronunciación y repaso | Sección «Sonidos» del menú, o «Repasar» | `Drill`, `Review`, `PhraseCheck` | `GET /api/drills`, `POST /api/review`, `WS /ws` | **Parcial.** Lista de sonidos, progreso, palabras seleccionables y fonemas esperados. Sin notas por palabra o fonema ni niveles a propósito: la confianza del modelo no es una calificación. Falta: XP. El repaso comparte el estilo, pero tiene flujo propio y no está en el diseño |
-| [O2Resumen](App/O2Resumen.dc.html) | [AppResumen](canvas/project/AppResumen.dc.html) | Resumen de sesión | Al terminar una sesión | `Summary` | `WS /ws` (evento `summary`) | **Parcial.** Cabecera con estrellas, cifras, objetivos, errores por tipo, pronunciación y botones para repetir o practicar. Sin notas por sonido a propósito. Falta: XP, racha y vocabulario (no existe ese dato) |
+| [O2Pronunciacion](App/O2Pronunciacion.dc.html) | [AppPronunciacion](canvas/project/AppPronunciacion.dc.html) | Sonidos: práctica de pronunciación | Sección «Sonidos» del menú | `Drill`, `PhraseCheck` | `GET /api/drills`, `WS /ws` | **Parcial.** Lista de sonidos, progreso, palabras seleccionables y fonemas esperados. Sin notas por palabra o fonema ni niveles a propósito: la confianza del modelo no es una calificación. Falta: XP |
+| Sin diseño | — | Conversación guiada | Sección «Guiada» del menú | `GuidedList`, `Guided`, `PhraseCheck` | `GET /api/scenarios`, `POST /api/guided`, `WS /ws` | Usa el estilo de `O2Escenarios` y `O2Conversacion` |
+| Sin diseño | — | Palabras: tu banco, el repaso y «Tu propia frase» | Sección «Palabras» del menú, o «Repasar» | `Words`, `Review`, `OwnSentence`, `PhraseCheck` | `GET /api/words`, `GET /api/drills`, `POST /api/review`, `POST /api/review/discard`, `WS /ws` | Usa el estilo de `O2Pronunciacion` |
+| [O2Resumen](App/O2Resumen.dc.html) | [AppResumen](canvas/project/AppResumen.dc.html) | Resumen de sesión | Al terminar una sesión | `Summary`, `MissionList` | `WS /ws` (evento `summary`) | **Parcial.** Cabecera con estrellas, cifras, objetivos, misión («Usaste» y «Para la próxima»), errores por tipo, pronunciación y botones para repetir o practicar. Sin notas por sonido a propósito. Falta: XP y racha |
 | [O2Progreso](App/O2Progreso.dc.html) | [AppProgreso](canvas/project/AppProgreso.dc.html) | Progreso | Sección «Progreso» del menú | `Progress`, `MonthCalendar`, `ThisWeek`, `Chart` | `GET /api/progress` | **Parcial.** Calendario del mes (solo días con práctica) y semana. El historial, las gráficas y los errores y sonidos repetidos no están en el diseño. Falta: nivel, racha, retos y logros |
 | [O2Ajustes](App/O2Ajustes.dc.html) | [AppAjustes](canvas/project/AppAjustes.dc.html) | Ajustes | Icono arriba a la derecha | `Settings` | `GET /api/health`, `GET` y `PUT /api/settings`, `GET /api/voice-sample` | **Parcial.** Silencio, velocidad con voz de prueba, modo de corrección y estado de los modelos. Sin idioma (decidido: español) ni umbral de confianza (la app no decide con él). Falta: metas, XP, protector de racha y cambiar la tecla |
+
+**Diferencia con los diseños:** las frases con errores usan en toda la app el subrayado de `O2Pronunciacion` (`.word-mark`), en lugar del tachado (`s.wrong`) y el resaltado (`mark.recast`) que dibujan `O2Conversacion` y `O2Resumen`. Decisión de Amado (2026-11-05).
 
 ## Endpoints
 
@@ -32,8 +36,12 @@ Definidos en [backend/main.py](../../backend/main.py).
 | `GET /api/health` | Comprueba Whisper, Ollama y el modelo de pronunciación | Todas: aviso `HealthAlert` | [DSErrores](Sistema%20de%20Diseño/DSErrores.dc.html) (parcial) |
 | `GET /api/topics` | Temas de conversación | Hoy y Conversar | [InicioO2](App/InicioO2.dc.html) |
 | `GET /api/scenarios` | Lista de escenarios con papeles y tus mejores estrellas | Escenarios | [O2Escenarios](App/O2Escenarios.dc.html) |
+| `POST /api/guided` | Guarda la nota de una conversación guiada; devuelve tu mejor nota | Conversación guiada | Sin diseño |
 | `GET /api/drills` | Frases por sonido, tus frases falladas y el repaso pendiente | Práctica | [O2Pronunciacion](App/O2Pronunciacion.dc.html) |
 | `POST /api/review` | Guarda «La sabía» o «Repasarla otra vez»; devuelve cuántas quedan y cuándo vuelve la siguiente | Repaso | Sin diseño |
+| `POST /api/review/discard` | «Esto no lo dije» o «Quitar»: la saca del repaso y del banco | Palabras | Sin diseño |
+| `GET /api/words` | Tu banco de palabras, con cuándo vuelve cada una | Palabras | Sin diseño |
+| `POST /api/words` | Guarda una palabra del chat; el tutor busca su significado | Conversación | Sin diseño |
 | `GET /api/progress` | Historial, minutos por día, métricas, errores y sonidos repetidos | Hoy y Progreso | [O2Progreso](App/O2Progreso.dc.html) (dibuja solo el calendario y la semana) |
 | `GET` y `PUT /api/settings` | Lee y guarda silencio, velocidad y modo de corrección | Ajustes y panel del tutor | [O2Ajustes](App/O2Ajustes.dc.html) |
 | `GET /api/voice-sample` | Voz de Buddy a la velocidad actual, en WAV | Ajustes | [O2Ajustes](App/O2Ajustes.dc.html) |
@@ -45,8 +53,11 @@ Definidos en [turn_manager.py](../../backend/pipeline/turn_manager.py). El audio
 
 | Pantalla | El navegador envía | El servidor responde |
 |---|---|---|
-| Conversación | `hello`, `start`, `stop`, `settings`, `intent`, `say` | `session`, `state`, `user_text`, `partner_text`, `partner_done`, `barge_in`, `turn_resumed`, `turn_discarded`, `feedback`, `intent_failed`, `pronunciation`, `goals`, `metrics`, `error` |
+| Conversación | `hello` (con `game` para «Buddy adivina»), `game_skip`, `start`, `stop`, `settings`, `intent`, `say` | `session`, `game`, `state`, `user_text`, `partner_text`, `partner_done`, `barge_in`, `turn_resumed`, `turn_discarded`, `feedback`, `intent_failed`, `pronunciation`, `goals`, `mission`, `metrics`, `error` |
 | Práctica | `drill`, `stop`, `start`, `say`, `settings` | `state`, `drill_result`, `turn_discarded`, `turn_resumed` |
+| Repaso | `recall`, `drill`, `stop`, `start`, `say` | `state`, `recall_result`, `drill_result`, `turn_discarded`, `turn_resumed` |
+| Conversación guiada | `drill` (con `grade`), `stop`, `start`, `say` | `state`, `drill_result`, `turn_discarded`, `turn_resumed` |
+| Tu propia frase | `recall` (con `check`), `stop`, `start`, `say` | `state`, `recall_result`, `usage_result`, `turn_discarded`, `turn_resumed` |
 | Resumen | `end` | `summary` |
 | Solo registros | `client_error`, `client_metrics` | — |
 

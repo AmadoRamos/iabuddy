@@ -19,3 +19,22 @@ key_phrases:
   - "Could someone help me with"
   - I'll follow up
   - on track
+
+guided:
+  turns:
+    - buddy: "Good morning, everyone! Let's get started. You're up first: what did you work on yesterday?"
+      you: "Yesterday I finished the login page and opened a pull request."
+      es: "Ayer terminé la página de inicio de sesión y abrí un pull request."
+    - buddy: "Nice! Has anyone reviewed it yet?"
+      you: "Not yet. Could someone help me with the review today?"
+      es: "Todavía no. ¿Alguien podría ayudarme con la revisión hoy?"
+    - buddy: "Sure, I can take a look after this meeting. What are you working on today?"
+      you: "Today I'm working on the payment tests. I'll follow up with the data team too."
+      es: "Hoy estoy trabajando en las pruebas de pagos. También le haré seguimiento con el equipo de datos."
+    - buddy: "Sounds good. Is anything blocking you?"
+      you: "Yes, I'm blocked by the staging server. It has been down since last night."
+      es: "Sí, estoy bloqueado por el servidor de staging. Lleva caído desde anoche."
+    - buddy: "Okay, I'll ask the infrastructure team to check it. Are we still on track for Friday?"
+      you: "I think we're on track, as long as the server is back today."
+      es: "Creo que vamos bien de tiempo, siempre que el servidor vuelva hoy."
+  closing: "Great, thanks for the update. Let's move on to the next person."

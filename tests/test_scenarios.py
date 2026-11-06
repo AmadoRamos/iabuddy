@@ -58,7 +58,7 @@ async def test_scenario_plays_a_role_tracks_goals_and_evaluates():
     await s.on_control({"type": "hello", "scenario": "cafe"})
     await s.task
     assert first(events, "session")["scenario"]["goals"] == SCENE["goals"]
-    assert s.messages[0]["content"] == "barista-coach" and s.messages[1]["content"] in SCENE["openers"]
+    assert s.messages[0]["content"].startswith("barista-coach") and s.messages[1]["content"] in SCENE["openers"]
     await run_turn(s)
     await asyncio.gather(*s.tutor_tasks)
     assert first(events, "goals")["met"] == [True, False, False]

@@ -34,12 +34,10 @@
 .your-turn { align-self: flex-end; max-width: 86%; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
 .your-turn .bubble { max-width: 100%; }
 .said-as {
-  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 12px;
   padding: 10px 12px 10px 16px; border-radius: 18px; background: var(--success-bg); animation: popin .3s ease-out both;
 }
-.said-as .overline { grid-column: 1; color: var(--success-text); }
-.said-as p { grid-column: 1; font-weight: 700; }
-.said-as .icon-btn { grid-column: 2; grid-row: 1 / span 2; }
+.said-as .overline { color: var(--success-text); }
+.said-as .labeled-text-main { font-weight: 700; }
 .bubble-anchor { position: relative; display: flex; justify-content: flex-end; max-width: 100%; }
 .bubble-btn { border: none; text-align: left; font: inherit; color: inherit; cursor: pointer; transition: transform var(--dur-fast), box-shadow var(--dur-fast); }
 .bubble-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 18px -12px rgba(27, 19, 64, .45); }
@@ -65,10 +63,37 @@
 .issues { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .issues li { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 16px; background: var(--info-bg); font-size: .875rem; line-height: 1.45; }
 .issues .tag { flex: none; }
-.better { padding: 10px 12px; border-radius: 16px; background: var(--bg); font-weight: 700; }
+.better { display: block; padding: 10px 12px; border-radius: 16px; background: var(--bg); font-weight: 700; }
 
 .summary { padding: 28px clamp(16px, 3vw, 32px); }
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
+.buddy-turn { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.buddy-words { display: flex; flex-direction: column; gap: 6px; }
+.mission-word { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.word-item { flex-direction: row !important; align-items: center; justify-content: space-between; gap: 12px !important; }
+.word-item-text { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+/* LabeledText: el texto de la app. Etiqueta, texto y nota, con los mismos tamaños y cajas en todas partes */
+.labeled-text { position: relative; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.labeled-text-note { font-size: var(--fs-small); line-height: 1.45; }
+.labeled-text-note .btn { margin-top: 8px; }
+.labeled-text-action { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); }
+.labeled-text.with-action { padding-inline-end: 52px; }
+.drill .labeled-text.with-action { padding-inline: 64px; }
+.size-m > .labeled-text-main, .size-l > .labeled-text-main, .size-xl > .labeled-text-main { font-family: var(--font-display); font-weight: 800; letter-spacing: -.02em; }
+.size-m > .labeled-text-main { font-size: clamp(1.25rem, 2.5vw, 1.625rem); line-height: 1.25; }
+.size-l > .labeled-text-main { font-size: clamp(1.375rem, 3vw, 2rem); line-height: 1.35; }
+.size-xl > .labeled-text-main { font-size: clamp(1.75rem, 4vw, 2.5rem); line-height: 1.15; }
+.box-plain, .box-info, .box-ok { padding: 16px 20px; border-radius: 20px; }
+.box-plain { background: var(--bg); }
+.box-info { background: var(--info-bg); }
+.box-info > .overline { color: var(--info-text); }
+.box-ok { background: var(--success-bg); }
+.box-ok > .overline { color: var(--success-text); }
+/* Más pequeña que la práctica: la conversación tiene que seguir viéndose encima, y el botón de hablar debajo */
+.guided-line .box-plain { padding-block: 12px; }
+.guided-line .size-l > .labeled-text-main { font-size: 1.25rem; }
+.guided-line { flex: 0 1 auto; min-height: 0; max-height: 55%; overflow-y: auto; padding: 16px clamp(16px, 3vw, 32px); border-top: 1.5px solid var(--sunken); }
+.guided-end { padding: 24px; overflow-y: auto; }
 .review-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .review-list li { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 16px; background: var(--bg); }
 
@@ -132,8 +157,15 @@ details > .phrases { margin-top: 8px; }
   border-radius: 16px; background: var(--warning-bg, var(--bg)); font-size: .875rem; line-height: 1.45; text-align: left;
 }
 .drill { flex: 1; padding: 28px clamp(16px, 3vw, 32px); }
-.drill-phrase { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 24px; border-radius: 20px; background: var(--bg); }
-.drill-phrase p { font-size: clamp(1.25rem, 3vw, 1.75rem); font-weight: 800; line-height: 1.35; }
+/* Lo que hay que decir, centrado a lo ancho y a lo alto. La barra de progreso se queda arriba: con márgenes
+   automáticos, porque si no cabe se puede seguir haciendo scroll (justify-content: center recortaría lo de arriba). */
+.drill { text-align: center; }
+.drill > :first-child { margin-bottom: auto; }
+.drill > :last-child { margin-bottom: auto; }
+.drill .btn { align-self: center; }
+.drill .word-phones { align-items: center; }
+.drill .cluster { justify-content: center; }
+.drill .phones, .drill .word-detail { justify-content: center; }
 .drill-layout { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr); }
 .drill-sounds { display: flex; gap: 8px; padding: 18px clamp(16px, 3vw, 32px); overflow-x: auto; border-bottom: 1.5px solid var(--sunken); align-items: center; }
 .drill-sounds .overline { display: none; }
@@ -160,6 +192,14 @@ details > .phrases { margin-top: 8px; }
 .word-score.ok { text-decoration-color: var(--success-border); }
 .word-score.unclear { text-decoration-color: var(--warning-border); text-decoration-style: dashed; }
 .word-score.bad { text-decoration-color: var(--error-border); text-decoration-style: wavy; text-decoration-thickness: 3px; }
+/* El mismo subrayado dentro de un texto normal: burbujas, panel del tutor, resumen, listas */
+.word-mark { text-decoration: underline 2.5px; text-underline-offset: 3px; text-decoration-skip-ink: none; }
+.word-mark.ok { text-decoration-color: var(--success-border); }
+.word-mark.unclear { text-decoration-color: var(--warning-border); text-decoration-style: dashed; }
+.word-mark.bad { text-decoration-color: var(--error-border); text-decoration-style: wavy; text-decoration-thickness: 2px; }
+/* Lo que hay que practicar: tiene que verse de un vistazo */
+.word-mark.target { padding: 0 .2em; border-radius: .3em; background: var(--mark-recast); text-decoration: none; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.word-score.target { background: var(--mark-recast); }
 .word-score:hover { background: var(--sunken); }
 .word-score[aria-pressed="true"] { background: var(--info-bg); }
 .word-score:focus-visible { box-shadow: var(--focus-ring); }
@@ -178,10 +218,6 @@ details > .phrases { margin-top: 8px; }
 .review-steps { flex: 1; display: flex; gap: 4px; }
 .review-steps span { flex: 1; height: 8px; border-radius: 9px; background: var(--track); }
 .review-steps .done { background: var(--info-fill); }
-.review-cue p { font-size: 1.125rem; font-weight: 700; }
-.review-hidden { flex-wrap: wrap; }
-.review-why { padding: 16px 20px; border-radius: 20px; background: var(--info-bg); }
-.review-why .overline { color: var(--info-text); }
 
 /* Progreso (Fase 5) */
 .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }

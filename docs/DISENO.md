@@ -202,7 +202,8 @@ Sin rankings ni comparación con otros: es una app de un solo usuario.
 | `turns` | sesión, hablante, texto, timestamps, (opcional) ruta del audio |
 | `corrections` | turno, tipo, span, corrección, explicación |
 | `pronunciation_scores` | turno/drill, palabra, fonema, puntuación |
-| `vocabulary` | término, primera vez visto, veces usado, estado de repaso |
+| `words` | término, significado, ejemplo, formas irregulares, origen (el estado de repaso va en `reviews`) |
+| `guided_results` | escenario, nota de la conversación guiada, fecha |
 | `xp_events` | fecha, origen (minutos, turno largo, objetivo, reto, logro), cantidad |
 | `daily_activity` | día, minutos hablados, meta cumplida, protector usado |
 | `achievements` | id, fecha de desbloqueo, progreso |
@@ -262,6 +263,7 @@ Cada etapa del pipeline implementa una interfaz (`STT`, `TTS`, `LLM`) para poder
 | **3 — Escenarios** | Roleplay con YAML, objetivos y evaluación final |
 | **4 — Pronunciación** | Modo pasivo + drills con puntuación por fonema |
 | **5 — Progreso** | Historial, errores recurrentes, repaso de vocabulario |
+| **6 — Vocabulario** | Banco de palabras, misión por sesión y actividades habladas |
 
 ## 12. Preguntas abiertas
 

@@ -11,6 +11,8 @@
 import json
 import re
 import threading
+from collections.abc import Callable
+from difflib import SequenceMatcher
 from functools import lru_cache
 from pathlib import Path
 
@@ -105,6 +107,23 @@ class Phonemes:
         return tuple((w, p) for w, p in out if p)
 
 
+def grade_reading(result: dict, heard: str, sound: Callable[[str], object] = str.lower) -> dict:
+    """Nota de una frase leída: el % de sus palabras bien dichas, según Whisper y los errores claros de sonido.
+
+    La confianza del modelo no entra: bien dicha, una frase da 40-70. Una palabra que Whisper no oyó vale 0, y una
+    con un error claro de sonido o que no se oyó con claridad, la mitad. Whisper a veces arregla lo que dijiste:
+    esta nota dice si la frase se entiende y suena bien, no que cada sonido sea perfecto.
+    Se compara cómo suena cada palabra, no cómo se escribe: Whisper no distingue *by* de *buy*, y eso no es un error tuyo.
+    """
+    expected = [sound(w["word"]) for w in result["words"]]
+    said = [sound(w) for w in WORD.findall(heard)]
+    blocks = SequenceMatcher(a=expected, b=said, autojunk=False).get_matching_blocks()
+    found = {i for b in blocks for i in range(b.a, b.a + b.size)}
+    words = [{**w, "missing": i not in found} for i, w in enumerate(result["words"])]
+    points = sum(0 if w["missing"] else 0.5 if w["issues"] or w["unclear"] else 1 for w in words)
+    return {"words": words, "grade": round(100 * points / len(words)) if words else 0}
+
+
 class Scorer:
     def __init__(self, model_dir: Path, threads: int = 4):
         import onnxruntime as ort
@@ -116,6 +135,10 @@ class Scorer:
         options.intra_op_num_threads = threads  # sin todos los núcleos: Kokoro también corre en CPU
         self.session = ort.InferenceSession(model_dir / "model.onnx", options, providers=["CPUExecutionProvider"])
         self.lock = threading.Lock()  # un análisis a la vez
+
+    def sound_of(self, word: str) -> tuple[str, ...] | str:
+        """Cómo suena una palabra sola. Sin fonemas (un símbolo), vale cómo se escribe."""
+        return tuple(p for _, phones in self.phonemes.sentence(word) for p in phones) or word.lower()
 
     def log_probs(self, pcm: bytes) -> np.ndarray:
         """PCM int16 a 16 kHz → log-probabilidades (frames × vocabulario, ~50 frames/s)."""

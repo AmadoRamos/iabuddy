@@ -13,24 +13,26 @@ import logging
 import mimetypes
 import wave
 from contextlib import asynccontextmanager
+from functools import lru_cache
 from pathlib import Path
 from typing import Literal
 
 import httpx
 import yaml
-from fastapi import FastAPI, Response, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, Response, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from .config import MODELS, settings
 from .partner import scenarios
-from .partner.prompts import GREETING, SYSTEMS
+from .partner.prompts import GAME_ID, GAME_TITLE, GREETING, SYSTEMS
 from .pipeline.llm import OllamaLLM
 from .pipeline.stt import WhisperSTT
 from .pipeline.tts import RATE as TTS_RATE
 from .pipeline.tts import KokoroTTS
 from .pipeline.turn_manager import Session
 from .pipeline.vad import StreamingVad
+from .pronunciation.rules import words_with_sound
 from .pronunciation.scorer import Scorer
 from .session_log import SessionLog, setup_file_logging
 from .storage.db import Store
@@ -40,6 +42,12 @@ log = logging.getLogger("iabuddy")
 DIST = Path(__file__).resolve().parents[1] / "frontend" / "dist"
 DRILLS = yaml.safe_load((Path(__file__).parent / "pronunciation" / "drills.yaml").read_text(encoding="utf-8"))
 SCENARIOS = scenarios.load()  # un YAML mal escrito falla al arrancar, no a mitad de sesión
+
+
+@lru_cache(maxsize=1)
+def drill_targets(scorer: Scorer) -> dict[str, dict[str, list[str]]]:
+    """Por grupo y frase, las palabras que llevan su sonido. Tarda la primera vez: eSpeak va palabra por palabra."""
+    return {d["title"]: {s: words_with_sound(scorer.phonemes.sentence(s), d["phones"]) for s in d["sentences"]} for d in DRILLS}
 
 
 def load_scorer() -> Scorer | None:
@@ -132,16 +140,32 @@ async def topics() -> list[dict]:
 
 @app.get("/api/scenarios")
 async def scenario_list() -> list[dict]:
-    stars = app.state.store.scenario_stars()
-    return [{**scenarios.public(sc), "stars": stars.get(sc["id"], 0)} for sc in SCENARIOS.values()]
+    stars, guided = app.state.store.scenario_stars(), app.state.store.guided_best()
+    return [{**scenarios.public(sc), "stars": stars.get(sc["id"], 0), "guided_best": guided.get(sc["id"])}
+            for sc in SCENARIOS.values()]
+
+
+class GuidedResult(BaseModel):
+    scenario: str
+    grade: int = Field(ge=0, le=100)
+
+
+@app.post("/api/guided")
+async def guided_result(result: GuidedResult) -> dict:
+    if result.scenario not in SCENARIOS:
+        raise HTTPException(404, "Ese escenario no existe.")
+    app.state.store.add_guided_result(result.scenario, result.grade)
+    return {"best": app.state.store.guided_best()[result.scenario]}
 
 
 @app.get("/api/drills")
 async def drills() -> dict:
     counts = app.state.store.sound_counts()
-    sounds = [{**d, "errors": sum(counts.get(p, 0) for p in d["phones"])} for d in DRILLS]
+    targets = await asyncio.to_thread(drill_targets, app.state.scorer) if app.state.scorer else {}
+    sounds = [{**d, "errors": sum(counts.get(p, 0) for p in d["phones"]), "targets": targets.get(d["title"], {})} for d in DRILLS]
     sounds.sort(key=lambda d: -d["errors"])  # primero lo que más fallas
-    return {"sounds": sounds, "failed": app.state.store.failed_phrases(), "review": app.state.store.review_items()}
+    return {"sounds": sounds, "failed": app.state.store.failed_phrases(), "review": app.state.store.review_items(),
+            "own": app.state.store.own_sentence_items()}
 
 
 @app.get("/api/progress")
@@ -149,7 +173,8 @@ async def progress() -> dict:
     data = app.state.store.progress()
     for s in data["sessions"]:  # el título del escenario vive en su YAML, no en la base de datos
         scenario = SCENARIOS.get(s["scenario"])
-        s["title"] = scenario["title"] if scenario else s["topic"] or "Conversación libre"
+        s["title"] = (scenario["title"] if scenario else GAME_TITLE if s["scenario"] == GAME_ID
+                      else s["topic"] or "Conversación libre")
     return data
 
 
@@ -162,6 +187,38 @@ class ReviewAnswer(BaseModel):
 async def review(answer: ReviewAnswer) -> dict:
     app.state.store.answer_review(answer.key, answer.known)
     return app.state.store.review_status()
+
+
+class ReviewDiscard(BaseModel):
+    key: str
+
+
+@app.post("/api/review/discard")
+async def review_discard(item: ReviewDiscard) -> dict:
+    """«Esto no lo dije» o quitarla del banco."""
+    app.state.store.discard_review(item.key)
+    return app.state.store.review_status()
+
+
+@app.get("/api/words")
+async def words() -> dict:
+    return app.state.store.word_bank()
+
+
+class WordToSave(BaseModel):
+    term: str = Field(min_length=1, max_length=60)
+    context: str = Field("", max_length=1000)
+
+
+@app.post("/api/words")
+async def save_word(word: WordToSave) -> dict:
+    """Una palabra que pulsaste en el chat. Pide al tutor su significado, con esa frase como contexto."""
+    try:
+        d = await app.state.tutor.define(word.term, word.context)
+    except Exception as e:  # el modelo no respondió o devolvió algo inservible
+        log.exception("Fallo al definir una palabra")
+        raise HTTPException(502, "No se pudo buscar el significado.") from e
+    return {"key": app.state.store.add_word(d["term"], d["meaning"], d["example"], d["forms"], "buddy"), **d}
 
 
 @app.websocket("/ws")
