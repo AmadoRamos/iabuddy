@@ -165,7 +165,7 @@ def test_a_word_you_say_is_marked_live_and_counts_in_the_summary():
         assert mission[0]["term"] == pack_for(None)[0]["term"] and "forms" not in mission[0]
         await talk(s)
         assert first(events, "mission")["used"] == ["figure out"]
-        assert '"figure out"' in llm.system  # Buddy sabe qué palabras practicas
+        assert "figure out" not in llm.system  # con la misión en el prompt, Buddy dejaba de corregir (docs/SPIKES.md, S7)
         await s.on_control({"type": "end"})
         summary = first(events, "summary")
         assert [w["key"] for w in summary["mission"]["used"]] == ["figure out"] and len(summary["mission"]["unused"]) == 3

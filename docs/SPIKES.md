@@ -311,3 +311,24 @@ Velocidad en CPU: unos **0,1 s por segundo de audio** (195 ms para una palabra, 
 
 ### Decisión
 **La Fase 0 queda cerrada.** El stack elegido cumple el criterio en lo que depende del sistema (1,05 s desde el cierre). La latencia percibida depende del fin de turno, que se ataca en la Fase 1 con las mejoras anteriores.
+
+---
+
+## S7 — La misión en el prompt de Buddy (2026-11-06)
+
+En la sesión 21, en modo voz, Buddy inventó una corrección y no señaló ninguno de los 5 errores que marcó el tutor. La prueba repitió 11 turnos de esa sesión contra `gemma4:12b-it-qat`, 6 veces cada uno, con su historial real. Las correcciones se contaron buscando frases como *quick tip* o *you could say*, y se leyó solo una muestra de las respuestas.
+
+| Prompt | Errores reales señalados | Frases correctas «corregidas» | Errores claros señalados |
+|---|---|---|---|
+| Con la línea de la misión | 0-1 de 18 | 6 de 30 | 17 de 18 |
+| Sin la línea | 9-10 de 18 | 0-2 de 30 | 17-18 de 18 |
+| Línea movida o reescrita (5 formas) | 0-1 de 18, y 5 de 18 en la mejor | 4-6 de 30 | 15-18 de 18 |
+
+- **Errores reales:** frases de la sesión con errores y texto desordenado, como *about reincarnated*. **Errores claros:** frases escritas para la prueba, como *She don't like the new novel*.
+- Con la línea, *I struggled with that theme* recibió una corrección inventada en 6 de 6 intentos. *struggle with* era una palabra de la misión.
+
+### Decisión
+**Se quita la línea: Buddy no conoce la misión.** Sigue detectándose lo que dices. En la sesión 21 Buddy solo nombró una palabra de la misión en 39 frases, y fue en la corrección inventada.
+
+### Límites
+Es una sola sesión, con 4 palabras concretas. Con semilla fija, solo 14 de 66 respuestas salieron idénticas al repetirlas, así que las cifras son orientativas. No se midió si las preguntas de Buddy ayudaban a usar las palabras. *I don't speaking about…* sigue pasando con el historial real (1 de 6), aunque sin historial se señala 6 de 6.
