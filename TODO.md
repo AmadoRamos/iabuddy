@@ -15,7 +15,7 @@ Revisado el 2026-11-06 con los registros de la sesión de Amado del 2026-11-05 (
 | Conversación, resumen y tiempos (Fase 5) | Sesión 21: 12 turnos en 6,7 min. 1.er audio oído: mediana de 1,36 s y máximo de 1,68 s, sin crecer (1,36 s en los 6 primeros turnos, 1,34 s en los 6 últimos). | ✅ Sí |
 | Misión de palabras: detección | 4 de 4: *to be honest*, *figure it out*, *struggled with*, *looking forward to*. | ✅ Sí |
 | Dilo en inglés | 7 intentos, 3 de 3 frases logradas. 3 rechazos justos por frase corta y un fallo de Whisper que se resolvió repitiendo. | ✅ Sí |
-| Conversación guiada | 1 sola frase del diálogo de la entrevista, 3 intentos (68, 75 y 64 %), sin terminar el diálogo: no hay nada en `guided_results`. Salió un error real, ver Deuda. | ❌ No |
+| Conversación guiada | 1 sola frase del diálogo de la entrevista, 3 intentos (68, 75 y 64 %), sin terminar el diálogo: no hay nada en `guided_results`. Salió un error real, ya corregido: *back-end* contaba *backend* como no dicha. | ❌ No |
 | Tu propia frase | Ningún intento en los registros. | ❌ No |
 | Buddy adivina | Se abrió 19 s, sin ningún turno hablado. | ❌ No |
 
@@ -29,7 +29,6 @@ Revisado el 2026-11-06 con los registros de la sesión de Amado del 2026-11-05 (
 ## 2. Deuda
 
 ### Errores
-- [ ] **Guiada: una palabra con guion cuenta como no dicha.** Whisper oyó *back-end*, y *backend* quedó con 0 puntos. `grade_reading` en `backend/pronunciation/scorer.py` separa por el guion: comprobado, la misma frase da 80 con guion y 100 sin él.
 - [ ] **Buddy inventó una corrección y dejó pasar las reales** (sesión 21, modo voz). Corrigió una sola vez en 12 turnos, y fue para decirte que dijeras justo lo que habías dicho (*I struggled with that theme*). El tutor marcó 5 errores en los turnos 2 y 11, y Buddy no corrigió ninguno. En la sesión 16, sin misión, corrigió en 5 de 9 turnos. Puede ser la línea de la misión en el prompt: falta medirlo.
 - [ ] **El tutor no marcó un error claro:** *I don't speaking about…* (sesión 21, turno 6) salió sin errores.
 - [ ] En «Tus frases» entran palabras mal transcritas (*Wispeth*).

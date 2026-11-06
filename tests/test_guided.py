@@ -71,6 +71,29 @@ def test_words_that_sound_the_same_count_as_said():
     assert grade_reading(result(word("by"), word("card")), "buy card", sound)["grade"] == 100
 
 
+def test_a_hyphen_from_whisper_does_not_make_a_word_missing():
+    r = grade_reading(result(word("a"), word("backend"), word("developer")), "a back-end developer.")
+    assert r["grade"] == 100 and not any(w["missing"] for w in r["words"])
+
+
+def test_a_hyphenated_phrase_still_counts_each_of_its_words():
+    r = grade_reading(result(word("well"), word("known"), word("tool")), "well-known tool")
+    assert r["grade"] == 100
+    r = grade_reading(result(word("back"), word("up"), word("now")), "back-end now")
+    assert [w["missing"] for w in r["words"]] == [False, True, False]  # el guion no regala la palabra que no dijiste
+
+
+def test_a_loose_dash_from_whisper_is_not_a_word():
+    asked = []
+
+    def sound(w):
+        asked.append(w)
+        return w.lower()
+
+    assert grade_reading(result(word("sure")), "- Sure.", sound)["grade"] == 100
+    assert asked == ["sure", "Sure"]  # a eSpeak no se le pide el sonido de un guion
+
+
 class FakeScorer:
     def __init__(self, score=60):
         self.score = score

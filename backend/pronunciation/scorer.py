@@ -116,7 +116,13 @@ def grade_reading(result: dict, heard: str, sound: Callable[[str], object] = str
     Se compara cómo suena cada palabra, no cómo se escribe: Whisper no distingue *by* de *buy*, y eso no es un error tuyo.
     """
     expected = [sound(w["word"]) for w in result["words"]]
-    said = [sound(w) for w in WORD.findall(heard)]
+    said = []
+    for token in heard.split():  # Whisper escribe back-end aunque la frase lleve backend: si esa palabra está, cuenta entera
+        parts = WORD.findall(token)
+        if len(parts) > 1 and (whole := sound("".join(parts))) in expected:
+            said.append(whole)
+        else:
+            said += [sound(w) for w in parts]
     blocks = SequenceMatcher(a=expected, b=said, autojunk=False).get_matching_blocks()
     found = {i for b in blocks for i in range(b.a, b.a + b.size)}
     words = [{**w, "missing": i not in found} for i, w in enumerate(result["words"])]
